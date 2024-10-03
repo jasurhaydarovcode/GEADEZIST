@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 body {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    font-family: Lato, sans-serif;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  font-family: Lato, sans-serif;
 }
 
 .container {
-    margin: 0 auto;
+  margin: 0 auto;
 }
