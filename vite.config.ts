@@ -1,12 +1,14 @@
 import { defineConfig, Plugin, ViteDevServer } from 'vite';
 import react from '@vitejs/plugin-react';
 
+
+// console plugin
 const GEADEZIST = (): Plugin => {
   return {
-    name: 'my-plugin',
+    name: 'console-plugin',
     configureServer(server: ViteDevServer) {
       server.httpServer?.once('listening', () => {
-        console.log('Happy Hacking, 🫠 🫠 😴\n GEADEZIST');
+        console.log('\n Happy Hacking, 🫠 🫠 😴\n GEADEZIST\n');
       });
     },
   };
@@ -15,7 +17,11 @@ const GEADEZIST = (): Plugin => {
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), GEADEZIST()],
-  server: {
-    port: 9999,
+  define: {
+    global: 'window',
   },
+  server: {
+    host: '0.0.0.0',
+    port: 80
+  }
 });
