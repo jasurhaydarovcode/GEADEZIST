@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/lato": "^5.1.0",
     "antd": "^5.21.2",
     "flowbite-react": "^0.10.2",
     "react": "^18.3.1",
