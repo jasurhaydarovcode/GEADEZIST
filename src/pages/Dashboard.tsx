@@ -16,6 +16,7 @@ import {
   Legend,
 } from 'chart.js';
 import { useState } from 'react';
+import Layout from '@/components/Dashboard/Layout';
 
 ChartJS.register(
   CategoryScale,
@@ -139,120 +140,114 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex h-screen">
-      <Sidebar />
-      <div className="flex-1 flex flex-col">
-        <Navbar />
-        <main className="p-6 flex-1 flex flex-col">
-          <div className="grid mb-10 grid-cols-1 md:grid-cols-4 gap-4">
-            {cardData.map((item) => (
-              <div
-                key={item.id}
-                className="bg-white p-6 shadow-md flex flex-col items-center text-center"
-              >
-                <div className="bg-gray-100 text-3xl p-4 rounded-full mb-4">
-                  {item.icon}
-                </div>
-                <h2 className="text-3xl font-bold mb-2">{item.count}</h2>
-                <p className="text-gray-600">{item.label}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Chart Section */}
+    <Layout>
+      <div className="grid mb-10 grid-cols-1 md:grid-cols-4 gap-4">
+        {cardData.map((item) => (
           <div
-            className="bg-white shadow rounded-lg flex flex-col p-4 mb-6"
-            style={{ height: '800px' }}
+            key={item.id}
+            className="bg-white p-6 shadow-md flex flex-col items-center text-center"
           >
-            <div className="flex justify-between items-center mt-8 mb-10 px-6">
-              <h2 className="text-blue-500 text-xl font-bold">
-                Haftalik ma'lumot
-              </h2>
-              <button className="bg-gray-100 px-4 py-2 text-gray-600 rounded-sm">
-                Hafta
-              </button>
+            <div className="bg-gray-100 text-3xl p-4 rounded-full mb-4">
+              {item.icon}
             </div>
-            <div className="flex-1">
-              <div className="h-full">
-                <Line data={data} options={options} />
-              </div>
-            </div>
+            <h2 className="text-3xl font-bold mb-2">{item.count}</h2>
+            <p className="text-gray-600">{item.label}</p>
           </div>
-
-          {/* Filters */}
-          <div className="flex justify-between mb-6">
-            <select
-              value={selectedCategory}
-              onChange={handleCategoryChange}
-              className="border p-2 rounded"
-            >
-              <option value="">Kategoriyani tanlang</option>
-              {categories.map((category, index) => (
-                <option key={index} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
-
-            <select
-              value={selectedRegion}
-              onChange={handleRegionChange}
-              className="border p-2 rounded"
-            >
-              <option value="">Viloyatni tanlang</option>
-              {regions.map((region, index) => (
-                <option key={index} value={region}>
-                  {region}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* User Table Section */}
-          <div className="bg-white shadow rounded-lg p-4">
-            <table className="min-w-full bg-white border">
-              <thead>
-                <tr>
-                  <th className="py-2 border">T/P</th>
-                  <th className="py-2 border">Ism</th>
-                  <th className="py-2 border">Familiya</th>
-                  <th className="py-2 border">Kategoriya nomi</th>
-                  <th className="py-2 border">Viloyat</th>
-                  <th className="py-2 border">
-                    Natija (To'g'ri javoblar/Umumiy)
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {dataUsers
-                  .filter(
-                    (user) =>
-                      (!selectedCategory ||
-                        user.kategoriya === selectedCategory) &&
-                      (!selectedRegion || user.viloyat === selectedRegion),
-                  )
-                  .map((user) => (
-                    <tr key={user.id}>
-                      <td className="py-2 border text-center">{user.id}</td>
-                      <td className="py-2 border text-center">{user.ism}</td>
-                      <td className="py-2 border text-center">
-                        {user.familiya}
-                      </td>
-                      <td className="py-2 border text-center">
-                        {user.kategoriya}
-                      </td>
-                      <td className="py-2 border text-center">
-                        {user.viloyat}
-                      </td>
-                      <td className="py-2 border text-center">{user.natija}</td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
-        </main>
+        ))}
       </div>
-    </div>
+
+      {/* Chart Section */}
+      <div
+        className="bg-white shadow rounded-lg flex flex-col p-4 mb-6"
+        style={{ height: '800px' }}
+      >
+        <div className="flex justify-between items-center mt-8 mb-10 px-6">
+          <h2 className="text-blue-500 text-xl font-bold">
+            Haftalik ma'lumot
+          </h2>
+          <button className="bg-gray-100 px-4 py-2 text-gray-600 rounded-sm">
+            Hafta
+          </button>
+        </div>
+        <div className="flex-1">
+          <div className="h-full">
+            <Line data={data} options={options} />
+          </div>
+        </div>
+      </div>
+
+      {/* Filters */}
+      <div className="flex justify-between mb-6">
+        <select
+          value={selectedCategory}
+          onChange={handleCategoryChange}
+          className="border p-2 rounded"
+        >
+          <option value="">Kategoriyani tanlang</option>
+          {categories.map((category, index) => (
+            <option key={index} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={selectedRegion}
+          onChange={handleRegionChange}
+          className="border p-2 rounded"
+        >
+          <option value="">Viloyatni tanlang</option>
+          {regions.map((region, index) => (
+            <option key={index} value={region}>
+              {region}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* User Table Section */}
+      <div className="bg-white shadow rounded-lg p-4">
+        <table className="min-w-full bg-white border">
+          <thead>
+            <tr>
+              <th className="py-2 border">T/P</th>
+              <th className="py-2 border">Ism</th>
+              <th className="py-2 border">Familiya</th>
+              <th className="py-2 border">Kategoriya nomi</th>
+              <th className="py-2 border">Viloyat</th>
+              <th className="py-2 border">
+                Natija (To'g'ri javoblar/Umumiy)
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {dataUsers
+              .filter(
+                (user) =>
+                  (!selectedCategory ||
+                    user.kategoriya === selectedCategory) &&
+                  (!selectedRegion || user.viloyat === selectedRegion),
+              )
+              .map((user) => (
+                <tr key={user.id}>
+                  <td className="py-2 border text-center">{user.id}</td>
+                  <td className="py-2 border text-center">{user.ism}</td>
+                  <td className="py-2 border text-center">
+                    {user.familiya}
+                  </td>
+                  <td className="py-2 border text-center">
+                    {user.kategoriya}
+                  </td>
+                  <td className="py-2 border text-center">
+                    {user.viloyat}
+                  </td>
+                  <td className="py-2 border text-center">{user.natija}</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
+    </Layout>
   );
 };
 
