@@ -1,7 +1,13 @@
+import Navbar from "@/components/Navbar"
+import Sidebar from "@/components/Sidebar"
+import { AdminScreenType } from "@/helpers/types/AdminScreenType"
 
-const AdminScreen = (): JSX.Element => {
+const AdminScreen: React.FC<AdminScreenType> = ({ children }): JSX.Element => {
     return (
-        <div></div>
+        <div>
+            <Navbar />
+            <Sidebar />
+        </div>
     )
 }
 
