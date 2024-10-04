@@ -6,7 +6,7 @@ const AdminScreen: React.FC<AdminScreenType> = ({ children }): JSX.Element => {
     return (
         <div>
             <Navbar />
-            <Sidebar />
+            <Sidebar children={children}/>
         </div>
     )
 }
