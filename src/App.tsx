@@ -32,38 +32,32 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="*" element={<NotFound />} />
 
-
-
       {/* START Authentication Routes */}
       <Route path="/auth/SignIn" element={<SignIn />} />
       <Route path="/auth/SignUp" element={<SignUp />} />
-      <Route path='/auth/confirm' element={<Confirm />} />
-      <Route path='/auth/reset-password' element={<ResetPassword />} />
-      <Route path='/auth/offer' element={<Offer />} />
+      <Route path="/auth/confirm" element={<Confirm />} />
+      <Route path="/auth/reset-password" element={<ResetPassword />} />
+      <Route path="/auth/offer" element={<Offer />} />
       {/* END Authentication Routes */}
 
-
-
       {/* START Client Routes */}
-      <Route path='/client/dashboard' element={<ClientDashboard />} />
-      <Route path='/client/profile' element={<ClientProfile />} />
-      <Route path='/client/test/start' element={<ClientTestStart />} />
-      <Route path='/client/quiz/:id' element={<ClientQuiz />} />
+      <Route path="/client/dashboard" element={<ClientDashboard />} />
+      <Route path="/client/profile" element={<ClientProfile />} />
+      <Route path="/client/test/start" element={<ClientTestStart />} />
+      <Route path="/client/quiz/:id" element={<ClientQuiz />} />
       {/* END Client Routes */}
 
-
-
       {/* START Admin Routes */}
-      <Route path='/dashboard' element={<Dashboard />} />
-      <Route path='/category' element={<Category />} />
-      <Route path='/test' element={<Test />} />
-      <Route path='/all-user' element={<AllUser />} />
-      <Route path='/user' element={<User />} />
-      <Route path='/archive/:id' element={<Archive />} />
-      <Route path='/employees' element={<Employees />} />
-      <Route path='/address' element={<Address />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/category" element={<Category />} />
+      <Route path="/test" element={<Test />} />
+      <Route path="/all-user" element={<AllUser />} />
+      <Route path="/user" element={<User />} />
+      <Route path="/archive/:id" element={<Archive />} />
+      <Route path="/employees" element={<Employees />} />
+      <Route path="/address" element={<Address />} />
 
-      <Route path='/inspector-admin' element={<InspectorAdmin />} />
+      <Route path="/inspector-admin" element={<InspectorAdmin />} />
       {/* END Admin Routes */}
     </Routes>
   );

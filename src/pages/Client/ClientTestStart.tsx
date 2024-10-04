@@ -1,7 +1,5 @@
 function ClientTestStart() {
-  return (
-    <div>ClientTestStart</div>
-  )
+  return <div>ClientTestStart</div>;
 }
 
-export default ClientTestStart
+export default ClientTestStart;

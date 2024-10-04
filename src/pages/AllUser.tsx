@@ -1,7 +1,5 @@
 function AllUser() {
-  return (
-    <div>AllUser</div>
-  )
+  return <div>AllUser</div>;
 }
 
-export default AllUser
+export default AllUser;

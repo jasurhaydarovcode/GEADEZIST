@@ -1,7 +1,5 @@
 function Archive() {
-  return (
-    <div>Archive</div>
-  )
+  return <div>Archive</div>;
 }
 
-export default Archive
+export default Archive;

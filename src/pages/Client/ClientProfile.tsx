@@ -1,7 +1,5 @@
 function ClientProfile() {
-  return (
-    <div>ClientProfile</div>
-  )
+  return <div>ClientProfile</div>;
 }
 
-export default ClientProfile
+export default ClientProfile;

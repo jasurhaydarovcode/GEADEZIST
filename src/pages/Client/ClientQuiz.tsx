@@ -1,7 +1,5 @@
 function ClientQuiz() {
-  return (
-    <div>ClientQuiz</div>
-  )
+  return <div>ClientQuiz</div>;
 }
 
-export default ClientQuiz
+export default ClientQuiz;

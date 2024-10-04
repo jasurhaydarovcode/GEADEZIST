@@ -1,7 +1,5 @@
 function Confirm() {
-  return (
-    <div>Confirm</div>
-  )
+  return <div>Confirm</div>;
 }
 
-export default Confirm
+export default Confirm;

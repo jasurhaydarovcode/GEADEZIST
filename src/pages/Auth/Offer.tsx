@@ -1,7 +1,5 @@
 function Offer() {
-  return (
-    <div>Offer</div>
-  )
+  return <div>Offer</div>;
 }
 
-export default Offer
+export default Offer;

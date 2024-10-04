@@ -1,7 +1,5 @@
 function ClientDashboard() {
-  return (
-    <div>ClientDashboard</div>
-  )
+  return <div>ClientDashboard</div>;
 }
 
-export default ClientDashboard
+export default ClientDashboard;

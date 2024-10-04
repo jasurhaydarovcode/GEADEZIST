@@ -1,7 +1,5 @@
 function Address() {
-  return (
-    <div>Address</div>
-  )
+  return <div>Address</div>;
 }
 
-export default Address
+export default Address;
