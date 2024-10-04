@@ -23,9 +23,9 @@
 |    №    |        Name        |          Work          |
 |:-------:|:------------------:|:----------------------:|
 |    1    |  Jasur   | client/dashboard client/profile  |
-|    2    |   Timur  | client/test-start client/quiz     |
+|    2    |   Temur  | client/test-start client/quiz     |
 |    3    |  Javlon  |       SignIn/SignUp      |
-|    4    | Ulug'bek | boshqaruv panel yani admin dashboard, Admin /Test |
+|    4    | Ulug'bek | boshqaruv panel yani admin dashboard, Admin /Test |  
 |    5    | Asliddin | Admin / Foydalanuvchilar |
 |    6    |   Nodir  | Admin Category |
 |    7    |   Uktam  | Admin /Test |
