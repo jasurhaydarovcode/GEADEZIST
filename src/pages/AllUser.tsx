@@ -1,8 +1,8 @@
-import { SlArrowDown } from "react-icons/sl";
-import { FcSearch } from "react-icons/fc";
+import { SlArrowDown } from 'react-icons/sl';
+import { FcSearch } from 'react-icons/fc';
 // import React from 'react'
 
-import { Link } from "react-router-dom"
+import { Link } from 'react-router-dom';
 // import Sidebar from "../components/Sidebar";
 // import Navbar from "../components/Navbar";
 
@@ -19,7 +19,9 @@ const AllUser = (): JSX.Element => {
               <header className="flex items-center justify-between">
                 <h3 className="font-bold text-[27px]">Foydalanuvchilar</h3>
                 <div className="flex gap-2 text-[18px]">
-                  <Link to={'/dashboard'}><h4>Boshqaruv paneli </h4></Link>
+                  <Link to={'/dashboard'}>
+                    <h4>Boshqaruv paneli </h4>
+                  </Link>
                   <h4> / </h4>
                   <h4 className="text-blue-600"> Foydalanuvchilar</h4>
                 </div>
@@ -29,11 +31,22 @@ const AllUser = (): JSX.Element => {
               {/* sort */}
               <div className="flex justify-end pt-5 gap-5">
                 <div className="flex">
-                  <label htmlFor="inp1"><FcSearch className="absolute mt-4 ml-3 text-[20px]" /></label>
-                  <input type="text" id="inp1" className="w-[390px] pl-10  bg-[] border-gray-300 rounded-md h-[50px] " placeholder="Foydalanuvchini qidirish" />
+                  <label htmlFor="inp1">
+                    <FcSearch className="absolute mt-4 ml-3 text-[20px]" />
+                  </label>
+                  <input
+                    type="text"
+                    id="inp1"
+                    className="w-[390px] pl-10  bg-[] border-gray-300 rounded-md h-[50px] "
+                    placeholder="Foydalanuvchini qidirish"
+                  />
                 </div>
                 <div className="flex">
-                  <input type="text" className="w-[390px] bg-[] rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400  placeholder:text-[14px] " placeholder="Foydalanuvchini qidirish" />
+                  <input
+                    type="text"
+                    className="w-[390px] bg-[] rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400  placeholder:text-[14px] "
+                    placeholder="Foydalanuvchini qidirish"
+                  />
                   <SlArrowDown className="absolute ml-[360px] mt-4" />
                 </div>
                 <div className="flex">
@@ -47,14 +60,13 @@ const AllUser = (): JSX.Element => {
                 </div>
               </div>
               {/* sort */}
-              <div>
-              </div>
+              <div></div>
             </div>
           </div>
-        </div >
+        </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default AllUser
+export default AllUser;

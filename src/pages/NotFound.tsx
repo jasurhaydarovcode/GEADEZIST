@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet";
+import { Helmet } from 'react-helmet';
 
 function NotFound() {
   return (
@@ -8,10 +8,12 @@ function NotFound() {
       </Helmet>
 
       <main className="h-screen w-full flex flex-col justify-center items-center bg-[#a8a9ac]">
-        <h1 className="text-9xl font-extrabold text-white tracking-widest">404</h1>
+        <h1 className="text-9xl font-extrabold text-white tracking-widest">
+          404
+        </h1>
       </main>
     </div>
   );
 }
 
-export default NotFound
+export default NotFound;

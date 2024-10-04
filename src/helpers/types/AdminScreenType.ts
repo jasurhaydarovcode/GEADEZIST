@@ -1,7 +1,7 @@
-import { ReactNode } from "react"
+import { ReactNode } from 'react';
 
 export interface AdminScreenType {
-    // name: string
-    // path: string
-    children?: React.ReactNode;
-}   
+  // name: string
+  // path: string
+  children?: React.ReactNode;
+}

@@ -1,4 +1,4 @@
-import Helmet from 'react-helmet'
+import Helmet from 'react-helmet';
 
 function Home() {
   return (
@@ -7,9 +7,7 @@ function Home() {
         <title>Homepage</title>
       </Helmet>
 
-      <div>
-        Home
-      </div>
+      <div>Home</div>
     </div>
   );
 }

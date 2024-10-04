@@ -1,21 +1,19 @@
-import { Logo } from "@/helpers/imports/images";
-import { Link } from "react-router-dom";
+import { Logo } from '@/helpers/imports/images';
+import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
-
   const sidebarItems = [
-    "Boshqaruv paneli",
-    "Kategoriya",
-    "Test",
-    "Foydalanuvchilar",
-    "Foydalanuvchilar natijasi",
-    "Hodimlar",
-    "Manzil",
+    'Boshqaruv paneli',
+    'Kategoriya',
+    'Test',
+    'Foydalanuvchilar',
+    'Foydalanuvchilar natijasi',
+    'Hodimlar',
+    'Manzil',
   ];
 
   return (
     <aside className="bg-gray-100 w-72 p-4 h-screen">
-
       {/* Logo */}
       <div className="pt-5 pb-8">
         <Link to="/dashboard">

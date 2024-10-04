@@ -1,4 +1,3 @@
-
-export interface ListType{
-    listname: string;
+export interface ListType {
+  listname: string;
 }

@@ -6,6 +6,7 @@ build
 vite.config.ts
 tailwind.config.js
 README.md
+package.json
 package-lock.json
 tsconfig.json
 tsconfig.app.json

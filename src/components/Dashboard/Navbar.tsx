@@ -1,4 +1,4 @@
-import { geodeziyaLogo } from "@/helpers/imports/images";
+import { geodeziyaLogo } from '@/helpers/imports/images';
 
 const Navbar = () => {
   return (
