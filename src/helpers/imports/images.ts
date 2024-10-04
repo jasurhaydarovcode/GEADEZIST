@@ -1,4 +1,4 @@
 import Logo from '../../assets/images/logo.svg'
-import Logo2 from '../../assets/images/logo.svg'
+import geodeziyaLogo from '../../assets/images/GEADEZIST.png'
 
-export {Logo, Logo2} 
+export {Logo, geodeziyaLogo} 

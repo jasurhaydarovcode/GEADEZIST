@@ -3,15 +3,15 @@ import { FcSearch } from "react-icons/fc";
 // import React from 'react'
 
 import { Link } from "react-router-dom"
-import Sidebar from "@/components/Sidebar";
-import Navbar from "@/components/Navbar";
+// import Sidebar from "../components/Sidebar";
+// import Navbar from "../components/Navbar";
 
 const AllUser = (): JSX.Element => {
   return (
     <>
       <div>
-        <Navbar />
-        <Sidebar />
+        {/* <Navbar />
+        <Sidebar /> */}
         <div className="flex justify-end pt-10 pr-6">
           <div className="p-7 px-8">
             <div className="w-max">
