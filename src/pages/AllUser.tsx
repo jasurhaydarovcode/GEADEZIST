@@ -1,3 +1,4 @@
+import { FcSearch } from "react-icons/fc";
 // import React from 'react'
 
 import { Link } from "react-router-dom"
@@ -15,8 +16,17 @@ const AllUser = () => {
             <h4 className="text-blue-600"> Foydalanuvchilar</h4>
           </div>
         </header>
-        <div>
-          <input type="text" />
+        <div className="flex justify-end pt-7 gap-5">
+          <div className="flex">
+            <label htmlFor="inp1"><FcSearch className="absolute mt-4 ml-3 text-[20px]" /></label>
+            <input type="text" id="inp1" className="w-[350px] pl-10  bg-[] border-gray-300 rounded-md h-[50px] " placeholder="Foydalanuvchini qidirish" />
+          </div>
+          <div className="flex">
+            <input type="text" className="w-[350px] bg-[] border-gray-300 rounded-md h-[50px] " placeholder="Foydalanuvchini qidirish" />
+          </div>
+          <div className="flex">
+            <input type="text" className="w-[350px] bg-[] border-gray-300 rounded-md h-[50px] " placeholder="Foydalanuvchini qidirish" />
+          </div>
         </div>
       </div>
     </>
