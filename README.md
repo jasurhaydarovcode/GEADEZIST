@@ -36,3 +36,4 @@
 |   12    |  Bexruz  | Admin Adress Dilshod bilan birga |
 |   13    | Asil aka | Admin /Test, Uktam bilan birga |
 |   14    |   Ozod   | client/quiz, Timur bilan birga |
+|   15    | Feruzbek | Admin Adress aka ukala bilan|
