@@ -31,8 +31,8 @@
 |    7    |   Uktam  | Admin /Test |
 |    8    | Shohjahon| Admin Foydalanuvchilar Natijasi |
 |    9    |  Alibek  | Admin Category Nodir bilan |
-|    9    |  Asilbek | Admin/Employees, auth/offerta  |
-|   10    |  Dilshod | Admin Adress |
+|   10    |  Asilbek | Admin/Employees, auth/offerta  |
+|   11    |  Dilshod | Admin Adress |
 |   12    |  Bexruz  | Admin Adress Dilshod bilan birga |
-|   11    | Asil aka | Admin /Test, Uktam bilan birga |
-|   12    |   Ozod   | client/quiz, Timur bilan birga |
+|   13    | Asil aka | Admin /Test, Uktam bilan birga |
+|   14    |   Ozod   | client/quiz, Timur bilan birga |
