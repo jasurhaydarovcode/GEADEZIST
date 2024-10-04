@@ -25,7 +25,7 @@
 |    1    |  Jasur   | client/dashboard client/profile  |
 |    2    |   Timur  | client/test-start client/quiz     |
 |    3    |  Javlon  |       SignIn/SignUp      |
-|    4    | Ulug'bek | boshqaruv panel yani admin dashboard |
+|    4    | Ulug'bek | boshqaruv panel yani admin dashboard, Admin /Test |
 |    5    | Asliddin | Admin / Foydalanuvchilar |
 |    6    |   Nodir  | Admin Category |
 |    7    |   Uktam  | Admin /Test |
@@ -34,6 +34,6 @@
 |   10    |  Asilbek | Admin/Employees, auth/offerta  |
 |   11    |  Dilshod | Admin Adress |
 |   12    |  Bexruz  | Admin Adress Dilshod bilan birga |
-|   13    | Asil aka | Admin /Test, Uktam bilan birga |
+|   13    | Asil aka | Uktam bilan birga |
 |   14    |   Ozod   | client/quiz, Timur bilan birga |
 |   15    | Feruzbek | Admin Adress aka ukala bilan|
