@@ -13,6 +13,7 @@
 ---
 
 ### Developer documentation
+#### Team Lead: [Jasur](https://github.com/jasurhaydarovcode)
 
 <p align="center">
   <a href="https://github.com/jasurhaydarovcode/GEADEZIST/graphs/contributors">
