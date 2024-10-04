@@ -5,14 +5,15 @@ function SignIn() {
   return (
     <div>
       <div className="h-screen  flex items-center justify-center bg-gray-100">
-      <div className="flex bg-white shadow-lg rounded-lg overflow-hidden">
+      <div className="flex w-5/6 h-5/6 bg-white shadow-lg rounded-lg overflow-hidden">
         <div className=" w-3/5  flex flex-col items-center justify-center bg-gray-50 p-8">
           <img src={Logo} alt="Logo" className="w-32 mb-8" />
           <div className="w-48">
             <img src={registerRasm} alt="Phone Illustration" />
           </div>
         </div>
-        <div className="w-3/5 p-8">
+        <div className="flex justify-center items-center">
+          <div className="w-5/5 p-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Тизимга кириш</h2>
           <div>
             <div className="mb-4">
@@ -56,6 +57,7 @@ function SignIn() {
             <a href="/forgot-password" className="text-sm text-blue-500 hover:underline">
               Паролни унутдингизми?
             </a>
+          </div>
           </div>
         </div>
       </div>
