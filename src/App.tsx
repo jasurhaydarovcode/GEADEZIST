@@ -25,8 +25,18 @@ import Archive from './pages/Archive';
 import Employees from './pages/Employees';
 import Address from './pages/Address';
 import InspectorAdmin from './pages/InspectorAdmin';
+// import { useEffect } from 'react';
 
 function App() {
+  // const navigate = useNavigate();
+  // function LocalgaSaqlash(){
+  //   if(!localStorage.getItem('token')){ 
+  //    navigate('/auth/SignIn')
+  //   }
+  // }
+  // useEffect(() => {
+  //   LocalgaSaqlash()
+  // })
   return (
     <Routes>
       <Route path="/" element={<Home />} />
