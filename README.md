@@ -6,6 +6,11 @@
 
 ---
 
+<img align=left src=".github/Deadline_logo.png" width="130"/> 
+<h2 align="right">03.10.2024/21.10.2024</h2>
+
+---
+
 #### Technologies
 
 [![My Skills](https://skillicons.dev/icons?i=react,vite,ts,tailwind,jquery)]()  
@@ -13,6 +18,7 @@
 ---
 
 ### Developer documentation
+#### Team Lead: [Jasur](https://github.com/jasurhaydarovcode)
 
 <p align="center">
   <a href="https://github.com/jasurhaydarovcode/GEADEZIST/graphs/contributors">

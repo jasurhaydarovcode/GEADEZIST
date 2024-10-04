@@ -8,7 +8,7 @@ const GEADEZIST = (): Plugin => {
     name: 'console-plugin',
     configureServer(server: ViteDevServer) {
       server.httpServer?.once('listening', () => {
-        console.log('\n Happy Hacking, 🫠 🫠 😴\n GEADEZIST\n');
+        console.log('\n ODAMCHALAR, 🫠 🫠 😴\n GEADEZIST\n');
       });
     },
   };
