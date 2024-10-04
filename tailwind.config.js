@@ -8,6 +8,11 @@ export default {
     flowbite.content(),
   ],
   theme: {
+    colors: {
+      'geadezist': {
+        100: '#DBDDE2'
+      }
+    },
     extend: {},
   },
   plugins: [

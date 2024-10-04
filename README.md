@@ -22,15 +22,16 @@
 
 |    №    |        Name        |          Work          |
 |:-------:|:------------------:|:----------------------:|
-|    1    |  Jasur   | client/dashboard client/profile auth/offerta |
+|    1    |  Jasur   | client/dashboard client/profile  |
 |    2    |   Timur  | client/test-start client/quiz     |
 |    3    |  Javlon  |       SignIn/SignUp      |
-|    4    | Ulug'bek ||
-|    5    | Asliddin ||
-|    6    |   Nodir  ||
-|    7    |   Uktam  ||
-|    8    | Shohjahon||
-|    9    |  Asilbek ||
-|   10    |  Dilshod ||
-|   12    |  Bexruz  ||
-|   11    | Asil aka ||
+|    4    | Ulug'bek | boshqaruv panel yani admin dashboard |
+|    5    | Asliddin | Admin / Foydalanuvchilar |
+|    6    |   Nodir  | Admin Category |
+|    7    |   Uktam  | Admin /Test |
+|    8    | Shohjahon| Admin Foydalanuvchilar Natijasi |
+|    9    |  Asilbek | Admin/Employees, auth/offerta  |
+|   10    |  Dilshod | Admin Adress |
+|   12    |  Bexruz  | Admin Adress Dilshod bilan birga |
+|   11    | Asil aka | Admin /Test, Uktam bilan birga |
+|   12    |   Ozod   | client/quiz, Timur bilan birga |
