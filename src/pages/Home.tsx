@@ -8,7 +8,7 @@ function Home() {
       </Helmet>
 
       <div>
-        Homepage
+        Home
       </div>
     </div>
   );
