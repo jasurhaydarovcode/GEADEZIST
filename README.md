@@ -30,7 +30,7 @@
 |    6    |   Nodir  | Admin Category |
 |    7    |   Uktam  | Admin /Test |
 |    8    | Shohjahon| Admin Foydalanuvchilar Natijasi |
-|    9    |  Alibek  | Admin Category Nodir bilan |
+<!-- |    9    |  Alibek | Nall | -->
 |   10    |  Asilbek | Admin/Employees, auth/offerta  |
 |   11    |  Dilshod | Admin Adress |
 |   12    |  Bexruz  | Admin Adress Dilshod bilan birga |
