@@ -17,7 +17,7 @@ const Sidebar: React.FC<AdminScreenType> = ({children}): JSX.Element => {
                     <ul className="space-y-4 font-medium">
                         <li>
                             <Button
-                                btnShadow="0px 0px 10px 0px gray"
+                                btnBorder="1px solid #E5E7EB"
                                 btnText="Boshqaruv Paneli"
                                 btnWidth="230px"
                                 btnHeight="50px"
