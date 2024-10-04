@@ -1,7 +1,11 @@
 {
   "files": [],
   "compilerOptions": {
-    "lib": ["esnext", "dom"]
+    "lib": ["esnext", "dom"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    }
   },
   "references": [
     { "path": "./tsconfig.app.json" },

@@ -1,8 +1,8 @@
 import { Route, Routes } from 'react-router-dom';
-import Home from './pages/Home';
-import NotFound from './pages/NotFound';
-import SignIn from './pages/Auth/SignIn';
-import SignUp from './pages/Auth/SignUp';
+import Home from '@/pages/Home';
+import NotFound from '@/pages/NotFound';
+import SignIn from '@/pages/Auth/SignIn';
+import SignUp from '@/pages/Auth/SignUp';
 
 // Font Family "Lato"
 import '@fontsource/lato';
@@ -15,10 +15,15 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="*" element={<NotFound />} />
 
+
+
       {/* START Authentication Routes */}
       <Route path="/auth/SignIn" element={<SignIn />} />
       <Route path="/auth/SignUp" element={<SignUp />} />
       {/* END Authentication Routes */}
+
+
+
     </Routes>
   );
 }
