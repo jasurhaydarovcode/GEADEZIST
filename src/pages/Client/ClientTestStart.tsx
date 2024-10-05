@@ -31,24 +31,6 @@ const ClientTestStart: React.FC = () => {
     { title: "Қайта топшириш вақти:", value: "3 кундан кейин" },
   ];
 
-
-  const testData = [
-    {
-      title: "Umumiy Geodeziya",
-      time: "60 (daq.)",
-      questions: "20 ta",
-      retry: "3 kundan keyin",
-      imgSrc: "https://via.placeholder.com/382x192",
-    },
-    {
-      title: "Tepografiya",
-      time: "60 (daq.)",
-      questions: "20 ta",
-      retry: "3 kundan keyin",
-      imgSrc: "https://via.placeholder.com/382x192",
-    },
-  ];
-
   return (
     <Layout>
       <div className="py-8">
