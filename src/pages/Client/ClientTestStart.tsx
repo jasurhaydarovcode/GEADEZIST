@@ -16,7 +16,6 @@ const ClientTestStart: React.FC = () => {
 
   const handleOk = () => {
     navigate('/client/quiz/:id')
-    // Add any logic you want to execute when "OK" is clicked
   };
 
   // Function to handle modal close
