@@ -10,7 +10,7 @@ function ClientProfile() {
           <div className="flex flex-col items-center mb-6">
             <h4 className="text-2xl text-red-600 font-semibold pb-4">Foydalanuvchi rasmi</h4>
             <img className="w-40 relative h-40 rounded-full object-cover" src="https://e1.pxfuel.com/desktop-wallpaper/574/559/desktop-wallpaper-joker-green-card-superheroes-backgrounds-and-green-joker-thumbnail.jpg" alt="User Image" />
-            <button className="absolute ml-28 mt-28 bg-red-500 text-white p-2 rounded-full">
+            <button className="absolute ml-28 mt-40 bg-red-500 text-white p-2 rounded-full">
               <BiSolidPencil />
             </button>
           </div>

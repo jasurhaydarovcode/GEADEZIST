@@ -20,11 +20,11 @@
 ### Developer documentation
 #### Team Lead: [Jasur](https://github.com/jasurhaydarovcode)
 
-<p align="center">
+<!-- <p align="center">
   <a href="https://github.com/jasurhaydarovcode/GEADEZIST/graphs/contributors">
     <img src="https://contrib.rocks/image?repo=jasurhaydarovcode/GEADEZIST">
   </a>
-</p>
+</p> -->
 
 |    №    |        Name        |          Work          |
 |:-------:|:------------------:|:----------------------:|
