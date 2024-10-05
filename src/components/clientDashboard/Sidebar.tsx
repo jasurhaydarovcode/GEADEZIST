@@ -16,7 +16,7 @@ const Sidebar: React.FC = () => {
     ];
 
     return (
-        <div className="w-80 bg-gray-100 p-4">
+        <div className="w-80 bg-gray-100 px-4 py-8">
             <Link to={"/client/dashboard"}>
                 <img src={Logo} className="w-52" alt="Geodeziya Logo" />
             </Link>

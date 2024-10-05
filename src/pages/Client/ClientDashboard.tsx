@@ -2,7 +2,7 @@
 import React from 'react';
 import Layout from '../../components/clientDashboard/laytout';
 import { CardProps } from '../../helpers/types/CardProp';
-import { IoEyeOutline } from 'react-icons/io5';
+import PreviewOverlay from '@/components/PreviewOverlay';
 
 const Card: React.FC<CardProps> = ({ image, title, answers, time, score, date, sections, buttonText, status }) => {
   return (
@@ -10,9 +10,7 @@ const Card: React.FC<CardProps> = ({ image, title, answers, time, score, date, s
       <div className="border rounded-lg shadow-lg p-4">
         <div className="relative group">
           <img src={image} alt="Preview" className="w-full h-64 object-cover rounded-md" />
-          <div className="gap-2 absolute top-0 left-0 w-full h-full bg-black bg-opacity-25 text-white text-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md">
-            <IoEyeOutline />  Preview
-          </div>
+          <PreviewOverlay />
         </div>
         <h3 className="text-center text-2xl font-bold text-red-500 mt-3">{title}</h3>
         <div className="text-gray-600 mt-2">

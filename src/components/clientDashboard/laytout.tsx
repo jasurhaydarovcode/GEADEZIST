@@ -14,12 +14,12 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 <Navbar />
 
                 {/* Main Content */}
-                <main className="p-4">
+                <main className="p-8">
                     {children}
                 </main>
             </div>
         </div>
     );
-};
+};``
 
 export default Layout;

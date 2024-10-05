@@ -25,14 +25,14 @@ const Sidebar = () => {
 
       <ul className="space-y-4">
         {sidebarItems.map((item, index) => (
-          <a
+          <Link
             key={index}
-            href={`/${item.toLowerCase().replace(/\s+/g, '-')}`}
+            to={`/${item.toLowerCase().replace(/\s+/g, '-')}`}
             className={`${pathname === `/${item.toLowerCase().replace(/\s+/g, '-')}` ? 'bg-gray-300' : ''} block px-4 py-5 bg-gray-100 text-gray-700 rounded shadow-xl border hover:bg-gray-400`}
             // className="block px-4 py-5 bg-gray-100 text-gray-700 rounded shadow-xl border hover:bg-gray-300"
           >
             {item}
-          </a>
+          </Link>
         ))}
       </ul>
     </aside>
