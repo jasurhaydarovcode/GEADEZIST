@@ -1,5 +1,5 @@
 import { Logo } from '@/helpers/imports/images';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Sidebar = () => {
   const sidebarItems = [
@@ -11,6 +11,8 @@ const Sidebar = () => {
     'Hodimlar',
     'Manzil',
   ];
+
+  const { pathname } = useLocation();
 
   return (
     <aside className="bg-gray-100 w-72 p-4">
@@ -25,8 +27,9 @@ const Sidebar = () => {
         {sidebarItems.map((item, index) => (
           <a
             key={index}
-            href={`#${item.toLowerCase().replace(/\s+/g, '-')}`}
-            className="block px-4 py-5 bg-gray-100 text-gray-700 rounded shadow-xl border hover:bg-gray-300"
+            href={`/${item.toLowerCase().replace(/\s+/g, '-')}`}
+            className={`${pathname === `/${item.toLowerCase().replace(/\s+/g, '-')}` ? 'bg-gray-300' : ''} block px-4 py-5 bg-gray-100 text-gray-700 rounded shadow-xl border hover:bg-gray-400`}
+            // className="block px-4 py-5 bg-gray-100 text-gray-700 rounded shadow-xl border hover:bg-gray-300"
           >
             {item}
           </a>
