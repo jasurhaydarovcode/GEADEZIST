@@ -6,14 +6,14 @@
 
 ---
 
-<img align=left src=".github/Deadline_logo.png" width="130"/> 
+<img align=left src=".github/Deadline_logo.png" width="100"/> 
 <h2 align="right">03.10.2024/21.10.2024</h2>
 
 ---
 
 #### Technologies
 
-[![My Skills](https://skillicons.dev/icons?i=react,vite,ts,tailwind,jquery)]()  
+[![My Skills](https://skillicons.dev/icons?i=react,vite,ts,tailwind)]()  
 
 ---
 
