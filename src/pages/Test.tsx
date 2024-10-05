@@ -1,6 +1,10 @@
+import Layout from "@/components/Dashboard/Layout";
+
 function Test() {
   return (
-    <div>Test</div>
+    <Layout>
+      Test
+    </Layout>
   );
 }
 

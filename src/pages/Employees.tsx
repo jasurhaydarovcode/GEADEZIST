@@ -1,14 +1,10 @@
-import Navbar from "@/components/Dashboard/Navbar"
-import Sidebar from "@/components/Dashboard/Sidebar"
+import Layout from "@/components/Dashboard/Layout"
 
 function Employees() {
   return (
-    <div className="flex h-screen container">
-      <Sidebar />
-      <div className="flex-1 flex flex-col">
-        <Navbar />
-      </div>
-    </div>
+    <Layout>
+      Xodimlar
+    </Layout>
   )
 }
 

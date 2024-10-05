@@ -1,6 +1,10 @@
+import Layout from "@/components/Dashboard/Layout";
+
 function User() {
   return (
-    <div>User</div>
+    <Layout>
+      User
+    </Layout>
   );
 }
 

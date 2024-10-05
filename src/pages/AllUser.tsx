@@ -10,6 +10,11 @@ const AllUser = (): JSX.Element => {
   return (
     <>
       <div>
+        <div>
+          <button>
+            
+          </button>
+        </div>
         {/* <Navbar />
         <Sidebar /> */}
         <div className="flex justify-end pt-10 pr-6">

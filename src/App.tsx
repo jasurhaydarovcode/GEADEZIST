@@ -17,7 +17,6 @@ import ClientProfile from './pages/Client/ClientProfile';
 import ClientTestStart from './pages/Client/ClientTestStart';
 import ClientQuiz from './pages/Client/ClientQuiz';
 import Dashboard from './pages/Dashboard';
-import Category from './pages/Category';
 import Test from './pages/Test';
 import AllUser from './pages/AllUser';
 import User from './pages/User';
@@ -25,6 +24,8 @@ import Archive from './pages/Archive';
 import Employees from './pages/Employees';
 import Address from './pages/Address';
 import InspectorAdmin from './pages/InspectorAdmin';
+import Category from './pages/Category';
+import Profile from './pages/Profile';
 // import { useEffect } from 'react';
 
 function App() {
@@ -66,7 +67,7 @@ function App() {
       <Route path="/archive/:id" element={<Archive />} />
       <Route path="/employees" element={<Employees />} />
       <Route path="/address" element={<Address />} />
-
+      <Route path="/profile" element={<Profile/>}/>
       <Route path="/inspector-admin" element={<InspectorAdmin />} />
       {/* END Admin Routes */}
     </Routes>
