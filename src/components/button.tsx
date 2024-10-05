@@ -1,6 +1,5 @@
 import { ButtonType } from "@/helpers/types/Button";
 
-
 const Button: React.FC<ButtonType> = ({
   btnText = '',
   btnBg = 'none',
@@ -10,6 +9,8 @@ const Button: React.FC<ButtonType> = ({
   btnShadow = 'none',
   btnWidth = 'none',
   btnClass = '',
+  iconClass = '', // Ikonka classini qabul qilish
+  btnClick
 }) => {
   return (
     <div>
@@ -23,10 +24,10 @@ const Button: React.FC<ButtonType> = ({
           width: btnWidth,
         }}
         className={btnClass}
+        onClick={btnClick}
       >
         {/* Agar iconClass berilgan bo'lsa, <i> tegini ko'rsatamiz */}
-        {/* {iconClass && } */}
-        
+        {iconClass && <i className={iconClass}></i>}
         {btnText && <span>{btnText}</span>}
       </button>
     </div>

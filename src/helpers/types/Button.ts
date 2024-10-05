@@ -1,3 +1,4 @@
+import { ReactElement, ReactNode } from "react";
 
 export interface ButtonType {
   btnClass?: string;
@@ -8,4 +9,6 @@ export interface ButtonType {
   btnColor?: string;
   btnBorder?: string;
   btnShadow?: string;
+  iconClass?: string;
+  btnClick?: ReactElement;
 }
