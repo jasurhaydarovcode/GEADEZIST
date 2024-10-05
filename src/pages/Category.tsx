@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import Sidebar from "@/components/Dashboard/Sidebar"
 import { Button } from "antd"
 import { Navbar } from "flowbite-react"
@@ -33,4 +34,12 @@ const Category = () => {
     )
 }
 
+=======
+function Category() {
+  return (
+    <div>Category</div>
+  );
+}
+
+>>>>>>> 688a4d8e867b88fed4759d9978b49c64730c6f6b
 export default Category

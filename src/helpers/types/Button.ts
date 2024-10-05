@@ -1,8 +1,7 @@
-import { ReactNode } from 'react';
 
 export interface ButtonType {
-  className?: string;
-  btnText?: ReactNode;
+  btnClass?: string;
+  btnText?: string;
   btnWidth?: string;
   btnHeight?: string;
   btnBg?: string;
