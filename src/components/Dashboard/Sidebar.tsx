@@ -13,7 +13,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="bg-gray-100 w-72 p-4 h-screen">
+    <aside className="bg-gray-100 w-72 p-4">
       {/* Logo */}
       <div className="pt-5 pb-8">
         <Link to="/dashboard">
