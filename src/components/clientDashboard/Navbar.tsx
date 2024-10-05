@@ -31,7 +31,7 @@ const Navbar: React.FC = () => {
 
           {/* Dropdown Modal */}
           {isDropdownOpen && (
-            <div className="absolute right-0 mt-2 w-56 bg-white border rounded-lg shadow-lg">
+            <div className="absolute z-10 right-0 mt-2 w-56 bg-white border rounded-lg shadow-lg">
               <div className="p-4">
                 <div className="font-bold">Foydalan Foydalaniyev</div>
                 <div className="text-gray-500 text-sm">foydalanibqol@gmail.com</div>
