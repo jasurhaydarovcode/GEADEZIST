@@ -25,14 +25,14 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <div className="bg-white shadow py-4 pr-8  relative">
+    <div className="bg-white py-4 pr-8  relative">
       {/* Navbar content here */}
-      <div className="bg-white shadow p-4 relative">
-        <div className="flex justify-between items-center">
+      <div className="bg-white p-4 relative">
+        <div className="flex justify-end items-center">
 
           {/* User section */}
-          <div className="relative">
-            <div className="flex gap-4 items-center cursor-pointer" onClick={toggleDropdown}>
+          <div>
+            <div className="flex justify-end gap-4 items-center cursor-pointer" onClick={toggleDropdown}>
               <div>
                 <div>Foydalan Foydalaniyev</div>
                 <span>foydalanuvchi</span>
@@ -44,7 +44,7 @@ const Navbar: React.FC = () => {
 
             {/* Dropdown Modal */}
             {isDropdownOpen &&
-              <div className="absolute z-50 right-0 mt-2 w-56 bg-white border rounded-lg shadow-lg">
+              <div className="absolute z-50 right-0 mt-2 w-56 bg-white  rounded-lg shadow-lg">
                 <div className="absolute z-10 right-0 mt-2 w-56 bg-white border rounded-lg shadow-lg">
                   <div className="p-4">
                     <div className="font-bold">Foydalan Foydalaniyev</div>
