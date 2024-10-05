@@ -17,7 +17,7 @@ import ClientProfile from './pages/Client/ClientProfile';
 import ClientTestStart from './pages/Client/ClientTestStart';
 import ClientQuiz from './pages/Client/ClientQuiz';
 import Dashboard from './pages/Dashboard';
-import Category from './pages/Category';
+// import Category from './pages/Category';
 import Test from './pages/Test';
 import AllUser from './pages/AllUser';
 import User from './pages/User';
@@ -59,7 +59,7 @@ function App() {
 
       {/* START Admin Routes */}
       <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/category" element={<Category />} />
+      {/* <Route path="/category" element={<Category />} /> */}
       <Route path="/test" element={<Test />} />
       <Route path="/all-user" element={<AllUser />} />
       <Route path="/user" element={<User />} />
