@@ -1,5 +1,5 @@
 import { geodeziyaLogo } from '@/helpers/imports/images';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaRegUser } from 'react-icons/fa';
 import { IoCloseOutline, IoExitOutline } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
@@ -22,6 +22,23 @@ const Navbar = () => {
   const closeLogoutModal = () => {
     setIsLogoutModalOpen(false);
   };
+
+  useEffect(() => {
+    // Klaviatura tugmasi bosilganda ishlovchi funksiya
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if(event.key){
+        setIsDropdownOpen(false)
+      }
+    };
+
+    // Window elementiga klaviatura hodisasini ulaymiz
+    window.addEventListener('keydown', handleKeyPress);
+
+    // Cleanup function: komponent o'chirilganda hodisani olib tashlaymiz
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, []);
 
   return (
     <nav className="bg-white border-b shadow p-6 flex justify-end items-center">

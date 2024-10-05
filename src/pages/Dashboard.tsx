@@ -13,8 +13,9 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { useState } from 'react';
+import {useState} from 'react';
 import Layout from '@/components/Dashboard/Layout';
+
 
 ChartJS.register(
   CategoryScale,
@@ -36,7 +37,6 @@ const Dashboard = () => {
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCategory(e.target.value);
   };
-
   const handleRegionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedRegion(e.target.value);
   };
