@@ -6,25 +6,25 @@
 
 ---
 
-<img align=left src=".github/Deadline_logo.png" width="130"/> 
+<img align=left src=".github/Deadline_logo.png" width="100"/> 
 <h2 align="right">03.10.2024/21.10.2024</h2>
 
 ---
 
 #### Technologies
 
-[![My Skills](https://skillicons.dev/icons?i=react,vite,ts,tailwind,jquery)]()  
+[![My Skills](https://skillicons.dev/icons?i=react,vite,ts,tailwind)]()  
 
 ---
 
 ### Developer documentation
 #### Team Lead: [Jasur](https://github.com/jasurhaydarovcode)
 
-<p align="center">
+<!-- <p align="center">
   <a href="https://github.com/jasurhaydarovcode/GEADEZIST/graphs/contributors">
     <img src="https://contrib.rocks/image?repo=jasurhaydarovcode/GEADEZIST">
   </a>
-</p>
+</p> -->
 
 |    №    |        Name        |          Work          |
 |:-------:|:------------------:|:----------------------:|
