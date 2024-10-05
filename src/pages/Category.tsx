@@ -6,7 +6,6 @@ import { MdOutlineAddCircle } from 'react-icons/md';
 import Modal from 'react-modal';
 
 
-
 const Category = () => {
     const [ isModalOpen, setIsModalOpen] = useState(false);
   
@@ -18,16 +17,19 @@ const Category = () => {
             <Navbar />
             <div className="flex">
                 <Sidebar />
-                <div className={`mb-5`}>
-                    <Button
-                    onClick={openModal}
-                    children={<div className={`flex justify-center items-center`}>
-                        <MdOutlineAddCircle className={`text-4xl mr-5`} />
-                        <p className={`text-lg font-bold`}>Qo'shish</p>
-                    </div>}
-                    />
+                <div className={`ml-5`}>
+                    <p className={`text-2xl font-bold my-5`}>Kategoryalar</p>
+                    <div className={`mb-5`}>
+                        <Button
+                        onClick={openModal}
+                        children={<div className={`flex justify-center items-center`}>
+                            <MdOutlineAddCircle className={`text-4xl mr-5`} />
+                            <p className={`text-lg font-bold`}>Qo'shish</p>
+                        </div>}
+                        />
+                    </div>
+                    {isModalOpen && <Modal onRequestClose={closeModal} isOpen={isModalOpen} />}
                 </div>
-                {isModalOpen && <Modal onRequestClose={closeModal} isOpen={isModalOpen} />}
             </div>
         </>
     )
