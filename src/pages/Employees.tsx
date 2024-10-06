@@ -50,6 +50,7 @@ function Employees() {
             onOk={handleOk}
             confirmLoading={confirmLoading}
             onCancel={handleCancel}
+            maskClosable={false}
           >
             <p>{modalText}</p>
           </Modal>
