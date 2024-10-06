@@ -1,6 +1,9 @@
 import Layout from "@/components/Dashboard/Layout"
 import { PlusCircleOutlined } from "@ant-design/icons"
 import { Button } from "antd"
+import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { Space, Switch } from 'antd';
 
 function Employees() {
   return (
@@ -17,6 +20,38 @@ function Employees() {
               <PlusCircleOutlined className="text-xl"/>Qo'shish 
             </Button>
           </div>
+          <div className="overflow-x-auto">
+      <Table hoverable>
+        <TableHead>
+          <TableHeadCell>T/P</TableHeadCell>
+          <TableHeadCell>Ism</TableHeadCell>
+          <TableHeadCell>Familya</TableHeadCell>
+          <TableHeadCell>Electron pochta</TableHeadCell>
+          <TableHeadCell>Lavozimi</TableHeadCell>
+          <TableHeadCell>Action</TableHeadCell>
+        </TableHead>
+        <TableBody className="divide-y">
+          <TableRow className="bg-white dark:border-gray-700 dark:bg-gray-800">
+            <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+              {'Apple MacBook Pro 17"'}
+            </TableCell>
+            <TableCell>Sliver</TableCell>
+            <TableCell>Laptop</TableCell>
+            <TableCell>$2999</TableCell>
+            <TableCell>$2999</TableCell>
+            <TableCell>
+              <Space direction="vertical">
+                <Switch
+                  checkedChildren={<CheckOutlined />}
+                  unCheckedChildren={<CloseOutlined />}
+                  defaultChecked
+                />
+              </Space>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </div>
         </div>
     </Layout>
   )
