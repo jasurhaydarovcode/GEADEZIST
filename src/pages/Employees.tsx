@@ -12,14 +12,12 @@ import { Modal } from 'antd';
 function Employees() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState('Content of the modal');
 
   const showModal = () => {
     setOpen(true);
   };
 
   const handleOk = () => {
-    setModalText('The modal will be closed after two seconds');
     setConfirmLoading(true);
     setTimeout(() => {
       setOpen(false);
@@ -28,7 +26,6 @@ function Employees() {
   };
 
   const handleCancel = () => {
-    console.log('Clicked cancel button');
     setOpen(false);
   };
   return (
@@ -45,14 +42,58 @@ function Employees() {
             <PlusCircleOutlined className="text-xl"/>Qo'shish 
           </Button>
           <Modal
-            title="Title"
+            title="Hodim qo'shish"
             open={open}
             onOk={handleOk}
             confirmLoading={confirmLoading}
             onCancel={handleCancel}
             maskClosable={false}
           >
-            <p>{modalText}</p>
+            {/* <h2 className="text-xl font-bold mb-4">Rasm Yuklash</h2> */}
+            <div className="mb-4">
+              <label className="block mb-2">Kategoriya turini tanlang</label>
+              <select className="border w-full p-2 rounded">
+                <option value="">Asosiy boʻlmagan kategoriya</option>
+                <option value="main">Asosiy kategoriya</option>
+                <option value="secondary">Asosiy boʻlmagan kategoriya</option>
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <label className="block mb-2">Tavsif</label>
+              <input
+                type="text"
+                placeholder="Tavsifni kiriting"
+                className="border w-full p-2 rounded"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block mb-2">Umumiy savollar soni</label>
+              <input
+                type="number"
+                placeholder="Umumiy savollar sonini kiriting"
+                className="border w-full p-2 rounded"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block mb-2">Qo'shimcha savollar soni</label>
+              <input
+                type="number"
+                placeholder="Qo'shimcha savollar sonini kiriting"
+                className="border w-full p-2 rounded"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block mb-2">Davomiylik vaqti (m)</label>
+              <input
+                type="number"
+                placeholder="Davomiylik vaqti (minutlarda)"
+                className="border w-full p-2 rounded"
+              />
+            </div>
           </Modal>
         </div>
         <div>
@@ -66,8 +107,8 @@ function Employees() {
               <TableHeadCell>Action</TableHeadCell>
             </TableHead>
             <TableBody className="divide-y">
-              <TableRow className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+              <TableRow className="bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800">
+                <TableCell>
                   {'Apple MacBook Pro 17"'}
                 </TableCell>
                 <TableCell>Sliver</TableCell>
