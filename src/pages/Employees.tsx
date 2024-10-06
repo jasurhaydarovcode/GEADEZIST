@@ -6,7 +6,31 @@ import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { Space, Switch } from 'antd';
 import { Pagination } from 'antd';
 
+import { useState } from 'react';
+import { Modal } from 'antd';
+
 function Employees() {
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [modalText, setModalText] = useState('Content of the modal');
+
+  const showModal = () => {
+    setOpen(true);
+  };
+
+  const handleOk = () => {
+    setModalText('The modal will be closed after two seconds');
+    setConfirmLoading(true);
+    setTimeout(() => {
+      setOpen(false);
+      setConfirmLoading(false);
+    }, 2000);
+  };
+
+  const handleCancel = () => {
+    console.log('Clicked cancel button');
+    setOpen(false);
+  };
   return (
     <Layout>
       <div className="p-5">
@@ -17,9 +41,18 @@ function Employees() {
           </p>
         </div>
         <div>
-          <Button color="default" variant="solid" className="text-xl px-5 py-6 my-5">
+          <Button onClick={showModal} color="default" variant="solid" className=" text-xl px-5 py-6 my-5">
             <PlusCircleOutlined className="text-xl"/>Qo'shish 
           </Button>
+          <Modal
+            title="Title"
+            open={open}
+            onOk={handleOk}
+            confirmLoading={confirmLoading}
+            onCancel={handleCancel}
+          >
+            <p>{modalText}</p>
+          </Modal>
         </div>
         <div>
           <Table hoverable>
