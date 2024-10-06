@@ -1,26 +1,33 @@
 import { useState } from 'react';
 import { Button, Modal, Input, Select } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
+import { CategoryFormValues } from '@/types/Category'; // import type from types.ts
 
 const { Option } = Select;
 
 const CategoryAddModal: React.FC = () => {
-    const [open, setOpen] = useState<boolean>(false);
-    const [categoryType, setCategoryType] = useState<string>('asosiy-bolmagan');
-    const [categoryName, setCategoryName] = useState<string>('');
-    const [description, setDescription] = useState<string>('');
-    const [totalQuestions, setTotalQuestions] = useState<string>('');
-    const [additionalQuestions, setAdditionalQuestions] = useState<string>('');
-    const [duration, setDuration] = useState<string>('');
+    // State turlarini `CategoryFormValues` interfeysida aniqlang
+    const [formValues, setFormValues] = useState<CategoryFormValues>({
+        categoryType: 'asosiy-bolmagan',
+        categoryName: '',
+        description: '',
+        totalQuestions: '',
+        additionalQuestions: '',
+        duration: '',
+    });
+
+    const [open, setOpen] = useState(false);
 
     // Inputlarni tozalovchi funksiya
     const resetForm = () => {
-        setCategoryType('asosiy-bolmagan'); // Default qiymat
-        setCategoryName('');
-        setDescription('');
-        setTotalQuestions('');
-        setAdditionalQuestions('');
-        setDuration('');
+        setFormValues({
+            categoryType: 'asosiy-bolmagan', // Default qiymat
+            categoryName: '',
+            description: '',
+            totalQuestions: '',
+            additionalQuestions: '',
+            duration: '',
+        });
     };
 
     const handleSave = () => {
@@ -52,56 +59,56 @@ const CategoryAddModal: React.FC = () => {
                 <div className="space-y-4">
                     {/* Kategoriya turini tanlash */}
                     <Select
-                        value={categoryType}
-                        onChange={(value) => setCategoryType(value)}
+                        value={formValues.categoryType}
+                        onChange={(value) => setFormValues({ ...formValues, categoryType: value })}
                         className="w-full"
                     >
                         <Option value="asosiy">Asosiy kategoriya</Option>
                         <Option value="asosiy-bolmagan">Asosiy bo'lmagan kategoriya</Option>
                     </Select>
 
-                    {/* Agar 'asosiy' kategoriya tanlansa */}
-                    {categoryType === 'asosiy' && (
+                    {/* 'asosiy' kategoriya tanlansa */}
+                    {formValues.categoryType === 'asosiy' && (
                         <>
                             {/* Kategoriya nomi */}
                             <Input
                                 placeholder="Kategoriya nomini kiriting"
-                                value={categoryName}
-                                onChange={(e) => setCategoryName(e.target.value)}
+                                value={formValues.categoryName}
+                                onChange={(e) => setFormValues({ ...formValues, categoryName: e.target.value })}
                             />
 
                             {/* Tavsifi */}
                             <Input
                                 placeholder="Tavsifni kiriting"
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
+                                value={formValues.description}
+                                onChange={(e) => setFormValues({ ...formValues, description: e.target.value })}
                             />
                         </>
                     )}
 
-                    {/* Agar 'asosiy bo'lmagan' kategoriya tanlansa */}
-                    {categoryType === 'asosiy-bolmagan' && (
+                    {/* 'asosiy-bolmagan' kategoriya tanlansa */}
+                    {formValues.categoryType === 'asosiy-bolmagan' && (
                         <>
                             {/* Kategoriya nomi */}
                             <Input
                                 placeholder="Kategoriya nomini kiriting"
-                                value={categoryName}
-                                onChange={(e) => setCategoryName(e.target.value)}
+                                value={formValues.categoryName}
+                                onChange={(e) => setFormValues({ ...formValues, categoryName: e.target.value })}
                             />
 
                             {/* Tavsifi */}
                             <Input
                                 placeholder="Tavsifni kiriting"
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
+                                value={formValues.description}
+                                onChange={(e) => setFormValues({ ...formValues, description: e.target.value })}
                             />
 
                             {/* Umumiy savollar soni */}
                             <Input
                                 type="number" // Faqat raqam kiritish mumkin
                                 placeholder="Umumiy savollar sonini kiriting"
-                                value={totalQuestions}
-                                onChange={(e) => setTotalQuestions(e.target.value)}
+                                value={formValues.totalQuestions}
+                                onChange={(e) => setFormValues({ ...formValues, totalQuestions: e.target.value })}
                                 min="0" // Manfiy qiymat kiritishni oldini olish
                             />
 
@@ -109,8 +116,8 @@ const CategoryAddModal: React.FC = () => {
                             <Input
                                 type="number" // Faqat raqam kiritish mumkin
                                 placeholder="Qo'shimcha savollar sonini kiriting"
-                                value={additionalQuestions}
-                                onChange={(e) => setAdditionalQuestions(e.target.value)}
+                                value={formValues.additionalQuestions}
+                                onChange={(e) => setFormValues({ ...formValues, additionalQuestions: e.target.value })}
                                 min="0" // Manfiy qiymat kiritishni oldini olish
                             />
 
@@ -118,8 +125,8 @@ const CategoryAddModal: React.FC = () => {
                             <Input
                                 type="number" // Faqat raqam kiritish mumkin
                                 placeholder="Davomiylik vaqtini kiriting (daqiqa)"
-                                value={duration}
-                                onChange={(e) => setDuration(e.target.value)}
+                                value={formValues.duration}
+                                onChange={(e) => setFormValues({ ...formValues, duration: e.target.value })}
                                 min="0" // Manfiy qiymat kiritishni oldini olish
                             />
                         </>
