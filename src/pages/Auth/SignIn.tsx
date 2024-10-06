@@ -1,5 +1,6 @@
 import { registerRasm } from "@/helpers/imports/images";
 import { Logo } from "@/helpers/imports/images";
+import { Link } from "react-router-dom";
 
 function SignIn() {
   return (
@@ -52,12 +53,12 @@ function SignIn() {
             </div>
 
             <div className="flex justify-between items-center mt-4 lg:mt-6">
-              <a href="/auth/signup" className="text-sm text-blue-500 hover:underline">
+              <Link to={"/auth/signup"} className="text-sm text-blue-500 hover:underline">
                 Ro'yhatdan o'tish
-              </a>
-              <a href="/auth/confirm" className="text-sm text-blue-500 hover:underline">
+              </Link>
+              <Link to={"/auth/confirm"} className="text-sm text-blue-500 hover:underline">
                 Parolni unutdingizmi?
-              </a>
+              </Link>
             </div>
           </div>
         </div>

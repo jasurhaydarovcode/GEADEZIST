@@ -1,8 +1,9 @@
 
 import { Logo, registerRasm } from "@/helpers/imports/images"; // Tasvirlarni import qilish
+import { Link } from "react-router-dom";
 
 function SignUp() {
-  
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="flex flex-col lg:flex-row w-full lg:w-5/6 lg:h-5/6 bg-white shadow-lg rounded-lg overflow-hidden">
@@ -150,9 +151,9 @@ function SignUp() {
 
             {/* Quyidagi havolalar */}
             <div className="flex justify-between items-center mt-4 lg:mt-6">
-              <a href="/login" className="text-sm text-blue-500 hover:underline">
+              <Link to={"/auth/signIn"} className="text-sm text-blue-500 hover:underline">
                 Tizimga kirish
-              </a>
+              </Link>
               <a href="/auth/confirm" className="text-sm text-blue-500 hover:underline">
                 Parolni unutdingizmi?
               </a>
