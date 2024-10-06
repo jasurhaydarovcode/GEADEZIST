@@ -68,7 +68,7 @@ function Address() {
                 <TableCell>Toshkent</TableCell>
                 <TableCell className="flex gap-1 text-xl cursor-pointer">
                   <MdEdit />
-                  <MdDelete />
+                  <MdDelete onClick={showModal}/>
                 </TableCell>
               </TableRow>
             </TableBody>
@@ -119,7 +119,7 @@ function Address() {
                 <TableCell>Toshkent</TableCell>
                 <TableCell className="flex gap-1 text-xl cursor-pointer">
                   <MdEdit />
-                  <MdDelete />
+                  <MdDelete  onClick={showModal}/>
                 </TableCell>
               </TableRow>
             </TableBody>
