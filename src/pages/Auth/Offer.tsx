@@ -1,8 +1,9 @@
 import { FaArrowLeft } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 const OfferPage = () => {
   return (
     <div className="h-screen px-12 py-12 bg-gray-100 ">
-      <FaArrowLeft className="cursor-pointer text-gray-500" />
+      <Link to="/auth/SignUp"><FaArrowLeft className="text-xl" /></Link>
       <h1 className="text-3xl font-bold text-center mb-6 text-gray-500">
         Ommaviy oferta shartlari
       </h1>

@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Button, Modal } from 'antd';
+import { PlusCircleOutlined } from '@ant-design/icons';
 
 const CategoryAddModal: React.FC = () => {
     const [open, setOpen] = useState(false);
 
     return (
         <>
-            <Button type="primary" className='text-xl p-5 py-7' onClick={() => setOpen(true)}>
-                <i className='bi bi-plus-circle-fill text-3xl'></i>
-                Qo'shish
+            <Button onClick={() => setOpen(true)} color="default" variant="solid" className=" text-xl px-5 py-6 my-5">
+                <PlusCircleOutlined className="text-xl" />Qo'shish
             </Button>
             <Modal
                 title="Modal 1000px width"
