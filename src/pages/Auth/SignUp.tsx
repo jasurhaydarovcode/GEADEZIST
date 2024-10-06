@@ -3,7 +3,7 @@ import { Logo, registerRasm } from "@/helpers/imports/images"; // Tasvirlarni im
 import { Link } from "react-router-dom";
 
 function SignUp() {
-  
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="flex flex-col lg:flex-row w-full lg:w-5/6 lg:h-5/6 bg-white shadow-lg rounded-lg overflow-hidden">
@@ -81,6 +81,8 @@ function SignUp() {
                   required
                   className="w-full px-4 mt-2 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                 />
+                <p className="text-xs ">Parol kamida 5 ta belgidan iborat</p>
+
               </div>
 
               {/* Parolni tasdiqlash */}
@@ -149,10 +151,10 @@ function SignUp() {
 
             {/* Quyidagi havolalar */}
             <div className="flex justify-between items-center mt-4 lg:mt-6">
-              <Link to="/auth/signin" className="text-sm text-blue-500 hover:underline">
+              <a href="/login" className="text-sm text-blue-500 hover:underline">
                 Tizimga kirish
-              </Link>
-              <Link to="/auth/confirm" className="text-sm text-blue-500 hover:underline">
+              </a>
+              <Link to={"/auth/confirm"} className="text-sm text-blue-500 hover:underline">
                 Parolni unutdingizmi?
               </Link>
             </div>

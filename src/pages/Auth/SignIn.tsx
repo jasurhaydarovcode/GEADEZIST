@@ -53,10 +53,17 @@ function SignIn() {
             </div>
 
             <div className="flex justify-between items-center mt-4 lg:mt-6">
+<<<<<<< HEAD
               <Link to={'/auth/signup'} className="text-sm text-blue-500 hover:underline">
                 Ro'yhatdan o'tish
               </Link>
               <Link to={'/auth/reset-password'} className="text-sm text-blue-500 hover:underline">
+=======
+              <Link to={"/auth/signup"} className="text-sm text-blue-500 hover:underline">
+                Ro'yhatdan o'tish
+              </Link>
+              <Link to={"/auth/confirm"} className="text-sm text-blue-500 hover:underline">
+>>>>>>> 4f7e5a85351816e3c40d4e763f594cff3bad449e
                 Parolni unutdingizmi?
               </Link>
             </div>
