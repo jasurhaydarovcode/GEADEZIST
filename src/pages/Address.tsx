@@ -1,10 +1,29 @@
 import Layout from "@/components/Dashboard/Layout";
 import { PlusCircleOutlined } from "@ant-design/icons";
-import { Button, Pagination } from "antd";
+import { Button, Modal, Pagination } from "antd";
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
+import { useState } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
 
 function Address() {
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+
+  const showModal = () => {
+    setOpen(true);
+  };
+
+  const handleOk = () => {
+    setConfirmLoading(true);
+    setTimeout(() => {
+      setOpen(false);
+      setConfirmLoading(false);
+    }, 2000);
+  };
+
+  const handleCancel = () => {
+    setOpen(false);
+  };
   return (
     <Layout>
       <div className="p-5">
@@ -16,9 +35,25 @@ function Address() {
         </div>
         <div className="flex justify-between items-center">
           <p className="font-sans text-2xl text-gray-700">Viloyatlar</p>
-          <Button color="default" variant="solid" className=" text-xl px-5 py-6 my-5">
+          <Button onClick={showModal} color="default" variant="solid" className=" text-xl px-5 py-6 my-5">
             <PlusCircleOutlined className="text-xl"/>Qo'shish 
           </Button>
+          <Modal
+            title="Viloyat qo'shish"
+            open={open}
+            onOk={handleOk}
+            confirmLoading={confirmLoading}
+            onCancel={handleCancel}
+            maskClosable={false}
+          >
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Viloyat nomini kiriting"
+                className="border w-full p-2 rounded"
+              />
+            </div>
+          </Modal>
         </div>
         <div>
         <Table hoverable>
