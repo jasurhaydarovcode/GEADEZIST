@@ -26,7 +26,7 @@ function SignIn() {
                   type="email"
                   id="email"
                   placeholder="Elektron pochtangizni kiriting"
-                  className="w-full px-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                  className="w-full px-4 mt-2 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                 />
               </div>
               <div className="mb-6">
@@ -37,7 +37,7 @@ function SignIn() {
                   type="password"
                   id="password"
                   placeholder="Parolni kiriting"
-                  className="w-full px-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                  className="w-full px-4 mt-2 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                 />
                 <small className="text-gray-500">
                   Parol kamida 5 ta harf yoki raqamdan iborat bo'lishi kerak
@@ -52,7 +52,7 @@ function SignIn() {
             </div>
 
             <div className="flex justify-between items-center mt-4 lg:mt-6">
-              <a href="/register" className="text-sm text-blue-500 hover:underline">
+              <a href="/auth/signup" className="text-sm text-blue-500 hover:underline">
                 Ro'yhatdan o'tish
               </a>
               <a href="/auth/confirm" className="text-sm text-blue-500 hover:underline">
