@@ -46,9 +46,7 @@
   <a href="https://github.com/jasurhaydarovcode/GEADEZIST/graphs/contributors">
     <img src="https://contrib.rocks/image?repo=jasurhaydarovcode/GEADEZIST">
   </a>
-   <a href="https://github.com/asilbekcodes/GEADEZIST/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=jasurhaydarovcode/GEADEZIST">
-  </a>
+
 </p>
 
 <div align=center>
