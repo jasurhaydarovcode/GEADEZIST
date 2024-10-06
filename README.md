@@ -40,11 +40,13 @@
 
 #### Team Lead: [Jasur](https://github.com/jasurhaydarovcode)
 
-<!-- <p align="center">
+
+### Collaborators
+<p align="center">
   <a href="https://github.com/jasurhaydarovcode/GEADEZIST/graphs/contributors">
     <img src="https://contrib.rocks/image?repo=jasurhaydarovcode/GEADEZIST">
   </a>
-</p> -->
+</p>
 
 <div align=center>
 
