@@ -1,4 +1,3 @@
-import Button from "@/components/button"
 import CategoryAddModal from "@/components/CategoryAddModal"
 import Layout from "@/components/Dashboard/Layout"
 import { geodeziyaLogo } from "@/helpers/imports/images"
@@ -10,13 +9,9 @@ const Category = () => {
         <div className="pagename">
           <h1 className="font-semibold text-3xl">Category</h1>
         </div>
-
+      <CategoryAddModal/>
         <div className="addBtn">
-          <Button
-            onClick={CategoryAddModal}
-            btnText="Qo'shish"
-            iconClass="bi bi-plus-circle-fill text-3xl"
-            btnClass="flex items-center gap-3 bg-blue-900 text-white text-xl px-3 py-2 rounded-lg hover:bg-blue-800" />
+         
         </div>
         <div className="bg-white shadow rounded-lg p-4 overflow-x-auto">
           <table className="min-w-full bg-white border">
