@@ -1,6 +1,8 @@
 import Layout from "@/components/Dashboard/Layout";
 import { PlusCircleOutlined } from "@ant-design/icons";
-import { Button } from "antd";
+import { Button, Pagination } from "antd";
+import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
+import { MdDelete, MdEdit } from "react-icons/md";
 
 function Address() {
   return (
@@ -17,6 +19,26 @@ function Address() {
           <Button color="default" variant="solid" className=" text-xl px-5 py-6 my-5">
             <PlusCircleOutlined className="text-xl"/>Qo'shish 
           </Button>
+        </div>
+        <div>
+        <Table hoverable>
+            <TableHead>
+              <TableHeadCell>T/P</TableHeadCell>
+              <TableHeadCell>Viloyat nomi</TableHeadCell>
+              <TableHeadCell>Harakat</TableHeadCell>
+            </TableHead>
+            <TableBody className="divide-y">
+              <TableRow className="bg-white text-gray-700 dark:border-gray-700 dark:bg-gray-800">
+                <TableCell>1</TableCell>
+                <TableCell>Toshkent</TableCell>
+                <TableCell className="flex gap-1 text-xl cursor-pointer">
+                  <MdEdit />
+                  <MdDelete />
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+          <Pagination className="mt-5" defaultCurrent={1} total={20} />
         </div>
       </div>
     </Layout>
