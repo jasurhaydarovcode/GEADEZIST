@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 
 import { useState } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
 
-function Address() {
+function Address() { 
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
@@ -25,7 +25,7 @@ function Address() {
     setOpen(false);
   };
   return (
-    <Layout>
+    <Layout> 
       <div className="p-5">
         <div className="flex justify-between">
           <h1 className="text-3xl font-bold font-sans">Manzillar</h1>
@@ -77,9 +77,32 @@ function Address() {
         </div>
         <div className="flex justify-between items-center">
           <p className="font-sans text-2xl text-gray-700">Tumanlar</p>
-          <Button color="default" variant="solid" className=" text-xl px-5 py-6 my-5">
+          <Button onClick={showModal} color="default" variant="solid" className=" text-xl px-5 py-6 my-5">
             <PlusCircleOutlined className="text-xl"/>Qo'shish 
           </Button>
+          <Modal
+            title="Tuman qo'shish"
+            open={open}
+            onOk={handleOk}
+            confirmLoading={confirmLoading}
+            onCancel={handleCancel}
+            maskClosable={false}
+          >
+            <div className="mb-4">
+              <select className="border w-full p-2 rounded">
+                <option value="">Viloyatni tanlang</option>
+                <option value="main">Toshkent</option>
+                <option value="main">Qashqadaryo</option>
+              </select>
+            </div>
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Tuman nomini kiriting"
+                className="border w-full p-2 rounded"
+              />
+            </div>
+          </Modal>
         </div>
         <div>
         <Table hoverable>
@@ -104,8 +127,8 @@ function Address() {
           <Pagination className="mt-5" defaultCurrent={1} total={30} />
         </div>
       </div>
-    </Layout>
+    </Layout> 
   )
-}
-
-export default Address;
+} 
+ 
+export default Address; 
