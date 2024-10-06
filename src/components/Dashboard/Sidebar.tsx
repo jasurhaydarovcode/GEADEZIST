@@ -36,7 +36,7 @@ const Sidebar = () => {
   const { pathname } = useLocation();
 
   return (
-    <aside className="bg-gray-100 w-72 p-4">
+    <aside className="bg-gray-100 w-72 p-4 min-h-screen">
       {/* Logo */}
       <div className="pt-5 pb-8">
         <Link to="/dashboard">
