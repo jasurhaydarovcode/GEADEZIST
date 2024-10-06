@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, Modal, Input, Select } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
-import { CategoryFormValues } from '@/types/Category'; // import type from types.ts
+import { CategoryFormValues } from '@/types/Category';
 
 const { Option } = Select;
 
@@ -41,6 +41,10 @@ const CategoryAddModal: React.FC = () => {
         setOpen(false);
     };
 
+    const InputStyles = {
+        input: 'w-full rounded-lg border border-stroke bg-transparent py-2 px-5 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary'
+      };
+
     return (
         <>
             <Button onClick={() => setOpen(true)} color="default" variant="solid" className="text-xl px-5 py-6 my-5">
@@ -52,7 +56,7 @@ const CategoryAddModal: React.FC = () => {
                 open={open}
                 onOk={handleSave}
                 onCancel={handleCancel} // Modal yopilganda tozalash funksiyasi chaqiriladi
-                width={500}
+                width={600}
                 okText="Saqlash"
                 cancelText="Yopish"
             >
@@ -72,6 +76,7 @@ const CategoryAddModal: React.FC = () => {
                         <>
                             {/* Kategoriya nomi */}
                             <Input
+                                className={InputStyles.input}
                                 placeholder="Kategoriya nomini kiriting"
                                 value={formValues.categoryName}
                                 onChange={(e) => setFormValues({ ...formValues, categoryName: e.target.value })}
@@ -79,6 +84,7 @@ const CategoryAddModal: React.FC = () => {
 
                             {/* Tavsifi */}
                             <Input
+                                className={InputStyles.input}
                                 placeholder="Tavsifni kiriting"
                                 value={formValues.description}
                                 onChange={(e) => setFormValues({ ...formValues, description: e.target.value })}
@@ -90,21 +96,21 @@ const CategoryAddModal: React.FC = () => {
                     {formValues.categoryType === 'asosiy-bolmagan' && (
                         <>
                             {/* Kategoriya nomi */}
-                            <Input
+                            <Input className={InputStyles.input}
                                 placeholder="Kategoriya nomini kiriting"
                                 value={formValues.categoryName}
                                 onChange={(e) => setFormValues({ ...formValues, categoryName: e.target.value })}
                             />
 
                             {/* Tavsifi */}
-                            <Input
+                            <Input className={InputStyles.input}
                                 placeholder="Tavsifni kiriting"
                                 value={formValues.description}
                                 onChange={(e) => setFormValues({ ...formValues, description: e.target.value })}
                             />
 
                             {/* Umumiy savollar soni */}
-                            <Input
+                            <Input className={InputStyles.input}
                                 type="number" // Faqat raqam kiritish mumkin
                                 placeholder="Umumiy savollar sonini kiriting"
                                 value={formValues.totalQuestions}
@@ -113,7 +119,7 @@ const CategoryAddModal: React.FC = () => {
                             />
 
                             {/* Qo'shimcha savollar soni */}
-                            <Input
+                            <Input className={InputStyles.input}
                                 type="number" // Faqat raqam kiritish mumkin
                                 placeholder="Qo'shimcha savollar sonini kiriting"
                                 value={formValues.additionalQuestions}
@@ -122,7 +128,7 @@ const CategoryAddModal: React.FC = () => {
                             />
 
                             {/* Davomiylik vaqti */}
-                            <Input
+                            <Input className={InputStyles.input}
                                 type="number" // Faqat raqam kiritish mumkin
                                 placeholder="Davomiylik vaqtini kiriting (daqiqa)"
                                 value={formValues.duration}

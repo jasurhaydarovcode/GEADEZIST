@@ -1,7 +1,9 @@
 import CategoryAddModal from "@/components/Modal/CategoryAddModal"
 import Layout from "@/components/Dashboard/Layout"
 import { geodeziyaLogo } from "@/helpers/imports/images"
-import { CategoryTableData } from '@/types/Category'; // import type from types.ts
+import { CategoryTableData } from '@/types/Category';
+
+
 
 const Category: React.FC = () => {
     // Ma'lumotlar turlari aniqlangan
