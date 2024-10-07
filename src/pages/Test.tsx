@@ -1,5 +1,5 @@
 import Layout from "@/components/Dashboard/Layout";
-import {  PlusCircleOutlined } from "@ant-design/icons";
+import { PlusCircleOutlined } from "@ant-design/icons";
 import { Button, Modal, Table } from "antd";
 import { useState } from "react";
 import { FcSearch } from "react-icons/fc";
@@ -9,7 +9,7 @@ function Test() {
     {
       key: "1",
       numer: 1,
-      testRasm: "", 
+      testRasm: "",
       savol: "asd/∛(a + 52)",
       catygoria: "Марказийдерлик",
       savolTuri: "Бир тўғри жавобли тест",
@@ -25,7 +25,7 @@ function Test() {
       qiyinligi: "Ўрта",
     },
   ];
-  
+
   const columns = [
     {
       title: "T/P",
@@ -36,7 +36,7 @@ function Test() {
       title: "Тест расми",
       dataIndex: "testRasm",
       key: "testRasm",
-      
+
     },
     {
       title: "Савол",
@@ -58,9 +58,9 @@ function Test() {
       dataIndex: "qiyinligi",
       key: "qiyinligi",
     },
-    
+
   ];
-  
+
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
@@ -159,7 +159,7 @@ function Test() {
                 placeholder="Foydalanuvchini qidirish"
               />
             </div>
-            
+
             <div className="flex">
               {/* <input type="text" className="w-[350px] bg-[] rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400  placeholder:text-[14px] " placeholder="Tumanni tanlang" /> */}
               <select className="w-[200px] text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
@@ -188,7 +188,7 @@ function Test() {
           </div>
         </div>
 
-        <Table dataSource={dataSource} columns={columns} />;
+        <Table dataSource={dataSource} columns={columns} />
       </div>
     </Layout>
   );
