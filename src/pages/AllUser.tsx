@@ -1,10 +1,9 @@
 import { SlArrowDown } from 'react-icons/sl';
 import { FcSearch } from 'react-icons/fc';
-
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Dashboard/Layout';
 
-const AllUser = (): JSX.Element => {
+const AllUser: React.FC = (): JSX.Element => {
   return (
     <>
       <Layout>
@@ -22,6 +21,7 @@ const AllUser = (): JSX.Element => {
                     <h4 className="text-blue-600"> Foydalanuvchilar</h4>
                   </div>
                 </header>
+
 
                 <div className="flex justify-end pt-5 gap-5">
                   <div className="flex">
@@ -50,10 +50,14 @@ const AllUser = (): JSX.Element => {
               </div>
             </div>
           </div>
+          <div>
+          </div>
         </div>
       </Layout>
     </>
   );
+
 };
+
 
 export default AllUser;
