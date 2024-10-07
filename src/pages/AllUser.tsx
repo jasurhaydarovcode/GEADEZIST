@@ -36,10 +36,10 @@ const AllUser = (): JSX.Element => {
                     />
                   </div>
                   <div className="flex">
-                    <input type="text" className="min-w-[345px] rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400  placeholder:text-[14px] " placeholder="Tumanni tanlang" />
+                    <input type="text" className="min-w-[260px] rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400  placeholder:text-[14px] " placeholder="Tumanni tanlang" />
                     <SlArrowDown className="absolute ml-[320px] mt-4" />
                   </div>
-                  <select className="min-w-[345px] text-gray-40 rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400  placeholder:text-[14px] ">
+                  <select className="min-w-[260px] text-gray-40 rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400  placeholder:text-[14px] ">
                     <option value="">hello</option>
                     <option value="">byey</option>
                     <option value="">mthf</option>
