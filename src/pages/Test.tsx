@@ -84,7 +84,7 @@ function Test() {
         <div className="flex justify-between">
           <h1 className="text-3xl font-bold font-sans">Test</h1>
           <p className="font-sans text-gray-700">
-            Boshqaruv paneli  // <span className="text-blue-700 ">Test</span>
+            Boshqaruv paneli  / <span className="text-blue-700 ">Test</span>
           </p>
         </div>
 
