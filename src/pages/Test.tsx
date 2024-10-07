@@ -102,48 +102,37 @@ function Test() {
             maskClosable={false}
           >
             <div className="mb-4">
-              <label className="block mb-2">Kategoriya turini tanlang</label>
-              <select className="border w-full p-2 rounded">
-                <option value="">Asosiy boʻlmagan kategoriya</option>
-                <option value="main">Asosiy kategoriya</option>
-                <option value="secondary">Asosiy boʻlmagan kategoriya</option>
+              <input
+                placeholder="savolni kiriting"
+                className="border w-full p-2 rounded"
+              />
+            </div>
+
+            <div className="mb-4">
+              <select className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
+                <option disabled>catygoriani tanlang</option>
+                <option value="">Umumiy savollar</option>
+                <option value="">Umumiy geodeziya</option>
+                <option value="">Tapografiya</option>
+                <option value="">Oliy geodeziya</option>
+                <option value="">xarqanday tug'ri</option>
               </select>
             </div>
-
             <div className="mb-4">
-              <label className="block mb-2">Tavsif</label>
-              <input
-                type="text"
-                placeholder="Tavsifni kiriting"
-                className="border w-full p-2 rounded"
-              />
+              <select className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
+                <option disabled>Qiyinchilik darajasini tanlang</option>
+                <option value="">qiyin</option>
+                <option value="">oson</option>
+                <option value="">o'rta</option>
+              </select>
             </div>
-
             <div className="mb-4">
-              <label className="block mb-2">Umumiy savollar soni</label>
-              <input
-                type="number"
-                placeholder="Umumiy savollar sonini kiriting"
-                className="border w-full p-2 rounded"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block mb-2">Qo'shimcha savollar soni</label>
-              <input
-                type="number"
-                placeholder="Qo'shimcha savollar sonini kiriting"
-                className="border w-full p-2 rounded"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block mb-2">Davomiylik vaqti (m)</label>
-              <input
-                type="number"
-                placeholder="Davomiylik vaqti (minutlarda)"
-                className="border w-full p-2 rounded"
-              />
+              <select className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
+                <option disabled>turni tanlang</option>
+                <option value="">xisoblangan natija</option>
+                <option value="">bir tug'ri javobli test</option>
+                <option value="">ko'p tug'ri javobli test</option>
+              </select>
             </div>
           </Modal>
 
