@@ -2,11 +2,17 @@ import { useState } from 'react';
 import { Button, Modal, Input, Select } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { CategoryFormValues } from '@/types/Category';
+import axios from 'axios'; // Axios kutubxonasini import qilamiz
 
 const { Option } = Select;
 
-const CategoryAddModal: React.FC = () => {
-    // State turlarini `CategoryFormValues` interfeysida aniqlang
+
+
+interface CategoryAddModalProps {
+    onAddCategory: (newCategory: CategoryFormValues) => void; // Yangi kategoriya qo'shish funksiyasi
+}
+
+const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) => {
     const [formValues, setFormValues] = useState<CategoryFormValues>({
         categoryType: 'asosiy-bolmagan',
         categoryName: '',
@@ -18,10 +24,9 @@ const CategoryAddModal: React.FC = () => {
 
     const [open, setOpen] = useState(false);
 
-    // Inputlarni tozalovchi funksiya
     const resetForm = () => {
         setFormValues({
-            categoryType: 'asosiy-bolmagan', // Default qiymat
+            categoryType: 'asosiy-bolmagan',
             categoryName: '',
             description: '',
             totalQuestions: '',
@@ -30,20 +35,25 @@ const CategoryAddModal: React.FC = () => {
         });
     };
 
-    const handleSave = () => {
-        // Saqlash funksiyasi
-        resetForm();
-        setOpen(false);
+    const handleSave = async () => {
+        try {
+            const response = await axios.post<CategoryFormValues>('http://164.92.165.18:8090/api/category', formValues);
+            onAddCategory(response.data); // Yangi kategoriya qo'shish uchun callback chaqiramiz
+            resetForm();
+            setOpen(false);
+        } catch (error) {
+            console.error('Xatolik:', error);
+        }
     };
 
     const handleCancel = () => {
-        resetForm(); // Tozalash funksiyasini chaqiramiz
+        resetForm();
         setOpen(false);
     };
 
     const InputStyles = {
         input: 'w-full rounded-lg border'
-      };
+    };
 
     return (
         <>
@@ -62,7 +72,6 @@ const CategoryAddModal: React.FC = () => {
                 maskClosable={false}
             >
                 <div className="space-y-4">
-                    {/* Kategoriya turini tanlash */}
                     <Select
                         value={formValues.categoryType}
                         onChange={(value) => setFormValues({ ...formValues, categoryType: value })}
@@ -72,21 +81,17 @@ const CategoryAddModal: React.FC = () => {
                         <Option value="asosiy-bolmagan">Asosiy bo'lmagan kategoriya</Option>
                     </Select>
 
-                    {/* 'asosiy' kategoriya tanlansa */}
                     {formValues.categoryType === 'asosiy' && (
                         <>
-                            {/* Kategoriya nomi */}
-                        <div>
-                            <label className="block mb-2">Kategoriya nomi</label>
-                            <Input
-                                className={InputStyles.input}
-                                placeholder="Kategoriya nomini kiriting"
-                                value={formValues.categoryName}
-                                onChange={(e) => setFormValues({ ...formValues, categoryName: e.target.value })}
-                            />
-                        </div>
-
-                            {/* Tavsifi */}
+                            <div>
+                                <label className="block mb-2">Kategoriya nomi</label>
+                                <Input
+                                    className={InputStyles.input}
+                                    placeholder="Kategoriya nomini kiriting"
+                                    value={formValues.categoryName}
+                                    onChange={(e) => setFormValues({ ...formValues, categoryName: e.target.value })}
+                                />
+                            </div>
                             <div>
                                 <label className="block mb-2">Tavsif</label>
                                 <Input
@@ -99,32 +104,26 @@ const CategoryAddModal: React.FC = () => {
                         </>
                     )}
 
-                    {/* 'asosiy-bolmagan' kategoriya tanlansa */}
                     {formValues.categoryType === 'asosiy-bolmagan' && (
                         <>
-                            {/* Kategoriya nomi */}
                             <div>
-                                <label className='block mb-2' htmlFor="">Kategoriya Nomi</label>
+                                <label className='block mb-2'>Kategoriya Nomi</label>
                                 <Input className={InputStyles.input}
                                     placeholder="Kategoriya nomini kiriting"
                                     value={formValues.categoryName}
                                     onChange={(e) => setFormValues({ ...formValues, categoryName: e.target.value })}
                                 />
                             </div>
-
-                            {/* Tavsifi */}
                             <div>
-                                <label className='block mb-2' htmlFor="">Tavsif</label>
+                                <label className='block mb-2'>Tavsif</label>
                                 <Input className={InputStyles.input}
                                     placeholder="Tavsifni kiriting"
                                     value={formValues.description}
                                     onChange={(e) => setFormValues({ ...formValues, description: e.target.value })}
                                 />
                             </div>
-
-                            {/* Umumiy savollar soni */}
                             <div>
-                                <label className='block mb-2' htmlFor="">Ummumiy Savollar</label>
+                                <label className='block mb-2'>Ummumiy Savollar</label>
                                 <Input className={InputStyles.input}
                                     type="number"
                                     placeholder="Umumiy savollar sonini kiriting"
@@ -132,12 +131,9 @@ const CategoryAddModal: React.FC = () => {
                                     onChange={(e) => setFormValues({ ...formValues, totalQuestions: e.target.value })}
                                     min="0"
                                 />
-
                             </div>
-
-                            {/* Qo'shimcha savollar soni */}
                             <div>
-                            <label className='block mb-2' htmlFor="">Qo'shimcha savollar</label>
+                                <label className='block mb-2'>Qo'shimcha savollar</label>
                                 <Input className={InputStyles.input}
                                     type="number"
                                     placeholder="Qo'shimcha savollar sonini kiriting"
@@ -146,10 +142,8 @@ const CategoryAddModal: React.FC = () => {
                                     min="0"
                                 />
                             </div>
-
-                            {/* Davomiylik vaqti */}
                             <div>
-                                <label className='block mb-2' htmlFor="">Davomiylik vaqtini</label>
+                                <label className='block mb-2'>Davomiylik vaqtini</label>
                                 <Input className={InputStyles.input}
                                     type="number"
                                     placeholder="Davomiylik vaqtini kiriting (daqiqa)"

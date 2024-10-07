@@ -1,27 +1,48 @@
-import CategoryAddModal from "@/components/Modal/CategoryAddModal"
-import Layout from "@/components/Dashboard/Layout"
-import { geodeziyaLogo } from "@/helpers/imports/images"
-import { CategoryTableData } from '@/types/Category';
-
-
+import CategoryAddModal from "@/components/Modal/CategoryAddModal";
+import Layout from "@/components/Dashboard/Layout";
+import { geodeziyaLogo } from "@/helpers/imports/images";
+import { CategoryTableData } from '@/types/CategoryTableData'; // Yangi interfeys importi
+import { CategoryFormValues } from '@/types/CategoryFormValues'; // Form interfeysini import qiling
+import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 const Category: React.FC = () => {
-    // Ma'lumotlar turlari aniqlangan
-    const categories: CategoryTableData[] = [
+    const [categories, setCategories] = useState<CategoryTableData[]>([
         {
-            id: 1,
+            id: uuidv4(), // UUID ni to'g'ri belgilash
             image: geodeziyaLogo,
+            categoryType: 'asosiy', // or 'asosiy-bolmagan'
             name: 'Geodeziya',
-            description: 'Geadeziya testlar',
+            description: 'Geodeziya testlar',           
             totalQuestions: 3,
             additionalQuestions: 1,
             duration: 1,
-            reAdmissionDate: '2',
+            reAdmissionDate: new Date().toISOString(), // Qayta qabul sanasini to'g'ri formatda
             createdBy: 'admin',
             situation: '',
             deletedBy: 'admin',
         },
-    ];
+    ]);
+
+    
+
+    const handleAddCategory = (formValues: CategoryFormValues) => {
+        const newCategory: CategoryTableData = {
+            id: uuidv4(), // UUID ni to'g'ri belgilash
+            image: '', // Tasvirni kiritish kerak
+            name: formValues.categoryName, // Kategoriya nomi
+            categoryType: formValues.categoryType, // Kategoriya turini olish
+            description: formValues.description, // Tavsif
+            totalQuestions: parseInt(formValues.totalQuestions, 10), // Umumiy savollar
+            additionalQuestions: parseInt(formValues.additionalQuestions, 10), // Qo'shimcha savollar
+            duration: parseInt(formValues.duration, 10), // Davomiylik
+            reAdmissionDate: new Date().toISOString(), // Qayta qabul sanasini to'g'ri formatda
+            createdBy: 'admin', // Yaratuvchini belgilang
+            situation: '', // Ixtiyoriy holat
+            deletedBy: '', // Ixtiyoriy o'chiruvchi
+        };
+        setCategories([...categories, newCategory]); // Yangi kategoriya qo'shish
+    };
 
     return (
         <Layout>
@@ -29,7 +50,7 @@ const Category: React.FC = () => {
                 <div className="pagename">
                     <h1 className="font-semibold text-3xl">Category</h1>
                 </div>
-                <CategoryAddModal />
+                <CategoryAddModal onAddCategory={handleAddCategory} />
                 <div className="addBtn"></div>
                 <div className="bg-white shadow rounded-lg p-4 overflow-x-auto">
                     <table className="min-w-full bg-white border">
@@ -60,7 +81,9 @@ const Category: React.FC = () => {
                                     <td className="py-2 border text-center">{category.totalQuestions}</td>
                                     <td className="py-2 border text-center">{category.additionalQuestions}</td>
                                     <td className="py-2 border text-center">{category.duration}</td>
-                                    <td className="py-2 border text-center">{category.reAdmissionDate}</td>
+                                    <td className="py-2 border text-center">
+                                        {new Date(category.reAdmissionDate as string).toLocaleDateString()}
+                                    </td>
                                     <td className="py-2 border text-center">{category.createdBy}</td>
                                     <td className="py-2 border text-center">{category.situation}</td>
                                     <td className="py-2 border text-center">{category.deletedBy}</td>
