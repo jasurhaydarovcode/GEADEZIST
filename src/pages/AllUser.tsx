@@ -12,7 +12,6 @@ const AllUser = (): JSX.Element => {
           <div className="flex justify-end pt-10 pr-6">
             <div className="px-8">
               <div className="w-max">
-                {/* nav */}
                 <header className="flex items-center justify-between">
                   <h3 className="font-bold text-[27px]">Foydalanuvchilar</h3>
                   <div className="flex gap-2 text-[18px]">
@@ -23,9 +22,7 @@ const AllUser = (): JSX.Element => {
                     <h4 className="text-blue-600"> Foydalanuvchilar</h4>
                   </div>
                 </header>
-                {/* nav */}
 
-                {/* sort */}
                 <div className="flex justify-end pt-5 gap-5">
                   <div className="flex">
                     <label htmlFor="inp1">
@@ -34,7 +31,7 @@ const AllUser = (): JSX.Element => {
                     <input
                       type="text"
                       id="inp1"
-                      className="w-[390px] pl-10  bg-[] border-gray-300 rounded-md h-[50px] "
+                      className="pl-10 border-gray-300 rounded-md h-[50px] "
                       placeholder="Foydalanuvchini qidirish"
                     />
                   </div>
@@ -42,7 +39,7 @@ const AllUser = (): JSX.Element => {
                     <input type="text" className="w-[350px] rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400  placeholder:text-[14px] " placeholder="Tumanni tanlang" />
                     <SlArrowDown className="absolute ml-[320px] mt-4" />
                   </div>
-                  <select className="w-[350px] text-gray-400 bg-[] rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400  placeholder:text-[14px] ">
+                  <select className="w-[350px] text-gray-40 rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400  placeholder:text-[14px] ">
                     <option value="">hello</option>
                     <option value="">byey</option>
                     <option value="">mthf</option>
