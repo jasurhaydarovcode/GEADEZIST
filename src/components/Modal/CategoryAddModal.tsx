@@ -59,6 +59,7 @@ const CategoryAddModal: React.FC = () => {
                 width={600}
                 okText="Saqlash"
                 cancelText="Yopish"
+                maskClosable={false}
             >
                 <div className="space-y-4">
                     {/* Kategoriya turini tanlash */}
