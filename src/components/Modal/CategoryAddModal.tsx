@@ -42,7 +42,7 @@ const CategoryAddModal: React.FC = () => {
     };
 
     const InputStyles = {
-        input: 'w-full rounded-lg border border-stroke bg-transparent py-2 px-5 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary'
+        input: 'w-full rounded-lg border'
       };
 
     return (
@@ -59,6 +59,7 @@ const CategoryAddModal: React.FC = () => {
                 width={600}
                 okText="Saqlash"
                 cancelText="Yopish"
+                maskClosable={false}
             >
                 <div className="space-y-4">
                     {/* Kategoriya turini tanlash */}
@@ -75,13 +76,15 @@ const CategoryAddModal: React.FC = () => {
                     {formValues.categoryType === 'asosiy' && (
                         <>
                             {/* Kategoriya nomi */}
-                            <label className="block m-2">Kategoriya nomi</label>
+                        <div>
+                            <label className="block mb-2">Kategoriya nomi</label>
                             <Input
                                 className={InputStyles.input}
                                 placeholder="Kategoriya nomini kiriting"
                                 value={formValues.categoryName}
                                 onChange={(e) => setFormValues({ ...formValues, categoryName: e.target.value })}
                             />
+                        </div>
 
                             {/* Tavsifi */}
                             <div>
@@ -101,7 +104,7 @@ const CategoryAddModal: React.FC = () => {
                         <>
                             {/* Kategoriya nomi */}
                             <div>
-                                <label className='blok mb-2' htmlFor="">Kategoriya Nomi</label>
+                                <label className='block mb-2' htmlFor="">Kategoriya Nomi</label>
                                 <Input className={InputStyles.input}
                                     placeholder="Kategoriya nomini kiriting"
                                     value={formValues.categoryName}

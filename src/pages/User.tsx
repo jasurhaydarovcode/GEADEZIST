@@ -35,31 +35,32 @@ function User() {
               </header>
               {/* nav */}
 
-              {/* sort */}
-              <div className="flex justify-end pt-5 gap-5">
-                <div className="flex">
-                  <label htmlFor="inp1">
-                    <FcSearch className="absolute mt-4 ml-3 text-[20px]" />
-                  </label>
-                  <input
-                    type="text"
-                    id="inp1"
-                    className="w-[390px] pl-10  bg-[] border-gray-300 rounded-md h-[50px] "
-                    placeholder="Foydalanuvchini qidirish"
-                  />
+                {/* sort */}
+                <div className="flex justify-end pt-5 gap-5">
+                  <div className="flex">
+                    <label htmlFor="inp1">
+                      <FcSearch className="absolute mt-4 ml-3 text-[20px]" />
+                    </label>
+                    <input
+                      type="text"
+                      id="inp1"
+                      className="pl-10  bg-[] border-gray-300 rounded-md h-[50px] "
+                      placeholder="Foydalanuvchini qidirish"
+                    />
+                  </div>
+                  <div className="flex">
+                    <input type="text" className="w-[350px] rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400  placeholder:text-[14px] " placeholder="Tumanni tanlang" />
+                    <SlArrowDown className="absolute ml-[320px] mt-4" />
+                  </div>
+                  <select className="w-[350px] text-gray-400 bg-[] rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400  placeholder:text-[14px] ">
+                    <option value="">hello</option>
+                    <option value="">byey</option>
+                    <option value="">mthf</option>
+                  </select>
                 </div>
-                <div className="flex">
-                  <input type="text" className="w-[350px] rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400  placeholder:text-[14px] " placeholder="Tumanni tanlang" />
-                  <SlArrowDown className="absolute ml-[320px] mt-4" />
-                </div>
-                <select className="w-[350px] text-gray-400 bg-[] rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400  placeholder:text-[14px] ">
-                  <option value="">hello</option>
-                  <option value="">byey</option>
-                  <option value="">mthf</option>
-                </select>
+                {/* sort */}
+                <div></div>
               </div>
-              {/* sort */}
-              <div></div>
             </div>
           </div>
         </div>
@@ -153,11 +154,6 @@ function User() {
 {/* Table end */}
           
 
-
-
-
-
-      </div>
 
     </Layout>
   );
