@@ -6,22 +6,22 @@ import { Link } from "react-router-dom";
 function User() {
   return (
     <Layout>
- <div>
-          <div className="flex justify-end pt-10 pr-6">
-            <div className="px-8">
-              <div className="w-max">
-                {/* nav */}
-                <header className="flex items-center justify-between">
-                  <h3 className="font-bold text-[27px]">Foydalanuvchilar natejasi</h3>
-                  <div className="flex gap-2 text-[18px]">
-                    <Link to={'/dashboard'}>
-                      <h4>Boshqaruv paneli </h4>
-                    </Link>
-                    <h4> / </h4>
-                    <h4 className="text-blue-600"> Foydalanuvchilar</h4>
-                  </div>
-                </header>
-                {/* nav */}
+      <div>
+        <div className="flex justify-end pt-10 pr-6">
+          <div className="px-8">
+            <div className="w-full">
+              {/* nav */}
+              <header className="flex items-center justify-between">
+                <h3 className="font-bold text-[27px]">Foydalanuvchilar natejasi</h3>
+                <div className="flex gap-2 text-[18px]">
+                  <Link to={'/dashboard'}>
+                    <h4>Boshqaruv paneli </h4>
+                  </Link>
+                  <h4> / </h4>
+                  <h4 className="text-blue-600"> Foydalanuvchilar</h4>
+                </div>
+              </header>
+              {/* nav */}
 
                 {/* sort */}
                 <div className="flex justify-end pt-5 gap-5">
@@ -32,7 +32,7 @@ function User() {
                     <input
                       type="text"
                       id="inp1"
-                      className="w-[390px] pl-10  bg-[] border-gray-300 rounded-md h-[50px] "
+                      className="pl-10  bg-[] border-gray-300 rounded-md h-[50px] "
                       placeholder="Foydalanuvchini qidirish"
                     />
                   </div>
