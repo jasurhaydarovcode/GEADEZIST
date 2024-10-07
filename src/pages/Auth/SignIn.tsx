@@ -3,7 +3,6 @@ import { Logo } from "@/helpers/imports/images";
 import { Link } from "react-router-dom";
 
 function SignIn() {
-  
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="flex flex-col lg:flex-row w-full lg:w-5/6 lg:h-5/6 bg-white shadow-lg rounded-lg overflow-hidden">
