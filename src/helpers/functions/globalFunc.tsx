@@ -54,3 +54,4 @@ export function useGlobalRequest<T>(
         globalDataFunc: mutation.mutateAsync
     }
 }
+

@@ -11,6 +11,4 @@ export interface CategoryTableData {
     createdBy: string;
     situation: string; // Ixtiyoriy
     deletedBy: string; // Ixtiyoriy
-    
-    
 }
