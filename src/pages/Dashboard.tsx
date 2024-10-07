@@ -1,30 +1,27 @@
-import { MdOutlineCategory } from 'react-icons/md';
-import { FaCircleQuestion } from 'react-icons/fa6';
-import { FaArrowsAlt } from 'react-icons/fa';
-import { PiUsersThreeFill } from 'react-icons/pi';
-import { Line } from 'react-chartjs-2';
+import { Scatter } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   PointElement,
-  LineElement,
   Title,
   Tooltip,
   Legend,
 } from 'chart.js';
-import {useState} from 'react';
+import { useState } from 'react';
 import Layout from '@/components/Dashboard/Layout';
-
+import { PiUsersThreeFill } from 'react-icons/pi';
+import { FaArrowsAlt } from 'react-icons/fa';
+import { FaCircleQuestion } from 'react-icons/fa6';
+import { MdOutlineCategory } from 'react-icons/md';
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
   PointElement,
-  LineElement,
   Title,
   Tooltip,
-  Legend,
+  Legend
 );
 
 const Dashboard = () => {
@@ -95,43 +92,68 @@ const Dashboard = () => {
     },
   ];
 
-  // Data for the chart
+  // Data for the scatter chart
   const data = {
-    labels: [
-      'Dushanba',
-      'Seshanba',
-      'Chorshanba',
-      'Payshanba',
-      'Juma',
-      'Shanba',
-      'Yakshanba',
-    ],
     datasets: [
       {
         label: 'Savdolar soni',
-        data: [120, 150, 80, 70, 200, 160, 100],
+        data: [
+          { x: 1, y: 120 },
+          { x: 2, y: 150 },
+          { x: 3, y: 80 },
+          { x: 4, y: 70 },
+          { x: 5, y: 200 },
+          { x: 6, y: 160 },
+          { x: 7, y: 100 },
+        ],
         borderColor: 'rgba(54, 162, 235, 1)',
         backgroundColor: 'rgba(54, 162, 235, 0.2)',
         borderWidth: 2,
-        tension: 0.3,
         pointRadius: 5,
         pointBackgroundColor: 'rgba(54, 162, 235, 1)',
       },
     ],
   };
 
-  // Options for the chart
-  const options = {
+  // Options for the scatter chart
+  const options:any = {
     responsive: true,
-    maintainAspectRatio: false, // Bu yerda aspectRatio o'chirilgan
+    maintainAspectRatio: false,
     plugins: {
       legend: { display: false },
     },
     scales: {
+      x: {
+        type: 'linear',
+        position: 'bottom',
+        title: {
+          display: true,
+          text: 'Hafta kunlari',
+        },
+        ticks: {
+          stepSize: 1,
+          callback: (value: number) => {
+            const days = [
+              'Dushanba',
+              'Seshanba',
+              'Chorshanba',
+              'Payshanba',
+              'Juma',
+              'Shanba',
+              'Yakshanba',
+            ];
+            return days[value - 1];
+          },
+        },
+      },
       y: {
         beginAtZero: true,
         ticks: {
           stepSize: 20,
+        },
+        title: {
+          display: true,
+          text: 'Savdo soni',
         },
       },
     },
@@ -164,8 +186,8 @@ const Dashboard = () => {
               Hafta
             </button>
           </div>
-          <div className="w-full h-64 md:h-96 lg:h-[500px]"> {/* Height specified for different screens */}
-            <Line data={data} options={options} />
+          <div className="w-full h-64 md:h-96 lg:h-[500px]">
+            <Scatter data={data} options={options}/>
           </div>
         </div>
 
@@ -218,7 +240,7 @@ const Dashboard = () => {
                 .filter(
                   (user) =>
                     (!selectedCategory || user.kategoriya === selectedCategory) &&
-                    (!selectedRegion || user.viloyat === selectedRegion),
+                    (!selectedRegion || user.viloyat === selectedRegion)
                 )
                 .map((user) => (
                   <tr key={user.id}>
