@@ -102,6 +102,14 @@ function Employees() {
                 className="border w-full p-2 rounded"
               />
             </div>
+            <div className="mb-4">
+              <label className="block mb-2">Davomiylik vaqti (m)</label>
+              <input
+                type="number"
+                placeholder="Davomiylik vaqti (minutlarda)"
+                className="border w-full p-2 rounded"
+              />
+            </div>
           </Modal>
         </div>
         <div>
