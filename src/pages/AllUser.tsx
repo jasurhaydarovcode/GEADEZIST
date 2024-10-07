@@ -42,7 +42,7 @@ const AllUser = (): JSX.Element => {
                   <select className="max-w-[350px] w-[375px] text-gray-40 rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400  placeholder:text-[14px] ">
                     <option value="">hello</option>
                     <option value="">example 1</option>
-                    <option value="">example</option>
+                    <option value="">example 2</option>
                   </select>
                 </div>
                 {/* sort */}
