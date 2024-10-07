@@ -9,7 +9,7 @@ const AllUser = (): JSX.Element => {
     <>
       <Layout>
         <div>
-          <div className="flex justify-end pt-7">
+          <div className="flex justify-center pt-7">
             <div className="px-8">
               <div className="w-max">
                 <header className="flex items-center justify-between">
@@ -39,10 +39,10 @@ const AllUser = (): JSX.Element => {
                     <input type="text" className="min-w-[260px] w-[360px] rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400  placeholder:text-[14px] " placeholder="Tumanni tanlang" />
                     <SlArrowDown className="absolute ml-[320px] mt-4" />
                   </div>
-                  <select className="min-w-[360px] w-[375px] text-gray-40 rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400  placeholder:text-[14px] ">
+                  <select className="max-w-[350px] w-[375px] text-gray-40 rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400  placeholder:text-[14px] ">
                     <option value="">hello</option>
-                    <option value="">byey</option>
-                    <option value="">mthf</option>
+                    <option value="">example 1</option>
+                    <option value="">example 2</option>
                   </select>
                 </div>
                 {/* sort */}
