@@ -35,7 +35,7 @@ const ClientTestStart: React.FC = () => {
       <div className="py-8">
         <h2 className="text-red-600 text-4xl text-center">Yo'nalishlar</h2>
       </div>
-      <div className="border-[1px] items-center relative border-black rounded-md py-6 px-4 w-full">
+      <div className="border-[1px] items-center shadow-lg relative border-black bg-white rounded-md py-6 px-4 w-full">
         <div className="flex">
           <div>
             <img className="w-40 h-40 mr-4" src={Logo} alt="Orientation Illustration" />
