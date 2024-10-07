@@ -1,14 +1,11 @@
-import { getMe } from '@/helpers/api/baseUrl';
-import axios from 'axios';
 import Helmet from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 
 function Home() {
   const navigate = useNavigate()
-  function getUser():void {
-    axios.get(getMe).then((res: ) => {
-
-    })
+  const token = localStorage.getItem('token')
+  if(!token){
+    navigate('/auth/SignIn')
   }
   return (
     <div>

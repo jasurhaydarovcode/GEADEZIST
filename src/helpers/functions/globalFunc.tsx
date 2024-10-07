@@ -1,6 +1,12 @@
 // import axios from "axios";
 // import { useMutation } from "react-query";
+// import { toast } from "react-toastify";
 
+// interface ResponseData {
+//     success: boolean;
+//     body?: any; // 'any' turini kerakli tur bilan almashtiring
+//     message: string;
+// }
 // export interface UseGlobalResponse<T> {
 //     loading: boolean;
 //     error: any;
@@ -31,8 +37,9 @@
 //                     res = await axios.delete(url, config || {})
 //                     break;
 //                 default:
-//                     null;
+//                     return toast.error('Xatolik');
 //             }
-//         }
+//                fun
+//             }
 //     })
 // }
