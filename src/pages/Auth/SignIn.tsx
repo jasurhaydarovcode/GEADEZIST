@@ -1,8 +1,23 @@
+import { loginUrl } from "@/helpers/api/baseUrl";
+import { useGlobalRequest } from "@/helpers/functions/globalFunc";
 import { registerRasm } from "@/helpers/imports/images";
 import { Logo } from "@/helpers/imports/images";
+import { useRef } from "react";
 import { Link } from "react-router-dom";
-
 function SignIn() {
+  const email = useRef<HTMLInputElement>(null);
+  const password = useRef<HTMLInputElement>(null);
+  console.log(email.current?.value);
+  
+  const login = useGlobalRequest(
+    loginUrl,
+    'POST',
+    {
+      email: email.current?.value,
+      password: password.current?.value
+    }
+
+  );
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="flex flex-col lg:flex-row w-full lg:w-5/6 lg:h-5/6 bg-white shadow-lg rounded-lg overflow-hidden">
@@ -24,6 +39,7 @@ function SignIn() {
                   Elektron pochta
                 </label>
                 <input
+                  ref={email}
                   type="email"
                   id="email"
                   placeholder="Elektron pochtangizni kiriting"
@@ -35,6 +51,7 @@ function SignIn() {
                   Parol
                 </label>
                 <input
+                  ref={password}
                   type="password"
                   id="password"
                   placeholder="Parolni kiriting"
