@@ -69,6 +69,7 @@ function App() {
       <Route path="/address" element={<Address />} />
       <Route path="/profile" element={<Profile/>}/>
       <Route path="/inspector-admin" element={<InspectorAdmin />} />
+
       {/* END Admin Routes */}
     </Routes>
   );
