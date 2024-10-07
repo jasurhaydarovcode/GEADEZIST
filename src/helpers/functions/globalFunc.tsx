@@ -39,10 +39,11 @@ export function useGlobalRequest<T>(
                 default:
                     return toast.error('Xatolik');
             }
-                if (!res.data.success) ''
-                return res.data?.body
+                // if (!res.data.success) ''
+                // return res.data?.body
+                return (res.data as ResponseData).body;
             },
-            onError: (error) => {
+            onError: (error: any) => {
                 toast.error(error.message);
             },
     })

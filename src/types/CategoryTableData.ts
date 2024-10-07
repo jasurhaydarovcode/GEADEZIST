@@ -1,7 +1,7 @@
 export interface CategoryTableData {
     id: string; // Yoki raqam
     image: string;
-    categoryType: 'asosiy' | 'asosiy-bolmagan'; // Yoki boshqa qiymat
+    categoryType: string; // Yoki boshqa qiymat
     name: string;
     description: string;
     totalQuestions: number; // Yoki string
@@ -11,4 +11,6 @@ export interface CategoryTableData {
     createdBy: string;
     situation: string; // Ixtiyoriy
     deletedBy: string; // Ixtiyoriy
+    
+    
 }
