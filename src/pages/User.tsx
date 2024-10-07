@@ -32,7 +32,7 @@ function User() {
                     <input
                       type="text"
                       id="inp1"
-                      className="w-[390px] pl-10  bg-[] border-gray-300 rounded-md h-[50px] "
+                      className="pl-10  bg-[] border-gray-300 rounded-md h-[50px] "
                       placeholder="Foydalanuvchini qidirish"
                     />
                   </div>
