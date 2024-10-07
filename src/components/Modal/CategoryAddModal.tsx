@@ -55,7 +55,7 @@ const CategoryAddModal: React.FC = () => {
                 centered
                 open={open}
                 onOk={handleSave}
-                onCancel={handleCancel} // Modal yopilganda tozalash funksiyasi chaqiriladi
+                onCancel={handleCancel}
                 width={600}
                 okText="Saqlash"
                 cancelText="Yopish"
@@ -75,6 +75,7 @@ const CategoryAddModal: React.FC = () => {
                     {formValues.categoryType === 'asosiy' && (
                         <>
                             {/* Kategoriya nomi */}
+                            <label className="block m-2">Kategoriya nomi</label>
                             <Input
                                 className={InputStyles.input}
                                 placeholder="Kategoriya nomini kiriting"
@@ -83,12 +84,15 @@ const CategoryAddModal: React.FC = () => {
                             />
 
                             {/* Tavsifi */}
-                            <Input
-                                className={InputStyles.input}
-                                placeholder="Tavsifni kiriting"
-                                value={formValues.description}
-                                onChange={(e) => setFormValues({ ...formValues, description: e.target.value })}
-                            />
+                            <div>
+                                <label className="block mb-2">Tavsif</label>
+                                <Input
+                                    className={InputStyles.input}
+                                    placeholder="Tavsifni kiriting"
+                                    value={formValues.description}
+                                    onChange={(e) => setFormValues({ ...formValues, description: e.target.value })}
+                                />
+                            </div>
                         </>
                     )}
 
@@ -96,45 +100,61 @@ const CategoryAddModal: React.FC = () => {
                     {formValues.categoryType === 'asosiy-bolmagan' && (
                         <>
                             {/* Kategoriya nomi */}
-                            <Input className={InputStyles.input}
-                                placeholder="Kategoriya nomini kiriting"
-                                value={formValues.categoryName}
-                                onChange={(e) => setFormValues({ ...formValues, categoryName: e.target.value })}
-                            />
+                            <div>
+                                <label className='blok mb-2' htmlFor="">Kategoriya Nomi</label>
+                                <Input className={InputStyles.input}
+                                    placeholder="Kategoriya nomini kiriting"
+                                    value={formValues.categoryName}
+                                    onChange={(e) => setFormValues({ ...formValues, categoryName: e.target.value })}
+                                />
+                            </div>
 
                             {/* Tavsifi */}
-                            <Input className={InputStyles.input}
-                                placeholder="Tavsifni kiriting"
-                                value={formValues.description}
-                                onChange={(e) => setFormValues({ ...formValues, description: e.target.value })}
-                            />
+                            <div>
+                                <label className='block mb-2' htmlFor="">Tavsif</label>
+                                <Input className={InputStyles.input}
+                                    placeholder="Tavsifni kiriting"
+                                    value={formValues.description}
+                                    onChange={(e) => setFormValues({ ...formValues, description: e.target.value })}
+                                />
+                            </div>
 
                             {/* Umumiy savollar soni */}
-                            <Input className={InputStyles.input}
-                                type="number" // Faqat raqam kiritish mumkin
-                                placeholder="Umumiy savollar sonini kiriting"
-                                value={formValues.totalQuestions}
-                                onChange={(e) => setFormValues({ ...formValues, totalQuestions: e.target.value })}
-                                min="0" // Manfiy qiymat kiritishni oldini olish
-                            />
+                            <div>
+                                <label className='block mb-2' htmlFor="">Ummumiy Savollar</label>
+                                <Input className={InputStyles.input}
+                                    type="number"
+                                    placeholder="Umumiy savollar sonini kiriting"
+                                    value={formValues.totalQuestions}
+                                    onChange={(e) => setFormValues({ ...formValues, totalQuestions: e.target.value })}
+                                    min="0"
+                                />
+
+                            </div>
 
                             {/* Qo'shimcha savollar soni */}
-                            <Input className={InputStyles.input}
-                                type="number" // Faqat raqam kiritish mumkin
-                                placeholder="Qo'shimcha savollar sonini kiriting"
-                                value={formValues.additionalQuestions}
-                                onChange={(e) => setFormValues({ ...formValues, additionalQuestions: e.target.value })}
-                                min="0" // Manfiy qiymat kiritishni oldini olish
-                            />
+                            <div>
+                            <label className='block mb-2' htmlFor="">Qo'shimcha savollar</label>
+                                <Input className={InputStyles.input}
+                                    type="number"
+                                    placeholder="Qo'shimcha savollar sonini kiriting"
+                                    value={formValues.additionalQuestions}
+                                    onChange={(e) => setFormValues({ ...formValues, additionalQuestions: e.target.value })}
+                                    min="0"
+                                />
+                            </div>
 
                             {/* Davomiylik vaqti */}
-                            <Input className={InputStyles.input}
-                                type="number" // Faqat raqam kiritish mumkin
-                                placeholder="Davomiylik vaqtini kiriting (daqiqa)"
-                                value={formValues.duration}
-                                onChange={(e) => setFormValues({ ...formValues, duration: e.target.value })}
-                                min="0" // Manfiy qiymat kiritishni oldini olish
-                            />
+                            <div>
+                                <label className='block mb-2' htmlFor="">Davomiylik vaqtini</label>
+                                <Input className={InputStyles.input}
+                                    type="number"
+                                    placeholder="Davomiylik vaqtini kiriting (daqiqa)"
+                                    value={formValues.duration}
+                                    onChange={(e) => setFormValues({ ...formValues, duration: e.target.value })}
+                                    min="0"
+                                />
+                            </div>
                         </>
                     )}
                 </div>
