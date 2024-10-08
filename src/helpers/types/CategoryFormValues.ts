@@ -1,10 +1,11 @@
+// helpers/types/CategoryFormValues.ts
 export interface CategoryFormValues {
-    categoryType: "asosiy" | "asosiy-bolmagan";  // Buni interfeysda tekshiring
-    categoryName: string; // Kategoriya nomi
-    description: string; // Kategoriya tavsifi
-    totalQuestions: string; // Umumiy savollar
-    additionalQuestions: string; // Qo'shimcha savollar
-    duration: string; // Davomiylik vaqti
-    retryDate: string; // Qayta qabul qilish sanasi
-}
-
+    categoryName: string;
+    categoryType: 'asosiy' | 'asosiy-bolmagan';
+    description: string;
+    totalQuestions: number;
+    additionalQuestions: number;
+    duration: number;
+    retryDate?: number; // Optional, as it might not be applicable for all categories
+  }
+  
