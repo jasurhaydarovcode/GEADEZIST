@@ -29,7 +29,7 @@ function ClientProfile() {
           district: data.district || "Qarshi Shaxri",
           email: data.email || "foydalanibqol@gmail.com",
           address: data.address || "Foydalanuvchi MFY Foyda Ko'chasi 21-uy",
-          profileImage: data.profileImage || "", // Leave empty to trigger fallback if no image
+          profileImage: data.profileImage || "",
         });
       })
       .catch((error) => {

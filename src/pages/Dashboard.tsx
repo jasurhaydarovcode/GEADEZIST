@@ -7,6 +7,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  ChartOptions,
 } from 'chart.js';
 import { useState } from 'react';
 import Layout from '@/components/Dashboard/Layout';
@@ -36,7 +37,9 @@ const Dashboard = () => {
       const res = await axios.get(getStaticAll)
       return res.data
     }
-  })
+  });
+  console.log(dashboardStatic.data); // qizil ni yo'q qilish uchun quydm
+
   const categories = ['Топография', 'Маркшейдерлик', 'Умумий Геодезия'];
   const regions = ['Toshkent', 'Samarqand', "Farg'ona"];
 
@@ -125,7 +128,7 @@ const Dashboard = () => {
   };
 
   // Options for the scatter chart
-  const options:any = {
+  const options: ChartOptions<'scatter'> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -141,7 +144,7 @@ const Dashboard = () => {
         },
         ticks: {
           stepSize: 1,
-          callback: (value: number) => {
+          callback: (tickValue: string | number) => {
             const days = [
               'Dushanba',
               'Seshanba',
@@ -151,7 +154,7 @@ const Dashboard = () => {
               'Shanba',
               'Yakshanba',
             ];
-            return days[value - 1];
+            return days[Number(tickValue)];
           },
         },
       },
@@ -167,6 +170,7 @@ const Dashboard = () => {
       },
     },
   };
+  
   checkLogin()
 
   return (
