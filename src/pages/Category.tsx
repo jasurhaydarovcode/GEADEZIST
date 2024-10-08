@@ -50,7 +50,6 @@ const Category: React.FC = () => {
                     };
                     handleAddCategory(newCategory);
                 }} />
-                <div className="addBtn"></div>
                 <div className="bg-white shadow rounded-lg p-4 overflow-x-auto">
                     <table className="min-w-full bg-white border">
                         <thead>

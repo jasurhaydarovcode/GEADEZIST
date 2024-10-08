@@ -2,22 +2,50 @@ import { loginUrl } from "@/helpers/api/baseUrl";
 import { useGlobalRequest } from "@/helpers/functions/globalFunc";
 import { registerRasm } from "@/helpers/imports/images";
 import { Logo } from "@/helpers/imports/images";
-import { useRef } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { useMutation } from "react-query";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 function SignIn() {
   const email = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
-  console.log(email.current?.value);
+  const navigate = useNavigate()
   
-  const login = useGlobalRequest(
-    loginUrl,
-    'POST',
-    {
-      email: email.current?.value,
-      password: password.current?.value
-    }
+  // const login = useGlobalRequest(
+  //   loginUrl,
+  //   'POST',
+  //   {
+  //     email: email.current?.value,
+  //     password: password.current?.value
+  //   }
+  // );
+  // useEffect(() => {
+  //   console.log(login.response);
+    
+  //   if(login.response){
+  //     localStorage.setItem('token', login.response.token)
+  //     if(login.response.role === 'ROLE_SUPER_ADMIN'){
+  //       navigate('/dashboard')
+  //     }
+  //     toast.success('Tizimga kirish muvaffaqiyatli')
+  //   }else {
+  //       toast.error(login.error)
+  //   }
+  // },[login.response])
 
-  );
+  const login = useMutation({
+    mutationFn: async (data: any) => {
+      const res = await axios.post(loginUrl, data)
+      return res
+    },
+    onSuccess: (res:any) => {
+      localStorage.setItem('token', res.data.token)
+      navigate('/dashboard')
+    },
+    onError: (error:any) => {
+      toast.error(error.message)
+    }
+  })
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="flex flex-col lg:flex-row w-full lg:w-5/6 lg:h-5/6 bg-white shadow-lg rounded-lg overflow-hidden">
@@ -62,6 +90,7 @@ function SignIn() {
                 </small>
               </div>
               <button
+                onClick={login.globalDataFunc}
                 type="submit"
                 className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
               >
