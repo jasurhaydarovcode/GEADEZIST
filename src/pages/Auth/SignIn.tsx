@@ -11,26 +11,27 @@ function SignIn() {
   const password = useRef<HTMLInputElement | null>(null);
 
   const navigate = useNavigate();
-  function loginPost(){
+  function loginPost() {
     const data: LoginType = {
-      email: email.current?.value,
-      password: password.current?.value
+      email: email.current?.value || null,
+      password: password.current?.value || null as string | null,
     }
     axios.post(`${baseUrl}auth/login`, data)
-    .then((res)=>{
-    localStorage.setItem("token", res.data.token);
-    toast.dark("Successfully logged in!");
-    if (res.data.role === "ROLE_SUPER_ADMIN") {
-      navigate("/dashboard");
-    } else if (res.data.role === "ROLE_ADMIN") {
-      navigate("/masters");
-    } else {
-      navigate("/clients");
-    }
-    console.log(res.data);
-    
-  })
-    .catch((err)=>toast.error(err.response.data.message))
+      .then((res) => {
+        const data = res.data as { role: string; token: string };
+        localStorage.setItem("token", data.token);
+        toast.dark("Successfully logged in!");
+        if (data.role === "ROLE_SUPER_ADMIN") {
+          navigate("/dashboard");
+        } else if (data.role === "ROLE_ADMIN") {
+          navigate("/masters");
+        } else {
+          navigate("/clients");
+        }
+        console.log(res.data);
+
+      })
+      .catch((err) => toast.error(err.response.data.message))
   }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
