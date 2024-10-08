@@ -1,12 +1,6 @@
 import axios from "axios";
 import { useMutation } from "react-query";
 import { toast } from "react-toastify";
-
-interface ResponseData {
-    success: boolean;
-    body?: any; // 'any' turini kerakli tur bilan almashtiring
-    message: string;
-}
 export interface UseGlobalResponse<T> {
     loading: boolean;
     error: any;
@@ -39,10 +33,10 @@ export function useGlobalRequest<T>(
                 default:
                     return toast.error('Xatolik');
             }
-                if (!res.data.success) ''
+                if (!res.data?.success) ''
                 return res.data?.body
             },
-            onError: (error) => {
+            onError: (error:any) => {
                 toast.error(error.message);
             },
     })
