@@ -1,4 +1,3 @@
-
 export interface ButtonType {
   btnClass?: string;
   btnText?: string;

@@ -1,8 +1,8 @@
 import CategoryAddModal from "@/components/Modal/CategoryAddModal";
 import Layout from "@/components/Dashboard/Layout";
 import { geodeziyaLogo } from "@/helpers/imports/images";
-import { CategoryTableData } from '@/types/CategoryTableData';
-import { CategoryFormValues } from '@/types/CategoryFormValues';
+import { CategoryTableData } from '@/helpers/types/CategoryTableData';
+import { CategoryFormValues } from '@/helpers/types/CategoryFormValues';
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -48,7 +48,8 @@ const Category: React.FC = () => {
                         createdBy: 'admin', 
                         situation: '', 
                         deletedBy: '', 
-                        additionalQuestions: parseInt(formValues.additionalQuestions, 10), // stringdan numberga o'zgartirish
+                        additionalQuestions: parseInt(formValues.additionalQuestions, 10),
+                        duration: Number(formValues.duration),
                     };
                     handleAddCategory(newCategory); 
                 }} />

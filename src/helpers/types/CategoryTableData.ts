@@ -1,5 +1,5 @@
 export interface CategoryTableData {
-    id: string; // Yoki raqam
+    id: string;
     image: string;
     categoryType: string; // Yoki boshqa qiymat
     name: string;

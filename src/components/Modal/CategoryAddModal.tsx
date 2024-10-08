@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, Modal, Input, Select, notification } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
-import { CategoryFormValues } from '@/types/CategoryFormValues'; // To'g'ri interfeys nomini kiriting
+import { CategoryFormValues } from '@/helpers/types/CategoryFormValues'; // To'g'ri interfeys nomini kiriting
 import axios from 'axios'; // Axios kutubxonasini import qilamiz
 
 const { Option } = Select;

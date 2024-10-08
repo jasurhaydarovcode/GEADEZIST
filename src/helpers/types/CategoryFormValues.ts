@@ -1,4 +1,3 @@
-// types/CategoryFormValues.ts
 export interface CategoryFormValues {
     categoryType: "asosiy" | "asosiy-bolmagan";  // Buni interfeysda tekshiring
     categoryName: string; // Kategoriya nomi
