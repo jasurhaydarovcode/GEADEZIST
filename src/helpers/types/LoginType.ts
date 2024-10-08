@@ -1,4 +1,4 @@
 export  interface LoginType  {
     email: null | string,
-    phone: string
+    password:null | string
 }

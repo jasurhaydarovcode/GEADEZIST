@@ -13,7 +13,7 @@ function SignIn() {
   const navigate = useNavigate();
   function loginPost() {
     const data: LoginType = {
-      email: email.current?.value || null,
+      email: email.current?.value || null as string | null,
       password: password.current?.value || null as string | null,
     }
     axios.post(`${baseUrl}auth/login`, data)
@@ -89,7 +89,7 @@ function SignIn() {
               <Link to={'/auth/signup'} className="text-sm text-blue-500 hover:underline">
                 Ro'yhatdan o'tish
               </Link>
-              <Link to={'/auth/reset-password'} className="text-sm text-blue-500 hover:underline">
+              <Link to={'/auth/confirm'} className="text-sm text-blue-500 hover:underline">
                 Parolni unutdingizmi?
               </Link>
             </div>
