@@ -1,23 +1,37 @@
-import { loginUrl } from "@/helpers/api/baseUrl";
-import { useGlobalRequest } from "@/helpers/functions/globalFunc";
+import { baseUrl } from "@/helpers/api/baseUrl";
 import { registerRasm } from "@/helpers/imports/images";
 import { Logo } from "@/helpers/imports/images";
+import { LoginType } from "@/helpers/types/LoginType";
+import axios from "axios";
 import { useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 function SignIn() {
-  const email = useRef<HTMLInputElement>(null);
-  const password = useRef<HTMLInputElement>(null);
-  console.log(email.current?.value);
-  
-  const login = useGlobalRequest(
-    loginUrl,
-    'POST',
-    {
+  const email = useRef<HTMLInputElement | null>(null);
+  const password = useRef<HTMLInputElement | null>(null);
+
+  const navigate = useNavigate();
+  function loginPost(){
+    const data: LoginType = {
       email: email.current?.value,
       password: password.current?.value
     }
-
-  );
+    axios.post(`${baseUrl}auth/login`, data)
+    .then((res)=>{
+    localStorage.setItem("token", res.data.token);
+    toast.dark("Successfully logged in!");
+    if (res.data.role === "ROLE_SUPER_ADMIN") {
+      navigate("/dashboard");
+    } else if (res.data.role === "ROLE_ADMIN") {
+      navigate("/masters");
+    } else {
+      navigate("/clients");
+    }
+    console.log(res.data);
+    
+  })
+    .catch((err)=>toast.error(err.response.data.message))
+  }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="flex flex-col lg:flex-row w-full lg:w-5/6 lg:h-5/6 bg-white shadow-lg rounded-lg overflow-hidden">
@@ -63,6 +77,7 @@ function SignIn() {
               </div>
               <button
                 type="submit"
+                onClick={loginPost}
                 className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
               >
                 Tizimga kirish
