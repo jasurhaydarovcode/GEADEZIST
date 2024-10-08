@@ -18,6 +18,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
     totalQuestions: '',
     additionalQuestions: '',
     duration: '',
+    retryDate: '',
   });
 
   const [open, setOpen] = useState(false);
@@ -31,6 +32,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
       totalQuestions: '',
       additionalQuestions: '',
       duration: '',
+      retryDate: '',
     });
   };
 
@@ -146,6 +148,17 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
                   placeholder="Davomiylik (daqiqa)"
                   value={formValues.duration}
                   onChange={(e) => setFormValues({ ...formValues, duration: e.target.value })}
+                  min="0"
+                />
+              </div>
+              <div>
+                <label className="block mb-2">Qayta qabul qilish</label>
+                <Input
+                  className={InputStyles.input}
+                  type="number"
+                  placeholder="Qayta qabul qilish sanasi"
+                  value={formValues.retryDate}
+                  onChange={(e) => setFormValues({ ...formValues, retryDate: e.target.value })}
                   min="0"
                 />
               </div>

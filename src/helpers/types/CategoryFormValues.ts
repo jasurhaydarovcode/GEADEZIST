@@ -5,4 +5,6 @@ export interface CategoryFormValues {
     totalQuestions: string; // Umumiy savollar
     additionalQuestions: string; // Qo'shimcha savollar
     duration: string; // Davomiylik vaqti
+    retryDate: string; // Qayta qabul qilish sanasi
 }
+
