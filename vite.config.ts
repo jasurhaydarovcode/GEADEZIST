@@ -1,8 +1,11 @@
+// vite.config.ts
+
 import { defineConfig, Plugin, ViteDevServer } from 'vite';
 import react from '@vitejs/plugin-react';
-import path from "path"
+import path from 'path';
+import vitePluginLogStart from './vite-plugin-log-start';
 
-// console plugin
+// Console plugin
 const GEADEZIST = (): Plugin => {
   return {
     name: 'console-plugin',
@@ -16,7 +19,14 @@ const GEADEZIST = (): Plugin => {
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), GEADEZIST()],
+  plugins: [
+    react(),
+    GEADEZIST(),
+    vitePluginLogStart({
+      filePath: './dev-start-log.json',
+      includeUser: true,
+    }),
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -27,6 +37,6 @@ export default defineConfig({
   },
   server: {
     host: '0.0.0.0',
-    port: 777
-  }
+    port: 777,
+  },
 });

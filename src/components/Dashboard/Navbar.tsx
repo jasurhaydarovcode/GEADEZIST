@@ -1,13 +1,18 @@
+
 import { geodeziyaLogo } from '@/helpers/imports/images';
 import { useEffect, useState } from 'react';
 import { FaRegUser } from 'react-icons/fa';
 import { IoCloseOutline, IoExitOutline } from 'react-icons/io5';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false);
-
+  const navigate = useNavigate()
+  function logOut() {
+    localStorage.removeItem('token')
+    navigate('/auth/SignIn')
+  }
   // Toggle dropdown visibility
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -26,7 +31,7 @@ const Navbar = () => {
   useEffect(() => {
     // Klaviatura tugmasi bosilganda ishlovchi funksiya
     const handleKeyPress = (event: KeyboardEvent) => {
-      if(event.key){
+      if (event.key) {
         setIsDropdownOpen(false)
       }
     };
@@ -105,7 +110,7 @@ const Navbar = () => {
                 >
                   Yopish
                 </button>
-                <button className="bg-gray-400 text-white px-4 py-2 rounded-md">
+                <button onClick={logOut} className="bg-gray-400 text-white px-4 py-2 rounded-md">
                   Ha
                 </button>
               </div>

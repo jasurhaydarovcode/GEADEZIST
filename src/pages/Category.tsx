@@ -1,27 +1,34 @@
-import CategoryAddModal from "@/components/Modal/CategoryAddModal"
-import Layout from "@/components/Dashboard/Layout"
-import { geodeziyaLogo } from "@/helpers/imports/images"
-import { CategoryTableData } from '@/types/Category';
-
-
+import CategoryAddModal from "@/components/Modal/CategoryAddModal";
+import Layout from "@/components/Dashboard/Layout";
+import { geodeziyaLogo } from "@/helpers/imports/images";
+import { CategoryTableData } from '@/types/CategoryTableData';
+import { CategoryFormValues } from '@/types/CategoryFormValues';
+import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 const Category: React.FC = () => {
-    // Ma'lumotlar turlari aniqlangan
-    const categories: CategoryTableData[] = [
+    const [categories, setCategories] = useState<CategoryTableData[]>([
         {
-            id: 1,
+            id: uuidv4(),
             image: geodeziyaLogo,
+            categoryType: 'asosiy',
             name: 'Geodeziya',
-            description: 'Geadeziya testlar',
+            description: 'Geodeziya testlar',
             totalQuestions: 3,
             additionalQuestions: 1,
             duration: 1,
-            reAdmissionDate: '2',
+            reAdmissionDate: new Date().toISOString(),
             createdBy: 'admin',
             situation: '',
             deletedBy: 'admin',
         },
-    ];
+    ]);
+
+    const handleAddCategory = (newCategory: CategoryTableData) => {
+        setCategories([...categories, newCategory]);
+    };
+
+    
 
     return (
         <Layout>
@@ -29,8 +36,22 @@ const Category: React.FC = () => {
                 <div className="pagename">
                     <h1 className="font-semibold text-3xl">Category</h1>
                 </div>
-                <CategoryAddModal />
-                <div className="addBtn"></div>
+                <CategoryAddModal onAddCategory={(formValues: CategoryFormValues) => {
+                    const newCategory: CategoryTableData = {
+                        id: uuidv4(),
+                        ...formValues,
+                        totalQuestions: Number(formValues.totalQuestions), // totalQuestions ni number ga o'zgartirish
+                        image: '', 
+                        name: formValues.categoryName, 
+                        categoryType: formValues.categoryType as "asosiy" | "asosiy-bolmagan",
+                        reAdmissionDate: new Date().toISOString(),
+                        createdBy: 'admin', 
+                        situation: '', 
+                        deletedBy: '', 
+                        additionalQuestions: parseInt(formValues.additionalQuestions, 10), // stringdan numberga o'zgartirish
+                    };
+                    handleAddCategory(newCategory); 
+                }} />
                 <div className="bg-white shadow rounded-lg p-4 overflow-x-auto">
                     <table className="min-w-full bg-white border">
                         <thead>
@@ -49,9 +70,9 @@ const Category: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {categories.map((category) => (
+                            {categories.map((category, index) => (
                                 <tr key={category.id}>
-                                    <td className="py-2 border text-center">{category.id}</td>
+                                    <td className="py-2 border text-center">{index + 1}</td>
                                     <td className="py-2 border text-center pl-4">
                                         <img src={category.image} className="w-14 h-14 rounded-full" alt="logo" />
                                     </td>
@@ -60,7 +81,9 @@ const Category: React.FC = () => {
                                     <td className="py-2 border text-center">{category.totalQuestions}</td>
                                     <td className="py-2 border text-center">{category.additionalQuestions}</td>
                                     <td className="py-2 border text-center">{category.duration}</td>
-                                    <td className="py-2 border text-center">{category.reAdmissionDate}</td>
+                                    <td className="py-2 border text-center">
+                                        {new Date(category.reAdmissionDate).toLocaleDateString()}
+                                    </td>
                                     <td className="py-2 border text-center">{category.createdBy}</td>
                                     <td className="py-2 border text-center">{category.situation}</td>
                                     <td className="py-2 border text-center">{category.deletedBy}</td>

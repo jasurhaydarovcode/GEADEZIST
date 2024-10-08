@@ -1,12 +1,6 @@
 // import axios from "axios";
 // import { useMutation } from "react-query";
 // import { toast } from "react-toastify";
-
-// interface ResponseData {
-//     success: boolean;
-//     body?: any; // 'any' turini kerakli tur bilan almashtiring
-//     message: string;
-// }
 // export interface UseGlobalResponse<T> {
 //     loading: boolean;
 //     error: any;
@@ -31,15 +25,25 @@
 //                     res = await axios.post(url, data || {}, config || {});
 //                     break;
 //                 case 'PUT':
-//                     res = await axios.put(url, data || {} , config || {});
+//                     res = await axios.put(url, data || {}, config || {});
 //                     break;
-//                 case 'DELETE': 
+//                 case 'DELETE':
 //                     res = await axios.delete(url, config || {})
 //                     break;
 //                 default:
 //                     return toast.error('Xatolik');
 //             }
-//                fun
-//             }
+//             return res
+//         },
+//         onError: (error: any) => {
+//             toast.error(error.message);
+//         },
 //     })
+//     return {
+//         loading: mutation.status == 'loading',
+//         error: mutation.error,
+//         response: mutation.data,
+//         globalDataFunc: mutation.mutateAsync
+//     }
 // }
+
