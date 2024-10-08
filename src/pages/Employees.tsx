@@ -36,9 +36,6 @@ function Employees() {
     setOpen(false);
   };
 
-  if (isLoading) return <p>Yuklanmoqda...</p>;
-  if (isError) return <p>Xatolik yuz berdi...</p>; 
-
     // Hodim holatini yangilash uchun mutatsiya yaratish
     const updateEmployeeStatus = useMutation(
       async ({ id, enabled }: { id: string, enabled: boolean }) => {
@@ -49,6 +46,9 @@ function Employees() {
         onSuccess: () => {
           queryClient.invalidateQueries('getADmin'); // Adminlar ma'lumotini qayta yuklash
         },
+        onError: (error) => {
+          console.error('Xatolik:', error);
+        }
       }
     );
 
