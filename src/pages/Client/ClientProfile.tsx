@@ -1,32 +1,72 @@
+import { useState, useEffect } from "react";
 import Layout from "@/components/clientDashboard/laytout";
 import { BiSolidPencil } from "react-icons/bi";
+import axios from "axios";
+import { noImageClientDefaultImage } from "@/helpers/imports/images";
+import { baseUrl } from "@/helpers/api/baseUrl";
 
 function ClientProfile() {
+  const [profileData, setProfileData] = useState({
+    firstName: "",
+    lastName: "",
+    region: "",
+    district: "",
+    email: "",
+    address: "",
+    profileImage: "",
+  });
+
+  // Fetch profile data from the API
+  useEffect(() => {
+    axios
+      .get(`${baseUrl}user/profile`)
+      .then((response) => {
+        const data = response.data.body;
+        setProfileData({
+          firstName: data.firstName || "Foydalanuvchi",
+          lastName: data.lastName || "Foydalaniyev",
+          region: data.region || "Qashqadaryo Viloyati",
+          district: data.district || "Qarshi Shaxri",
+          email: data.email || "foydalanibqol@gmail.com",
+          address: data.address || "Foydalanuvchi MFY Foyda Ko'chasi 21-uy",
+          profileImage: data.profileImage || "", // Leave empty to trigger fallback if no image
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching profile data:", error);
+      });
+  }, []);
+
   return (
     <Layout>
-      <div className="flex flex-col items-center p-4">
+      <div className="flex flex-col items-center md:p-4 p-0">
         <div className="w-full max-w-7xl bg-white shadow-md rounded-lg p-6">
           {/* Profile Picture Section */}
           <div className="flex flex-col items-center mb-6">
             <h4 className="text-2xl text-red-600 font-semibold pb-4">Foydalanuvchi rasmi</h4>
-            <img className="w-40 relative h-40 rounded-full object-cover" src="https://e1.pxfuel.com/desktop-wallpaper/574/559/desktop-wallpaper-joker-green-card-superheroes-backgrounds-and-green-joker-thumbnail.jpg" alt="User Image" />
+            <img
+              className="w-40 relative h-40 rounded-full object-cover"
+              src={profileData.profileImage || noImageClientDefaultImage} // user agar rasm quymasa shu default rasm quyiladi
+              alt="User Image"
+              onError={(e) => {
+                e.currentTarget.src = noImageClientDefaultImage;
+              }}
+            />
             <button className="absolute ml-28 mt-40 bg-red-500 text-white p-2 rounded-full">
               <BiSolidPencil />
             </button>
           </div>
 
           {/* Profile Info Section */}
-          <div className="text-center text-red-500 text-xl mb-4">
-            Sizning Ma'lumotlaringiz
-          </div>
+          <div className="text-center text-red-500 text-xl mb-4">Sizning Ma'lumotlaringiz</div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Name */}
             <div>
-              <label className="block text-sm text-gray-600">Ism</label>
+              <label className="block text-lg text-gray-600">Ism</label>
               <input
                 type="text"
-                value="Foydalanuvchi"
+                value={profileData.firstName}
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                 readOnly
               />
@@ -34,10 +74,10 @@ function ClientProfile() {
 
             {/* Surname */}
             <div>
-              <label className="block text-sm text-gray-600">Familiya</label>
+              <label className="block text-lg text-gray-600">Familiya</label>
               <input
                 type="text"
-                value="Foydalaniyev"
+                value={profileData.lastName}
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                 readOnly
               />
@@ -45,10 +85,10 @@ function ClientProfile() {
 
             {/* Region */}
             <div>
-              <label className="block text-sm text-gray-600">Viloyat</label>
+              <label className="block text-lg text-gray-600">Viloyat</label>
               <input
                 type="text"
-                value="Qashqadaryo Viloyati"
+                value={profileData.region}
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                 readOnly
               />
@@ -56,10 +96,10 @@ function ClientProfile() {
 
             {/* District */}
             <div>
-              <label className="block text-sm text-gray-600">Tuman</label>
+              <label className="block text-lg text-gray-600">Tuman</label>
               <input
                 type="text"
-                value="Qarshi Shaxri"
+                value={profileData.district}
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                 readOnly
               />
@@ -67,10 +107,10 @@ function ClientProfile() {
 
             {/* Email */}
             <div>
-              <label className="block text-sm text-gray-600">E-pochta manzili</label>
+              <label className="block text-lg text-gray-600">E-pochta manzili</label>
               <input
                 type="email"
-                value="foydalanibqol@gmail.com"
+                value={profileData.email}
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                 readOnly
               />
@@ -78,14 +118,39 @@ function ClientProfile() {
 
             {/* Address */}
             <div>
-              <label className="block text-sm text-gray-600">Ko'cha (To'liq)</label>
+              <label className="block text-lg text-gray-600">Ko'cha (To'liq)</label>
               <input
                 type="text"
-                value="Foydalanuvchi MFY Foyda Ko'chasi 21-uy"
+                value={profileData.address}
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                 readOnly
               />
             </div>
+
+            {/* Phone Number */}
+            <div>
+              <label className="block text-lg text-gray-600">Telefon raqamingiz <span className="text-red-500">(namuna: 998912345678)</span></label>
+              <input
+                type="text"
+                value={profileData.address}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
+                readOnly
+              />
+            </div>
+
+            {/* User Brithday */}
+            <div>
+              <label className="block text-lg text-gray-600">Tug'ilgan kuningiz <span>(namuna: yil-oy-kun: 2003-02-09)</span></label>
+              <input
+                type="text"
+                value={profileData.address}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
+                readOnly
+              />
+            </div>
+            <button className="p-2 rounded-lg text-md mt-9 bg-gray-600 hover:bg-gray-800 transition duration-200 ease-in-out w-max font-semibold text-white">
+              O'zgartirishlarni saqlang
+            </button>
           </div>
         </div>
       </div>
