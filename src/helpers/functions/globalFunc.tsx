@@ -33,10 +33,18 @@ export function useGlobalRequest<T>(
                 default:
                     return toast.error('Xatolik');
             }
+<<<<<<< HEAD
                 if (!res.data?.success) ''
                 return res.data?.body
             },
             onError: (error:any) => {
+=======
+                // if (!res.data.success) ''
+                // return res.data?.body
+                return (res.data as ResponseData).body;
+            },
+            onError: (error: any) => {
+>>>>>>> 997c94cf4951f6bff5ae99a7e5e14551eb53b480
                 toast.error(error.message);
             },
     })
@@ -47,3 +55,4 @@ export function useGlobalRequest<T>(
         globalDataFunc: mutation.mutateAsync
     }
 }
+

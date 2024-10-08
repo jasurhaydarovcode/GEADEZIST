@@ -2,7 +2,7 @@
 
 // Modalda kerak bo'ladigan form ma'lumotlari uchun interface
 export interface CategoryFormValues {
-    categoryType: string;
+    categoryType: "asosiy" | "asosiy-bolmagan";
     categoryName: string;
     description: string;
     totalQuestions: string;
@@ -24,4 +24,5 @@ export interface CategoryFormValues {
     situation?: string; // Optional field
     deletedBy: string;
   }
+
   
