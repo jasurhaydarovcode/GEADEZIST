@@ -14,6 +14,7 @@ import { PiUsersThreeFill } from 'react-icons/pi';
 import { FaArrowsAlt } from 'react-icons/fa';
 import { FaCircleQuestion } from 'react-icons/fa6';
 import { MdOutlineCategory } from 'react-icons/md';
+import checkLogin from '@/helpers/functions/checkLogin';
 
 ChartJS.register(
   CategoryScale,
@@ -158,6 +159,7 @@ const Dashboard = () => {
       },
     },
   };
+  checkLogin()
 
   return (
     <Layout>

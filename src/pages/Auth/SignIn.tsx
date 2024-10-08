@@ -1,7 +1,8 @@
 import { loginUrl } from "@/helpers/api/baseUrl";
-import { useGlobalRequest } from "@/helpers/functions/globalFunc";
+// import { useGlobalRequest } from "@/helpers/functions/globalFunc";
 import { registerRasm } from "@/helpers/imports/images";
 import { Logo } from "@/helpers/imports/images";
+import axios from "axios";
 import { useEffect, useRef } from "react";
 import { useMutation } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,42 +11,35 @@ function SignIn() {
   const email = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
   const navigate = useNavigate()
-  
-  // const login = useGlobalRequest(
-  //   loginUrl,
-  //   'POST',
-  //   {
-  //     email: email.current?.value,
-  //     password: password.current?.value
-  //   }
-  // );
-  // useEffect(() => {
-  //   console.log(login.response);
-    
-  //   if(login.response){
-  //     localStorage.setItem('token', login.response.token)
-  //     if(login.response.role === 'ROLE_SUPER_ADMIN'){
-  //       navigate('/dashboard')
-  //     }
-  //     toast.success('Tizimga kirish muvaffaqiyatli')
-  //   }else {
-  //       toast.error(login.error)
-  //   }
-  // },[login.response])
-
   const login = useMutation({
-    mutationFn: async (data: any) => {
+    mutationFn: async () => {
+      const data = {email: email.current?.value, password: password.current?.value}
       const res = await axios.post(loginUrl, data)
       return res
     },
     onSuccess: (res:any) => {
       localStorage.setItem('token', res.data.token)
-      navigate('/dashboard')
+      if(res.data.role === 'ROLE_SUPER_ADMIN'){
+        navigate('/dashboard')
+      }else if(res.data.role === 'ROLE_USER'){
+        navigate('/')
+      }
+      toast.success('Tizimga kirish muvaffaqiyatli' ,{position: 'top-center'})
     },
     onError: (error:any) => {
-      toast.error(error.message)
-    }
+      
+      if(email.current?.value === '' || password.current?.value === ''){
+        toast.warning('Email va parolni to\'liq kiriting')
+      }else{
+        toast.error(error.message)
+      }
+    },
   })
+  function checkInput(){
+  }
+  useEffect(() => {
+    checkInput()
+  }, [])
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="flex flex-col lg:flex-row w-full lg:w-5/6 lg:h-5/6 bg-white shadow-lg rounded-lg overflow-hidden">
@@ -80,7 +74,7 @@ function SignIn() {
                 </label>
                 <input
                   ref={password}
-                  type="password"
+                  type="text"
                   id="password"
                   placeholder="Parolni kiriting"
                   className="w-full px-4 mt-2 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
@@ -90,7 +84,7 @@ function SignIn() {
                 </small>
               </div>
               <button
-                onClick={login.globalDataFunc}
+                onClick={() => login.mutate()}
                 type="submit"
                 className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
               >
