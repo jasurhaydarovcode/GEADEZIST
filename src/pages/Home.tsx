@@ -1,12 +1,8 @@
+import checkLogin from '@/helpers/functions/checkLogin';
 import Helmet from 'react-helmet';
-import { useNavigate } from 'react-router-dom';
 
 function Home() {
-  const navigate = useNavigate()
-  const token = localStorage.getItem('token')
-  if(!token){
-    navigate('/auth/SignIn')
-  }
+  checkLogin()
   return (
     <div>
       <Helmet>
@@ -14,7 +10,7 @@ function Home() {
       </Helmet>
 
       <div>Home</div>
-    </div>
+    </div> 
   );
 }
 

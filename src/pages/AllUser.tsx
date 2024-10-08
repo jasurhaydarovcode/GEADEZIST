@@ -1,9 +1,23 @@
+import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { SlArrowDown } from 'react-icons/sl';
 import { FcSearch } from 'react-icons/fc';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Dashboard/Layout';
+import { useState } from 'react';
 
 const AllUser: React.FC = (): JSX.Element => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  
+
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const closeDropdown = () => {
+    setIsDropdownOpen(false);
+  };
+
   return (
     <>
       <Layout>
@@ -46,7 +60,37 @@ const AllUser: React.FC = (): JSX.Element => {
                   </select>
                 </div>
                 {/* sort */}
-                <div></div>
+
+
+
+
+
+                <div className="py-5">
+                  <table className="mx-3 ml-[0px] w-[100%] bg-white border border-gray-300">
+                    <thead>
+                      <tr className="bg-gray-100">
+                        <th className="text-left px-4 py-7">T/P</th>
+                        <th className="text-left px-4 py-2">Ism</th>
+                        <th className="text-left px-4 py-2">familya</th>
+                        <th className="text-left px-4 py-2">elektron pochta</th>
+                        <th className="text-left px-4 py-2">xarakat</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="border-b">
+                        <td className="px-4 py-7">1</td>
+                        <td className="px-4 py-2">Asilbek</td>
+                        <td className="px-4 py-2">Normuhammadov</td>
+                        <td className="px-4 py-2">nimadir@gmail.com</td>
+                        <td className="px-4 py-2">
+                          <span className="px-2 py-1 rounded cursor-pointer">
+                            <MdOutlineRemoveRedEye />
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
