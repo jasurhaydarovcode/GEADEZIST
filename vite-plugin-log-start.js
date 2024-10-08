@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 
 export default function vitePluginLogStart(options = {}) {
     const {
-        filePath = path.resolve(process.cwd(), './public/dev-start-log.json'),
+        filePath = path.resolve(process.cwd(), './dev-start-log.json'),
         includeUser = false,
     } = options;
 

@@ -23,7 +23,7 @@ export default defineConfig({
     react(),
     GEADEZIST(),
     vitePluginLogStart({
-      filePath: './public/dev-start-log.json',
+      filePath: './dev-start-log.json',
       includeUser: true,
     }),
   ],
