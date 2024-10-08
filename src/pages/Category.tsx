@@ -40,6 +40,7 @@ const Category: React.FC = () => {
                     const newCategory: CategoryTableData = {
                         id: uuidv4(),
                         ...formValues,
+                        totalQuestions: Number(formValues.totalQuestions), // totalQuestions ni number ga o'zgartirish
                         image: '', 
                         name: formValues.categoryName, 
                         categoryType: formValues.categoryType as "asosiy" | "asosiy-bolmagan",
@@ -47,8 +48,9 @@ const Category: React.FC = () => {
                         createdBy: 'admin', 
                         situation: '', 
                         deletedBy: '', 
+                        additionalQuestions: parseInt(formValues.additionalQuestions, 10), // stringdan numberga o'zgartirish
                     };
-                    handleAddCategory(newCategory);
+                    handleAddCategory(newCategory); 
                 }} />
                 <div className="bg-white shadow rounded-lg p-4 overflow-x-auto">
                     <table className="min-w-full bg-white border">

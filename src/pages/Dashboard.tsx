@@ -15,6 +15,8 @@ import { FaArrowsAlt } from 'react-icons/fa';
 import { FaCircleQuestion } from 'react-icons/fa6';
 import { MdOutlineCategory } from 'react-icons/md';
 import checkLogin from '@/helpers/functions/checkLogin';
+import { useQuery } from 'react-query';
+import { getStaticAll } from '@/helpers/api/baseUrl';
 
 ChartJS.register(
   CategoryScale,
@@ -28,7 +30,13 @@ ChartJS.register(
 const Dashboard = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedRegion, setSelectedRegion] = useState('');
-
+  const dashboardStatic = useQuery({
+    queryKey: ['dashboardStatic'],
+    queryFn: async () => {
+      const res = await axios.get(getStaticAll)
+      return res.data
+    }
+  })
   const categories = ['Топография', 'Маркшейдерлик', 'Умумий Геодезия'];
   const regions = ['Toshkent', 'Samarqand', "Farg'ona"];
 
@@ -38,7 +46,7 @@ const Dashboard = () => {
   const handleRegionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedRegion(e.target.value);
   };
-
+  
   const cardData = [
     {
       id: 1,
