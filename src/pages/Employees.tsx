@@ -191,7 +191,7 @@ import { Button, Space, Switch, Pagination, Modal } from "antd";
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { useState } from 'react';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import axios from 'axios';
 import { baseUrl } from "@/helpers/api/baseUrl";
 import { config } from "@/helpers/functions/token";
@@ -199,6 +199,8 @@ import { config } from "@/helpers/functions/token";
 function Employees() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+
+  const queryClient = useQueryClient();
 
   const { data: admins, isLoading, isError } = useQuery(['getADmin'], async () => {
     const res = await axios.get(`${baseUrl}user/get/admin/list?page=0&size=10`, config);
@@ -223,6 +225,34 @@ function Employees() {
 
   if (isLoading) return <p>Yuklanmoqda...</p>;
   if (isError) return <p>Xatolik yuz berdi...</p>;
+
+  // const handleSwitchChange = (checked: boolean, id: number) => {
+  //   // Bu yerda hodimni enabled/disabled qilishni API orqali amalga oshirishingiz mumkin
+  //   console.log(`Hodim ${id} holati:`, checked ? "Faol" : "Nofoal");
+
+  //   // Shu yerda API orqali yangilashingiz mumkin bo'lgan so'rov:
+  //   // axios.put(`${baseUrl}/user/active/${id}`, { enabled: checked }, config)
+  //   //   .then(res => console.log('Holat yangilandi'))
+  //   //   .catch(err => console.log('Xato:', err));
+  // };
+
+    // Hodim holatini yangilash uchun mutatsiya yaratish
+    const updateEmployeeStatus = useMutation(
+      async ({ id, enabled }: { id: string, enabled: boolean }) => {
+        return axios.put(`${baseUrl}user/active/${id}`, { enabled }, config);
+      },
+      {
+        // Mutatsiya muvaffaqiyatli bo'lganda, hodimlar ro'yxatini qayta so'rash
+        onSuccess: () => {
+          queryClient.invalidateQueries('getADmin'); // Adminlar ma'lumotini qayta yuklash
+        },
+      }
+    );
+
+      // Switch o'zgarganda ishlaydigan funksiya
+  const handleSwitchChange = (checked: boolean, id: string) => {
+    updateEmployeeStatus.mutate({ id, enabled: checked });
+  };
 
   return (
     <Layout>
@@ -271,12 +301,12 @@ function Employees() {
                       <Switch
                         checkedChildren={<CheckOutlined />}
                         unCheckedChildren={<CloseOutlined />}
-                        // defaultChecked={item.enabled}
+                        defaultChecked={item.enabled}
+                        onChange={(checked) => handleSwitchChange(checked, item.id)}
                       />
                     </Space>
                   </TableCell>
                 </TableRow>
-                
               ))}
             </TableBody>
           </Table>
