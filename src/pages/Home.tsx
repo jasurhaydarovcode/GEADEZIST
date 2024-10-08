@@ -14,7 +14,7 @@ function Home() {
       </Helmet>
 
       <div>Home</div>
-    </div>
+    </div> 
   );
 }
 
