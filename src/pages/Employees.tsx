@@ -3,11 +3,12 @@ import { PlusCircleOutlined } from "@ant-design/icons";
 import { Button, Space, Switch, Pagination, Modal } from "antd";
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
-import {  useState } from 'react';
+import {  useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import axios from 'axios';
 import { baseUrl } from "@/helpers/api/baseUrl";
 import { config } from "@/helpers/functions/token";
+import { useNavigate } from "react-router-dom";
 
 function Employees() {
   const [open, setOpen] = useState(false);
@@ -19,6 +20,16 @@ function Employees() {
     const res = await axios.get(`${baseUrl}user/get/admin/list?page=0&size=10`, config);
     return (res.data as { body: { body: string }}).body.body;
   });
+  const navigate = useNavigate()
+  function checkRoleClient() {
+    const role = localStorage.getItem('role')
+    if (role == 'ROLE_CLIENT') {
+      navigate('/client/dashboard')
+    } 
+  }
+  useEffect(() => {
+    checkRoleClient()
+  }, [checkRoleClient])
 
   const showModal = () => {
     setOpen(true);

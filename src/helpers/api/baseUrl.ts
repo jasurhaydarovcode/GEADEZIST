@@ -4,6 +4,7 @@ export const getMeUser = `${baseUrl}user/get/me`
 export const getStaticAll = `${baseUrl}statistic/counts/`
 export const getClientAll = `${baseUrl}user?page=0&size=10`
 export const getMe = `${baseUrl}user/get/me`
+export const getProfile = `${baseUrl}user/profile`
 
 // category
 export const addCategory = `${baseUrl}category/add`

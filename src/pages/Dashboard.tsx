@@ -9,7 +9,7 @@ import {
   Legend,
   ChartOptions,
 } from 'chart.js';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Layout from '@/components/Dashboard/Layout';
 import { PiUsersThreeFill } from 'react-icons/pi';
 import { FaArrowsAlt } from 'react-icons/fa';
@@ -23,6 +23,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import { GetClientAllResponse } from '@/helpers/types/GetClientType';
 import { GetStaticsAllResponse } from '@/helpers/types/GetStaticsAllResponse';
+import { useNavigate } from 'react-router-dom';
 
 ChartJS.register(
   CategoryScale,
@@ -41,7 +42,7 @@ const Dashboard = () => {
     queryKey: ['dashboardStatic',config],
     queryFn: async () => {
       const res = await axios.get(getStaticAll, config)
-      return res.data
+      return (res.data as { body: any }).body
     },
     onError: (error: any) => {
       toast.error(error.message)
@@ -79,19 +80,19 @@ const Dashboard = () => {
     {
       id: 2,
       icon: <FaCircleQuestion />,
-      count: 123,
+      count: staticData?.questionCount,
       label: 'Umumiy Savol',
     },
     {
       id: 3,
       icon: <FaArrowsAlt />,
-      count: 82,
+      count: staticData?.resultCount,
       label: 'Umumiy Natija',
     },
     {
       id: 4,
       icon: <PiUsersThreeFill />,
-      count: 21,
+      count: staticData?.userCount,
       label: 'Jami Foydalanuvchilar',
     },
   ];
@@ -170,7 +171,17 @@ const Dashboard = () => {
       },
     },
   };
-
+  const navigate = useNavigate()
+  function checkRoleClient() {
+    const role = localStorage.getItem('role')
+    if (role == 'ROLE_CLIENT') {
+      navigate('/client/dashboard')
+    } 
+  }
+  useEffect(() => {
+    checkRoleClient()
+  }, [checkRoleClient])
+  
   return (
     <Layout>
       <div className="container mx-auto px-4">

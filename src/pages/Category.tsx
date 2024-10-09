@@ -5,9 +5,10 @@ import { geodeziyaLogo } from "@/helpers/imports/images";
 import { CategoryTableData } from "@/helpers/types/CategoryTableData";
 import { CategoryFormValues } from "@/helpers/types/CategoryFormValues";
 import { Table, Button, Popconfirm } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 const Category: React.FC = () => {
   const [categories, setCategories] = useState<CategoryTableData[]>([
@@ -61,6 +62,16 @@ const Category: React.FC = () => {
       setEditModalVisible(false); // Modalni yopish
     }
   };
+  const navigate = useNavigate()
+  function checkRoleClient() {
+    const role = localStorage.getItem('role')
+    if (role == 'ROLE_CLIENT') {
+      navigate('/client/dashboard')
+    } 
+  }
+  useEffect(() => {
+    checkRoleClient()
+  }, [checkRoleClient])
 
   const columns = [
     {

@@ -15,6 +15,17 @@ const QuestionPage: React.FC = () => {
     console.log(`Selected: ${value}`);
   };
 
+  function checkRoleClient() {
+    const role = localStorage.getItem('role')
+    if (role == 'ROLE_SUPER_ADMIN' || role == 'ROLE_TESTER') {
+      navigate('/dashboard')
+    } 
+  }
+
+  useEffect(() => {
+    checkRoleClient()
+  }, [checkRoleClient])
+
   useEffect(() => {
     // Retrieve saved time from localStorage if available
     const savedTime = localStorage.getItem(STORAGE_KEY);

@@ -1,15 +1,24 @@
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { SlArrowDown } from 'react-icons/sl';
 import { FcSearch } from 'react-icons/fc';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Layout from '@/components/Dashboard/Layout';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const AllUser: React.FC = (): JSX.Element => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   
 
-
+  const navigate = useNavigate()
+  function checkRoleClient() {
+    const role = localStorage.getItem('role')
+    if (role == 'ROLE_CLIENT') {
+      navigate('/client/dashboard')
+    } 
+  }
+  useEffect(() => {
+    checkRoleClient()
+  }, [checkRoleClient])
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };

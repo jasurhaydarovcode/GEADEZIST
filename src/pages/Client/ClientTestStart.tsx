@@ -3,7 +3,7 @@ import Layout from "@/components/clientDashboard/laytout";
 import { Logo } from "@/helpers/imports/images";
 import { useNavigate } from "react-router-dom";
 import { Modal } from "antd";
-import { useState } from "react";
+import { useEffect,  useState } from "react";
 import { MdOutlineNotStarted } from "react-icons/md";
 
 const ClientTestStart: React.FC = () => {
@@ -17,6 +17,17 @@ const ClientTestStart: React.FC = () => {
   const handleOk = () => {
     navigate('/client/quiz/:id')
   };
+  
+  function checkRoleClient() {
+    const role = localStorage.getItem('role')
+    if (role == 'ROLE_SUPER_ADMIN' || role == 'ROLE_TESTER') {
+      navigate('/dashboard')
+    }
+  }
+
+  useEffect(() => {
+    checkRoleClient()
+  }, [checkRoleClient])
 
   // Function to handle modal close
   const handleCancel = () => {

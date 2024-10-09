@@ -4,6 +4,7 @@ import { BiSolidPencil } from "react-icons/bi";
 import axios from "axios";
 import { noImageClientDefaultImage } from "@/helpers/imports/images";
 import { baseUrl } from "@/helpers/api/baseUrl";
+import { useNavigate } from "react-router-dom";
 
 function ClientProfile() {
   const [profileData, setProfileData] = useState({
@@ -37,6 +38,17 @@ function ClientProfile() {
       });
   }, []);
 
+  const navigate = useNavigate()
+  function checkRoleClient() {
+    const role = localStorage.getItem('role')
+    if (role == 'ROLE_SUPER_ADMIN' || role == 'ROLE_TESTER') {
+      navigate('/dashboard')
+    }
+  }
+
+  useEffect(() => {
+    checkRoleClient()
+  }, [checkRoleClient])
   return (
     <Layout>
       <div className="flex flex-col items-center md:p-4 p-0">
