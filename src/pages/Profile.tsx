@@ -27,7 +27,7 @@ function Profile() {
               <label className="block text-sm text-gray-600">Ism</label>
               <input
                 type="text"
-                value="Admin"
+                value="admin"
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                 readOnly
               />
@@ -38,7 +38,7 @@ function Profile() {
               <label className="block text-sm text-gray-600">Familiya</label>
               <input
                 type="text"
-                value="Admin"
+                value=""
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                 readOnly
               />
@@ -49,7 +49,7 @@ function Profile() {
               <label className="block text-sm text-gray-600">Viloyat</label>
               <input
                 type="text"
-                value="Qashqadaryo Viloyati"
+                value=""
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                 readOnly
               />
@@ -60,7 +60,7 @@ function Profile() {
               <label className="block text-sm text-gray-600">Tuman</label>
               <input
                 type="text"
-                value="Qarshi Shaxri"
+                value=""
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                 readOnly
               />
@@ -71,7 +71,7 @@ function Profile() {
               <label className="block text-sm text-gray-600">E-pochta manzili</label>
               <input
                 type="email"
-                value="example@gmail.com"
+                value="admin@gmail.com"
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                 readOnly
               />
@@ -82,11 +82,14 @@ function Profile() {
               <label className="block text-sm text-gray-600">Ko'cha (To'liq)</label>
               <input
                 type="text"
-                value="Admin MFY Exam Ko'chasi 21-uy"
+                value=""
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                 readOnly
               />
             </div>
+            <button disabled={true} className="cursor-not-allowed p-2 rounded-lg text-md mt-4 bg-gray-600 hover:bg-gray-800 transition duration-200 ease-in-out w-max font-semibold text-white">
+              O'zgartirishlarni saqlang
+            </button>
           </div>
         </div>
       </div>
