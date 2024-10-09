@@ -24,8 +24,11 @@ function SignIn() {
         if (data.role === "ROLE_SUPER_ADMIN") {
           navigate("/dashboard");
         } else if (data.role === "ROLE_ADMIN") {
-          navigate("/masters");
-        } else {
+          navigate("/dashboard");
+        }else if (data.role === "ROLE_TESTER") {
+          navigate("/testers");
+        }
+         else {
           navigate("/clients");
         }
         console.log(res.data);

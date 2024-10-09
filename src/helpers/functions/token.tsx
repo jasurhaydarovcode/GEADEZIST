@@ -1,14 +1,10 @@
 function getToken() {
-    let token = localStorage.getItem('token')
-    if (token) {
-        return token
-    } else {
-        return ''
-    }
+    const token = localStorage.getItem('token');
+    return token ? token : '';
 }
 
 export const config = {
     headers: {
         Authorization: `Bearer ${getToken()}`,
     },
-}
+};
