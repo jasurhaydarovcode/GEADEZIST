@@ -21,14 +21,14 @@ function ClientProfile() {
     axios
       .get(`${baseUrl}user/profile`)
       .then((response) => {
-        const data = response.data.body;
+        const data = response.data?.body;
         setProfileData({
           firstName: data.firstName || "Foydalanuvchi",
           lastName: data.lastName || "Foydalaniyev",
-          region: data.region || "Qashqadaryo Viloyati",
-          district: data.district || "Qarshi Shaxri",
+          region: data.region || "Shaxarli Viloyati",
+          district: data.district || "Shaxarsiz Shaxri",
           email: data.email || "foydalanibqol@gmail.com",
-          address: data.address || "Foydalanuvchi MFY Foyda Ko'chasi 21-uy",
+          address: data.address || "Ko'chabu MFY Foyda Ko'chasi 21-uy",
           profileImage: data.profileImage || "",
         });
       })
