@@ -38,7 +38,7 @@ const Dashboard = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedRegion, setSelectedRegion] = useState('');
   const dashboardStatic = useQuery({
-    queryKey: ['dashboardStatic',config],
+    queryKey: ['dashboardStatic', config],
     queryFn: async () => {
       const res = await axios.get(getStaticAll, config)
       return res.data
@@ -62,7 +62,8 @@ const Dashboard = () => {
     queryKey: ['getStatic', config],
     queryFn: async () => {
       const res = await axios.get(getStaticAll, config)
-      return res.data.body
+      const data = res.data?.body?.body as GetStaticsAllResponse
+      return data
     },
     onError: (error: any) => {
       toast.error(error.message)
@@ -122,8 +123,8 @@ const Dashboard = () => {
     queryKey: ['getClient', config],
     queryFn: async () => {
       const res = await axios.get<GetClientAllResponse[]>(getClientAll, config)
-      const data = res.data.body.body as GetClientAllResponse[]
-      return data
+      const data = res.data.body?.body as GetClientAllResponse[]
+      return data;
     }
   })
   const clientData: GetClientAllResponse[] = getClient.data as GetClientAllResponse[]
