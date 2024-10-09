@@ -2,7 +2,7 @@ import { loginUrl } from "@/helpers/api/baseUrl";
 import { registerRasm } from "@/helpers/imports/images";
 import { Logo } from "@/helpers/imports/images";
 import axios from "axios";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useMutation } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -10,6 +10,29 @@ function SignIn() {
   const email = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
   const navigate = useNavigate()
+
+  function checkRoleClient() {
+    const role = localStorage.getItem('role')
+    if (role == 'ROLE_SUPER_ADMIN' && localStorage.getItem('token') || role == 'ROLE_TESTER' && localStorage.getItem('token')) {
+      navigate('/dashboard')
+    } else if (role == 'ROLE_CLIENT' && localStorage.getItem('token')) {
+      navigate('/client/dashboard')
+    } else {
+      navigate('/auth/Signin')
+    }
+  }
+  function handleCheckPassword() {
+    if (password.current) {
+      if (password.current.type !== 'password') {
+        password.current.type = 'password';
+      } else {
+        password.current.type = 'text';
+      }
+    }
+  }
+  useEffect(() => {
+    checkRoleClient()
+  }, [])
   const login = useMutation({
     mutationFn: async () => {
       const data = { email: email.current?.value, password: password.current?.value }
@@ -18,8 +41,13 @@ function SignIn() {
     },
     onSuccess: (res: any) => {
       localStorage.setItem('token', res.data.token)
+      localStorage.setItem('role', res.data.role)
       if (res.data.role === 'ROLE_SUPER_ADMIN') {
         navigate('/dashboard')
+      } else if (res.data.role === 'ROLE_TESTER') {
+        navigate('/category')
+      } else if (res.data.role === 'ROLE_CLIENT') {
+        navigate('/client/dashboard')
       } else if (res.data.role === 'ROLE_ADMIN') {
         navigate('/dashboard')
       }
@@ -74,12 +102,20 @@ function SignIn() {
                 </label>
                 <input
                   ref={password}
-                  type="text"
+                  type='password'
                   onKeyDown={handleEnter}
                   id="password"
                   placeholder="Parolni kiriting"
                   className="w-full px-4 mt-2 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                 />
+                <br />
+                <br />
+                <div className="flex items-center gap-5">
+                  <input type="checkbox" onClick={handleCheckPassword} id="checkbox" />
+                  <label htmlFor="checkbox">Parolni ko'rsatish</label>
+
+                </div>
+                <br />
                 <small className="text-gray-500">
                   Parol kamida 5 ta harf yoki raqamdan iborat bo'lishi kerak
                 </small>
