@@ -4,7 +4,7 @@ import { Button, Space, Switch, Pagination, Modal } from "antd";
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import {  useEffect, useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import axios from 'axios';
 import { baseUrl } from "@/helpers/api/baseUrl";
 import { config } from "@/helpers/functions/token";
@@ -15,7 +15,6 @@ function Employees() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
-  const queryClient = useQueryClient();
   
   function checkRoleClient() {
     const role = localStorage.getItem('role')
@@ -39,12 +38,30 @@ function Employees() {
   };
 
   const handleOk = () => {
+    postAdmin.mutate();
     setConfirmLoading(true);
     setTimeout(() => {
       setOpen(false);
       setConfirmLoading(false);
     }, 2000);
   };
+
+  // const handleOk = () => {
+  //   if (firstname && lastname && email && phoneNumber && password && confirmPassword && role) {
+  //     if (password === confirmPassword) {
+  //       postAdmin.mutate();
+  //       setConfirmLoading(true);
+  //       setTimeout(() => {
+  //         setOpen(false);
+  //         setConfirmLoading(false);
+  //       }, 2000);
+  //     } else {
+  //       toast.error("Parollar mos kelmadi");
+  //     }
+  //   } else {
+  //     toast.error("Barcha maydonlarni to'ldiring");
+  //   }
+  // };
 
   const handleCancel = () => {
     setOpen(false);
@@ -79,6 +96,18 @@ function Employees() {
       updateEmployeeStatus.mutate({ id, enabled: checked });
     };
 
+    // yangi hodim qo'shish funksiyasi
+    const [firstname, setFirstname] = useState('');
+    const [lastname, setLastname] = useState('');
+    const [email, setEmail] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [role, setRole] = useState('');
+
+    const postAdmin = useMutation(async () => {
+      return axios.post(`${baseUrl}auth/save/admin`, { firstname, lastname, email, phoneNumber, password, confirmPassword, role }, config);
+    });
 
   return (
     <Layout>
@@ -104,7 +133,7 @@ function Employees() {
             {/* Modal mazmuni */}
             <div className="mb-4">
               {/* <label className="block mb-2">Admin toifasini tanlang</label> */}
-              <select className="border w-full p-2 rounded">
+              <select className="border w-full p-2 rounded" value={role} onChange={(e) => setRole(e.target.value)}>
                 <option value="">Admin toifasini tanlang</option>
                 <option value="ROLE_TESTER">Tester admin</option>
                 <option value="ROLE_ADMIN">Tekshiruvchi admin</option>
@@ -116,6 +145,18 @@ function Employees() {
               type="text"
               placeholder="Ismni kiriting"
               className="border w-full p-2 rounded"
+              value={firstname}
+              onChange={(e) => setFirstname(e.target.value)}
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Ism</label>
+              <input
+              type="text"
+              placeholder="Ismni kiriting"
+              className="border w-full p-2 rounded"
+              value={lastname}
+              onChange={(e) => setLastname(e.target.value)}
               />
             </div>
             <div className="mb-4">
@@ -124,6 +165,8 @@ function Employees() {
               type="text"
               placeholder="Telfon raqamni kiriting"
               className="border w-full p-2 rounded"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
               />
             </div>
             <div className="mb-4">
@@ -132,6 +175,8 @@ function Employees() {
               type="email"
               placeholder="Email kiriting"
               className="border w-full p-2 rounded"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="mb-4">
@@ -140,6 +185,8 @@ function Employees() {
               type="text"
               placeholder="Parolni kiriting"
               className="border w-full p-2 rounded"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               />
             </div>
             <div className="mb-4">
@@ -148,6 +195,8 @@ function Employees() {
               type="text"
               placeholder="Takroriy parolni kiriting"
               className="border w-full p-2 rounded"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               />
             </div>
           </Modal>
