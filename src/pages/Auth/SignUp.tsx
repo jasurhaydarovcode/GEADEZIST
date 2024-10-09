@@ -1,13 +1,53 @@
-
-import { Logo, registerRasm } from "@/helpers/imports/images"; // Tasvirlarni import qilish
+import { baseUrl } from "@/helpers/api/baseUrl";
+import { Logo, registerRasm } from "@/helpers/imports/images";
+import { SignUpType } from "@/helpers/types/LoginType";
+import axios from "axios";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function SignUp() {
+  const email = useRef<HTMLInputElement>(null);
+  const password = useRef<HTMLInputElement>(null);
+  const confirmPassword = useRef<HTMLInputElement>(null);
+  const firstname = useRef<HTMLInputElement>(null);
+  const lastname = useRef<HTMLInputElement>(null);
+  const phone = useRef<HTMLInputElement>(null);
+  
+  // Jinsni select orqali tanlash uchun state
+  const [genderValue, setGenderValue] = useState<string>("");
+ 
+  function signUpPost() {
+    if (!genderValue) {
+      toast.error("Iltimos, jinsni tanlang");
+      return;
+    }
+
+    const data: SignUpType = {
+      firstname: firstname.current?.value || "",
+      lastname: lastname.current?.value || "", 
+      email: email.current?.value || "",
+      phoneNumber: phone.current?.value || "",
+      password: password.current?.value || "",
+      confirmPassword: confirmPassword.current?.value || "",
+      role: "user", // role ni kerak bo'lganda o'zgartiring
+    };
+
+    axios.post(`${baseUrl}auth/register?genderType=${genderValue.toUpperCase()}`, data)
+      .then((res) => {
+        toast.success("Ro'yxatdan o'tdingiz");
+        console.log(res.data);
+      })
+      .catch((err) => {
+        const errorMessage = err.response?.data?.message || "Xatolik yuz berdi";
+        toast.error(errorMessage);
+        console.log(err);
+      });
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="flex flex-col lg:flex-row w-full lg:w-5/6 lg:h-5/6 bg-white shadow-lg rounded-lg overflow-hidden">
-        {/* Chap qism: Tasvir va Logo */}
         <div className="lg:w-3/5 w-full flex flex-col items-center justify-center bg-gray-50 p-8">
           <img src={Logo} alt="Logo" className="w-30 lg:w-48 mb-4 lg:mb-8" />
           <div className="w-40 lg:w-60">
@@ -15,18 +55,18 @@ function SignUp() {
           </div>
         </div>
 
-        {/* O'ng qism: Ro'yxatdan o'tish formasi */}
         <div className="flex justify-center items-center w-full lg:w-3/5 p-6 lg:p-8">
           <div className="w-full">
             <h2 className="text-xl lg:text-2xl font-bold text-gray-800 mb-4 lg:mb-6">
               Ro'yxatdan o'tish
             </h2>
-            <form>
+            <div>
               <div className="mb-4">
                 <label htmlFor="firstName" className="block text-sm font-semibold text-gray-600">
                   Ism
                 </label>
                 <input
+                  ref={firstname}
                   type="text"
                   id="firstName"
                   name="firstName"
@@ -36,44 +76,57 @@ function SignUp() {
                 />
               </div>
 
-              {/* Familiya */}
               <div className="mb-4">
                 <label htmlFor="lastName" className="block text-sm font-semibold text-gray-600">
                   Familiya
                 </label>
                 <input
+                  ref={lastname}
                   type="text"
                   id="lastName"
                   name="lastName"
                   placeholder="Familiyangizni kiriting"
-
                   required
                   className="w-full px-4 mt-2 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                 />
               </div>
 
-              {/* Telefon raqam */}
+              <div className="mb-4">
+                <label htmlFor="email" className="block text-sm font-semibold text-gray-600">
+                  Email
+                </label>
+                <input
+                  ref={email}
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="Emailingizni kiriting"
+                  required
+                  className="w-full px-4 mt-2 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                />
+              </div>
+
               <div className="mb-4">
                 <label htmlFor="phoneNumber" className="block text-sm font-semibold text-gray-600">
                   Telefon raqam
                 </label>
                 <input
+                  ref={phone}
                   type="tel"
                   id="phoneNumber"
                   name="phoneNumber"
                   placeholder="+998 XX XXX XX XX"
-
                   required
                   className="w-full px-4 mt-2 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                 />
               </div>
 
-              {/* Parol */}
               <div className="mb-4">
                 <label htmlFor="password" className="block text-sm font-semibold text-gray-600">
                   Parol
                 </label>
                 <input
+                  ref={password}
                   type="password"
                   id="password"
                   name="password"
@@ -82,15 +135,14 @@ function SignUp() {
                   className="w-full px-4 mt-2 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                 />
                 <p className="text-xs ">Parol kamida 5 ta belgidan iborat</p>
-
               </div>
 
-              {/* Parolni tasdiqlash */}
               <div className="mb-4">
                 <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-600">
                   Parolni tasdiqlang
                 </label>
                 <input
+                  ref={confirmPassword}
                   type="password"
                   id="confirmPassword"
                   name="confirmPassword"
@@ -100,59 +152,50 @@ function SignUp() {
                 />
               </div>
 
-              {/* Jins */}
+              {/* Jins tanlash */}
               <div className="mb-4">
-                <label className="block text-sm font-semibold text-gray-600">Jins</label>
-                <div className="flex items-center space-x-4">
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="gender"
-                      value="male"
-                      required
-                      className="form-radio h-4 w-4 text-blue-600"
-                    />
-                    <span className="ml-2 text-sm text-gray-600">Erkak</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="gender"
-                      value="female"
-                      required
-                      className="form-radio h-4 w-4 text-blue-600"
-                    />
-                    <span className="ml-2 text-sm text-gray-600">Ayol</span>
-                  </label>
-                </div>
+                <label htmlFor="gender" className="block text-sm font-semibold text-gray-600">Jins</label>
+                <select
+                  id="gender"
+                  name="gender"
+                  value={genderValue}
+                  onChange={(e) => setGenderValue(e.target.value)}
+                  required
+                  className="w-full px-4 mt-2 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                >
+                  <option value="">Jinsni tanlang</option>
+                  <option value="MALE">Erkak</option>
+                  <option value="FEMALE">Ayol</option>
+                </select>
               </div>
 
-              {/* Offertani qabul qilish */}
               <div className="mb-6">
                 <label className="flex items-center">
                   <input
+                    required
                     type="checkbox"
                     name="acceptedTerms"
                     className="form-checkbox h-4 w-4 text-blue-600"
                   />
                   <span className="ml-2 text-sm text-gray-600">
-                    Foydalanish shartlarini qabul qilaman.<Link to={'/auth/offer'} className="text-blue-600 hover:underline">Offer</Link>
+                    Foydalanish shartlarini qabul qilaman. 
+                    <Link to={'/auth/offer'} className="text-blue-600 hover:underline">Offer</Link>
                   </span>
                 </label>
               </div>
-              {/* Ro'yxatdan o'tish tugmasi */}
+
               <button
+                onClick={signUpPost}
                 type="submit"
                 className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
               >
                 Ro'yxatdan o'tish
               </button>
-            </form>
+            </div>
 
-            {/* Quyidagi havolalar */}
             <div className="flex justify-center items-center mt-4 lg:mt-6">
-              <Link to={"/auth  /SignIn"} className="text-sm text-blue-500 hover:underline">
-                Ro'yhatdan o'tish
+              <Link to={"/auth/SignIn"} className="text-sm text-blue-500 hover:underline">
+                Tizimga kirish
               </Link>
             </div>
           </div>
