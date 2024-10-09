@@ -38,12 +38,16 @@ const Dashboard = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedRegion, setSelectedRegion] = useState('');
   const dashboardStatic = useQuery({
-    queryKey: ['dashboardStatic'],
+    queryKey: ['dashboardStatic',config],
     queryFn: async () => {
-      const res = await axios.get(getStaticAll)
+      const res = await axios.get(getStaticAll, config)
       return res.data
+    },
+    onError: (error: any) => {
+      toast.error(error.message)
     }
   })
+  console.log(dashboardStatic.data, 'dashboardStatic')
   const categories = ['Топография', 'Маркшейдерлик', 'Умумий Геодезия'];
   const regions = ['Toshkent', 'Samarqand', "Farg'ona"];
 
@@ -58,7 +62,7 @@ const Dashboard = () => {
     queryKey: ['getStatic', config],
     queryFn: async () => {
       const res = await axios.get(getStaticAll, config)
-      return res.data
+      return res.data.body
     },
     onError: (error: any) => {
       toast.error(error.message)
@@ -91,6 +95,7 @@ const Dashboard = () => {
       label: 'Jami Foydalanuvchilar',
     },
   ];
+  console.log(cardData[0], 'cardData')
   // Data for the scatter chart
   const data = {
     datasets: [
