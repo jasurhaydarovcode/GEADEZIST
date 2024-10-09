@@ -3,7 +3,7 @@ import { PlusCircleOutlined } from "@ant-design/icons";
 import { Button, Space, Switch, Pagination, Modal } from "antd";
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
-import {  useState } from 'react';
+import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import axios from 'axios';
 import { baseUrl } from "@/helpers/api/baseUrl";
@@ -13,9 +13,17 @@ function Employees() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
+  // State variables for form inputs
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isAdmin, setIsAdmin] = useState("");
+
   const queryClient = useQueryClient();
 
-  const { data: admins,} = useQuery(['getADmin'], async () => {
+  const { data: admins } = useQuery(['getADmin'], async () => {
     const res = await axios.get(`${baseUrl}user/get/admin/list?page=0&size=10`, config);
     return (res.data as { body: { body: string }}).body.body;
   });
@@ -24,36 +32,50 @@ function Employees() {
     setOpen(true);
   };
 
-  const handleOk = () => {
+  const handleOk = async () => {
     setConfirmLoading(true);
-    setTimeout(() => {
-      setOpen(false);
-      setConfirmLoading(false);
-    }, 2000);
+    // Handle form submission here, e.g., send a request to add the employee
+    // You might want to create a mutation for adding a new employee
+
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 2000)); 
+
+    // Reset form inputs after successful submission
+    setName("");
+    setPhone("");
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+    setIsAdmin("");
+    setOpen(false);
+    setConfirmLoading(false);
   };
 
   const handleCancel = () => {
+    // Reset form inputs on modal close
+    setName("");
+    setPhone("");
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+    setIsAdmin("");
     setOpen(false);
   };
 
-    // Hodim holatini yangilash uchun mutatsiya yaratish
-    const updateEmployeeStatus = useMutation(
-      async ({ id, enabled }: { id: string, enabled: boolean }) => {
-        return axios.put(`${baseUrl}user/active/${id}`, { enabled }, config);
+  const updateEmployeeStatus = useMutation(
+    async ({ id, enabled }: { id: string, enabled: boolean }) => {
+      return axios.put(`${baseUrl}user/active/${id}`, { enabled }, config);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('getADmin');
       },
-      {
-        // Mutatsiya muvaffaqiyatli bo'lganda, hodimlar ro'yxatini qayta so'rash
-        onSuccess: () => {
-          queryClient.invalidateQueries('getADmin'); // Adminlar ma'lumotini qayta yuklash
-        },
-        onError: (error) => {
-          console.error('Xatolik:', error);
-        }
+      onError: (error) => {
+        console.error('Xatolik:', error);
       }
-    );
+    }
+  );
 
-
-  // Switch o'zgarganda ishlaydigan funksiya
   const handleSwitchChange = (checked: boolean, id: string) => {
     updateEmployeeStatus.mutate({ id, enabled: checked });
   };
@@ -81,8 +103,7 @@ function Employees() {
           >
             {/* Modal mazmuni */}
             <div className="mb-4">
-              {/* <label className="block mb-2">Admin toifasini tanlang</label> */}
-              <select className="border w-full p-2 rounded">
+              <select className="border w-full p-2 rounded" value={isAdmin} onChange={(e) => setIsAdmin(e.target.value)}>
                 <option value="">Admin toifasini tanlang</option>
                 <option value="ROLE_TESTER">Tester admin</option>
                 <option value="ROLE_ADMIN">Tekshiruvchi admin</option>
@@ -91,41 +112,51 @@ function Employees() {
             <div className="mb-4">
               <label className="block mb-2">Ism</label>
               <input
-              type="text"
-              placeholder="Ismni kiriting"
-              className="border w-full p-2 rounded"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Ismni kiriting"
+                className="border w-full p-2 rounded"
               />
             </div>
             <div className="mb-4">
               <label className="block mb-2">Telfon raqam</label>
               <input
-              type="text"
-              placeholder="Telfon raqamni kiriting"
-              className="border w-full p-2 rounded"
+                type="text"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Telfon raqamni kiriting"
+                className="border w-full p-2 rounded"
               />
             </div>
             <div className="mb-4">
               <label className="block mb-2">Email kiriting</label>
               <input
-              type="email"
-              placeholder="Email kiriting"
-              className="border w-full p-2 rounded"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email kiriting"
+                className="border w-full p-2 rounded"
               />
             </div>
             <div className="mb-4">
               <label className="block mb-2">Parolni kiriting</label>
               <input
-              type="text"
-              placeholder="Parolni kiriting"
-              className="border w-full p-2 rounded"
+                type="text"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Parolni kiriting"
+                className="border w-full p-2 rounded"
               />
             </div>
             <div className="mb-4">
               <label className="block mb-2">Parolni takrorlang</label>
               <input
-              type="text"
-              placeholder="Takroriy parolni kiriting"
-              className="border w-full p-2 rounded"
+                type="text"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Takroriy parolni kiriting"
+                className="border w-full p-2 rounded"
               />
             </div>
           </Modal>
