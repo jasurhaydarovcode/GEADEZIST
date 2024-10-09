@@ -8,11 +8,17 @@ const Sidebar = () => {
       name: 'Boshqaruv paneli',
       pathName: 'dashboard'
     },
-    role === 'ROLE_SUPER_ADMIN' || role === 'ROLE_TESTER' && {
+    role === 'ROLE_SUPER_ADMIN' && {
+      name: 'Kategoriya',
+      pathName: 'category'
+    } || role === 'ROLE_TESTER' && {
       name: 'Kategoriya',
       pathName: 'category'
     },
-    role === 'ROLE_SUPER_ADMIN' || role === 'ROLE_TESTER' && {
+    role === 'ROLE_SUPER_ADMIN' && {
+      name: 'Test',
+      pathName: 'test'
+    } || role === 'ROLE_TESTER' && {
       name: 'Test',
       pathName: 'test'
     },
