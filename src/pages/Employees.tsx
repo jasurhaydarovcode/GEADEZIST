@@ -1,10 +1,10 @@
 import Layout from "@/components/Dashboard/Layout";
 import { PlusCircleOutlined } from "@ant-design/icons";
-import { Button, Space, Switch, Pagination, Modal, message } from "antd";
+import { Button, Space, Switch, Pagination, Modal,  } from "antd";
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import axios from 'axios';
 import { baseUrl } from "@/helpers/api/baseUrl";
 import { config } from "@/helpers/functions/token";
@@ -12,16 +12,7 @@ import { config } from "@/helpers/functions/token";
 function Employees() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [newEmployee, setNewEmployee] = useState({
-    role: '',
-    firstName: '',
-    lastName: '',
-    phoneNumber: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-  });
-
+  
   const queryClient = useQueryClient();
 
   const { data: admins } = useQuery(['getADmin'], async () => {
@@ -35,37 +26,11 @@ function Employees() {
 
   const handleOk = () => {
     setConfirmLoading(true);
-    addEmployee.mutate(newEmployee);
   };
 
   const handleCancel = () => {
     setOpen(false);
   };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setNewEmployee({ ...newEmployee, [name]: value });
-  };
-
-  // Xodim qo'shish uchun mutatsiya
-  const addEmployee = useMutation(
-    async (newEmployeeData: any) => {
-      return axios.post(`${baseUrl}auth/save/admin`, newEmployeeData, config);
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('getADmin'); // Adminlar ro'yxatini qayta yuklash
-        setOpen(false);
-        setConfirmLoading(false);
-        message.success("Yangi xodim qo'shildi!");
-      },
-      onError: (error) => {
-        console.error('Xatolik:', error);
-        message.error("Xodim qo'shishda xatolik yuz berdi.");
-        setConfirmLoading(false);
-      }
-    }
-  );
 
   // Switch o'zgarganda ishlaydigan funksiya
   const handleSwitchChange = (checked: boolean, id: string) => {
@@ -97,7 +62,7 @@ function Employees() {
             maskClosable={false}
           >
             <div className="mb-4">
-              <select name="role" onChange={handleChange} className="border w-full p-2 rounded">
+              <select name="role"  className="border w-full p-2 rounded">
                 <option value="">Admin toifasini tanlang</option>
                 <option value="ROLE_TESTER">Tester admin</option>
                 <option value="ROLE_ADMIN">Tekshiruvchi admin</option>
@@ -107,9 +72,7 @@ function Employees() {
               <label className="block mb-2">Ism</label>
               <input
                 type="text"
-                name="firstName"
-                value={newEmployee.firstName}
-                onChange={handleChange}
+                name="firstname"
                 placeholder="Ismni kiriting"
                 className="border w-full p-2 rounded"
               />
@@ -118,9 +81,7 @@ function Employees() {
               <label className="block mb-2">Familiya</label>
               <input
                 type="text"
-                name="lastName"
-                value={newEmployee.lastName}
-                onChange={handleChange}
+                name="lastname"
                 placeholder="Familiyani kiriting"
                 className="border w-full p-2 rounded"
               />
@@ -130,8 +91,6 @@ function Employees() {
               <input
                 type="text"
                 name="phoneNumber"
-                value={newEmployee.phoneNumber}
-                onChange={handleChange}
                 placeholder="Telefon raqamni kiriting"
                 className="border w-full p-2 rounded"
               />
@@ -141,8 +100,6 @@ function Employees() {
               <input
                 type="email"
                 name="email"
-                value={newEmployee.email}
-                onChange={handleChange}
                 placeholder="Emailni kiriting"
                 className="border w-full p-2 rounded"
               />
@@ -152,8 +109,6 @@ function Employees() {
               <input
                 type="password"
                 name="password"
-                value={newEmployee.password}
-                onChange={handleChange}
                 placeholder="Parolni kiriting"
                 className="border w-full p-2 rounded"
               />
@@ -163,8 +118,6 @@ function Employees() {
               <input
                 type="password"
                 name="confirmPassword"
-                value={newEmployee.confirmPassword}
-                onChange={handleChange}
                 placeholder="Parolni takror kiriting"
                 className="border w-full p-2 rounded"
               />
@@ -211,4 +164,3 @@ function Employees() {
 }
 
 export default Employees;
-
