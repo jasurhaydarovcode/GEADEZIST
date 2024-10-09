@@ -1,10 +1,10 @@
 import Layout from "@/components/Dashboard/Layout";
 import { PlusCircleOutlined } from "@ant-design/icons";
-import { Button, Space, Switch, Pagination, Modal,  } from "antd";
+import { Button, Space, Switch, Pagination, Modal } from "antd";
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { useState } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import axios from 'axios';
 import { baseUrl } from "@/helpers/api/baseUrl";
 import { config } from "@/helpers/functions/token";
@@ -12,7 +12,14 @@ import { config } from "@/helpers/functions/token";
 function Employees() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  
+
+  // State variables for form inputs
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const queryClient = useQueryClient();
 
   const { data: admins } = useQuery(['getADmin'], async () => {
@@ -24,20 +31,51 @@ function Employees() {
     setOpen(true);
   };
 
-  const handleOk = () => {
+  const handleOk = async () => {
     setConfirmLoading(true);
+    // Handle form submission here, e.g., send a request to add the employee
+    // You might want to create a mutation for adding a new employee
+
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 2000)); 
+
+    // Reset form inputs after successful submission
+    setName("");
+    setPhone("");
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+
+    setOpen(false);
+    setConfirmLoading(false);
   };
 
   const handleCancel = () => {
+    // Reset form inputs on modal close
+    setName("");
+    setPhone("");
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
     setOpen(false);
   };
 
-  // Switch o'zgarganda ishlaydigan funksiya
+  const updateEmployeeStatus = useMutation(
+    async ({ id, enabled }: { id: string, enabled: boolean }) => {
+      return axios.put(`${baseUrl}user/active/${id}`, { enabled }, config);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('getADmin');
+      },
+      onError: (error) => {
+        console.error('Xatolik:', error);
+      }
+    }
+  );
+
   const handleSwitchChange = (checked: boolean, id: string) => {
-    // Hodim holatini yangilash uchun PUT so'rov
-    axios.put(`${baseUrl}user/active/${id}`, { enabled: checked }, config)
-      .then(() => queryClient.invalidateQueries('getADmin'))
-      .catch(err => console.error(err));
+    updateEmployeeStatus.mutate({ id, enabled: checked });
   };
 
   return (
@@ -61,8 +99,9 @@ function Employees() {
             onCancel={handleCancel}
             maskClosable={false}
           >
+            {/* Modal mazmuni */}
             <div className="mb-4">
-              <select name="role"  className="border w-full p-2 rounded">
+              <select className="border w-full p-2 rounded">
                 <option value="">Admin toifasini tanlang</option>
                 <option value="ROLE_TESTER">Tester admin</option>
                 <option value="ROLE_ADMIN">Tekshiruvchi admin</option>
@@ -72,43 +111,38 @@ function Employees() {
               <label className="block mb-2">Ism</label>
               <input
                 type="text"
-                name="firstname"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 placeholder="Ismni kiriting"
                 className="border w-full p-2 rounded"
               />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Familiya</label>
+              <label className="block mb-2">Telfon raqam</label>
               <input
                 type="text"
-                name="lastname"
-                placeholder="Familiyani kiriting"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Telfon raqamni kiriting"
                 className="border w-full p-2 rounded"
               />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Telefon raqam</label>
-              <input
-                type="text"
-                name="phoneNumber"
-                placeholder="Telefon raqamni kiriting"
-                className="border w-full p-2 rounded"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block mb-2">Email</label>
+              <label className="block mb-2">Email kiriting</label>
               <input
                 type="email"
-                name="email"
-                placeholder="Emailni kiriting"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email kiriting"
                 className="border w-full p-2 rounded"
               />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Parol</label>
+              <label className="block mb-2">Parolni kiriting</label>
               <input
-                type="password"
-                name="password"
+                type="text"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Parolni kiriting"
                 className="border w-full p-2 rounded"
               />
@@ -116,9 +150,10 @@ function Employees() {
             <div className="mb-4">
               <label className="block mb-2">Parolni takrorlang</label>
               <input
-                type="password"
-                name="confirmPassword"
-                placeholder="Parolni takror kiriting"
+                type="text"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Takroriy parolni kiriting"
                 className="border w-full p-2 rounded"
               />
             </div>
@@ -147,7 +182,7 @@ function Employees() {
                       <Switch
                         checkedChildren={<CheckOutlined />}
                         unCheckedChildren={<CloseOutlined />}
-                        checked={item.enabled}
+                        defaultChecked={item.enabled}
                         onChange={(checked) => handleSwitchChange(checked, item.id)}
                       />
                     </Space>
