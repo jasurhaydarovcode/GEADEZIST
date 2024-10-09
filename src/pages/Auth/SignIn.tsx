@@ -20,8 +20,8 @@ function SignIn() {
       localStorage.setItem('token', res.data.token)
       if (res.data.role === 'ROLE_SUPER_ADMIN') {
         navigate('/dashboard')
-      } else if (res.data.role === 'ROLE_USER') {
-        navigate('/')
+      } else if (res.data.role === 'ROLE_ADMIN') {
+        navigate('/dashboard')
       }
       toast.success('Tizimga kirish muvaffaqiyatli', { position: 'top-center' })
     },
