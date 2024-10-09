@@ -9,24 +9,27 @@ import axios from 'axios';
 import { baseUrl } from "@/helpers/api/baseUrl";
 import { config } from "@/helpers/functions/token";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function Employees() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
   const queryClient = useQueryClient();
-
-  const { data: admins,} = useQuery(['getADmin'], async () => {
-    const res = await axios.get(`${baseUrl}user/get/admin/list?page=0&size=10`, config);
-    return (res.data as { body: { body: string }}).body.body;
-  });
-  const navigate = useNavigate()
+  
   function checkRoleClient() {
     const role = localStorage.getItem('role')
     if (role == 'ROLE_CLIENT') {
       navigate('/client/dashboard')
     } 
   }
+
+  const { data: admins,} = useQuery(['getADmin'], async () => {
+    const res = await axios.get(`${baseUrl}user/get/admin/list?page=0&size=10`, config);
+    return (res.data as { body: { body: string }}).body.body;
+  });
+
+  const navigate = useNavigate()
   useEffect(() => {
     checkRoleClient()
   }, [checkRoleClient])
@@ -53,9 +56,17 @@ function Employees() {
         return axios.put(`${baseUrl}user/active/${id}`, { enabled }, config);
       },
       {
-        // Mutatsiya muvaffaqiyatli bo'lganda, hodimlar ro'yxatini qayta so'rash
-        onSuccess: () => {
-          queryClient.invalidateQueries('getADmin'); // Adminlar ma'lumotini qayta yuklash
+        // Mutatsiya muvaffaqiyatli bo'lganda, hodimlar ro'yxatini toastga chiqarish
+        onSuccess: ( data, variables ) => {
+          const { enabled } = variables;
+          console.log('Yangilandi:', data);
+          // queryClient.invalidateQueries('getADmin'); // Adminlar ma'lumotini qayta yuklash
+          if (enabled === true) {
+            toast.success('Hodim muvaffaqiyatli ishga tushirildi');
+          } else {
+            toast.success("Hodim muvaffaqiyatli o'chirildi");
+            
+          }
         },
         onError: (error) => {
           console.error('Xatolik:', error);
@@ -63,11 +74,11 @@ function Employees() {
       }
     );
 
+    // Switch o'zgarganda ishlaydigan funksiya
+    const handleSwitchChange = (checked: boolean, id: string) => {
+      updateEmployeeStatus.mutate({ id, enabled: checked });
+    };
 
-  // Switch o'zgarganda ishlaydigan funksiya
-  const handleSwitchChange = (checked: boolean, id: string) => {
-    updateEmployeeStatus.mutate({ id, enabled: checked });
-  };
 
   return (
     <Layout>
