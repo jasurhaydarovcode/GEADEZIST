@@ -19,6 +19,7 @@ function Employees() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [isAdmin, setIsAdmin] = useState("");
 
   const queryClient = useQueryClient();
 
@@ -45,7 +46,7 @@ function Employees() {
     setEmail("");
     setPassword("");
     setConfirmPassword("");
-
+    setIsAdmin("");
     setOpen(false);
     setConfirmLoading(false);
   };
@@ -57,6 +58,7 @@ function Employees() {
     setEmail("");
     setPassword("");
     setConfirmPassword("");
+    setIsAdmin("");
     setOpen(false);
   };
 
@@ -101,7 +103,7 @@ function Employees() {
           >
             {/* Modal mazmuni */}
             <div className="mb-4">
-              <select className="border w-full p-2 rounded">
+              <select className="border w-full p-2 rounded" value={isAdmin} onChange={(e) => setIsAdmin(e.target.value)}>
                 <option value="">Admin toifasini tanlang</option>
                 <option value="ROLE_TESTER">Tester admin</option>
                 <option value="ROLE_ADMIN">Tekshiruvchi admin</option>
