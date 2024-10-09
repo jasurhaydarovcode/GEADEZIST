@@ -41,7 +41,7 @@ function SignIn() {
   }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="flex flex-col lg:flex-row w-full lg:w-5/6 lg:h-5/6 bg-white shadow-lg rounded-lg overflow-hidden">
+      <div className="flex flex-col lg:flex-row w-full lg:w-5/6 lg:h-[700px] bg-white shadow-lg rounded-lg overflow-hidden">
         <div className="lg:w-3/5 w-full flex flex-col items-center justify-center bg-gray-50 p-8">
           <img src={Logo} alt="Logo" className="w-30 lg:w-48 mb-4 lg:mb-8" />
           <div className="w-40 lg:w-60">

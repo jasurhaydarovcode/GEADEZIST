@@ -16,7 +16,7 @@ import { FaArrowsAlt } from 'react-icons/fa';
 import { FaCircleQuestion } from 'react-icons/fa6';
 import { MdOutlineCategory } from 'react-icons/md';
 import checkLogin from '@/helpers/functions/checkLogin';
-import {  useQuery } from 'react-query';
+import { useQuery } from 'react-query';
 import { getClientAll, getStaticAll } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import { toast } from 'react-toastify';
@@ -38,12 +38,16 @@ const Dashboard = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedRegion, setSelectedRegion] = useState('');
   const dashboardStatic = useQuery({
-    queryKey: ['dashboardStatic'],
+    queryKey: ['dashboardStatic',config],
     queryFn: async () => {
-      const res = await axios.get(getStaticAll)
+      const res = await axios.get(getStaticAll, config)
       return res.data
+    },
+    onError: (error: any) => {
+      toast.error(error.message)
     }
   })
+  console.log(dashboardStatic.data, 'dashboardStatic')
   const categories = ['Топография', 'Маркшейдерлик', 'Умумий Геодезия'];
   const regions = ['Toshkent', 'Samarqand', "Farg'ona"];
 
@@ -53,14 +57,14 @@ const Dashboard = () => {
   const handleRegionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedRegion(e.target.value);
   };
-  
+
   const getStatic = useQuery({
-    queryKey: ['getStatic',config],
+    queryKey: ['getStatic', config],
     queryFn: async () => {
-      const res = await axios.get(getStaticAll,config)
-      return res.data
+      const res = await axios.get(getStaticAll, config)
+      return res.data.body
     },
-    onError: (error:any) => {
+    onError: (error: any) => {
       toast.error(error.message)
     }
   })
@@ -91,6 +95,7 @@ const Dashboard = () => {
       label: 'Jami Foydalanuvchilar',
     },
   ];
+  console.log(cardData[0], 'cardData')
   // Data for the scatter chart
   const data = {
     datasets: [
@@ -112,15 +117,16 @@ const Dashboard = () => {
         pointBackgroundColor: 'rgba(54, 162, 235, 1)',
       },
     ],
-  }; 
+  };
   const getClient = useQuery({
-    queryKey: ['getClient',config],
+    queryKey: ['getClient', config],
     queryFn: async () => {
-      const res = await axios.get(getClientAll,config)
-      return res
+      const res = await axios.get<GetClientAllResponse[]>(getClientAll, config)
+      const data = res.data.body.body as GetClientAllResponse[]
+      return data
     }
   })
-  const clientData: GetClientAllResponse[] = []; // Yoki kerakli tip bilan aniqlang
+  const clientData: GetClientAllResponse[] = getClient.data as GetClientAllResponse[]
   // Options for the scatter chart
   const options: ChartOptions<'scatter'> = {
     responsive: true,
@@ -193,7 +199,7 @@ const Dashboard = () => {
             </button>
           </div>
           <div className="w-full h-64 md:h-96 lg:h-[500px]">
-            <Scatter data={data} options={options}/>
+            <Scatter data={data} options={options} />
           </div>
         </div>
 
@@ -240,14 +246,14 @@ const Dashboard = () => {
               </tr>
             </thead>
             <tbody>
-              {clientData && clientData.length > 0 && clientData.map((user:GetClientAllResponse, index:number) => (
-                  <tr key={index}>
-                    <td className="py-2 border text-center">{index + 1}</td>
-                    <td className="py-2 border text-center">{user.firstName}</td>
-                    <td className="py-2 border text-center">{user.lastName}</td>
-                    <td className="py-2 border text-center">{user.email}</td>
-                  </tr>
-                ))}
+              {clientData && clientData.length > 0 && clientData.map((user: GetClientAllResponse, index: number) => (
+                <tr key={index}>
+                  <td className="py-2 border text-center">{index + 1}</td>
+                  <td className="py-2 border text-center">{user.firstName}</td>
+                  <td className="py-2 border text-center">{user.lastName}</td>
+                  <td className="py-2 border text-center">{user.email}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

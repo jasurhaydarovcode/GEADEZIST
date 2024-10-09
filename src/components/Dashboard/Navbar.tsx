@@ -12,11 +12,15 @@ import { Link, useNavigate } from 'react-router-dom';
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false);
+
+  // ======= START Log out uchun button
   const navigate = useNavigate()
   function logOut() {
     localStorage.removeItem('token')
     navigate('/auth/SignIn')
   }
+  // ======= END Log out uchun button
+
   // Toggle dropdown visibility
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -32,9 +36,9 @@ const Navbar = () => {
     setIsLogoutModalOpen(false);
   };
   const getMe = useQuery({
-    queryKey: ['getMe',config],
+    queryKey: ['getMe', config],
     queryFn: async (): Promise<any> => { // Return type annotation added
-      const res = await axios.get(getMeUser, config) 
+      const res = await axios.get(getMeUser, config)
       return res.data
     }
   })
@@ -65,7 +69,11 @@ const Navbar = () => {
           <div className="flex gap-4 items-center cursor-pointer">
             <div>
               <h1 className='text-gray-500 mr-2 text-md font-semibold'>{getMeData?.fullName}</h1>
-              <span>{getMeData?.email == 'admin@gmail.com' ? 'super admin' : 'client'}</span>
+              <span>
+                {getMe.isLoading ? 'Loading...' : (
+                  getMeData?.email == 'admin@gmail.com' ? 'super admin' : 'client'
+                )}
+              </span>
             </div>
             <div>
               <img src={geodeziyaLogo} alt="Admin logo" className="rounded-full w-10" />
