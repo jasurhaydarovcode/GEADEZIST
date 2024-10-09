@@ -29,8 +29,7 @@ function ResetPassword() {
       .put(`${baseUrl}auth/reset-password`, data)
       .then((res) => {
         if (res.status === 200) {
-          const message = res.message
-          toast.success(message);
+          toast.success(res.message);
           navigate("/auth/SignIn");
         }
         console.log(res.status);
