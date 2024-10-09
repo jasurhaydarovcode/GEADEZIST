@@ -15,7 +15,7 @@ function Employees() {
 
   const queryClient = useQueryClient();
 
-  const { data: admins, isLoading, isError } = useQuery(['getADmin'], async () => {
+  const { data: admins,} = useQuery(['getADmin'], async () => {
     const res = await axios.get(`${baseUrl}user/get/admin/list?page=0&size=10`, config);
     return (res.data as { body: { body: string }}).body.body;
   });
@@ -80,6 +80,54 @@ function Employees() {
             maskClosable={false}
           >
             {/* Modal mazmuni */}
+            <div className="mb-4">
+              {/* <label className="block mb-2">Admin toifasini tanlang</label> */}
+              <select className="border w-full p-2 rounded">
+                <option value="">Admin toifasini tanlang</option>
+                <option value="ROLE_TESTER">Tester admin</option>
+                <option value="ROLE_ADMIN">Tekshiruvchi admin</option>
+              </select>
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Ism</label>
+              <input
+              type="text"
+              placeholder="Ismni kiriting"
+              className="border w-full p-2 rounded"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Telfon raqam</label>
+              <input
+              type="text"
+              placeholder="Telfon raqamni kiriting"
+              className="border w-full p-2 rounded"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Email kiriting</label>
+              <input
+              type="email"
+              placeholder="Email kiriting"
+              className="border w-full p-2 rounded"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Parolni kiriting</label>
+              <input
+              type="text"
+              placeholder="Parolni kiriting"
+              className="border w-full p-2 rounded"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Parolni takrorlang</label>
+              <input
+              type="text"
+              placeholder="Takroriy parolni kiriting"
+              className="border w-full p-2 rounded"
+              />
+            </div>
           </Modal>
         </div>
         <div>
@@ -99,7 +147,7 @@ function Employees() {
                   <TableCell>{item.firstName}</TableCell>
                   <TableCell>{item.lastName}</TableCell>
                   <TableCell>{item.email}</TableCell>
-                  <TableCell>{item.role}</TableCell>
+                  <TableCell>{item.role === 'ROLE_ADMIN' ? 'Tekshiruvchi admin' : 'Tester admin'}</TableCell>
                   <TableCell>
                     <Space direction="vertical">
                       <Switch
