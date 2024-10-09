@@ -112,8 +112,15 @@ const Dashboard = () => {
         pointBackgroundColor: 'rgba(54, 162, 235, 1)',
       },
     ],
-  };
-
+  }; 
+  const getClient = useQuery({
+    queryKey: ['getClient',config],
+    queryFn: async () => {
+      const res = await axios.get(getClientAll,config)
+      return res
+    }
+  })
+  const clientData: GetClientAllResponse[] = []; // Yoki kerakli tip bilan aniqlang
   // Options for the scatter chart
   const options: ChartOptions<'scatter'> = {
     responsive: true,
@@ -157,7 +164,6 @@ const Dashboard = () => {
       },
     },
   };
-  checkLogin()
 
   return (
     <Layout>

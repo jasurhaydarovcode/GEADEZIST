@@ -64,8 +64,8 @@ const Navbar = () => {
         <div className="relative" onClick={toggleDropdown}>
           <div className="flex gap-4 items-center cursor-pointer">
             <div>
-              <h1 className='text-gray-500 mr-2 text-md font-semibold'>{getMeData.fullName}</h1>
-              <span>{getMeData.email == 'admin@gmail.com' ? 'super admin' : 'client'}</span>
+              <h1 className='text-gray-500 mr-2 text-md font-semibold'>{getMeData?.fullName}</h1>
+              <span>{getMeData?.email == 'admin@gmail.com' ? 'super admin' : 'client'}</span>
             </div>
             <div>
               <img src={geodeziyaLogo} alt="Admin logo" className="rounded-full w-10" />

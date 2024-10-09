@@ -1,5 +1,5 @@
 export interface GetMeResponse {
-    "fullName":string
-    "email": string
-    "fileId": null
+    "fullName"?:string;
+    "email"?: string
+    "fileId"?: null
 }
