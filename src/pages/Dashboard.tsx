@@ -7,6 +7,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  ChartOptions,
 } from 'chart.js';
 import { useState } from 'react';
 import Layout from '@/components/Dashboard/Layout';
@@ -36,6 +37,13 @@ const Dashboard = () => {
   checkLogin()
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedRegion, setSelectedRegion] = useState('');
+  const dashboardStatic = useQuery({
+    queryKey: ['dashboardStatic'],
+    queryFn: async () => {
+      const res = await axios.get(getStaticAll)
+      return res.data
+    }
+  })
   const categories = ['Топография', 'Маркшейдерлик', 'Умумий Геодезия'];
   const regions = ['Toshkent', 'Samarqand', "Farg'ona"];
 
@@ -107,7 +115,7 @@ const Dashboard = () => {
   };
 
   // Options for the scatter chart
-  const options:any = {
+  const options: ChartOptions<'scatter'> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -123,7 +131,7 @@ const Dashboard = () => {
         },
         ticks: {
           stepSize: 1,
-          callback: (value: number) => {
+          callback: (tickValue: string | number) => {
             const days = [
               'Dushanba',
               'Seshanba',
@@ -133,7 +141,7 @@ const Dashboard = () => {
               'Shanba',
               'Yakshanba',
             ];
-            return days[value - 1];
+            return days[Number(tickValue)];
           },
         },
       },
@@ -149,18 +157,8 @@ const Dashboard = () => {
       },
     },
   };
-  const getClient = useQuery({
-    queryKey: ['getClient',config],
-    queryFn: async () => {
-      const res = await axios.get(getClientAll,config)
-      return res
-    },
-    onError: (error:any) => {
-      toast.error(error.message)
-    }
-  })
-  const clientData = getClient.data?.data?.body?.body as GetClientAllResponse[]
-  console.log(clientData)
+  checkLogin()
+
   return (
     <Layout>
       <div className="container mx-auto px-4">

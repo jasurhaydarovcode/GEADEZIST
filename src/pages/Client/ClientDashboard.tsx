@@ -6,7 +6,7 @@ import PreviewOverlay from '@/components/PreviewOverlay';
 
 const Card: React.FC<CardProps> = ({ image, title, answers, time, score, date, sections, buttonText, status }) => {
   return (
-    <div className='container max-w-[450px]'>
+    <div className='container bg-white rounded-md max-w-[450px]'>
       <div className="border rounded-lg shadow-lg p-4">
         <div className="relative group">
           <img src={image} alt="Preview" className="w-full h-64 object-cover rounded-md" />

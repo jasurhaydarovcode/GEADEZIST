@@ -1,14 +1,14 @@
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 
-function checkLogin(){
+function CheckLogin(){
     const navigate = useNavigate()
     const token = localStorage.getItem('token')
     useEffect(() => {
       if(!token){
         navigate('/auth/SignIn')
       }
-    }, [token])
+    }, [token, navigate])
 }
 
-export default checkLogin
+export default CheckLogin

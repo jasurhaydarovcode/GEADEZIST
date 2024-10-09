@@ -25,7 +25,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <div className="bg-white py-4 pr-8  relative">
+    <div className="bg-white pr-8 relative">
       {/* Navbar content here */}
       <div className="bg-white p-4 relative">
         <div className="flex justify-end items-center">

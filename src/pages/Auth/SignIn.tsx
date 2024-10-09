@@ -1,13 +1,13 @@
-import { loginUrl } from "@/helpers/api/baseUrl";
-// import { useGlobalRequest } from "@/helpers/functions/globalFunc";
+import { baseUrl } from "@/helpers/api/baseUrl";
 import { registerRasm } from "@/helpers/imports/images";
 import { Logo } from "@/helpers/imports/images";
+import { LoginType } from "@/helpers/types/LoginType";
 import axios from "axios";
-import { useEffect, useRef } from "react";
-import { useMutation } from "react-query";
+import { useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 function SignIn() {
+<<<<<<< HEAD
   const email = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
   const navigate = useNavigate()
@@ -39,6 +39,33 @@ function SignIn() {
     if (e.key === 'Enter') {
       login.mutate()
     }
+=======
+  const email = useRef<HTMLInputElement | null>(null);
+  const password = useRef<HTMLInputElement | null>(null);
+
+  const navigate = useNavigate();
+  function loginPost() {
+    const data: LoginType = {
+      email: email.current?.value || null as string | null,
+      password: password.current?.value || null as string | null,
+    }
+    axios.post(`${baseUrl}auth/login`, data)
+      .then((res) => {
+        const data = res.data as { role: string; token: string };
+        localStorage.setItem("token", data.token);
+        toast.dark("Successfully logged in!");
+        if (data.role === "ROLE_SUPER_ADMIN") {
+          navigate("/dashboard");
+        } else if (data.role === "ROLE_ADMIN") {
+          navigate("/masters");
+        } else {
+          navigate("/clients");
+        }
+        console.log(res.data);
+
+      })
+      .catch((err) => toast.error(err.response.data.message))
+>>>>>>> a36168a3178b73666b4ea42ec1097211511078b1
   }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -86,9 +113,13 @@ function SignIn() {
                 </small>
               </div>
               <button
+<<<<<<< HEAD
                 onClick={() => login.mutate()}
                 
+=======
+>>>>>>> a36168a3178b73666b4ea42ec1097211511078b1
                 type="submit"
+                onClick={loginPost}
                 className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
               >
                 Tizimga kirish
@@ -99,7 +130,7 @@ function SignIn() {
               <Link to={'/auth/signup'} className="text-sm text-blue-500 hover:underline">
                 Ro'yhatdan o'tish
               </Link>
-              <Link to={'/auth/reset-password'} className="text-sm text-blue-500 hover:underline">
+              <Link to={'/auth/confirm'} className="text-sm text-blue-500 hover:underline">
                 Parolni unutdingizmi?
               </Link>
             </div>

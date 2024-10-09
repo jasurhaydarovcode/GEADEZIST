@@ -150,12 +150,9 @@ function SignUp() {
             </form>
 
             {/* Quyidagi havolalar */}
-            <div className="flex justify-between items-center mt-4 lg:mt-6">
+            <div className="flex justify-center items-center mt-4 lg:mt-6">
               <Link to={"/auth  /SignIn"} className="text-sm text-blue-500 hover:underline">
-                Tizimga kirish
-              </Link>
-              <Link to={"/auth/confirm"} className="text-sm text-blue-500 hover:underline">
-                Parolni unutdingizmi?
+                Ro'yhatdan o'tish
               </Link>
             </div>
           </div>

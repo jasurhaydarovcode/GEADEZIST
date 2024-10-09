@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Select } from 'antd';
 
 const TOTAL_TIME = 60 * 60; // 60 minutes (in seconds)
 const STORAGE_KEY = "savedRemainingTime";
@@ -7,6 +9,12 @@ const QuestionPage: React.FC = () => {
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
   const [remainingTime, setRemainingTime] = useState(TOTAL_TIME); // In seconds
 
+  const { Option } = Select;
+
+  const handleChange = (value: string) => {
+    console.log(`Selected: ${value}`);
+  };
+
   useEffect(() => {
     // Retrieve saved time from localStorage if available
     const savedTime = localStorage.getItem(STORAGE_KEY);
@@ -14,6 +22,12 @@ const QuestionPage: React.FC = () => {
       setRemainingTime(parseInt(savedTime, 10));
     }
   }, []);
+
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate(-1); // Goes to the previous page in the history stack
+  };
 
   useEffect(() => {
     // Timer logic: decrement remaining time every second
@@ -52,7 +66,7 @@ const QuestionPage: React.FC = () => {
   return (
     <div className="px-9 space-y-12">
       <div className="mt-11 bg-white p-6 rounded-2xl">
-        <div className="w-full bg-gray-200 h-4 rounded-2xl overflow-hidden">
+        <div className="w-full bg-gray-200 h-3 rounded-2xl overflow-hidden">
           <div
             className="bg-blue-500 h-full"
             style={{ width: `${progressPercentage}%` }}
@@ -100,9 +114,14 @@ const QuestionPage: React.FC = () => {
 
           {/* Navigation Buttons */}
           <div className="mt-6 flex justify-between items-center">
-            <button className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md">
+            <button onClick={handleBack} className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md">
               Орқага
             </button>
+            <Select defaultValue="Savollar" style={{ width: 150 }} onChange={handleChange}>
+              {number.map((item: number) =>
+                <Option classname="p-3" key={item}>{item}/{number.length}</Option>)
+              }
+            </Select>
             <button className="px-4 py-2 bg-blue-500 text-white rounded-md">
               Кейингиси
             </button>
@@ -120,5 +139,7 @@ const answers = [
   "Дастурни ишлата олмайман.",
   "Дастурни ишлай оламан лекин ўқув ёки иш жараёнида аниқ бир иш битирмаганман."
 ];
+
+const number = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
 
 export default QuestionPage;
