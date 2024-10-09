@@ -58,13 +58,13 @@ const Dashboard = () => {
     queryKey: ['getStatic',config],
     queryFn: async () => {
       const res = await axios.get(getStaticAll,config)
-      return res
+      return res.data
     },
     onError: (error:any) => {
       toast.error(error.message)
     }
   })
-  const staticData: GetStaticsAllResponse = getStatic.data?.data
+  const staticData: GetStaticsAllResponse = getStatic.data as GetStaticsAllResponse
   const cardData = [
     {
       id: 1,
