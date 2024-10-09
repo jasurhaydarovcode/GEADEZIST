@@ -48,7 +48,7 @@ const Dashboard = () => {
       toast.error(error.message)
     }
   })
-  console.log(dashboardStatic.data, 'dashboardStatic')
+  const staticData: GetStaticsAllResponse = dashboardStatic.data as GetStaticsAllResponse
   const categories = ['Топография', 'Маркшейдерлик', 'Умумий Геодезия'];
   const regions = ['Toshkent', 'Samarqand', "Farg'ona"];
 
@@ -59,18 +59,7 @@ const Dashboard = () => {
     setSelectedRegion(e.target.value);
   };
 
-  const getStatic = useQuery({
-    queryKey: ['getStatic', config],
-    queryFn: async () => {
-      const res = await axios.get(getStaticAll, config)
-      const data = res.data?.body?.body as GetStaticsAllResponse
-      return data
-    },
-    onError: (error: any) => {
-      toast.error(error.message)
-    }
-  })
-  const staticData: GetStaticsAllResponse = getStatic.data as GetStaticsAllResponse
+  
   const cardData = [
     {
       id: 1,
@@ -128,6 +117,10 @@ const Dashboard = () => {
       return data;
     }
   })
+  useEffect(() => {
+    getClient.refetch()
+    // dashboardStatic.refetch() 
+  }, [])
   const clientData: GetClientAllResponse[] = getClient.data as GetClientAllResponse[]
   // Options for the scatter chart
   const options: ChartOptions<'scatter'> = {
