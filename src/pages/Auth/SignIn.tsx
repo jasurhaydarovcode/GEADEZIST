@@ -44,8 +44,13 @@ function SignIn() {
       localStorage.setItem('role', res.data.role)
       if (res.data.role === 'ROLE_SUPER_ADMIN' || res.data.role === 'ROLE_TESTER') {
         navigate('/dashboard')
+<<<<<<< HEAD
       } else if (res.data.role === 'ROLE_CLIENT') {
         navigate('/client/dashboard')
+=======
+      } else if (res.data.role === 'ROLE_ADMIN') {
+        navigate('/dashboard')
+>>>>>>> a3b12ed1fd5f24612d9444f2390b365a77fb5cd1
       }
       toast.success('Tizimga kirish muvaffaqiyatli', { position: 'top-center' })
     },

@@ -20,7 +20,7 @@ function ClientProfile() {
   // Fetch profile data from the API
   useEffect(() => {
     axios
-      .get(`${baseUrl}user/profile`)
+      .get(`${baseUrl}statistics-controller`)
       .then((response) => {
         const data = response.data?.body;
         setProfileData({

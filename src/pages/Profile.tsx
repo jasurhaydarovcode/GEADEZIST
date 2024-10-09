@@ -127,6 +127,9 @@ function Profile() {
                 />
               </div>
             </div>
+            <button disabled={true} className="cursor-not-allowed p-2 rounded-lg text-md mt-4 bg-gray-600 hover:bg-gray-800 transition duration-200 ease-in-out w-max font-semibold text-white">
+              O'zgartirishlarni saqlang
+            </button>
           </div>
         </div>
       }
