@@ -42,8 +42,10 @@ function SignIn() {
     onSuccess: (res: any) => {
       localStorage.setItem('token', res.data.token)
       localStorage.setItem('role', res.data.role)
-      if (res.data.role === 'ROLE_SUPER_ADMIN' || res.data.role === 'ROLE_TESTER') {
+      if (res.data.role === 'ROLE_SUPER_ADMIN') {
         navigate('/dashboard')
+      } else if (res.data.role === 'ROLE_TESTER') {
+        navigate('/category')
       } else if (res.data.role === 'ROLE_CLIENT') {
         navigate('/client/dashboard')
       } else if (res.data.role === 'ROLE_ADMIN') {
