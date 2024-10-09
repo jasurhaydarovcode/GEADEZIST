@@ -15,8 +15,13 @@ import { FaArrowsAlt } from 'react-icons/fa';
 import { FaCircleQuestion } from 'react-icons/fa6';
 import { MdOutlineCategory } from 'react-icons/md';
 import checkLogin from '@/helpers/functions/checkLogin';
-import { useQuery } from 'react-query';
-import { getStaticAll } from '@/helpers/api/baseUrl';
+import {  useQuery } from 'react-query';
+import { getClientAll, getStaticAll } from '@/helpers/api/baseUrl';
+import { config } from '@/helpers/functions/token';
+import { toast } from 'react-toastify';
+import axios from 'axios';
+import { GetClientAllResponse } from '@/helpers/types/GetClientType';
+import { GetStaticsAllResponse } from '@/helpers/types/GetStaticsAllResponse';
 
 ChartJS.register(
   CategoryScale,
@@ -28,15 +33,9 @@ ChartJS.register(
 );
 
 const Dashboard = () => {
+  checkLogin()
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedRegion, setSelectedRegion] = useState('');
-  const dashboardStatic = useQuery({
-    queryKey: ['dashboardStatic'],
-    queryFn: async () => {
-      const res = await axios.get(getStaticAll)
-      return res.data
-    }
-  })
   const categories = ['Топография', 'Маркшейдерлик', 'Умумий Геодезия'];
   const regions = ['Toshkent', 'Samarqand', "Farg'ona"];
 
@@ -47,11 +46,22 @@ const Dashboard = () => {
     setSelectedRegion(e.target.value);
   };
   
+  const getStatic = useQuery({
+    queryKey: ['getStatic',config],
+    queryFn: async () => {
+      const res = await axios.get(getStaticAll,config)
+      return res
+    },
+    onError: (error:any) => {
+      toast.error(error.message)
+    }
+  })
+  const staticData: GetStaticsAllResponse = getStatic.data?.data
   const cardData = [
     {
       id: 1,
       icon: <MdOutlineCategory />,
-      count: 13,
+      count: staticData?.categoryCount,
       label: 'Umumiy Kategoriya',
     },
     {
@@ -73,34 +83,6 @@ const Dashboard = () => {
       label: 'Jami Foydalanuvchilar',
     },
   ];
-
-  const dataUsers = [
-    {
-      id: 1,
-      ism: 'Asilbek',
-      familiya: 'Normuhammadov',
-      kategoriya: 'Топография',
-      viloyat: 'Toshkent',
-      natija: '8/34',
-    },
-    {
-      id: 2,
-      ism: 'Shahrixon',
-      familiya: 'Raxmatullayev',
-      kategoriya: 'Маркшейдерлик',
-      viloyat: 'Samarqand',
-      natija: '5/25',
-    },
-    {
-      id: 3,
-      ism: 'Otabek',
-      familiya: 'Komilov',
-      kategoriya: 'Умумий Геодезия',
-      viloyat: "Farg'ona",
-      natija: '26/40',
-    },
-  ];
-
   // Data for the scatter chart
   const data = {
     datasets: [
@@ -167,8 +149,18 @@ const Dashboard = () => {
       },
     },
   };
-  checkLogin()
-
+  const getClient = useQuery({
+    queryKey: ['getClient',config],
+    queryFn: async () => {
+      const res = await axios.get(getClientAll,config)
+      return res
+    },
+    onError: (error:any) => {
+      toast.error(error.message)
+    }
+  })
+  const clientData = getClient.data?.data?.body?.body as GetClientAllResponse[]
+  console.log(clientData)
   return (
     <Layout>
       <div className="container mx-auto px-4">
@@ -238,28 +230,18 @@ const Dashboard = () => {
                 <th className="py-2 border">T/P</th>
                 <th className="py-2 border">Ism</th>
                 <th className="py-2 border">Familiya</th>
-                <th className="py-2 border">Kategoriya nomi</th>
-                <th className="py-2 border">Viloyat</th>
                 <th className="py-2 border">
-                  Natija (To'g'ri javoblar/Umumiy)
+                  Email
                 </th>
               </tr>
             </thead>
             <tbody>
-              {dataUsers
-                .filter(
-                  (user) =>
-                    (!selectedCategory || user.kategoriya === selectedCategory) &&
-                    (!selectedRegion || user.viloyat === selectedRegion)
-                )
-                .map((user) => (
-                  <tr key={user.id}>
-                    <td className="py-2 border text-center">{user.id}</td>
-                    <td className="py-2 border text-center">{user.ism}</td>
-                    <td className="py-2 border text-center">{user.familiya}</td>
-                    <td className="py-2 border text-center">{user.kategoriya}</td>
-                    <td className="py-2 border text-center">{user.viloyat}</td>
-                    <td className="py-2 border text-center">{user.natija}</td>
+              {clientData && clientData.length > 0 && clientData.map((user:GetClientAllResponse, index:number) => (
+                  <tr key={index}>
+                    <td className="py-2 border text-center">{index + 1}</td>
+                    <td className="py-2 border text-center">{user.firstName}</td>
+                    <td className="py-2 border text-center">{user.lastName}</td>
+                    <td className="py-2 border text-center">{user.email}</td>
                   </tr>
                 ))}
             </tbody>

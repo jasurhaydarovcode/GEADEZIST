@@ -13,33 +13,33 @@ function SignIn() {
   const navigate = useNavigate()
   const login = useMutation({
     mutationFn: async () => {
-      const data = {email: email.current?.value, password: password.current?.value}
+      const data = { email: email.current?.value, password: password.current?.value }
       const res = await axios.post(loginUrl, data)
       return res
     },
-    onSuccess: (res:any) => {
+    onSuccess: (res: any) => {
       localStorage.setItem('token', res.data.token)
-      if(res.data.role === 'ROLE_SUPER_ADMIN'){
+      if (res.data.role === 'ROLE_SUPER_ADMIN') {
         navigate('/dashboard')
-      }else if(res.data.role === 'ROLE_USER'){
+      } else if (res.data.role === 'ROLE_USER') {
         navigate('/')
       }
-      toast.success('Tizimga kirish muvaffaqiyatli' ,{position: 'top-center'})
+      toast.success('Tizimga kirish muvaffaqiyatli', { position: 'top-center' })
     },
-    onError: (error:any) => {
-      
-      if(email.current?.value === '' || password.current?.value === ''){
+    onError: (error: any) => {
+
+      if (email.current?.value === '' || password.current?.value === '') {
         toast.warning('Email va parolni to\'liq kiriting')
-      }else{
+      } else {
         toast.error(error.message)
       }
     },
   })
-  function checkInput(){
+  const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      login.mutate()
+    }
   }
-  useEffect(() => {
-    checkInput()
-  }, [])
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="flex flex-col lg:flex-row w-full lg:w-5/6 lg:h-5/6 bg-white shadow-lg rounded-lg overflow-hidden">
@@ -63,6 +63,7 @@ function SignIn() {
                 <input
                   ref={email}
                   type="email"
+                  onKeyDown={handleEnter}
                   id="email"
                   placeholder="Elektron pochtangizni kiriting"
                   className="w-full px-4 mt-2 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
@@ -75,6 +76,7 @@ function SignIn() {
                 <input
                   ref={password}
                   type="text"
+                  onKeyDown={handleEnter}
                   id="password"
                   placeholder="Parolni kiriting"
                   className="w-full px-4 mt-2 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
@@ -85,6 +87,7 @@ function SignIn() {
               </div>
               <button
                 onClick={() => login.mutate()}
+                
                 type="submit"
                 className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
               >
