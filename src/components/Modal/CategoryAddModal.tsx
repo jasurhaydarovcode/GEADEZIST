@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, Modal, Input, Select, notification } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
-import { CategoryFormValues } from '@/helpers/types/CategoryFormValues'; 
+import { CategoryFormValues } from '@/helpers/types/CategoryFormValues';
 import axios from 'axios';
 
 const { Option } = Select;
@@ -15,14 +15,14 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
     categoryType: 'asosiy-bolmagan',
     categoryName: '',
     description: '',
-    totalQuestions: 0, // O'zgartirildi
-    additionalQuestions: 0, // O'zgartirildi
-    duration: 0, // O'zgartirildi
-    retryDate: undefined, // O'zgartirildi
+    totalQuestions: 0, 
+    additionalQuestions: 0,
+    duration: 0,
+    retryDate: undefined,
   });
 
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
 
   const resetForm = () => {
     setFormValues({
@@ -37,15 +37,20 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
   };
 
   const handleSave = async () => {
-    setLoading(true); 
+    setLoading(true);
     try {
       const response = await axios.post<CategoryFormValues>(
-        'http://164.92.165.18:8090/api/category', 
-        formValues
+        'http://164.92.165.18:8090/api/category',
+        formValues,
+        {
+          headers: {
+            Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3Mjg0NjY4MjMsImV4cCI6MTcyODU1MzIyM30.FetUXyrF7k3hBq4GtSHGc4tprIdt4QF-VMnh6PYY7dZrt3efwctRhCTCCOsSZMim7V-jO0UaPVfmZdxZAPpA1A`,
+          },
+        }
       );
       onAddCategory(response.data);
       notification.success({
-        message: 'Kategoriya muvaffaqiyatli qo\'shildi',
+        message: "Kategoriya muvaffaqiyatli qo'shildi",
       });
       resetForm();
       setOpen(false);
@@ -53,7 +58,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
       console.error('Xatolik:', error);
       notification.error({
         message: 'Xatolik yuz berdi',
-        description: 'Kategoriya qo\'shishda xatolik yuz berdi, iltimos qayta urinib ko\'ring',
+        description: "Kategoriya qo'shishda xatolik yuz berdi, iltimos qayta urinib ko'ring",
       });
     } finally {
       setLoading(false);
@@ -66,7 +71,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
   };
 
   const InputStyles = {
-    input: 'w-full rounded-lg border'
+    input: 'w-full rounded-lg border',
   };
 
   return (
@@ -83,7 +88,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
         width={600}
         okText="Saqlash"
         cancelText="Yopish"
-        confirmLoading={loading} 
+        confirmLoading={loading}
         maskClosable={false}
       >
         <div className="space-y-4">
