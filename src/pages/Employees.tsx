@@ -1,9 +1,9 @@
 import Layout from "@/components/Dashboard/Layout";
 import { PlusCircleOutlined } from "@ant-design/icons";
-import { Button, Space, Switch, Pagination, Modal } from "antd";
+import { Button, Space, Switch, Pagination, Modal, message } from "antd";
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
-import {  useState } from 'react';
+import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import axios from 'axios';
 import { baseUrl } from "@/helpers/api/baseUrl";
@@ -12,10 +12,19 @@ import { config } from "@/helpers/functions/token";
 function Employees() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [newEmployee, setNewEmployee] = useState({
+    role: '',
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
 
   const queryClient = useQueryClient();
 
-  const { data: admins,} = useQuery(['getADmin'], async () => {
+  const { data: admins } = useQuery(['getADmin'], async () => {
     const res = await axios.get(`${baseUrl}user/get/admin/list?page=0&size=10`, config);
     return (res.data as { body: { body: string }}).body.body;
   });
@@ -26,36 +35,44 @@ function Employees() {
 
   const handleOk = () => {
     setConfirmLoading(true);
-    setTimeout(() => {
-      setOpen(false);
-      setConfirmLoading(false);
-    }, 2000);
+    addEmployee.mutate(newEmployee);
   };
 
   const handleCancel = () => {
     setOpen(false);
   };
 
-    // Hodim holatini yangilash uchun mutatsiya yaratish
-    const updateEmployeeStatus = useMutation(
-      async ({ id, enabled }: { id: string, enabled: boolean }) => {
-        return axios.put(`${baseUrl}user/active/${id}`, { enabled }, config);
-      },
-      {
-        // Mutatsiya muvaffaqiyatli bo'lganda, hodimlar ro'yxatini qayta so'rash
-        onSuccess: () => {
-          queryClient.invalidateQueries('getADmin'); // Adminlar ma'lumotini qayta yuklash
-        },
-        onError: (error) => {
-          console.error('Xatolik:', error);
-        }
-      }
-    );
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setNewEmployee({ ...newEmployee, [name]: value });
+  };
 
+  // Xodim qo'shish uchun mutatsiya
+  const addEmployee = useMutation(
+    async (newEmployeeData: any) => {
+      return axios.post(`${baseUrl}auth/save/admin`, newEmployeeData, config);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('getADmin'); // Adminlar ro'yxatini qayta yuklash
+        setOpen(false);
+        setConfirmLoading(false);
+        message.success("Yangi xodim qo'shildi!");
+      },
+      onError: (error) => {
+        console.error('Xatolik:', error);
+        message.error("Xodim qo'shishda xatolik yuz berdi.");
+        setConfirmLoading(false);
+      }
+    }
+  );
 
   // Switch o'zgarganda ishlaydigan funksiya
   const handleSwitchChange = (checked: boolean, id: string) => {
-    updateEmployeeStatus.mutate({ id, enabled: checked });
+    // Hodim holatini yangilash uchun PUT so'rov
+    axios.put(`${baseUrl}user/active/${id}`, { enabled: checked }, config)
+      .then(() => queryClient.invalidateQueries('getADmin'))
+      .catch(err => console.error(err));
   };
 
   return (
@@ -79,10 +96,8 @@ function Employees() {
             onCancel={handleCancel}
             maskClosable={false}
           >
-            {/* Modal mazmuni */}
             <div className="mb-4">
-              {/* <label className="block mb-2">Admin toifasini tanlang</label> */}
-              <select className="border w-full p-2 rounded">
+              <select name="role" onChange={handleChange} className="border w-full p-2 rounded">
                 <option value="">Admin toifasini tanlang</option>
                 <option value="ROLE_TESTER">Tester admin</option>
                 <option value="ROLE_ADMIN">Tekshiruvchi admin</option>
@@ -91,41 +106,67 @@ function Employees() {
             <div className="mb-4">
               <label className="block mb-2">Ism</label>
               <input
-              type="text"
-              placeholder="Ismni kiriting"
-              className="border w-full p-2 rounded"
+                type="text"
+                name="firstName"
+                value={newEmployee.firstName}
+                onChange={handleChange}
+                placeholder="Ismni kiriting"
+                className="border w-full p-2 rounded"
               />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Telfon raqam</label>
+              <label className="block mb-2">Familiya</label>
               <input
-              type="text"
-              placeholder="Telfon raqamni kiriting"
-              className="border w-full p-2 rounded"
+                type="text"
+                name="lastName"
+                value={newEmployee.lastName}
+                onChange={handleChange}
+                placeholder="Familiyani kiriting"
+                className="border w-full p-2 rounded"
               />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Email kiriting</label>
+              <label className="block mb-2">Telefon raqam</label>
               <input
-              type="email"
-              placeholder="Email kiriting"
-              className="border w-full p-2 rounded"
+                type="text"
+                name="phoneNumber"
+                value={newEmployee.phoneNumber}
+                onChange={handleChange}
+                placeholder="Telefon raqamni kiriting"
+                className="border w-full p-2 rounded"
               />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Parolni kiriting</label>
+              <label className="block mb-2">Email</label>
               <input
-              type="text"
-              placeholder="Parolni kiriting"
-              className="border w-full p-2 rounded"
+                type="email"
+                name="email"
+                value={newEmployee.email}
+                onChange={handleChange}
+                placeholder="Emailni kiriting"
+                className="border w-full p-2 rounded"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Parol</label>
+              <input
+                type="password"
+                name="password"
+                value={newEmployee.password}
+                onChange={handleChange}
+                placeholder="Parolni kiriting"
+                className="border w-full p-2 rounded"
               />
             </div>
             <div className="mb-4">
               <label className="block mb-2">Parolni takrorlang</label>
               <input
-              type="text"
-              placeholder="Takroriy parolni kiriting"
-              className="border w-full p-2 rounded"
+                type="password"
+                name="confirmPassword"
+                value={newEmployee.confirmPassword}
+                onChange={handleChange}
+                placeholder="Parolni takror kiriting"
+                className="border w-full p-2 rounded"
               />
             </div>
           </Modal>
@@ -153,7 +194,7 @@ function Employees() {
                       <Switch
                         checkedChildren={<CheckOutlined />}
                         unCheckedChildren={<CloseOutlined />}
-                        defaultChecked={item.enabled}
+                        checked={item.enabled}
                         onChange={(checked) => handleSwitchChange(checked, item.id)}
                       />
                     </Space>
@@ -170,3 +211,4 @@ function Employees() {
 }
 
 export default Employees;
+
