@@ -1,18 +1,26 @@
-
+import { getMeUser } from '@/helpers/api/baseUrl';
+import { config } from '@/helpers/functions/token';
 import { geodeziyaLogo } from '@/helpers/imports/images';
+import { GetMeResponse } from '@/helpers/types/GetMetype';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { FaRegUser } from 'react-icons/fa';
 import { IoCloseOutline, IoExitOutline } from 'react-icons/io5';
+import { useQuery } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false);
+
+  // ======= START Log out uchun button
   const navigate = useNavigate()
   function logOut() {
     localStorage.removeItem('token')
     navigate('/auth/SignIn')
   }
+  // ======= END Log out uchun button
+
   // Toggle dropdown visibility
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -27,7 +35,14 @@ const Navbar = () => {
   const closeLogoutModal = () => {
     setIsLogoutModalOpen(false);
   };
-
+  const getMe = useQuery({
+    queryKey: ['getMe', config],
+    queryFn: async (): Promise<any> => { // Return type annotation added
+      const res = await axios.get(getMeUser, config)
+      return res.data
+    }
+  })
+  const getMeData: GetMeResponse = getMe.data?.body
   useEffect(() => {
     // Klaviatura tugmasi bosilganda ishlovchi funksiya
     const handleKeyPress = (event: KeyboardEvent) => {
@@ -53,8 +68,12 @@ const Navbar = () => {
         <div className="relative" onClick={toggleDropdown}>
           <div className="flex gap-4 items-center cursor-pointer">
             <div>
-              <h1 className='text-gray-500 mr-2 text-md font-semibold'>admin admin</h1>
-              <span>super admin</span>
+              <h1 className='text-gray-500 mr-2 text-md font-semibold'>{getMeData?.fullName}</h1>
+              <span>
+                {getMe.isLoading ? 'Loading...' : (
+                  getMeData?.email == 'admin@gmail.com' ? 'super admin' : 'client'
+                )}
+              </span>
             </div>
             <div>
               <img src={geodeziyaLogo} alt="Admin logo" className="rounded-full w-10" />
@@ -66,8 +85,8 @@ const Navbar = () => {
             <div className="absolute z-50 right-0 mt-2 w-56 bg-white border rounded-lg shadow-lg">
               <div className="absolute z-10 right-0 mt-2 w-56 bg-white border rounded-lg shadow-lg">
                 <div className="p-4">
-                  <div className="font-bold">Admin Admin</div>
-                  <div className="text-gray-500 text-sm">example@gmail.com</div>
+                  <div className="font-bold">{getMeData.fullName}</div>
+                  <div className="text-gray-500 text-sm">{getMeData.email}</div>
                 </div>
                 <hr />
                 <div>
