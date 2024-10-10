@@ -38,9 +38,9 @@ function Category() {
                   <TableCell>{item.durationTime}</TableCell>
                   <TableCell>{item.retakeDat}</TableCell>
                   <TableCell>{item.fileId}</TableCell>
+                  <TableCell>{item.updatedBy}</TableCell>   
                   <TableCell>{item.main}</TableCell>
                   <TableCell>{item.createdBy}</TableCell>
-                  <TableCell>{item.updatedBy}</TableCell>
                   <TableCell>{item.deletedBy}</TableCell>
                 </TableRow>
               ))}
