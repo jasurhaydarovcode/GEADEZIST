@@ -1,13 +1,16 @@
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { SlArrowDown } from 'react-icons/sl';
 import { FcSearch } from 'react-icons/fc';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Layout from '@/components/Dashboard/Layout';
 import { useEffect, useState } from 'react';
+<<<<<<< HEAD
 import checkLogin from "@/helpers/functions/checkLogin";
 import axios from "axios";
 import { baseUrl } from "@/helpers/api/baseUrl";
 import { AxiosResponse } from "axios";
+=======
+>>>>>>> 37c8c21535cba2dcf9341342efe486737d8f7746
 
 const AllUser: React.FC = (): JSX.Element => {
   // interface users {
@@ -32,7 +35,22 @@ const AllUser: React.FC = (): JSX.Element => {
 
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+<<<<<<< HEAD
   // checkLogin()
+=======
+  
+
+  const navigate = useNavigate()
+  function checkRoleClient() {
+    const role = localStorage.getItem('role')
+    if (role == 'ROLE_CLIENT') {
+      navigate('/client/dashboard')
+    } 
+  }
+  useEffect(() => {
+    checkRoleClient()
+  }, [checkRoleClient])
+>>>>>>> 37c8c21535cba2dcf9341342efe486737d8f7746
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };

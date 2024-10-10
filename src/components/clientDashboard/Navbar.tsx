@@ -1,13 +1,19 @@
 import { useState } from 'react';
 import { FaRegUser } from 'react-icons/fa';
 import { IoExitOutline } from 'react-icons/io5';
-import { IoCloseOutline } from 'react-icons/io5'; // Close icon for modal
+import { IoCloseOutline } from 'react-icons/io5';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Navbar: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const navigate = useNavigate()
+
+  function logOut() {
+    localStorage.removeItem('token')
+    navigate('/auth/SignIn')
+  }
 
   // Toggle dropdown visibility
   const toggleDropdown = () => {
@@ -25,7 +31,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <div className="bg-white py-4 pr-8  relative">
+    <div className="bg-white pr-8 relative">
       {/* Navbar content here */}
       <div className="bg-white p-4 relative">
         <div className="flex justify-end items-center">
@@ -91,7 +97,7 @@ const Navbar: React.FC = () => {
                   >
                     Yopish
                   </button>
-                  <button className="bg-gray-400 text-white px-4 py-2 rounded-md">
+                  <button onClick={logOut} className="bg-gray-400 text-white px-4 py-2 rounded-md">
                     Ha
                   </button>
                 </div>

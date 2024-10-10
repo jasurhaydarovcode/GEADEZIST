@@ -2,8 +2,9 @@ import Layout from "@/components/Dashboard/Layout";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { Button, Modal, Pagination } from "antd";
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 function Address() { 
   const [open, setOpen] = useState(false);
@@ -12,7 +13,16 @@ function Address() {
   const showModal = () => {
     setOpen(true);
   };
-
+  const navigate = useNavigate()
+  function checkRoleClient() {
+    const role = localStorage.getItem('role')
+    if (role == 'ROLE_CLIENT') {
+      navigate('/client/dashboard')
+    } 
+  }
+  useEffect(() => {
+    checkRoleClient()
+  }, [checkRoleClient])
   const handleOk = () => {
     setConfirmLoading(true);
     setTimeout(() => {

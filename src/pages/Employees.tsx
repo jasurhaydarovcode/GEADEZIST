@@ -1,23 +1,44 @@
-import Layout from "@/components/Dashboard/Layout"
-import { PlusCircleOutlined } from "@ant-design/icons"
-import { Button } from "antd"
+import Layout from "@/components/Dashboard/Layout";
+import { PlusCircleOutlined } from "@ant-design/icons";
+import { Button, Space, Switch, Pagination, Modal } from "antd";
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
-import { Space, Switch } from 'antd';
-import { Pagination } from 'antd';
-
-import { useState } from 'react';
-import { Modal } from 'antd';
+import {  useEffect, useState } from 'react';
+import { useMutation, useQuery } from 'react-query';
+import axios from 'axios';
+import { baseUrl } from "@/helpers/api/baseUrl";
+import { config } from "@/helpers/functions/token";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function Employees() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+
+  
+  function checkRoleClient() {
+    const role = localStorage.getItem('role')
+    if (role == 'ROLE_CLIENT') {
+      navigate('/client/dashboard')
+    } 
+  }
+
+  const { data: admins,} = useQuery(['getADmin'], async () => {
+    const res = await axios.get(`${baseUrl}user/get/admin/list?page=0&size=10`, config);
+    return (res.data as { body: { body: string }}).body.body;
+  });
+
+  const navigate = useNavigate()
+  useEffect(() => {
+    checkRoleClient()
+  }, [checkRoleClient])
 
   const showModal = () => {
     setOpen(true);
   };
 
   const handleOk = () => {
+    postAdmin.mutate();
     setConfirmLoading(true);
     setTimeout(() => {
       setOpen(false);
@@ -25,21 +46,81 @@ function Employees() {
     }, 2000);
   };
 
+  // const handleOk = () => {
+  //   if (firstname && lastname && email && phoneNumber && password && confirmPassword && role) {
+  //     if (password === confirmPassword) {
+  //       postAdmin.mutate();
+  //       setConfirmLoading(true);
+  //       setTimeout(() => {
+  //         setOpen(false);
+  //         setConfirmLoading(false);
+  //       }, 2000);
+  //     } else {
+  //       toast.error("Parollar mos kelmadi");
+  //     }
+  //   } else {
+  //     toast.error("Barcha maydonlarni to'ldiring");
+  //   }
+  // };
+
   const handleCancel = () => {
     setOpen(false);
   };
+
+    // Hodim holatini yangilash uchun mutatsiya yaratish
+    const updateEmployeeStatus = useMutation(
+      async ({ id, enabled }: { id: string, enabled: boolean }) => {
+        return axios.put(`${baseUrl}user/active/${id}`, { enabled }, config);
+      },
+      {
+        // Mutatsiya muvaffaqiyatli bo'lganda, hodimlar ro'yxatini toastga chiqarish
+        onSuccess: ( data, variables ) => {
+          const { enabled } = variables;
+          console.log('Yangilandi:', data);
+          // queryClient.invalidateQueries('getADmin'); // Adminlar ma'lumotini qayta yuklash
+          if (enabled === true) {
+            toast.success('Hodim muvaffaqiyatli ishga tushirildi');
+          } else {
+            toast.success("Hodim muvaffaqiyatli o'chirildi");
+            
+          }
+        },
+        onError: (error) => {
+          console.error('Xatolik:', error);
+        }
+      }
+    );
+
+    // Switch o'zgarganda ishlaydigan funksiya
+    const handleSwitchChange = (checked: boolean, id: string) => {
+      updateEmployeeStatus.mutate({ id, enabled: checked });
+    };
+
+    // yangi hodim qo'shish funksiyasi
+    const [firstname, setFirstname] = useState('');
+    const [lastname, setLastname] = useState('');
+    const [email, setEmail] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [role, setRole] = useState('');
+
+    const postAdmin = useMutation(async () => {
+      return axios.post(`${baseUrl}auth/save/admin`, { firstname, lastname, email, phoneNumber, password, confirmPassword, role }, config);
+    });
+
   return (
     <Layout>
       <div className="p-5">
         <div className="flex justify-between">
           <h1 className="text-3xl font-bold font-sans">Hodimlar</h1>
           <p className="font-sans text-gray-700">
-            Boshqaruv paneli  /  <span className="text-blue-700 ">Hodimlar</span>
+            Boshqaruv paneli / <span className="text-blue-700">Hodimlar</span>
           </p>
         </div>
         <div>
-          <Button onClick={showModal} color="default" variant="solid" className=" text-xl px-5 py-6 my-5">
-            <PlusCircleOutlined className="text-xl"/>Qo'shish 
+          <Button onClick={showModal} color="default" variant="solid" className="text-xl px-5 py-6 my-5">
+            <PlusCircleOutlined className="text-xl" /> Qo'shish
           </Button>
           <Modal
             title="Hodim qo'shish"
@@ -49,65 +130,73 @@ function Employees() {
             onCancel={handleCancel}
             maskClosable={false}
           >
-            {/* <h2 className="text-xl font-bold mb-4">Rasm Yuklash</h2> */}
+            {/* Modal mazmuni */}
             <div className="mb-4">
-              <label className="block mb-2">Kategoriya turini tanlang</label>
-              <select className="border w-full p-2 rounded">
-                <option value="">Asosiy boʻlmagan kategoriya</option>
-                <option value="main">Asosiy kategoriya</option>
-                <option value="secondary">Asosiy boʻlmagan kategoriya</option>
+              {/* <label className="block mb-2">Admin toifasini tanlang</label> */}
+              <select className="border w-full p-2 rounded" value={role} onChange={(e) => setRole(e.target.value)}>
+                <option value="">Admin toifasini tanlang</option>
+                <option value="ROLE_TESTER">Tester admin</option>
+                <option value="ROLE_ADMIN">Tekshiruvchi admin</option>
               </select>
             </div>
-
             <div className="mb-4">
-              <label className="block mb-2">Tavsif</label>
+              <label className="block mb-2">Ism</label>
               <input
-                type="text"
-                placeholder="Tavsifni kiriting"
-                className="border w-full p-2 rounded"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block mb-2">Umumiy savollar soni</label>
-              <input
-                type="number"
-                placeholder="Umumiy savollar sonini kiriting"
-                className="border w-full p-2 rounded"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block mb-2">Qo'shimcha savollar soni</label>
-              <input
-                type="number"
-                placeholder="Qo'shimcha savollar sonini kiriting"
-                className="border w-full p-2 rounded"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block mb-2">Davomiylik vaqti (m)</label>
-              <input
-                type="number"
-                placeholder="Davomiylik vaqti (minutlarda)"
-                className="border w-full p-2 rounded"
+              type="text"
+              placeholder="Ismni kiriting"
+              className="border w-full p-2 rounded"
+              value={firstname}
+              onChange={(e) => setFirstname(e.target.value)}
               />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Davomiylik vaqti (m)</label>
+              <label className="block mb-2">Ism</label>
               <input
-                type="number"
-                placeholder="Davomiylik vaqti (minutlarda)"
-                className="border w-full p-2 rounded"
+              type="text"
+              placeholder="Ismni kiriting"
+              className="border w-full p-2 rounded"
+              value={lastname}
+              onChange={(e) => setLastname(e.target.value)}
               />
             </div>
             <div className="mb-4">
-              <label className="block mb-2">Davomiylik vaqti (m)</label>
+              <label className="block mb-2">Telfon raqam</label>
               <input
-                type="number"
-                placeholder="Davomiylik vaqti (minutlarda)"
-                className="border w-full p-2 rounded"
+              type="text"
+              placeholder="Telfon raqamni kiriting"
+              className="border w-full p-2 rounded"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Email kiriting</label>
+              <input
+              type="email"
+              placeholder="Email kiriting"
+              className="border w-full p-2 rounded"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Parolni kiriting</label>
+              <input
+              type="text"
+              placeholder="Parolni kiriting"
+              className="border w-full p-2 rounded"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block mb-2">Parolni takrorlang</label>
+              <input
+              type="text"
+              placeholder="Takroriy parolni kiriting"
+              className="border w-full p-2 rounded"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               />
             </div>
           </Modal>
@@ -118,36 +207,37 @@ function Employees() {
               <TableHeadCell>T/P</TableHeadCell>
               <TableHeadCell>Ism</TableHeadCell>
               <TableHeadCell>Familya</TableHeadCell>
-              <TableHeadCell>Electron pochta</TableHeadCell>
+              <TableHeadCell>Email</TableHeadCell>
               <TableHeadCell>Lavozimi</TableHeadCell>
               <TableHeadCell>Action</TableHeadCell>
             </TableHead>
             <TableBody className="divide-y">
-              <TableRow className="bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800">
-                <TableCell>
-                  {'Apple MacBook Pro 17"'}
-                </TableCell>
-                <TableCell>Sliver</TableCell>
-                <TableCell>Laptop</TableCell>
-                <TableCell>$2999</TableCell>
-                <TableCell>$2999</TableCell>
-                <TableCell>
-                  <Space direction="vertical">
-                    <Switch
-                      checkedChildren={<CheckOutlined />}
-                      unCheckedChildren={<CloseOutlined />}
-                      defaultChecked
-                    />
-                  </Space>
-                </TableCell>
-              </TableRow>
+              {Array.isArray(admins) && admins.map((item, index) => (
+                <TableRow key={item.id} className="bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800">
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{item.firstName}</TableCell>
+                  <TableCell>{item.lastName}</TableCell>
+                  <TableCell>{item.email}</TableCell>
+                  <TableCell>{item.role === 'ROLE_ADMIN' ? 'Tekshiruvchi admin' : 'Tester admin'}</TableCell>
+                  <TableCell>
+                    <Space direction="vertical">
+                      <Switch
+                        checkedChildren={<CheckOutlined />}
+                        unCheckedChildren={<CloseOutlined />}
+                        defaultChecked={item.enabled}
+                        onChange={(checked) => handleSwitchChange(checked, item.id)}
+                      />
+                    </Space>
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
           <Pagination className="mt-5" defaultCurrent={1} total={10} />
         </div>
       </div>
     </Layout>
-  )
+  );
 }
 
-export default Employees
+export default Employees;

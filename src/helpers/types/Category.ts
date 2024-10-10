@@ -1,5 +1,3 @@
-// types.ts
-
 // Modalda kerak bo'ladigan form ma'lumotlari uchun interface
 export interface CategoryFormValues {
     categoryType: "asosiy" | "asosiy-bolmagan";

@@ -3,6 +3,8 @@
 import { defineConfig, Plugin, ViteDevServer } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+
+// log start development plugin
 import vitePluginLogStart from './vite-plugin-log-start';
 
 // Console plugin
@@ -21,11 +23,11 @@ const GEADEZIST = (): Plugin => {
 export default defineConfig({
   plugins: [
     react(),
-    GEADEZIST(),
     vitePluginLogStart({
-      filePath: './public/dev-start-log.json',
+      filePath: './dev-start-log.json',
       includeUser: true,
     }),
+    GEADEZIST(),
   ],
   resolve: {
     alias: {

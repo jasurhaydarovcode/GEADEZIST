@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { Button, Modal, Input, Select, notification } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
-import { CategoryFormValues } from '@/types/CategoryFormValues'; // To'g'ri interfeys nomini kiriting
-import axios from 'axios'; // Axios kutubxonasini import qilamiz
+import { CategoryFormValues } from '@/helpers/types/CategoryFormValues';
+import axios from 'axios';
 
 const { Option } = Select;
 
 interface CategoryAddModalProps {
-  onAddCategory: (newCategory: CategoryFormValues) => void; // Yangi kategoriya qo'shish funksiyasi
+  onAddCategory: (newCategory: CategoryFormValues) => void;
 }
 
 const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) => {
@@ -15,56 +15,63 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
     categoryType: 'asosiy-bolmagan',
     categoryName: '',
     description: '',
-    totalQuestions: '',
-    additionalQuestions: '',
-    duration: '',
+    totalQuestions: 0, 
+    additionalQuestions: 0,
+    duration: 0,
+    retryDate: undefined,
   });
 
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false); // Yuklash holati uchun
+  const [loading, setLoading] = useState(false);
 
   const resetForm = () => {
     setFormValues({
       categoryType: 'asosiy-bolmagan',
       categoryName: '',
       description: '',
-      totalQuestions: '',
-      additionalQuestions: '',
-      duration: '',
+      totalQuestions: 0,
+      additionalQuestions: 0,
+      duration: 0,
+      retryDate: undefined,
     });
   };
 
   const handleSave = async () => {
-    setLoading(true); // Saqlash jarayonida yuklashni ko'rsatamiz
+    setLoading(true);
     try {
       const response = await axios.post<CategoryFormValues>(
-        'http://164.92.165.18:8090/api/category', // To'g'ri API endpointni qo'llang
-        formValues
+        'http://164.92.165.18:8090/api/category',
+        formValues,
+        {
+          headers: {
+            Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3Mjg0NjY4MjMsImV4cCI6MTcyODU1MzIyM30.FetUXyrF7k3hBq4GtSHGc4tprIdt4QF-VMnh6PYY7dZrt3efwctRhCTCCOsSZMim7V-jO0UaPVfmZdxZAPpA1A`,
+          },
+        }
       );
-      onAddCategory(response.data); // Yangi kategoriya qo'shish uchun callback chaqiramiz
+      onAddCategory(response.data);
       notification.success({
-        message: 'Kategoriya muvaffaqiyatli qo\'shildi',
+        message: "Kategoriya muvaffaqiyatli qo'shildi",
       });
       resetForm();
-      setOpen(false); // Modalni yopamiz
+      setOpen(false);
     } catch (error) {
       console.error('Xatolik:', error);
       notification.error({
         message: 'Xatolik yuz berdi',
-        description: 'Kategoriya qo\'shishda xatolik yuz berdi, iltimos qayta urinib ko\'ring',
+        description: "Kategoriya qo'shishda xatolik yuz berdi, iltimos qayta urinib ko'ring",
       });
     } finally {
-      setLoading(false); // Yuklashni to'xtatamiz
+      setLoading(false);
     }
   };
 
   const handleCancel = () => {
     resetForm();
-    setOpen(false); // Modalni yopamiz
+    setOpen(false);
   };
 
   const InputStyles = {
-    input: 'w-full rounded-lg border'
+    input: 'w-full rounded-lg border',
   };
 
   return (
@@ -81,7 +88,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
         width={600}
         okText="Saqlash"
         cancelText="Yopish"
-        confirmLoading={loading} // Yuklash animatsiyasini ko'rsatish
+        confirmLoading={loading}
         maskClosable={false}
       >
         <div className="space-y-4">
@@ -94,7 +101,6 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
             <Option value="asosiy-bolmagan">Asosiy bo'lmagan kategoriya</Option>
           </Select>
 
-          {/* Kategoriya turi asosiy yoki asosiy bo'lmaganligiga qarab formalarni ko'rsatamiz */}
           <div>
             <label className="block mb-2">Kategoriya Nomi</label>
             <Input
@@ -123,7 +129,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
                   type="number"
                   placeholder="Umumiy savollar sonini kiriting"
                   value={formValues.totalQuestions}
-                  onChange={(e) => setFormValues({ ...formValues, totalQuestions: e.target.value })}
+                  onChange={(e) => setFormValues({ ...formValues, totalQuestions: Number(e.target.value) })}
                   min="0"
                 />
               </div>
@@ -134,7 +140,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
                   type="number"
                   placeholder="Qo'shimcha savollar sonini kiriting"
                   value={formValues.additionalQuestions}
-                  onChange={(e) => setFormValues({ ...formValues, additionalQuestions: e.target.value })}
+                  onChange={(e) => setFormValues({ ...formValues, additionalQuestions: Number(e.target.value) })}
                   min="0"
                 />
               </div>
@@ -145,7 +151,18 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
                   type="number"
                   placeholder="Davomiylik (daqiqa)"
                   value={formValues.duration}
-                  onChange={(e) => setFormValues({ ...formValues, duration: e.target.value })}
+                  onChange={(e) => setFormValues({ ...formValues, duration: Number(e.target.value) })}
+                  min="0"
+                />
+              </div>
+              <div>
+                <label className="block mb-2">Qayta qabul qilish</label>
+                <Input
+                  className={InputStyles.input}
+                  type="number"
+                  placeholder="Qayta qabul qilish sanasi"
+                  value={formValues.retryDate}
+                  onChange={(e) => setFormValues({ ...formValues, retryDate: Number(e.target.value) })}
                   min="0"
                 />
               </div>

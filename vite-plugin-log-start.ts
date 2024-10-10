@@ -1,22 +1,30 @@
-// vite-plugin-log-start.js
-
 import fs from 'fs';
 import path from 'path';
 import dayjs from 'dayjs';
+import { ViteDevServer } from 'vite';
 
-export default function vitePluginLogStart(options = {}) {
+interface PluginOptions {
+    filePath?: string;
+    includeUser?: boolean;
+}
+
+interface LogEntry {
+    timestamp: string;
+    user?: string | null;
+}
+
+export default function vitePluginLogStart(options: PluginOptions = {}) {
     const {
-        filePath = path.resolve(process.cwd(), './public/dev-start-log.json'),
+        filePath = path.resolve(process.cwd(), './dev-start-log.json'),
         includeUser = false,
     } = options;
 
-    const getUserName = () => {
+    const getUserName = (): string | null => {
         return includeUser ? process.env.USER || process.env.USERNAME || 'Unknown User' : null;
     };
 
-    // Log yozish funksiyasi
-    const writeLog = () => {
-        const logEntry = {
+    const writeLog = (): void => {
+        const logEntry: LogEntry = {
             timestamp: dayjs().format(),
         };
 
@@ -24,7 +32,7 @@ export default function vitePluginLogStart(options = {}) {
             logEntry.user = getUserName();
         }
 
-        let logs = [];
+        let logs: LogEntry[] = [];
 
         if (fs.existsSync(filePath)) {
             try {
@@ -39,10 +47,8 @@ export default function vitePluginLogStart(options = {}) {
             }
         }
 
-        // Yangi yozuvni qo'shish
         logs.push(logEntry);
 
-        // Faylga yozish
         try {
             fs.writeFileSync(filePath, JSON.stringify(logs, null, 2), 'utf-8');
             console.log(`\n✅ Dev server is running and log write file: ${filePath}`);
@@ -54,7 +60,7 @@ export default function vitePluginLogStart(options = {}) {
     return {
         name: 'vite-plugin-log-start',
 
-        configureServer(server) {
+        configureServer(server: ViteDevServer) {
             server.httpServer?.once('listening', () => {
                 writeLog();
             });

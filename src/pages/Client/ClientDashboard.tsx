@@ -1,12 +1,13 @@
 // components/clientDashboard/ClientDashboard.tsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import Layout from '../../components/clientDashboard/laytout';
 import { CardProps } from '../../helpers/types/CardProp';
 import PreviewOverlay from '@/components/PreviewOverlay';
+import { useNavigate } from 'react-router-dom';
 
 const Card: React.FC<CardProps> = ({ image, title, answers, time, score, date, sections, buttonText, status }) => {
   return (
-    <div className='container max-w-[450px]'>
+    <div className='container bg-white rounded-md max-w-[450px]'>
       <div className="border rounded-lg shadow-lg p-4">
         <div className="relative group">
           <img src={image} alt="Preview" className="w-full h-64 object-cover rounded-md" />
@@ -82,6 +83,17 @@ const ClientDashboard: React.FC = () => {
     },
   ];
 
+  const navigate = useNavigate()
+  function checkRoleClient() {
+    const role = localStorage.getItem('role')
+    if (role == 'ROLE_SUPER_ADMIN' || role == 'ROLE_TESTER') {
+      navigate('/dashboard')
+    } 
+  }
+
+  useEffect(() => {
+    checkRoleClient()
+  }, [checkRoleClient])
   return (
     <Layout>
       <div>

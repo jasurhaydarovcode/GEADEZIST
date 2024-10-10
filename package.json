@@ -31,7 +31,7 @@
     "react-modal": "^3.16.1",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.26.2",
-    "react-toastify": "^10.0.5",
+    "react-toastify": "^10.0.5", 
     "uuid": "^10.0.0"
   },
   "devDependencies": {
