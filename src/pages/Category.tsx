@@ -27,6 +27,7 @@ function Category() {
               <TableHeadCell>Yaratgan</TableHeadCell>
               <TableHeadCell>Kategoriya holati</TableHeadCell>
               <TableHeadCell>O'chirgan</TableHeadCell>
+              <TableHeadCell>Xarakat</TableHeadCell>
             </TableHead>
             <TableBody className="divide-y">
               {Array.isArray(data.data) && data.data.map((item, index) => (
