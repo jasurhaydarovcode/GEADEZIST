@@ -34,7 +34,10 @@ function Category() {
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.description}</TableCell>
                   <TableCell>{item.questionCount}</TableCell>
-                  <TableCell>{item.testCount}</TableCell>
+                  <TableCell>{item.extraQuestionCoun}</TableCell>
+                  <TableCell>{item.durationTime}</TableCell>
+                  <TableCell>{item.retakeDat}</TableCell>
+                  <TableCell>{item.fileId}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
