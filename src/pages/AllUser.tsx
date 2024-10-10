@@ -1,15 +1,14 @@
-import { MdOutlineRemoveRedEye } from "react-icons/md";
-import { SlArrowDown } from 'react-icons/sl';
-import { FcSearch } from 'react-icons/fc';
-import { Link, useNavigate } from 'react-router-dom';
-import Layout from '@/components/Dashboard/Layout';
-import { useEffect, useState } from 'react';
-import checkLogin from "@/helpers/functions/checkLogin";
-import axios from "axios";
-import { baseUrl } from "@/helpers/api/baseUrl";
-import { AxiosResponse } from "axios";
+//:////import { MdOutlineRemoveRedEye } from "react-icons/md";
+//import { SlArrowDown } from 'react-icons/sl';
+//import// { FcSearch } from 'react-icons/fc';
+////import Layout from '@/components/Dashboard/Layout';
+//import { useEffect, useState } from 'react';
+//import checkLogin from "@/helpers/functions/checkLogin";
+//import axios from "axios";
+//import { baseUrl } from "@/helpers/api/baseUrl";
+//import { AxiosResponse } from "axios";
 
-const AllUser: React.FC = (): JSX.Element => {
+//const AllUser: React.FC = (): JSX.Element => {
   // interface users {
   //   name: string;
   //   lastname: string;
