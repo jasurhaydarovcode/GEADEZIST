@@ -52,12 +52,12 @@ function Category() {
                     <TableCell>{item.name}</TableCell>
                     <TableCell>{item.description}</TableCell>
                     <TableCell>{item.questionCount}</TableCell>
-                    <TableCell>{item.extraQuestionCoun}</TableCell>
-                    <TableCell>{item.retakeDate}</TableCell>
+                    <TableCell>{item.extraQuestionCount}</TableCell>
+                    <TableCell>{item.durationTime}</TableCell>
+                    <TableCell>{item.retakeDate}</TableCell>  
                     <TableCell>{item.createdBy}</TableCell>
+                    <TableCell>{item.deleted && 'O"chirilgan'}</TableCell>
                     <TableCell>{item.deletedBy}</TableCell>
-                    <TableCell>{item.deleted && 'Uchirilgan'}</TableCell>
-                    <TableCell>{}</TableCell>
                     <TableCell className="flex gap-4 text-xl">
                       <div className="cursor-pointer">
                         <MdEdit />
