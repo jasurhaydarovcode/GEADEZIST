@@ -1,5 +1,3 @@
-
-
 import Layout from "@/components/Dashboard/Layout";
 import { baseUrl } from "@/helpers/api/baseUrl";
 import { config } from "@/helpers/functions/token";
@@ -19,11 +17,16 @@ function Category() {
       <Table hoverable>
             <TableHead>
               <TableHeadCell>T/P</TableHeadCell>
-              <TableHeadCell>Ism</TableHeadCell>
-              <TableHeadCell>Familya</TableHeadCell>
-              <TableHeadCell>Email</TableHeadCell>
-              <TableHeadCell>Lavozimi</TableHeadCell>
-              <TableHeadCell>Action</TableHeadCell>
+              <TableHeadCell>Kategoriya rasmi</TableHeadCell>
+              <TableHeadCell>Tavsifi</TableHeadCell>
+              <TableHeadCell>Savollar soni</TableHeadCell>
+              <TableHeadCell>Testlar soni</TableHeadCell>
+              <TableHeadCell>Qo'shimcha savollar</TableHeadCell>
+              <TableHeadCell>Davomiylik vaqti(m)</TableHeadCell>
+              <TableHeadCell>Qayta qabul qilish sanasi</TableHeadCell>
+              <TableHeadCell>Yaratgan</TableHeadCell>
+              <TableHeadCell>Kategoriya holati</TableHeadCell>
+              <TableHeadCell>O'chirgan</TableHeadCell>
             </TableHead>
             <TableBody className="divide-y">
               {Array.isArray(data.data) && data.data.map((item, index) => (
