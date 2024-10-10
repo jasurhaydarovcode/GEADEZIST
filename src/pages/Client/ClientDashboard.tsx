@@ -86,16 +86,9 @@ const ClientDashboard: React.FC = () => {
   const navigate = useNavigate()
   function checkRoleClient() {
     const role = localStorage.getItem('role')
-    const token = localStorage.getItem('token')
-    if (role == 'ROLE_SUPER_ADMIN') {
+    if (role == 'ROLE_SUPER_ADMIN' || role == 'ROLE_TESTER') {
       navigate('/dashboard')
-    } else if (role == 'ROLE_TESTER') {
-      navigate('/category')
-    }
-
-    if (token == null) {
-      navigate('/auth/Signin')
-    }
+    } 
   }
 
   useEffect(() => {

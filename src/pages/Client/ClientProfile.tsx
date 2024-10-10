@@ -1,21 +1,23 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Layout from "@/components/clientDashboard/laytout";
 import { BiSolidPencil } from "react-icons/bi";
 import axios from "axios";
 import { noImageClientDefaultImage } from "@/helpers/imports/images";
-import { baseUrl } from "@/helpers/api/baseUrl";
+import { baseUrl, getProfile } from "@/helpers/api/baseUrl";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "react-query";
+import { config } from "@/helpers/functions/token";
 
 function ClientProfile() {
-  const [profileData, setProfileData] = useState({
-    firstName: "",
-    lastName: "",
-    region: "",
-    district: "",
-    email: "",
-    address: "",
-    profileImage: "",
-  });
+  // const [profileData, setProfileData] = useState({
+  //   firstName: "",
+  //   lastName: "",
+  //   region: "",
+  //   district: "",
+  //   email: "",
+  //   address: "",
+  //   profileImage: "",
+  // });
 
   // Fetch profile data from the API
   useEffect(() => {
@@ -53,6 +55,22 @@ function ClientProfile() {
     }
   }
 
+  const getMeUser = useQuery({
+    queryKey: ['getMeUser'],
+    queryFn: async () => {
+      const response = await axios.get(`${getProfile}`, config);
+      return response.data
+    },
+    onError: (error: any) => {
+      console.error("Error fetching profile data:", error);
+    },
+    // refetchInterval: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    cacheTime: 1000 * 60 * 15, // 15 minutes
+  })
+  const profileData: GetMetype = getMeUser.data?.body as GetMetype
+  console.log(profileData);
+
   useEffect(() => {
     checkRoleClient()
   }, [checkRoleClient])
@@ -65,11 +83,12 @@ function ClientProfile() {
             <h4 className="text-2xl text-red-600 font-semibold pb-4">Foydalanuvchi rasmi</h4>
             <img
               className="w-40 relative h-40 rounded-full object-cover"
-              src={profileData.profileImage || noImageClientDefaultImage} // user agar rasm quymasa shu default rasm quyiladi
+              src={profileData?.profileImage ? profileData?.profileImage : noImageClientDefaultImage}
+              // src={profileData.profileImage || noImageClientDefaultImage} // user agar rasm quymasa shu default rasm quyiladi
               alt="User Image"
-              onError={(e) => {
-                e.currentTarget.src = noImageClientDefaultImage;
-              }}
+              // onError={(e) => {
+              //   e.currentTarget.src = noImageClientDefaultImage;
+              // }}
             />
             <button className="absolute ml-28 mt-40 bg-red-500 text-white p-2 rounded-full">
               <BiSolidPencil />
@@ -85,8 +104,8 @@ function ClientProfile() {
               <label className="block text-lg text-gray-600">Ism</label>
               <input
                 type="text"
-                value={profileData.firstName}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
+                value={profileData?.firstName}
+                className="clientProfileDatasStyles"
                 readOnly
               />
             </div>
@@ -96,8 +115,8 @@ function ClientProfile() {
               <label className="block text-lg text-gray-600">Familiya</label>
               <input
                 type="text"
-                value={profileData.lastName}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
+                value={profileData?.lastName}
+                className="clientProfileDatasStyles"
                 readOnly
               />
             </div>
@@ -107,8 +126,8 @@ function ClientProfile() {
               <label className="block text-lg text-gray-600">Viloyat</label>
               <input
                 type="text"
-                value={profileData.region}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
+                value={profileData?.region ? profileData?.region : 'No region '}
+                className="clientProfileDatasStyles"
                 readOnly
               />
             </div>
@@ -118,8 +137,8 @@ function ClientProfile() {
               <label className="block text-lg text-gray-600">Tuman</label>
               <input
                 type="text"
-                value={profileData.district}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
+                value={profileData?.district ? profileData?.district : 'No District'}
+                className="clientProfileDatasStyles"
                 readOnly
               />
             </div>
@@ -129,8 +148,8 @@ function ClientProfile() {
               <label className="block text-lg text-gray-600">E-pochta manzili</label>
               <input
                 type="email"
-                value={profileData.email}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
+                value={profileData?.email}
+                className="clientProfileDatasStyles"
                 readOnly
               />
             </div>
@@ -140,8 +159,8 @@ function ClientProfile() {
               <label className="block text-lg text-gray-600">Ko'cha (To'liq)</label>
               <input
                 type="text"
-                value={profileData.address}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
+                value={profileData?.address ? profileData?.address : 'No Adress'}
+                className="clientProfileDatasStyles"
                 readOnly
               />
             </div>
@@ -151,8 +170,8 @@ function ClientProfile() {
               <label className="block text-lg text-gray-600">Telefon raqamingiz <span className="text-red-500">(namuna: 998912345678)</span></label>
               <input
                 type="text"
-                value={profileData.address}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
+                value={profileData?.phoneNumber}
+                className="clientProfileDatasStyles"
                 readOnly
               />
             </div>
@@ -162,8 +181,8 @@ function ClientProfile() {
               <label className="block text-lg text-gray-600">Tug'ilgan kuningiz <span>(namuna: yil-oy-kun: 2003-02-09)</span></label>
               <input
                 type="text"
-                value={profileData.address}
-                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
+                value={profileData?.dateOfBirth ? profileData?.dateOfBirth : "No Brithday"}
+                className="clientProfileDatasStyles"
                 readOnly
               />
             </div>
