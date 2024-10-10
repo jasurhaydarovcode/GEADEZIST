@@ -86,7 +86,6 @@ const Dashboard = () => {
       label: 'Jami Foydalanuvchilar',
     },
   ];
-  console.log(cardData[0], 'cardData')
   // Data for the scatter chart
   const data = {
     datasets: [

@@ -10,7 +10,11 @@ function Home() {
     const role = localStorage.getItem('role')
     if (role == 'ROLE_CLIENT') {
       navigate('/client/dashboard')
-    } 
+    }else if(role == 'ROLE_SUPER_ADMIN'){
+      navigate('/dashboard')
+    }else if(role == 'ROLE_TESTER'){
+      navigate('/category')
+    }
   }
   useEffect(() => {
     checkRoleClient()
