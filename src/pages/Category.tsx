@@ -41,7 +41,7 @@ function Category() {
                   <TableCell>{item.updatedBy}</TableCell>   
                   <TableCell>{item.main}</TableCell>
                   <TableCell>{item.createdBy}</TableCell>
-                  <TableCell>{item.deletedBy}</TableCell>
+                  <TableCell>{}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
