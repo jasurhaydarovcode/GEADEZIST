@@ -4,13 +4,10 @@ import { FcSearch } from 'react-icons/fc';
 import { Link, useNavigate } from 'react-router-dom';
 import Layout from '@/components/Dashboard/Layout';
 import { useEffect, useState } from 'react';
-<<<<<<< HEAD
 import checkLogin from "@/helpers/functions/checkLogin";
 import axios from "axios";
 import { baseUrl } from "@/helpers/api/baseUrl";
 import { AxiosResponse } from "axios";
-=======
->>>>>>> 37c8c21535cba2dcf9341342efe486737d8f7746
 
 const AllUser: React.FC = (): JSX.Element => {
   // interface users {
@@ -35,9 +32,7 @@ const AllUser: React.FC = (): JSX.Element => {
 
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-<<<<<<< HEAD
   // checkLogin()
-=======
   
 
   const navigate = useNavigate()
@@ -50,7 +45,6 @@ const AllUser: React.FC = (): JSX.Element => {
   useEffect(() => {
     checkRoleClient()
   }, [checkRoleClient])
->>>>>>> 37c8c21535cba2dcf9341342efe486737d8f7746
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
