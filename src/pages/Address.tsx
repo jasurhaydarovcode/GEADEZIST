@@ -1,9 +1,13 @@
 import Layout from "@/components/Dashboard/Layout";
+import { baseUrl } from "@/helpers/api/baseUrl";
+import { config } from "@/helpers/functions/token";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { Button, Modal, Pagination } from "antd";
+import axios from "axios";
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
+import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 
 function Address() { 
@@ -34,6 +38,12 @@ function Address() {
   const handleCancel = () => {
     setOpen(false);
   };
+
+  const data = useQuery(['getAddress'], async () => {
+    const res = await axios.get(`${baseUrl}region/getAllRegionPage?page=0&size=10`, config)
+    return (res.data as { body: { body: string }}).body.body;
+  })
+  
   return (
     <Layout> 
       <div className="p-5">
@@ -66,21 +76,23 @@ function Address() {
           </Modal>
         </div>
         <div>
-        <Table hoverable>
+          <Table hoverable>
             <TableHead>
               <TableHeadCell>T/P</TableHeadCell>
               <TableHeadCell>Viloyat nomi</TableHeadCell>
               <TableHeadCell>Harakat</TableHeadCell>
             </TableHead>
             <TableBody className="divide-y">
+            {Array.isArray(data.data) && data.data.map((item, index) => (
               <TableRow className="bg-white text-gray-700 dark:border-gray-700 dark:bg-gray-800">
-                <TableCell>1</TableCell>
-                <TableCell>Toshkent</TableCell>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{item.name}</TableCell>
                 <TableCell className="flex gap-1 text-xl cursor-pointer">
                   <MdEdit />
-                  <MdDelete onClick={showModal}/>
+                  <MdDelete />
                 </TableCell>
               </TableRow>
+            ))}
             </TableBody>
           </Table>
           <Pagination className="mt-5" defaultCurrent={1} total={20} />
