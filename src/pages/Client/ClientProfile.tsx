@@ -41,8 +41,15 @@ function ClientProfile() {
   const navigate = useNavigate()
   function checkRoleClient() {
     const role = localStorage.getItem('role')
-    if (role == 'ROLE_SUPER_ADMIN' || role == 'ROLE_TESTER') {
+    const token = localStorage.getItem('token')
+    if (role == 'ROLE_SUPER_ADMIN') {
       navigate('/dashboard')
+    } else if (role == 'ROLE_TESTER') {
+      navigate('/category')
+    }
+
+    if (token == null) {
+      navigate('/auth/Signin')
     }
   }
 

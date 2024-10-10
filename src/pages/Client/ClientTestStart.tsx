@@ -21,8 +21,6 @@ const ClientTestStart: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const navigate = useNavigate()
 
-  const queryClient = useQueryClient();
-
   const showModal = () => {
     setIsModalVisible(true);
   };
@@ -30,11 +28,18 @@ const ClientTestStart: React.FC = () => {
   const handleOk = () => {
     navigate('/client/quiz/:id')
   };
-  
+
   function checkRoleClient() {
     const role = localStorage.getItem('role')
-    if (role == 'ROLE_SUPER_ADMIN' || role == 'ROLE_TESTER') {
+    const token = localStorage.getItem('token')
+    if (role == 'ROLE_SUPER_ADMIN') {
       navigate('/dashboard')
+    } else if (role == 'ROLE_TESTER') {
+      navigate('/category')
+    }
+
+    if (token == null) {
+      navigate('/auth/Signin')
     }
   }
 
