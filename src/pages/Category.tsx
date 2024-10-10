@@ -23,53 +23,55 @@ function Category() {
         <Button color="black" className="bg-black hover:bg-black text-xl px- py-2 my-5 text-white">
           <PlusCircleOutlined className="text-xl" /> Qo'shish
         </Button>
-        <Table hoverable>
-              <TableHead>
-                <TableHeadCell>T/P</TableHeadCell>
-                <TableHeadCell>Kategoriya rasmi</TableHeadCell>
-                <TableHeadCell>Tavsifi</TableHeadCell>
-                <TableHeadCell>Savollar soni</TableHeadCell>
-                <TableHeadCell>Testlar soni</TableHeadCell>
-                <TableHeadCell>Qo'shimcha savollar</TableHeadCell>
-                <TableHeadCell>Davomiylik vaqti(m)</TableHeadCell>
-                <TableHeadCell>Qayta qabul qilish sanasi</TableHeadCell>
-                <TableHeadCell>Yaratgan</TableHeadCell>
-                <TableHeadCell>Kategoriya holati</TableHeadCell>
-                <TableHeadCell>O'chirgan</TableHeadCell>
-                <TableHeadCell>Xarakat</TableHeadCell>
-              </TableHead>
-              <TableBody className="divide-y">
-                {Array.isArray(data.data) && data.data.map((item, index) => (
-                  <TableRow key={item.id} className="bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800">
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>
-                      <img 
-                        alt={item.name}
-                        src={item.fileId ? `${getImage}${item.fileId}` : defaultImage}
-                        className={'border-[1px] border-gray-300 w-[43px] h-[43px] rounded-full object-cover hover:cursor-pointer'}
-                      />
-                    </TableCell>
-                    <TableCell>{item.name}</TableCell>
-                    <TableCell>{item.description}</TableCell>
-                    <TableCell>{item.questionCount}</TableCell>
-                    <TableCell>{item.extraQuestionCount}</TableCell>
-                    <TableCell>{item.durationTime}</TableCell>
-                    <TableCell>{item.retakeDate}</TableCell>  
-                    <TableCell>{item.createdBy}</TableCell>
-                    <TableCell>{item.deleted && 'O"chirilgan'}</TableCell>
-                    <TableCell>{item.deletedBy}</TableCell>
-                    <TableCell className="flex gap-4 text-xl">
-                      <div className="cursor-pointer">
-                        <MdEdit />
-                      </div>
-                      <div className="cursor-pointer">
-                        <MdDelete />
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+        <div className="overflow-x-scroll w-[1200px] rounded-lg ">
+          <Table hoverable className="border-collapse">
+            <TableHead>
+              <TableHeadCell>T/P</TableHeadCell>
+              <TableHeadCell>Kategoriya rasmi</TableHeadCell>
+              <TableHeadCell>Tavsifi</TableHeadCell>
+              <TableHeadCell>Savollar soni</TableHeadCell>
+              <TableHeadCell>Testlar soni</TableHeadCell>
+              <TableHeadCell>Qo'shimcha savollar</TableHeadCell>
+              <TableHeadCell>Davomiylik vaqti(m)</TableHeadCell>
+              <TableHeadCell>Qayta qabul qilish sanasi</TableHeadCell>
+              <TableHeadCell>Yaratgan</TableHeadCell>
+              <TableHeadCell>Kategoriya holati</TableHeadCell>
+              <TableHeadCell>O'chirgan</TableHeadCell>
+              <TableHeadCell>Xarakat</TableHeadCell>
+            </TableHead>
+            <TableBody className="divide-y">
+              {Array.isArray(data.data) && data.data.map((item, index) => (
+                <TableRow key={item.id} className="bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800">
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>
+                    <img 
+                      alt={item.name}
+                      src={item.fileId ? `${getImage}${item.fileId}` : defaultImage}
+                      className={'border-[1px] border-gray-300 w-[43px] h-[43px] rounded-full object-cover hover:cursor-pointer'}
+                    />
+                  </TableCell>
+                  <TableCell>{item.name}</TableCell>
+                  <TableCell>{item.description}</TableCell>
+                  <TableCell>{item.questionCount}</TableCell>
+                  <TableCell>{item.extraQuestionCount}</TableCell>
+                  <TableCell>{item.durationTime}</TableCell>
+                  <TableCell>{item.retakeDate}</TableCell>  
+                  <TableCell>{item.createdBy}</TableCell>
+                  <TableCell>{item.deleted && 'O"chirilgan'}</TableCell>
+                  <TableCell>{item.deletedBy}</TableCell>
+                  <TableCell className="flex gap-4 text-xl">
+                    <div className="cursor-pointer">
+                      <MdEdit />
+                    </div>
+                    <div className="cursor-pointer">
+                      <MdDelete />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </Layout>
 
     </div>
