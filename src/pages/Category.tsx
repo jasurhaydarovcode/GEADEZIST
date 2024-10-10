@@ -15,17 +15,13 @@ function Category() {
   return (
     <div>
       <Layout>
-      <div className="flex justify-between">
-          <h1 className="text-3xl font-bold font-sans">Hodimlar</h1>
-          <p className="font-sans text-gray-700">
-            Boshqaruv paneli / <span className="text-blue-700">Hodimlar</span>
-          </p>
+        <div className="flex justify-between">
+          <h1 className="text-3xl font-bold font-sans">Kategoriya</h1>
+          <p className="font-sans text-gray-700">Boshqaruv paneli / <span className="text-blue-700">Kategoriya</span></p>
         </div>
-        <div>
-          <Button color="default" variant="solid" className="text-xl px-5 py-6 my-5">
-            <PlusCircleOutlined className="text-xl" /> Qo'shish
-          </Button>
-        </div>
+        <Button color="black" className="bg-black hover:bg-black text-xl px- py-2 my-5 text-white">
+          <PlusCircleOutlined className="text-xl" /> Qo'shish
+        </Button>
         <Table hoverable>
               <TableHead>
                 <TableHeadCell>T/P</TableHeadCell>
