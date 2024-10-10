@@ -3,17 +3,39 @@ import { SlArrowDown } from 'react-icons/sl';
 import { FcSearch } from 'react-icons/fc';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Dashboard/Layout';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import checkLogin from "@/helpers/functions/checkLogin";
+import axios from "axios";
+import { baseUrl } from "@/helpers/api/baseUrl";
+import { AxiosResponse } from "axios";
 
 const AllUser: React.FC = (): JSX.Element => {
+  // interface users {
+  //   name: string;
+  //   lastname: string;
+  //   gmail: string;
+  // }
+
+  // const [data, setData] = useState<users[] | null>(null)
+
+  // useEffect(() => {
+  //   axios.get(baseUrl + `/user`)
+  //     .then((res) => {
+  //       setData(res.data?)
+  //     })
+  // })
+
+
+
+
+
+
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  
-
-
+  // checkLogin()
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
-
   const closeDropdown = () => {
     setIsDropdownOpen(false);
   };
