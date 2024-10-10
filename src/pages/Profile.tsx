@@ -7,7 +7,7 @@ import { useQuery } from "react-query";
 import { GetProfileType } from "@/helpers/types/GetProfileType";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 
 function Profile() {
   const getUserProfile = useQuery({
@@ -18,15 +18,18 @@ function Profile() {
     },
   });
   const navigate = useNavigate()
-  function checkRoleClient() {
+
+  // Move checkRoleClient inside useEffect or wrap it in useCallback
+  const checkRoleClient = useCallback(() => {
     const role = localStorage.getItem('role')
     if (role == 'ROLE_CLIENT') {
       navigate('/client/dashboard')
-    } 
-  }
+    }
+  }, [navigate]) // 'navigate' dependency added
+
   useEffect(() => {
     checkRoleClient()
-  }, [checkRoleClient])
+  }, [checkRoleClient]) // Ensure checkRoleClient is included in dependencies
 
   interface UserProfileData {
     body: GetProfileType;
@@ -121,7 +124,7 @@ function Profile() {
                 <label className="block text-sm text-gray-600">Ko'cha (To'liq)</label>
                 <input
                   type="text"
-                  value={getProfileData?.street == null ? 'NO data' : getProfileData?.street || "Admin MFY Exam Ko'chasi 21-uy"}
+                  value={getProfileData?.street == null ? 'No data' : getProfileData?.street || "Admin MFY Exam Ko'chasi 21-uy"}
                   className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                   readOnly
                 />
