@@ -5,8 +5,6 @@ import axios from "axios";
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
 import { useQuery } from "react-query";
 
-
-
 function Category() {
   const data = useQuery(['getAddress'], async () => {
     const res = await axios.get(`${baseUrl}category/page?page=0&size=10`, config)
@@ -34,6 +32,9 @@ function Category() {
                 <TableRow key={item.id} className="bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800">
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>{item.name}</TableCell>
+                  <TableCell>{item.description}</TableCell>
+                  <TableCell>{item.questionCount}</TableCell>
+                  <TableCell>{item.testCount}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
