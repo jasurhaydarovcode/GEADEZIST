@@ -22,7 +22,7 @@ function Category() {
           </p>
         </div>
         <div>
-          <Button color="default" className="text-xl px-5 py-6 my-5">
+          <Button color="default" variant="solid" className="text-xl px-5 py-6 my-5">
             <PlusCircleOutlined className="text-xl" /> Qo'shish
           </Button>
         </div>
