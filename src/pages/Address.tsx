@@ -7,8 +7,9 @@ import axios from "axios";
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
-import { useQuery } from "react-query";
+import { QueryClient, useMutation, useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function Address() { 
   const [open, setOpen] = useState(false);
@@ -28,6 +29,7 @@ function Address() {
     checkRoleClient()
   }, [checkRoleClient])
   const handleOk = () => {
+    postAddressData.mutate();
     setConfirmLoading(true);
     setTimeout(() => {
       setOpen(false);
@@ -38,11 +40,37 @@ function Address() {
   const handleCancel = () => {
     setOpen(false);
   };
-
+  // Address get qilish 
   const data = useQuery(['getAddress'], async () => {
     const res = await axios.get(`${baseUrl}region/getAllRegionPage?page=0&size=10`, config)
     return (res.data as { body: { body: string }}).body.body;
   })
+  
+  const queryClient = new QueryClient();
+
+  // Address post qilish
+  const [name, setName] = useState('')
+
+  const postAddressData = useMutation({
+    mutationFn: async () => {
+      const res = await axios.post(`${baseUrl}region`, {name}, config)
+      return (res.data as { body: { body: string }}).body.body;
+    },
+    onSuccess: () => {
+      toast.success("Manzil qo'shildi")
+      queryClient.invalidateQueries('getAddress')
+    },
+    onError: (error) => {
+      console.log('Xatolik:', error);
+      
+    }
+  })
+  // const postAddress = useQuery(['postAddress'], async () => {
+  //   const res = await axios.post(`${baseUrl}region/create`, config)
+  //   return (res.data as { body: { body: string }}).body.body;
+  // })
+
+
   
   return (
     <Layout> 
@@ -69,8 +97,10 @@ function Address() {
             <div className="mb-4">
               <input
                 type="text"
+                value={name}
                 placeholder="Viloyat nomini kiriting"
                 className="border w-full p-2 rounded"
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
           </Modal>
@@ -97,7 +127,7 @@ function Address() {
           </Table>
           <Pagination className="mt-5" defaultCurrent={1} total={20} />
         </div>
-        <div className="flex justify-between items-center">
+        {/* <div className="flex justify-between items-center">
           <p className="font-sans text-2xl text-gray-700">Tumanlar</p>
           <Button onClick={showModal} color="default" variant="solid" className=" text-xl px-5 py-6 my-5">
             <PlusCircleOutlined className="text-xl"/>Qo'shish 
@@ -147,7 +177,7 @@ function Address() {
             </TableBody>
           </Table>
           <Pagination className="mt-5" defaultCurrent={1} total={30} />
-        </div>
+        </div> */}
       </div>
     </Layout> 
   )
