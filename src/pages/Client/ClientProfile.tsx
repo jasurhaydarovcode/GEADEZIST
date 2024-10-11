@@ -7,73 +7,47 @@ import { baseUrl, getProfile } from "@/helpers/api/baseUrl";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import { config } from "@/helpers/functions/token";
+import GetMetype from "../../helpers/types/GetMetype.ts";
 
 function ClientProfile() {
-  // const [profileData, setProfileData] = useState({
-  //   firstName: "",
-  //   lastName: "",
-  //   region: "",
-  //   district: "",
-  //   email: "",
-  //   address: "",
-  //   profileImage: "",
-  // });
+  const navigate = useNavigate();
 
-  // Fetch profile data from the API
-  useEffect(() => {
-    axios
-      .get(`${baseUrl}statistics-controller`)
-      .then((response) => {
-        const data = response.data?.body;
-        setProfileData({
-          firstName: data.firstName || "Foydalanuvchi",
-          lastName: data.lastName || "Foydalaniyev",
-          region: data.region || "Shaxarli Viloyati",
-          district: data.district || "Shaxarsiz Shaxri",
-          email: data.email || "foydalanibqol@gmail.com",
-          address: data.address || "Ko'chabu MFY Foyda Ko'chasi 21-uy",
-          profileImage: data.profileImage || "",
-        });
-      })
-      .catch((error) => {
-        console.error("Error fetching profile data:", error);
-      });
-  }, []);
-
-  const navigate = useNavigate()
-  function checkRoleClient() {
-    const role = localStorage.getItem('role')
-    const token = localStorage.getItem('token')
-    if (role == 'ROLE_SUPER_ADMIN') {
-      navigate('/dashboard')
-    } else if (role == 'ROLE_TESTER') {
-      navigate('/category')
+  // Tekshirish uchun role va tokenni faqat bir marta ishlatish uchun useCallback qo'llaymiz
+  const checkRoleClient = () => {
+    const role = localStorage.getItem("role");
+    const token = localStorage.getItem("token");
+    if (role === "ROLE_SUPER_ADMIN") {
+      navigate("/dashboard");
+    } else if (role === "ROLE_TESTER") {
+      navigate("/category");
     }
 
-    if (token == null) {
-      navigate('/auth/Signin')
+    if (!token) {
+      navigate("/auth/Signin");
     }
-  }
+  };
 
-  const getMeUser = useQuery({
-    queryKey: ['getMeUser'],
+  // Ma'lumotni React Query orqali olish
+  const { data: getMeUserData, error: queryError } = useQuery({
+    queryKey: ["getMeUser"],
     queryFn: async () => {
-      const response = await axios.get(`${getProfile}`, config);
-      return response.data
+      const response = await axios.get(getProfile, config);
+      return response.data;
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       console.error("Error fetching profile data:", error);
     },
-    // refetchInterval: 1000 * 60 * 5, // 5 minutes
-    staleTime: 1000 * 60 * 5, // 5 minutes
-    cacheTime: 1000 * 60 * 15, // 15 minutes
-  })
-  const profileData: GetMetype = getMeUser.data?.body as GetMetype
-  console.log(profileData);
+    staleTime: 1000 * 60 * 5,
+    cacheTime: 1000 * 60 * 15,
+  });
+
+  const profileData: GetMetype =
+    (getMeUserData as { body?: GetMetype })?.body || ({} as GetMetype);
 
   useEffect(() => {
-    checkRoleClient()
-  }, [checkRoleClient])
+    checkRoleClient();
+  }, []);
+
   return (
     <Layout>
       <div className="flex flex-col items-center md:p-4 p-0">
@@ -83,12 +57,10 @@ function ClientProfile() {
             <h4 className="text-2xl text-red-600 font-semibold pb-4">Foydalanuvchi rasmi</h4>
             <img
               className="w-40 relative h-40 rounded-full object-cover"
-              src={profileData?.profileImage ? profileData?.profileImage : noImageClientDefaultImage}
-              // src={profileData.profileImage || noImageClientDefaultImage} // user agar rasm quymasa shu default rasm quyiladi
+              src={
+                profileData?.profileImage ? profileData?.profileImage : noImageClientDefaultImage
+              }
               alt="User Image"
-              // onError={(e) => {
-              //   e.currentTarget.src = noImageClientDefaultImage;
-              // }}
             />
             <button className="absolute ml-28 mt-40 bg-red-500 text-white p-2 rounded-full">
               <BiSolidPencil />
@@ -96,7 +68,9 @@ function ClientProfile() {
           </div>
 
           {/* Profile Info Section */}
-          <div className="text-center text-red-500 text-xl mb-4">Sizning Ma'lumotlaringiz</div>
+          <div className="text-center text-red-500 text-xl mb-4">
+            Sizning Ma'lumotlaringiz
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Name */}
@@ -104,7 +78,7 @@ function ClientProfile() {
               <label className="block text-lg text-gray-600">Ism</label>
               <input
                 type="text"
-                value={profileData?.firstName}
+                value={profileData?.firstName || "No First Name"}
                 className="clientProfileDatasStyles"
                 readOnly
               />
@@ -115,7 +89,7 @@ function ClientProfile() {
               <label className="block text-lg text-gray-600">Familiya</label>
               <input
                 type="text"
-                value={profileData?.lastName}
+                value={profileData?.lastName || "No Last Name"}
                 className="clientProfileDatasStyles"
                 readOnly
               />
@@ -126,7 +100,7 @@ function ClientProfile() {
               <label className="block text-lg text-gray-600">Viloyat</label>
               <input
                 type="text"
-                value={profileData?.region ? profileData?.region : 'No region '}
+                value={profileData?.region || "No Region"}
                 className="clientProfileDatasStyles"
                 readOnly
               />
@@ -137,7 +111,7 @@ function ClientProfile() {
               <label className="block text-lg text-gray-600">Tuman</label>
               <input
                 type="text"
-                value={profileData?.district ? profileData?.district : 'No District'}
+                value={profileData?.district || "No District"}
                 className="clientProfileDatasStyles"
                 readOnly
               />
@@ -148,7 +122,7 @@ function ClientProfile() {
               <label className="block text-lg text-gray-600">E-pochta manzili</label>
               <input
                 type="email"
-                value={profileData?.email}
+                value={profileData?.email || "No Email"}
                 className="clientProfileDatasStyles"
                 readOnly
               />
@@ -159,7 +133,7 @@ function ClientProfile() {
               <label className="block text-lg text-gray-600">Ko'cha (To'liq)</label>
               <input
                 type="text"
-                value={profileData?.address ? profileData?.address : 'No Adress'}
+                value={profileData?.address || "No Address"}
                 className="clientProfileDatasStyles"
                 readOnly
               />
@@ -167,10 +141,12 @@ function ClientProfile() {
 
             {/* Phone Number */}
             <div>
-              <label className="block text-lg text-gray-600">Telefon raqamingiz <span className="text-red-500">(namuna: 998912345678)</span></label>
+              <label className="block text-lg text-gray-600">
+                Telefon raqamingiz <span className="text-red-500">(namuna: 998912345678)</span>
+              </label>
               <input
                 type="text"
-                value={profileData?.phoneNumber}
+                value={profileData?.phoneNumber || "No Phone Number"}
                 className="clientProfileDatasStyles"
                 readOnly
               />
@@ -178,10 +154,12 @@ function ClientProfile() {
 
             {/* User Brithday */}
             <div>
-              <label className="block text-lg text-gray-600">Tug'ilgan kuningiz <span>(namuna: yil-oy-kun: 2003-02-09)</span></label>
+              <label className="block text-lg text-gray-600">
+                Tug'ilgan kuningiz <span>(namuna: yil-oy-kun: 2003-02-09)</span>
+              </label>
               <input
                 type="text"
-                value={profileData?.dateOfBirth ? profileData?.dateOfBirth : "No Brithday"}
+                value={profileData?.dateOfBirth || "No Birthday"}
                 className="clientProfileDatasStyles"
                 readOnly
               />

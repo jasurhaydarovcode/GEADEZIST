@@ -3,8 +3,6 @@ import React from 'react';
 import { IoEyeOutline } from 'react-icons/io5';
 
 interface PreviewOverlayProps {
-    // Define any props if needed. For now, we'll keep it simple.
-    // For example, you might want to pass in children or additional classes
     children?: React.ReactNode;
 }
 
