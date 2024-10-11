@@ -18,11 +18,11 @@ function Category() {
     return res.data.body.body;
   });
 
-  // Yangi kategoriya qo'shilgandan keyin ma'lumotlarni yangilaydi
-  const handleAddCategory = () => {
-    queryClient.invalidateQueries(['getCategories']); // Keshni yangilaydi
-    refetch(); // Yangi ma'lumotlarni olish
-  };
+  // // Yangi kategoriya qo'shilgandan keyin ma'lumotlarni yangilaydi
+  // const handleAddCategory = () => {
+  //   queryClient.invalidateQueries(['getCategories']); // Keshni yangilaydi
+  //   refetch(); // Yangi ma'lumotlarni olish
+  // };
 
   // Kategoriyani o'chirish funksiyasi
   const handleDeleteCategory = async (categoryId: string) => {
