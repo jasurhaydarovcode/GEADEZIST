@@ -1,6 +1,7 @@
-import { useRef, useState } from 'react';
-import { Button, Modal, Input, Select, notification } from 'antd';
+import { useState } from 'react';
+import { Button, Modal, Input, Select } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
+import { useMutation, useQueryClient } from 'react-query'; // Ma'lumotlarni jo'natish uchun React Query ishlatyapmiz
 import axios from 'axios';
 import { baseUrl } from '@/helpers/api/baseUrl';
 
@@ -11,7 +12,8 @@ interface CategoryAddModalProps {
 }
 
 const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) => {
-  const formRef = useRef({
+  // Form qiymatlarini boshqarish uchun useState ishlatyapmiz
+  const [formData, setFormData] = useState({
     name: '',
     description: '',
     questionCount: 0,
@@ -19,14 +21,38 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
     durationTime: 0,
     retakeDate: 0,
     fileId: 0,
-    main: true,
+    main: false, // Asosiy kategoriya uchun boshlang'ich qiymat true
   });
 
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+//   const [loading, setLoading] = useState(false);
 
+  const queryClient = useQueryClient();
+
+  // React Query orqali POST so'rovini bajaryapmiz
+  const mutation = useMutation(
+    async (newCategory: any) => {
+      const response = await axios.post(`${baseUrl}category`, newCategory, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      return response.data; // To'g'ridan-to'g'ri response ni emas, balki response.data ni qaytaradi
+    },
+    {
+      onSuccess: (data) => {
+        queryClient.invalidateQueries('categories'); // Kategoriyalarni yangilash
+        console.log('Kategoriya muvaffaqiyatli qo\'shildi:', data);
+      },
+      onError: (error) => {
+        console.error('Xatolik yuz berdi:', error);
+      },
+    }
+  );
+
+  // Formani tozalash funksiyasi
   const resetForm = () => {
-    formRef.current = {
+    setFormData({
       name: '',
       description: '',
       questionCount: 0,
@@ -34,43 +60,27 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
       durationTime: 0,
       retakeDate: 0,
       fileId: 0,
-      main: false,
-    };
+      main: true, // Yana asosiy bo'lishi uchun true qiymatga qaytariladi
+    });
   };
 
-  const handleSave = async () => {
-    setLoading(true);
-    axios
-      .post(`${baseUrl}category`, formRef.current, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
-      .then((response) => {
-        onAddCategory(response.data);
-        notification.success({
-          message: "Kategoriya muvaffaqiyatli qo'shildi",
-        });
-        resetForm();
-        setOpen(false);
-      })
-      .catch((error) => {
-        console.error('Xatolik:', error);
-        notification.error({
-          message: 'Xatolik yuz berdi',
-          description: "Kategoriya qo'shishda xatolik yuz berdi, iltimos qayta urinib ko'ring",
-        });
-      })
-    //   .finally(() => {
-    //     setLoading(false);
-    //   }) as Promise<void>;
+  // Ma'lumotlarni saqlash uchun so'rov jo'natiladi
+  const handleSave = () => {
+    mutation.mutate(formData, {
+      onSuccess: (data) => {
+        onAddCategory(data); // Yangi kategoriyani ota-komponenta uzatish
+        setOpen(false); // Modalni yopish
+        resetForm(); // Formani tozalash
+      }
+    });
   };
 
   const handleCancel = () => {
-    resetForm();
-    setOpen(false);
+    resetForm(); // Formani tozalash
+    setOpen(false); // Modalni yopish
   };
 
+  // Input uchun CSS class nomlari
   const InputStyles = {
     input: 'w-full rounded-lg border',
   };
@@ -89,17 +99,29 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
         width={600}
         okText="Saqlash"
         cancelText="Yopish"
-        confirmLoading={loading}
+        confirmLoading={mutation.isLoading} // Saqlanish jarayonida yuklanish holati
         maskClosable={false}
       >
         <div className="space-y-4">
+        <div>
+            <label className="block mb-2">Asosiy Kategoriya</label>
+            <Select
+              value={formData.main ? 'asosiy' : 'asosiy-bolmagan'}
+              onChange={(value) => setFormData({ ...formData, main: value === 'asosiy' })}
+              className="w-full"
+            >
+              <Option value="asosiy">Asosiy</Option>
+              <Option value="asosiy-bolmagan">Asosiy bo'lmagan</Option>
+            </Select>
+          </div>
+
           <div>
             <label className="block mb-2">Kategoriya Nomi</label>
             <Input
               className={InputStyles.input}
               placeholder="Kategoriya nomini kiriting"
-              defaultValue={formRef.current.name}
-              onChange={(e) => (formRef.current.name = e.target.value)}
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             />
           </div>
           <div>
@@ -107,8 +129,8 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
             <Input
               className={InputStyles.input}
               placeholder="Tavsifni kiriting"
-              defaultValue={formRef.current.description}
-              onChange={(e) => (formRef.current.description = e.target.value)}
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
             />
           </div>
           <div>
@@ -117,8 +139,8 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
               className={InputStyles.input}
               type="number"
               placeholder="Umumiy savollar sonini kiriting"
-              defaultValue={formRef.current.questionCount}
-              onChange={(e) => (formRef.current.questionCount = Number(e.target.value))}
+              value={formData.questionCount}
+              onChange={(e) => setFormData({ ...formData, questionCount: Number(e.target.value) })}
               min="0"
             />
           </div>
@@ -128,8 +150,8 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
               className={InputStyles.input}
               type="number"
               placeholder="Qo'shimcha savollar sonini kiriting"
-              defaultValue={formRef.current.extraQuestionCount}
-              onChange={(e) => (formRef.current.extraQuestionCount = Number(e.target.value))}
+              value={formData.extraQuestionCount}
+              onChange={(e) => setFormData({ ...formData, extraQuestionCount: Number(e.target.value) })}
               min="0"
             />
           </div>
@@ -139,8 +161,8 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
               className={InputStyles.input}
               type="number"
               placeholder="Davomiylik (daqiqa)"
-              defaultValue={formRef.current.durationTime}
-              onChange={(e) => (formRef.current.durationTime = Number(e.target.value))}
+              value={formData.durationTime}
+              onChange={(e) => setFormData({ ...formData, durationTime: Number(e.target.value) })}
               min="0"
             />
           </div>
@@ -150,21 +172,10 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
               className={InputStyles.input}
               type="number"
               placeholder="Qayta qabul qilish sanasi"
-              defaultValue={formRef.current.retakeDate}
-              onChange={(e) => (formRef.current.retakeDate = Number(e.target.value))}
+              value={formData.retakeDate}
+              onChange={(e) => setFormData({ ...formData, retakeDate: Number(e.target.value) })}
               min="0"
             />
-          </div>
-          <div>
-            <label className="block mb-2">Asosiy Kategoriya</label>
-            <Select
-              value={formRef.current.main ? 'asosiy' : 'asosiy-bolmagan'}
-              onChange={(value) => (formRef.current.main = value === 'asosiy')}
-              className="w-full"
-            >
-              <Option value="asosiy">Asosiy</Option>
-              <Option value="asosiy-bolmagan">Asosiy bo'lmagan</Option>
-            </Select>
           </div>
         </div>
       </Modal>
