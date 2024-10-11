@@ -3,7 +3,8 @@ import { Logo, registerRasm } from "@/helpers/imports/images";
 import { SignUpType } from "@/helpers/types/LoginType";
 import axios  from "axios";
 import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function SignUp() {
@@ -14,30 +15,41 @@ function SignUp() {
   const lastname = useRef<HTMLInputElement>(null);
   const phone = useRef<HTMLInputElement>(null);
   const offer = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
   
   // Jinsni select orqali tanlash uchun state
   const [genderValue, setGenderValue] = useState<string>("");
+  const [showpassword, setShowpassword] = useState<boolean>(false);
+  const [showconfirmPassword, setShowconfirmPassword] = useState<boolean>(false);
  
   function signUpPost() {
     if (!firstname.current?.value || !lastname.current?.value || !phone.current?.value) {
-      toast.error("Iltimos, bo'shliqni to'ldiring");
+      toast.warning("Iltimos, bo'shliqni to'ldiring");
       return;
     }
     if (!email.current?.value || !password.current?.value || !confirmPassword.current?.value) {
-      toast.error("Iltimos, bo'shliqni to'ldiring");
+      toast.warning("Iltimos, bo'shliqni to'ldiring");
       
       return;
     }
-    if (password.current?.value !== confirmPassword.current?.value) {
-      toast.error("Parollar bir xil emas");
+    if(!email.current?.value.includes("@gmail.com")) {
+      toast.warning("Iltimos, emailni to'liq kiriting");
       return;
     }
-    // if (!offer.current?.value) {
-    //   toast.error("Iltimos, Offer bilan tanishib chiqing");
-    //   return;
-    // }
+    if(password.current?.value.length < 5) {
+      toast.warning("Parol kamida 5 ta belgidan iborat bo'lishi kerak");
+      return;
+    }
+    if (password.current?.value !== confirmPassword.current?.value) {
+      toast.warning("Parollar bir xil emas");
+      return;
+    }
+    if (!offer.current?.checked) {
+      toast.warning("Iltimos, Offer bilan tanishib chiqing");
+      return;
+    }
     if (!genderValue) {
-      toast.error("Iltimos, jinsni tanlang");
+      toast.warning("Iltimos, jinsni tanlang");
       return;
     }
     const data: SignUpType = {
@@ -53,17 +65,20 @@ function SignUp() {
     axios.post(`${baseUrl}auth/register?genderType=${genderValue}`, data)
       .then((res) => {
 
-        if (res.status === 200) {
+        if (res.status === 200 || res.status === 201) {
           toast.success("Ro'yxatdan o'tdingiz");
-          
+          navigate("/auth/confirm-signup");          
         }
         toast.success("Ro'yxatdan o'tdingiz");
         console.log(res);
       })
       .catch((err) => {
-        const errorMessage = err.response?.data?.message || "Xatolik yuz berdi";
-        toast.error(errorMessage);
-        console.log(err);
+        if (err.response?.status === 404) {
+          toast.warning("Serverda xatolik yuz berdi");
+        }
+        else if(err.response?.status === 400 || err.response?.status === 401 || err.response?.status === 403) {
+          toast.error("Bu email bilan ro'yxatdan o'tilgan");
+        }
       });
       
   }
@@ -138,42 +153,69 @@ function SignUp() {
                   type="tel"
                   id="phoneNumber"
                   name="phoneNumber"
-                  placeholder="+998 XX XXX XX XX"
+                  placeholder="998 XX XXX XX XX"
                   required
                   className="w-full px-4 mt-2 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                 />
-              </div>
-
-              <div className="mb-4">
-                <label htmlFor="password" className="block text-sm font-semibold text-gray-600">
-                  Parol
-                </label>
-                <input
-                  ref={password}
-                  type="password"
-                  id="password"
-                  name="password"
-                  placeholder="Yangi parolni kiriting"
-                  required
-                  className="w-full px-4 mt-2 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
-                />
-                <p className="text-xs ">Parol kamida 5 ta belgidan iborat</p>
               </div>
 
               <div className="mb-4">
                 <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-600">
                   Parolni tasdiqlang
                 </label>
-                <input
-                  ref={confirmPassword}
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  placeholder="Parolni qayta kiriting"
-                  required
-                  className="w-full px-4 mt-2 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
-                />
-              </div>
+                  {/* Wrapper div to apply flexbox */}
+                  <div className="flex items-center border rounded-lg mt-2">
+                    <input
+                      ref={password}
+                      type={showpassword ? "text" : "password"}
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      placeholder="Parolni qayta kiriting"
+                      required
+                      className="w-full px-4 py-2 text-sm rounded-lg "
+                    />
+                    {/* Eye icon */}
+                    <span
+                      onClick={() => setShowpassword(!showpassword)}
+                      className="px-3 cursor-pointer text-gray-800"
+                    >
+                      {showpassword ? <AiOutlineEye/> : <AiOutlineEyeInvisible />}
+                    </span>
+                  </div>
+  
+                            <p className="text-xs mt-2">Parol kamida 5 ta belgidan iborat</p>
+                          </div>
+
+
+              <div className="mb-4">
+                  <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-600">
+                    Parolni tasdiqlang
+                  </label>
+                  
+                  {/* Wrapper div to apply flexbox */}
+                  <div className="flex items-center border rounded-lg mt-2">
+                    <input
+                      ref={confirmPassword}
+                      type={showconfirmPassword ? "text" : "password"}
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      placeholder="Parolni qayta kiriting"
+                      required
+                      className="w-full px-4 py-2 text-sm rounded-lg "
+                    />
+                    {/* Eye icon */}
+                    <span
+                      onClick={() => setShowconfirmPassword(!showconfirmPassword)}
+                      className="px-3 cursor-pointer text-gray-800"
+                    >
+                      {showconfirmPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
+                    </span>
+                  </div>
+                  
+                  <p className="text-xs mt-2">Parol kamida 5 ta belgidan iborat</p>
+                </div>
+
+
 
               {/* Jins tanlash */}
               <div className="mb-4">
@@ -195,12 +237,13 @@ function SignUp() {
               <div className="mb-6">
                 <label className="flex items-center">
                   <input
+                    ref={offer}
                     required
                     type="checkbox"
                     name="acceptedTerms"
                     className="form-checkbox h-4 w-4 text-blue-600"
                   />
-                  <span ref={offer} className="ml-2 text-sm text-gray-600">
+                  <span  className="ml-2 text-sm text-gray-600">
                     Foydalanish shartlarini qabul qilaman. 
                     <Link to={'/auth/offer'} className="text-blue-600 hover:underline">Offer</Link>
                   </span>

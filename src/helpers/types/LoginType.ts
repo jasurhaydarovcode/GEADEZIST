@@ -20,3 +20,6 @@ export interface SignUpType {
     confirmPassword: null | string
     role: null | string
 }
+export interface ForgetPasswordType {
+    code: null | string
+}

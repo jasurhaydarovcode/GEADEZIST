@@ -26,6 +26,7 @@ import Address from './pages/Address';
 import InspectorAdmin from './pages/InspectorAdmin';
 import Category from './pages/Category';
 import Profile from './pages/Profile';
+import ConfirmSignUp from './pages/Auth/ConfirmSignUp';
 // import { useEffect } from 'react';
 
 function App() {
@@ -47,7 +48,8 @@ function App() {
       <Route path="/auth/SignIn" element={<SignIn />} />
       <Route path="/auth/SignUp" element={<SignUp />} />
       <Route path="/auth/confirm" element={<Confirm />} />
-      <Route path="/auth/reset-password" element={<ResetPassword />} />
+      <Route path="/auth/confirm-signup" element={<ConfirmSignUp/>} />
+      <Route path="/auth/reset-password" element={<ResetPassword/>} />
       <Route path="/auth/offer" element={<Offer />} />
       {/* END Authentication Routes */}
 

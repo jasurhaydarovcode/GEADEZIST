@@ -3,16 +3,19 @@ import { registerRasm } from "@/helpers/imports/images";
 import { Logo } from "@/helpers/imports/images";
 import { ConfirmType} from "@/helpers/types/LoginType";
 import axios from "axios";
-import { useRef } from "react";
+import { useRef} from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function Confirm() {
     const email = useRef<HTMLInputElement | null>(null);
     const navigate = useNavigate();
+    // const [loading , setLoading] = useState(false);
 
     // Forget Password funksiyasi
     function forgetPassword() {
+      // setLoading(true);
+
       if (!email.current?.value) {
         toast.error("Iltimos, elektron pochtangizni kiriting!"); // Elektron pochta kiritilmagan bo'lsa xabar beriladi
         return;
@@ -21,18 +24,23 @@ function Confirm() {
       const data : ConfirmType = {
         email: email.current?.value,
       };
-
       axios.put(`${baseUrl }auth/forgot-password`,data)
       .then((res) => {
           const data = res.data as { status: string; message: string };
           if(data.status === 'OK') {
-            toast.success(data.message);
+            toast.success("Emailga code yuborildi");
             navigate("/auth/reset-password");
+            console.log(data.message);
+            
         }})
         .catch((err) => {
-          const errorMessage = err.response?.data?.message;
-          toast.error(errorMessage);
-        });
+          if(err.response?.status === 404) {
+            toast.warning('Emailni togri kiritmadingiz!');
+        }
+        else {
+          toast.error('Qayta tekshirib ko\'ring!');
+        }
+      })
     }
 
     return (
@@ -65,8 +73,9 @@ function Confirm() {
                 <button
                   onClick={forgetPassword}
                   type="submit"
-                  className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+                  className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
                 >
+                  {/* {loading ? "Tasdiqlamoqda" : "Tasdiqlash"} */}
                   Tasdiqlash
                 </button>
               </div>
