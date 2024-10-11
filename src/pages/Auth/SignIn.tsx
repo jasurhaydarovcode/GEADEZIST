@@ -53,17 +53,12 @@ function SignIn() {
       }
       toast.success('Tizimga kirish muvaffaqiyatli', { position: 'top-center' })
     },
-    onError: (error: any) => {
-      
 
-      if (email.current?.value === '' || password.current?.value === '') {
-        toast.warning('Email va parolni to\'liq kiriting')
-      }
-      else if(error.status === 401 || error.status === 400 || error.status === 404) {
-        toast.warning("Email yoki parol xato")
-      }
-      else {
-        toast.error(error.message)
+    onError: (error: unknown) => {
+      if (error instanceof Error) {
+        if (email.current?.value === '' || password.current?.value === '') {
+          toast.warning('Email va parolni to\'liq kiriting')
+        }
       }
     },
   })
