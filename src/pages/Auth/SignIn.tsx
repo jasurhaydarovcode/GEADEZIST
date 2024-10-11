@@ -1,25 +1,28 @@
-import { loginUrl } from "@/helpers/api/baseUrl";
-import { registerRasm } from "@/helpers/imports/images";
-import { Logo } from "@/helpers/imports/images";
-import axios from "axios";
-import { AxiosResponse } from "axios";
-import { useEffect, useRef } from "react";
-import { useMutation } from "react-query";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { loginUrl } from '@/helpers/api/baseUrl';
+import { registerRasm } from '@/helpers/imports/images';
+import { Logo } from '@/helpers/imports/images';
+import axios from 'axios';
+import { AxiosResponse } from 'axios';
+import { useEffect, useRef } from 'react';
+import { useMutation } from 'react-query';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 function SignIn() {
   const email = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   function checkRoleClient() {
-    const role = localStorage.getItem('role')
-    if (role == 'ROLE_SUPER_ADMIN' && localStorage.getItem('token') || role == 'ROLE_TESTER' && localStorage.getItem('token')) {
-      navigate('/dashboard')
+    const role = localStorage.getItem('role');
+    if (
+      (role == 'ROLE_SUPER_ADMIN' && localStorage.getItem('token')) ||
+      (role == 'ROLE_TESTER' && localStorage.getItem('token'))
+    ) {
+      navigate('/dashboard');
     } else if (role == 'ROLE_CLIENT' && localStorage.getItem('token')) {
-      navigate('/client/dashboard')
+      navigate('/client/dashboard');
     } else {
-      navigate('/auth/Signin')
+      navigate('/auth/Signin');
     }
   }
   function handleCheckPassword() {
@@ -32,42 +35,47 @@ function SignIn() {
     }
   }
   useEffect(() => {
-    checkRoleClient()
-  }, [])
+    checkRoleClient();
+  }, []);
   const login = useMutation({
     mutationFn: async () => {
-      const data = { email: email.current?.value, password: password.current?.value }
-      const res = await axios.post(loginUrl, data)
-      return res
+      const data = {
+        email: email.current?.value,
+        password: password.current?.value,
+      };
+      const res = await axios.post(loginUrl, data);
+      return res;
     },
     onSuccess: (res: AxiosResponse) => {
-      localStorage.setItem('token', res.data.token)
-      localStorage.setItem('role', res.data.role)
+      localStorage.setItem('token', res.data.token);
+      localStorage.setItem('role', res.data.role);
       if (res.data.role === 'ROLE_SUPER_ADMIN') {
-        navigate('/dashboard')
+        navigate('/dashboard');
       } else if (res.data.role === 'ROLE_TESTER') {
-        navigate('/category')
+        navigate('/category');
       } else if (res.data.role === 'ROLE_CLIENT') {
-        navigate('/client/dashboard')
+        navigate('/client/dashboard');
       } else if (res.data.role === 'ROLE_ADMIN') {
-        navigate('/dashboard')
+        navigate('/dashboard');
       }
-      toast.success('Tizimga kirish muvaffaqiyatli', { position: 'top-center' })
+      toast.success('Tizimga kirish muvaffaqiyatli', {
+        position: 'top-center',
+      });
     },
 
     onError: (error: unknown) => {
       if (error instanceof Error) {
         if (email.current?.value === '' || password.current?.value === '') {
-          toast.warning('Email va parolni to\'liq kiriting')
+          toast.warning("Email va parolni to'liq kiriting");
         }
       }
     },
-  })
+  });
   const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      login.mutate()
+      login.mutate();
     }
-  }
+  };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="flex flex-col lg:flex-row w-full lg:w-5/6 lg:h-[700px] bg-white shadow-lg rounded-lg overflow-hidden">
@@ -85,7 +93,10 @@ function SignIn() {
             </h2>
             <div>
               <div className="mb-4">
-                <label htmlFor="email" className="block text-sm font-semibold text-gray-600">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-semibold text-gray-600"
+                >
                   Elektron pochta
                 </label>
                 <input
@@ -98,12 +109,15 @@ function SignIn() {
                 />
               </div>
               <div className="mb-6">
-                <label htmlFor="password" className="block text-sm font-semibold text-gray-600">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-semibold text-gray-600"
+                >
                   Parol
                 </label>
                 <input
                   ref={password}
-                  type='password'
+                  type="password"
                   onKeyDown={handleEnter}
                   id="password"
                   placeholder="Parolni kiriting"
@@ -112,9 +126,12 @@ function SignIn() {
                 <br />
                 <br />
                 <div className="flex items-center gap-5">
-                  <input type="checkbox" onClick={handleCheckPassword} id="checkbox" />
+                  <input
+                    type="checkbox"
+                    onClick={handleCheckPassword}
+                    id="checkbox"
+                  />
                   <label htmlFor="checkbox">Parolni ko'rsatish</label>
-
                 </div>
                 <br />
                 <small className="text-gray-500">
@@ -131,10 +148,16 @@ function SignIn() {
             </div>
 
             <div className="flex justify-between items-center mt-4 lg:mt-6">
-              <Link to={'/auth/signup'} className="text-sm text-blue-500 hover:underline">
+              <Link
+                to={'/auth/signup'}
+                className="text-sm text-blue-500 hover:underline"
+              >
                 Ro'yhatdan o'tish
               </Link>
-              <Link to={'/auth/confirm'} className="text-sm text-blue-500 hover:underline">
+              <Link
+                to={'/auth/confirm'}
+                className="text-sm text-blue-500 hover:underline"
+              >
                 Parolni unutdingizmi?
               </Link>
             </div>

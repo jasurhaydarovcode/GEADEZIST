@@ -72,8 +72,9 @@ const Navbar: React.FC = () => {
       <div className="flex justify-between items-center">
         {/* User section */}
         <div
-          className={`relative ${getMe.isLoading ? 'pointer-events-none opacity-50' : ''
-            }`} // Disable dropdown trigger while loading
+          className={`relative ${
+            getMe.isLoading ? 'pointer-events-none opacity-50' : ''
+          }`} // Disable dropdown trigger while loading
           onClick={toggleDropdown}
         >
           <div className="flex gap-4 items-center cursor-pointer">
@@ -85,8 +86,8 @@ const Navbar: React.FC = () => {
                 {getMe.isLoading
                   ? 'Loading...'
                   : (role === 'ROLE_SUPER_ADMIN' && 'super admin') ||
-                  (role === 'ROLE_TESTER' && 'tester') ||
-                  (role === 'ROLE_USER' && 'client')}
+                    (role === 'ROLE_TESTER' && 'tester') ||
+                    (role === 'ROLE_USER' && 'client')}
               </span>
             </div>
             <div>
@@ -109,8 +110,9 @@ const Navbar: React.FC = () => {
               <div>
                 <Link to={'/profile'}>
                   <button
-                    className={`flex items-center gap-2 w-full text-left hover:bg-gray-100 px-3 py-5 rounded ${getMe.isLoading ? 'pointer-events-none opacity-50' : ''
-                      }`}
+                    className={`flex items-center gap-2 w-full text-left hover:bg-gray-100 px-3 py-5 rounded ${
+                      getMe.isLoading ? 'pointer-events-none opacity-50' : ''
+                    }`}
                     disabled={getMe.isLoading}
                   >
                     <FaRegUser />
@@ -118,8 +120,9 @@ const Navbar: React.FC = () => {
                   </button>
                 </Link>
                 <button
-                  className={`flex items-center gap-2 w-full text-left hover:bg-gray-100 px-3 py-5 rounded ${getMe.isLoading ? 'pointer-events-none opacity-50' : ''
-                    }`}
+                  className={`flex items-center gap-2 w-full text-left hover:bg-gray-100 px-3 py-5 rounded ${
+                    getMe.isLoading ? 'pointer-events-none opacity-50' : ''
+                  }`}
                   onClick={openLogoutModal}
                   disabled={getMe.isLoading}
                 >

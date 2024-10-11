@@ -71,19 +71,23 @@ const Navbar: React.FC = () => {
         <div className="flex justify-end items-center">
           {/* User section */}
           <div>
-            <div className="flex justify-end gap-4 items-center cursor-pointer" onClick={toggleDropdown}>
+            <div
+              className="flex justify-end gap-4 items-center cursor-pointer"
+              onClick={toggleDropdown}
+            >
               <div>
                 <h1 className="text-gray-500 mr-2 text-md font-semibold">
                   {getMe.isLoading
                     ? 'Loading...'
-                    : `${getMeData?.fullName} ${role === 'ROLE_SUPER_ADMIN'
-                      ? '(super admin)'
-                      : role === 'ROLE_TESTER'
-                        ? '(tester)'
-                        : role === 'ROLE_USER'
-                          ? '(client)'
-                          : ''
-                    }`}
+                    : `${getMeData?.fullName} ${
+                        role === 'ROLE_SUPER_ADMIN'
+                          ? '(super admin)'
+                          : role === 'ROLE_TESTER'
+                            ? '(tester)'
+                            : role === 'ROLE_USER'
+                              ? '(client)'
+                              : ''
+                      }`}
                 </h1>
                 <p>Foydalanuvchi</p>
               </div>
@@ -101,7 +105,9 @@ const Navbar: React.FC = () => {
               <div className="absolute z-50 right-0 mt-2 w-56 bg-white border rounded-lg shadow-lg">
                 <div className="p-4">
                   <div className="font-bold">{getMeData?.fullName}</div>
-                  <div className="text-gray-500 text-sm">{getMeData?.email}</div>
+                  <div className="text-gray-500 text-sm">
+                    {getMeData?.email}
+                  </div>
                 </div>
                 <hr />
                 <div>

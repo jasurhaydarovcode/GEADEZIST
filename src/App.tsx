@@ -32,7 +32,7 @@ import ConfirmCode from './pages/Auth/ConfirmCode';
 function App() {
   // const navigate = useNavigate();
   // function LocalgaSaqlash(){
-  //   if(!localStorage.getItem('token')){ 
+  //   if(!localStorage.getItem('token')){
   //    navigate('/auth/SignIn')
   //   }
   // }
@@ -59,7 +59,7 @@ function App() {
       <Route path="/client/test/start" element={<ClientTestStart />} />
       <Route path="/client/quiz/:id" element={<ClientQuiz />} />
       {/* END Client Routes */}
-    
+
       {/* START Admin Routes */}
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/category" element={<Category />} />
@@ -69,8 +69,8 @@ function App() {
       <Route path="/archive/:id" element={<Archive />} />
       <Route path="/employees" element={<Employees />} />
       <Route path="/address" element={<Address />} />
-      <Route path="/profile" element={<Profile/>}/>
-      
+      <Route path="/profile" element={<Profile />} />
+
       <Route path="/inspector-admin" element={<InspectorAdmin />} />
       {/* END Admin Routes */}
     </Routes>

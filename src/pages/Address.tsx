@@ -1,15 +1,22 @@
-import Layout from "@/components/Dashboard/Layout";
-import { baseUrl } from "@/helpers/api/baseUrl";
-import { config } from "@/helpers/functions/token";
-import { PlusCircleOutlined } from "@ant-design/icons";
-import { Button, Modal, Pagination } from "antd";
-import axios from "axios";
-import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
-import { useEffect, useState } from "react";
-import { MdDelete, MdEdit } from "react-icons/md";
-import { QueryClient, useMutation, useQuery } from "react-query";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import Layout from '@/components/Dashboard/Layout';
+import { baseUrl } from '@/helpers/api/baseUrl';
+import { config } from '@/helpers/functions/token';
+import { PlusCircleOutlined } from '@ant-design/icons';
+import { Button, Modal, Pagination } from 'antd';
+import axios from 'axios';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeadCell,
+  TableRow,
+} from 'flowbite-react';
+import { useEffect, useState } from 'react';
+import { MdDelete, MdEdit } from 'react-icons/md';
+import { QueryClient, useMutation, useQuery } from 'react-query';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function Address() {
   const [open, setOpen] = useState(false);
@@ -17,17 +24,17 @@ function Address() {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false); // O'chirish modalini ko'rsatish uchun
   const [selectedAddress, setSelectedAddress] = useState(null); // O'chiriladigan manzilni saqlash
   const [putOpen, setPutOpen] = useState(false);
-   // Pagination holati
-   const [currentPage, setCurrentPage] = useState(1);
-   const [pageSize, setPageSize] = useState(10);
-   const [totalItems, setTotalItems] = useState(0); // Umumiy ma'lumotlar soni
+  // Pagination holati
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalItems, setTotalItems] = useState(0); // Umumiy ma'lumotlar soni
 
   const showModal = () => {
     setOpen(true);
   };
 
   const navigate = useNavigate();
-  
+
   function checkRoleClient() {
     const role = localStorage.getItem('role');
     if (role == 'ROLE_CLIENT') {
@@ -72,17 +79,28 @@ function Address() {
 
   const handlePutCancel = () => {
     setPutOpen(false);
-  };  
+  };
 
   // Viloyatlarni get qilish
-  const data = useQuery(['getAddress', currentPage], async () => {
-    const res = await axios.get(`${baseUrl}region/getAllRegionPage?page=${currentPage - 1}&size=${pageSize}`, config);
-    const responseData = (res.data as { body: { body: string, totalElements: number, totalPage: number }}).body;
-    setTotalItems(responseData.totalElements); // Umumiy ma'lumotlar sonini saqlaymiz
-    return responseData.body;
-  }, {
-    keepPreviousData: true, // Sahifa o'zgarganda eski ma'lumotlarni saqlab qoladi
-  });
+  const data = useQuery(
+    ['getAddress', currentPage],
+    async () => {
+      const res = await axios.get(
+        `${baseUrl}region/getAllRegionPage?page=${currentPage - 1}&size=${pageSize}`,
+        config,
+      );
+      const responseData = (
+        res.data as {
+          body: { body: string; totalElements: number; totalPage: number };
+        }
+      ).body;
+      setTotalItems(responseData.totalElements); // Umumiy ma'lumotlar sonini saqlaymiz
+      return responseData.body;
+    },
+    {
+      keepPreviousData: true, // Sahifa o'zgarganda eski ma'lumotlarni saqlab qoladi
+    },
+  );
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page); // Hozirgi sahifani yangilash
@@ -97,7 +115,7 @@ function Address() {
   const postAddressData = useMutation({
     mutationFn: async () => {
       const res = await axios.post(`${baseUrl}region`, { name }, config);
-      return (res.data as { body: { body: string }}).body.body;
+      return (res.data as { body: { body: string } }).body.body;
     },
     onSuccess: () => {
       toast.success("Manzil qo'shildi");
@@ -105,10 +123,10 @@ function Address() {
     },
     onError: (error) => {
       console.log('Xatolik:', error);
-    }
+    },
   });
-  
-  // Manzillarni o'chirish 
+
+  // Manzillarni o'chirish
   const deleteAddress = useMutation({
     mutationFn: async (addressId) => {
       await axios.delete(`${baseUrl}region/${addressId}`, config);
@@ -120,7 +138,7 @@ function Address() {
     onError: (error) => {
       toast.error('Xatolik yuz berdi');
       console.log('Xatolik:', error);
-    }
+    },
   });
 
   // Manzillarni put qilish
@@ -129,13 +147,13 @@ function Address() {
       await axios.put(`${baseUrl}region/${addressId}`, { name }, config);
     },
     onSuccess: () => {
-      toast.success("Manzil yangilandi");
+      toast.success('Manzil yangilandi');
       queryClient.invalidateQueries('getAddress');
     },
     onError: (error) => {
       toast.error('Xatolik yuz berdi');
       console.log('Xatolik:', error);
-    }
+    },
   });
 
   return (
@@ -149,8 +167,14 @@ function Address() {
         </div>
         <div className="flex justify-between items-center">
           <p className="font-sans text-2xl text-gray-700">Viloyatlar</p>
-          <Button onClick={showModal} color="default" variant="solid" className="text-xl px-5 py-6 my-5">
-            <PlusCircleOutlined className="text-xl" />Qo'shish
+          <Button
+            onClick={showModal}
+            color="default"
+            variant="solid"
+            className="text-xl px-5 py-6 my-5"
+          >
+            <PlusCircleOutlined className="text-xl" />
+            Qo'shish
           </Button>
           {/* Viloyat qo'shish uchun modal */}
           <Modal
@@ -181,16 +205,30 @@ function Address() {
               <TableHeadCell>Harakat</TableHeadCell>
             </TableHead>
             <TableBody className="divide-y">
-              {Array.isArray(data.data) && data.data.map((item, index) => (
-                <TableRow className="bg-white text-gray-700 dark:border-gray-700 dark:bg-gray-800" key={item.id}>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell className="flex gap-1 text-xl cursor-pointer">
-                    <MdEdit onClick={() => { setSelectedAddress(item.id); setPutOpen(true); }}/>
-                    <MdDelete onClick={() => { setSelectedAddress(item.id); setDeleteModalVisible(true); }} />
-                  </TableCell>
-                </TableRow>
-              ))}
+              {Array.isArray(data.data) &&
+                data.data.map((item, index) => (
+                  <TableRow
+                    className="bg-white text-gray-700 dark:border-gray-700 dark:bg-gray-800"
+                    key={item.id}
+                  >
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{item.name}</TableCell>
+                    <TableCell className="flex gap-1 text-xl cursor-pointer">
+                      <MdEdit
+                        onClick={() => {
+                          setSelectedAddress(item.id);
+                          setPutOpen(true);
+                        }}
+                      />
+                      <MdDelete
+                        onClick={() => {
+                          setSelectedAddress(item.id);
+                          setDeleteModalVisible(true);
+                        }}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
           {/* pagination */}
@@ -212,7 +250,9 @@ function Address() {
           okText="O'chirish"
           cancelText="Bekor qilish"
         >
-          <p className="text-center my-5 font-semibold">Viloyatni o'chirishni tasdiqlaysizmi?</p>
+          <p className="text-center my-5 font-semibold">
+            Viloyatni o'chirishni tasdiqlaysizmi?
+          </p>
         </Modal>
 
         {/* Put qilish uchun modal */}
@@ -236,8 +276,13 @@ function Address() {
         </Modal>
         <div className="flex justify-between items-center">
           <p className="font-sans text-2xl text-gray-700">Tumanlar</p>
-          <Button color="default" variant="solid" className="text-xl px-5 py-6 my-5">
-            <PlusCircleOutlined className="text-xl" />Qo'shish
+          <Button
+            color="default"
+            variant="solid"
+            className="text-xl px-5 py-6 my-5"
+          >
+            <PlusCircleOutlined className="text-xl" />
+            Qo'shish
           </Button>
         </div>
         <div>
@@ -249,14 +294,14 @@ function Address() {
               <TableHeadCell>Harakat</TableHeadCell>
             </TableHead>
             <TableBody className="divide-y">
-                <TableRow className="bg-white text-gray-700 dark:border-gray-700 dark:bg-gray-800" >
-                  <TableCell>1</TableCell>
-                  <TableCell>2</TableCell>
-                  <TableCell className="flex gap-1 text-xl cursor-pointer">
-                    <MdEdit />
-                    <MdDelete  />
-                  </TableCell>
-                </TableRow>
+              <TableRow className="bg-white text-gray-700 dark:border-gray-700 dark:bg-gray-800">
+                <TableCell>1</TableCell>
+                <TableCell>2</TableCell>
+                <TableCell className="flex gap-1 text-xl cursor-pointer">
+                  <MdEdit />
+                  <MdDelete />
+                </TableCell>
+              </TableRow>
             </TableBody>
           </Table>
           {/* pagination */}

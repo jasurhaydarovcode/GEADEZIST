@@ -15,7 +15,7 @@
 //     categoryType: 'asosiy-bolmagan',
 //     categoryName: '',
 //     description: '',
-//     totalQuestions: 0, 
+//     totalQuestions: 0,
 //     additionalQuestions: 0,
 //     duration: 0,
 //     retryDate: undefined,

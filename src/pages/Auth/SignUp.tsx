@@ -1,12 +1,12 @@
-import { baseUrl } from "@/helpers/api/baseUrl";
-import { Logo, registerRasm } from "@/helpers/imports/images";
-import { SignUpType } from "@/helpers/types/LoginType";
-import axios from "axios";
-import { AxiosError } from "axios";
-import { useRef, useState } from "react";
-import { useMutation } from "react-query";
-import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
+import { baseUrl } from '@/helpers/api/baseUrl';
+import { Logo, registerRasm } from '@/helpers/imports/images';
+import { SignUpType } from '@/helpers/types/LoginType';
+import axios from 'axios';
+import { AxiosError } from 'axios';
+import { useRef, useState } from 'react';
+import { useMutation } from 'react-query';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function SignUp() {
   const email = useRef<HTMLInputElement>(null);
@@ -16,33 +16,36 @@ function SignUp() {
   const lastname = useRef<HTMLInputElement>(null);
   const phone = useRef<HTMLInputElement>(null);
   const register = useMutation({
-    mutationFn: async () =>{
+    mutationFn: async () => {
       const data: SignUpType = {
-        firstname: firstname.current?.value || "",
-        lastname: lastname.current?.value || "", 
-        email: email.current?.value || "",
-        phoneNumber: phone.current?.value || "",
-        password: password.current?.value || "",
-        confirmPassword: confirmPassword.current?.value || "",
-        role: "user", // role ni kerak bo'lganda o'zgartiring
-      }
-      const res = await axios.post(`${baseUrl}auth/register?genderType=${genderValue.toUpperCase()}`, data)
-      console.log(res.data) 
-    } ,
+        firstname: firstname.current?.value || '',
+        lastname: lastname.current?.value || '',
+        email: email.current?.value || '',
+        phoneNumber: phone.current?.value || '',
+        password: password.current?.value || '',
+        confirmPassword: confirmPassword.current?.value || '',
+        role: 'user', // role ni kerak bo'lganda o'zgartiring
+      };
+      const res = await axios.post(
+        `${baseUrl}auth/register?genderType=${genderValue.toUpperCase()}`,
+        data,
+      );
+      console.log(res.data);
+    },
     onError: (error: AxiosError) => {
-      toast.error(error.message)
+      toast.error(error.message);
     },
     onSuccess: () => {
-      toast.success("Ro'yxatdan o'tdingiz")
-      navigate("/auth/")
-    }
-  })
+      toast.success("Ro'yxatdan o'tdingiz");
+      navigate('/auth/');
+    },
+  });
   // Jinsni select orqali tanlash uchun state
-  const [genderValue, setGenderValue] = useState<string>("");
+  const [genderValue, setGenderValue] = useState<string>('');
 
   function signUpPost() {
     if (!genderValue) {
-      toast.error("Iltimos, jinsni tanlang");
+      toast.error('Iltimos, jinsni tanlang');
       return;
     }
   }
@@ -64,7 +67,10 @@ function SignUp() {
             </h2>
             <div>
               <div className="mb-4">
-                <label htmlFor="firstName" className="block text-sm font-semibold text-gray-600">
+                <label
+                  htmlFor="firstName"
+                  className="block text-sm font-semibold text-gray-600"
+                >
                   Ism
                 </label>
                 <input
@@ -79,7 +85,10 @@ function SignUp() {
               </div>
 
               <div className="mb-4">
-                <label htmlFor="lastName" className="block text-sm font-semibold text-gray-600">
+                <label
+                  htmlFor="lastName"
+                  className="block text-sm font-semibold text-gray-600"
+                >
                   Familiya
                 </label>
                 <input
@@ -94,7 +103,10 @@ function SignUp() {
               </div>
 
               <div className="mb-4">
-                <label htmlFor="email" className="block text-sm font-semibold text-gray-600">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-semibold text-gray-600"
+                >
                   Email
                 </label>
                 <input
@@ -109,7 +121,10 @@ function SignUp() {
               </div>
 
               <div className="mb-4">
-                <label htmlFor="phoneNumber" className="block text-sm font-semibold text-gray-600">
+                <label
+                  htmlFor="phoneNumber"
+                  className="block text-sm font-semibold text-gray-600"
+                >
                   Telefon raqam
                 </label>
                 <input
@@ -124,7 +139,10 @@ function SignUp() {
               </div>
 
               <div className="mb-4">
-                <label htmlFor="password" className="block text-sm font-semibold text-gray-600">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-semibold text-gray-600"
+                >
                   Parol
                 </label>
                 <input
@@ -140,7 +158,10 @@ function SignUp() {
               </div>
 
               <div className="mb-4">
-                <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-600">
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-semibold text-gray-600"
+                >
                   Parolni tasdiqlang
                 </label>
                 <input
@@ -156,7 +177,12 @@ function SignUp() {
 
               {/* Jins tanlash */}
               <div className="mb-4">
-                <label htmlFor="gender" className="block text-sm font-semibold text-gray-600">Jins</label>
+                <label
+                  htmlFor="gender"
+                  className="block text-sm font-semibold text-gray-600"
+                >
+                  Jins
+                </label>
                 <select
                   id="gender"
                   name="gender"
@@ -181,7 +207,12 @@ function SignUp() {
                   />
                   <span className="ml-2 text-sm text-gray-600">
                     Foydalanish shartlarini qabul qilaman.
-                    <Link to={'/auth/offer'} className="text-blue-600 hover:underline">Offer</Link>
+                    <Link
+                      to={'/auth/offer'}
+                      className="text-blue-600 hover:underline"
+                    >
+                      Offer
+                    </Link>
                   </span>
                 </label>
               </div>
@@ -196,7 +227,10 @@ function SignUp() {
             </div>
 
             <div className="flex justify-center items-center mt-4 lg:mt-6">
-              <Link to={"/auth/SignIn"} className="text-sm text-blue-500 hover:underline">
+              <Link
+                to={'/auth/SignIn'}
+                className="text-sm text-blue-500 hover:underline"
+              >
                 Tizimga kirish
               </Link>
             </div>

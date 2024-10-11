@@ -1,14 +1,2 @@
-node_modules
-dist
-build
-*.min.js
-
-vite.config.ts
-tailwind.config.js
-README.md
-package.json
-package-lock.json
-tsconfig.json
-tsconfig.app.json
-tsconfig.node.json
-postcss.config.js
+# apply.css ni format qilish mumkin emas 
+src/css/apply.css

@@ -1,23 +1,109 @@
-import Layout from "@/components/Dashboard/Layout";
-import { PlusCircleOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
-import { Button, Modal, Table } from "antd";
-import { useState } from "react";
-import { FcSearch } from "react-icons/fc";
+import Layout from '@/components/Dashboard/Layout';
+import {
+  PlusCircleOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  ExclamationCircleOutlined,
+} from '@ant-design/icons';
+import { Button, Modal, Table } from 'antd';
+import { useState } from 'react';
+import { FcSearch } from 'react-icons/fc';
 
 function Test() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
   const dataSource = [
-    { key: "1", numer: 1, testRasm: ".", savol: "asd/∛(a + 52)", catygoria: "Markaziyderlik", savolTuri: "Bir to'g'ri javobli test", qiyinligi: "O'rta", yaratganOdam: "admin" },
-    { key: "2", numer: 2, testRasm: ".", savol: "asd/∛(a + 52)", catygoria: "Markaziyderlik", savolTuri: "Bir to'g'ri javobli test", qiyinligi: "Yurta", yaratganOdam: "admin" },
-    { key: "3", numer: 3, testRasm: ".", savol: "asd/∛(a + 52)", catygoria: "Markaziyderlik", savolTuri: "Bir to'g'ri javobli test", qiyinligi: "Yurta", yaratganOdam: "admin" },
-    { key: "4", numer: 4, testRasm: ".", savol: "asd/∛(a + 52)", catygoria: "Markaziyderlik", savolTuri: "Bir to'g'ri javobli test", qiyinligi: "Yurta", yaratganOdam: "admin" },
-    { key: "5", numer: 5, testRasm: ".", savol: "asd/∛(a + 52)", catygoria: "Markaziyderlik", savolTuri: "Bir to'g'ri javobli test", qiyinligi: "Yurta", yaratganOdam: "admin" },
-    { key: "6", numer: 6, testRasm: ".", savol: "asd/∛(a + 52)", catygoria: "Markaziyderlik", savolTuri: "Bir to'g'ri javobli test", qiyinligi: "Yurta", yaratganOdam: "admin" },
-    { key: "7", numer: 7, testRasm: ".", savol: "asd/∛(a + 52)", catygoria: "Markaziyderlik", savolTuri: "Bir to'g'ri javobli test", qiyinligi: "Yurta", yaratganOdam: "admin" },
-    { key: "8", numer: 8, testRasm: ".", savol: "asd/∛(a + 52)", catygoria: "Markaziyderlik", savolTuri: "Bir to'g'ri javobli test", qiyinligi: "Yurta", yaratganOdam: "admin" },
-    { key: "9", numer: 9, testRasm: ".", savol: "asd/∛(a + 52)", catygoria: "Markaziyderlik", savolTuri: "Bir to'g'ri javobli test", qiyinligi: "Yurta", yaratganOdam: "admin" }
+    {
+      key: '1',
+      numer: 1,
+      testRasm: '.',
+      savol: 'asd/∛(a + 52)',
+      catygoria: 'Markaziyderlik',
+      savolTuri: "Bir to'g'ri javobli test",
+      qiyinligi: "O'rta",
+      yaratganOdam: 'admin',
+    },
+    {
+      key: '2',
+      numer: 2,
+      testRasm: '.',
+      savol: 'asd/∛(a + 52)',
+      catygoria: 'Markaziyderlik',
+      savolTuri: "Bir to'g'ri javobli test",
+      qiyinligi: 'Yurta',
+      yaratganOdam: 'admin',
+    },
+    {
+      key: '3',
+      numer: 3,
+      testRasm: '.',
+      savol: 'asd/∛(a + 52)',
+      catygoria: 'Markaziyderlik',
+      savolTuri: "Bir to'g'ri javobli test",
+      qiyinligi: 'Yurta',
+      yaratganOdam: 'admin',
+    },
+    {
+      key: '4',
+      numer: 4,
+      testRasm: '.',
+      savol: 'asd/∛(a + 52)',
+      catygoria: 'Markaziyderlik',
+      savolTuri: "Bir to'g'ri javobli test",
+      qiyinligi: 'Yurta',
+      yaratganOdam: 'admin',
+    },
+    {
+      key: '5',
+      numer: 5,
+      testRasm: '.',
+      savol: 'asd/∛(a + 52)',
+      catygoria: 'Markaziyderlik',
+      savolTuri: "Bir to'g'ri javobli test",
+      qiyinligi: 'Yurta',
+      yaratganOdam: 'admin',
+    },
+    {
+      key: '6',
+      numer: 6,
+      testRasm: '.',
+      savol: 'asd/∛(a + 52)',
+      catygoria: 'Markaziyderlik',
+      savolTuri: "Bir to'g'ri javobli test",
+      qiyinligi: 'Yurta',
+      yaratganOdam: 'admin',
+    },
+    {
+      key: '7',
+      numer: 7,
+      testRasm: '.',
+      savol: 'asd/∛(a + 52)',
+      catygoria: 'Markaziyderlik',
+      savolTuri: "Bir to'g'ri javobli test",
+      qiyinligi: 'Yurta',
+      yaratganOdam: 'admin',
+    },
+    {
+      key: '8',
+      numer: 8,
+      testRasm: '.',
+      savol: 'asd/∛(a + 52)',
+      catygoria: 'Markaziyderlik',
+      savolTuri: "Bir to'g'ri javobli test",
+      qiyinligi: 'Yurta',
+      yaratganOdam: 'admin',
+    },
+    {
+      key: '9',
+      numer: 9,
+      testRasm: '.',
+      savol: 'asd/∛(a + 52)',
+      catygoria: 'Markaziyderlik',
+      savolTuri: "Bir to'g'ri javobli test",
+      qiyinligi: 'Yurta',
+      yaratganOdam: 'admin',
+    },
   ];
 
   const columns = [
@@ -38,8 +124,8 @@ function Test() {
           <DeleteOutlined className="text-black cursor-pointer" />
           <ExclamationCircleOutlined className="text-black cursor-pointer" />
         </div>
-      )
-    }
+      ),
+    },
   ];
 
   const showModal = () => {
@@ -69,7 +155,10 @@ function Test() {
         </div>
 
         <div className="flex justify-between">
-          <Button onClick={showModal} className="bg-black hover:bg-black text-xl px-5 py-6 my-5 text-white">
+          <Button
+            onClick={showModal}
+            className="bg-black hover:bg-black text-xl px-5 py-6 my-5 text-white"
+          >
             <PlusCircleOutlined className="text-xl" /> Qo'shish
           </Button>
 
@@ -90,42 +179,74 @@ function Test() {
 
             <div className="mb-4">
               <select className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
-                <option disabled selected value="">Kategoriyani tanlang</option>
-                <option value="" className="text text-black">Umumiy savollar</option>
-                <option value="" className="text text-black">Umumiy geodeziya</option>
-                <option value="" className="text text-black">Topografiya</option>
-                <option value="" className="text text-black">Oliy geodeziya</option>
-                <option value="" className="text text-black">Har qanday to'g'ri</option>
+                <option disabled selected value="">
+                  Kategoriyani tanlang
+                </option>
+                <option value="" className="text text-black">
+                  Umumiy savollar
+                </option>
+                <option value="" className="text text-black">
+                  Umumiy geodeziya
+                </option>
+                <option value="" className="text text-black">
+                  Topografiya
+                </option>
+                <option value="" className="text text-black">
+                  Oliy geodeziya
+                </option>
+                <option value="" className="text text-black">
+                  Har qanday to'g'ri
+                </option>
               </select>
             </div>
 
             <div className="mb-4">
               <select className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
-                <option disabled selected>Qiyinchilik darajasini tanlang</option>
-                <option value="" className="text text-black">Qiyin</option>
-                <option value="" className="text text-black">Oson</option>
-                <option value="" className="text text-black">O'rta</option>
+                <option disabled selected>
+                  Qiyinchilik darajasini tanlang
+                </option>
+                <option value="" className="text text-black">
+                  Qiyin
+                </option>
+                <option value="" className="text text-black">
+                  Oson
+                </option>
+                <option value="" className="text text-black">
+                  O'rta
+                </option>
               </select>
             </div>
 
             <div className="mb-4">
               <select className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
-                <option disabled selected>Turlarni tanlang</option>
-                <option value="" className="text text-black">Hisoblangan natija</option>
-                <option value="" className="text text-black">Bir to'g'ri javobli test</option>
-                <option value="" className="text text-black">Ko'p to'g'ri javobli test</option>
+                <option disabled selected>
+                  Turlarni tanlang
+                </option>
+                <option value="" className="text text-black">
+                  Hisoblangan natija
+                </option>
+                <option value="" className="text text-black">
+                  Bir to'g'ri javobli test
+                </option>
+                <option value="" className="text text-black">
+                  Ko'p to'g'ri javobli test
+                </option>
               </select>
             </div>
 
             <div className="mb-4 ml-[180px] mt-5">
               <Button className="w-[90px] h-[90px] rounded border-dashed border-2 border-gray-400 flex flex-col items-center justify-center">
-                <img src="https://example.com/your-icon.png" alt="Rasm yuklash" className="w-6 h-6" /> {/* Ikonka rasm manzilingiz bilan almashtiring */}
+                <img
+                  src="https://example.com/your-icon.png"
+                  alt="Rasm yuklash"
+                  className="w-6 h-6"
+                />{' '}
+                {/* Ikonka rasm manzilingiz bilan almashtiring */}
                 Rasm yuklash
               </Button>
-              <h2 className="mt-2 mr-2">Rasm yuklash ixtiyoriy</h2> {/* Markazdan chapga joylashtirildi */}
+              <h2 className="mt-2 mr-2">Rasm yuklash ixtiyoriy</h2>{' '}
+              {/* Markazdan chapga joylashtirildi */}
             </div>
-
-
           </Modal>
 
           <div className="flex justify-end pt-5 gap-5">
@@ -143,22 +264,44 @@ function Test() {
 
             <div className="flex">
               <select className="w-[200px] text-gray-400 bg-white rounded-md h-[50px]">
-                <option disabled selected>Kategoriyani tanlang</option>
-                <option value="" className="text text-black">Umumiy savollar</option>
-                <option value="" className="text text-black">Umumiy geodeziya</option>
-                <option value="" className="text text-black">Topografiya</option>
-                <option value="" className="text text-black">Oliy geodeziya</option>
-                <option value="" className="text text-black">Har qanday to'g'ri</option>
+                <option disabled selected>
+                  Kategoriyani tanlang
+                </option>
+                <option value="" className="text text-black">
+                  Umumiy savollar
+                </option>
+                <option value="" className="text text-black">
+                  Umumiy geodeziya
+                </option>
+                <option value="" className="text text-black">
+                  Topografiya
+                </option>
+                <option value="" className="text text-black">
+                  Oliy geodeziya
+                </option>
+                <option value="" className="text text-black">
+                  Har qanday to'g'ri
+                </option>
               </select>
             </div>
 
             <div className="flex">
               <select className="w-[200px] text-gray-400 bg-white rounded-md h-[50px]">
-                <option disabled selected>Turlarni tanlang</option>
-                <option value="calculated" className="text text-black">Hisoblangan natija</option>
-                <option value="single-choice" className="text text-black">Bir to'g'ri javobli test</option>
-                <option value="multiple-choice" className="text text-black">Ko'p to'g'ri javobli test</option>
-                <option value="" className="text text-black">Har qanday to'g'ri</option>
+                <option disabled selected>
+                  Turlarni tanlang
+                </option>
+                <option value="calculated" className="text text-black">
+                  Hisoblangan natija
+                </option>
+                <option value="single-choice" className="text text-black">
+                  Bir to'g'ri javobli test
+                </option>
+                <option value="multiple-choice" className="text text-black">
+                  Ko'p to'g'ri javobli test
+                </option>
+                <option value="" className="text text-black">
+                  Har qanday to'g'ri
+                </option>
               </select>
             </div>
           </div>

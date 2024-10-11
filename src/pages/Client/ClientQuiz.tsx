@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Select } from 'antd';
 
 const TOTAL_TIME = 60 * 60; // 60 minutes (in seconds)
-const STORAGE_KEY = "savedRemainingTime";
+const STORAGE_KEY = 'savedRemainingTime';
 
 const QuestionPage: React.FC = () => {
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
@@ -16,22 +16,22 @@ const QuestionPage: React.FC = () => {
   };
 
   function checkRoleClient() {
-    const role = localStorage.getItem('role')
-    const token = localStorage.getItem('token')
+    const role = localStorage.getItem('role');
+    const token = localStorage.getItem('token');
     if (role == 'ROLE_SUPER_ADMIN') {
-      navigate('/dashboard')
+      navigate('/dashboard');
     } else if (role == 'ROLE_TESTER') {
-      navigate('/category')
+      navigate('/category');
     }
 
     if (token == null) {
-      navigate('/auth/Signin')
+      navigate('/auth/Signin');
     }
   }
 
   useEffect(() => {
-    checkRoleClient()
-  }, [checkRoleClient])
+    checkRoleClient();
+  }, [checkRoleClient]);
 
   useEffect(() => {
     // Retrieve saved time from localStorage if available
@@ -70,7 +70,7 @@ const QuestionPage: React.FC = () => {
   const formatTime = (timeInSeconds: number) => {
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = timeInSeconds % 60;
-    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   };
 
   const toggleAnswer = (index: number) => {
@@ -93,22 +93,28 @@ const QuestionPage: React.FC = () => {
       </div>
       <div className="bg-white p-6 mx-auto shadow-lg rounded-2xl">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold text-red-500">Умумий саволлар</h2>
+          <h2 className="text-2xl font-semibold text-red-500">
+            Умумий саволлар
+          </h2>
         </div>
         <div className="mt-4">
           <p className="text-lg font-medium">
-            1. AutoCAD дастурида геодезик ўлчаш ишлари билан ишлашни биласизми? Қандай даражада?
+            1. AutoCAD дастурида геодезик ўлчаш ишлари билан ишлашни биласизми?
+            Қандай даражада?
           </p>
-          <p className="text-red-600 mt-2">Бир неча тўғри жавобларни белгиланг</p>
+          <p className="text-red-600 mt-2">
+            Бир неча тўғри жавобларни белгиланг
+          </p>
 
           <div className="mt-4 space-y-3">
             {answers.map((answer, index) => (
               <label
                 key={index}
-                className={`block p-4 border rounded-lg cursor-pointer ${selectedAnswers.includes(index)
-                  ? "bg-blue-100 border-blue-500"
-                  : "border-gray-300"
-                  }`}
+                className={`block p-4 border rounded-lg cursor-pointer ${
+                  selectedAnswers.includes(index)
+                    ? 'bg-blue-100 border-blue-500'
+                    : 'border-gray-300'
+                }`}
                 onClick={() => toggleAnswer(index)}
               >
                 <input
@@ -124,7 +130,6 @@ const QuestionPage: React.FC = () => {
 
           {/* Progress Bar */}
 
-
           {/* Timer */}
           <div className="mt-4 text-left text-gray-700 text-lg font-semibold">
             Қолган вақт: {formatTime(remainingTime)}
@@ -132,13 +137,22 @@ const QuestionPage: React.FC = () => {
 
           {/* Navigation Buttons */}
           <div className="mt-6 flex justify-between items-center">
-            <button onClick={handleBack} className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md">
+            <button
+              onClick={handleBack}
+              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md"
+            >
               Орқага
             </button>
-            <Select defaultValue="Savollar" style={{ width: 150 }} onChange={handleChange}>
-              {number.map((item: number) =>
-                <Option classname="p-3" key={item}>{item}/{number.length}</Option>)
-              }
+            <Select
+              defaultValue="Savollar"
+              style={{ width: 150 }}
+              onChange={handleChange}
+            >
+              {number.map((item: number) => (
+                <Option classname="p-3" key={item}>
+                  {item}/{number.length}
+                </Option>
+              ))}
             </Select>
             <button className="px-4 py-2 bg-blue-500 text-white rounded-md">
               Кейингиси
@@ -152,12 +166,15 @@ const QuestionPage: React.FC = () => {
 
 // Sample answers data (you can change it to be dynamic)
 const answers = [
-  "Ҳа биламан. Топография ва қурилиш маҳоратили фойдалана оламан.",
-  "Ҳа биламан. Ўқув жараёнида яхши фойдаланганман.",
-  "Дастурни ишлата олмайман.",
-  "Дастурни ишлай оламан лекин ўқув ёки иш жараёнида аниқ бир иш битирмаганман."
+  'Ҳа биламан. Топография ва қурилиш маҳоратили фойдалана оламан.',
+  'Ҳа биламан. Ўқув жараёнида яхши фойдаланганман.',
+  'Дастурни ишлата олмайман.',
+  'Дастурни ишлай оламан лекин ўқув ёки иш жараёнида аниқ бир иш битирмаганман.',
 ];
 
-const number = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
+const number = [
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+  23, 24, 25, 26, 27, 28, 29, 30,
+];
 
 export default QuestionPage;

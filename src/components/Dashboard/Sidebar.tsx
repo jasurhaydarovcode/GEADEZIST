@@ -2,42 +2,44 @@ import { Logo } from '@/helpers/imports/images';
 import { Link, useLocation } from 'react-router-dom';
 
 const Sidebar = () => {
-  const role = localStorage.getItem('role')
+  const role = localStorage.getItem('role');
   const sidebarItems = [
     role === 'ROLE_SUPER_ADMIN' && {
       name: 'Boshqaruv paneli',
-      pathName: 'dashboard'
+      pathName: 'dashboard',
     },
-    role === 'ROLE_SUPER_ADMIN' && {
+    (role === 'ROLE_SUPER_ADMIN' && {
       name: 'Kategoriya',
-      pathName: 'category'
-    } || role === 'ROLE_TESTER' && {
-      name: 'Kategoriya',
-      pathName: 'category'
-    },
-    role === 'ROLE_SUPER_ADMIN' && {
+      pathName: 'category',
+    }) ||
+      (role === 'ROLE_TESTER' && {
+        name: 'Kategoriya',
+        pathName: 'category',
+      }),
+    (role === 'ROLE_SUPER_ADMIN' && {
       name: 'Test',
-      pathName: 'test'
-    } || role === 'ROLE_TESTER' && {
-      name: 'Test',
-      pathName: 'test'
-    },
+      pathName: 'test',
+    }) ||
+      (role === 'ROLE_TESTER' && {
+        name: 'Test',
+        pathName: 'test',
+      }),
     role === 'ROLE_SUPER_ADMIN' && {
       name: 'Foydalanuvchilar',
-      pathName: 'all-user'
+      pathName: 'all-user',
     },
     role === 'ROLE_SUPER_ADMIN' && {
       name: 'Foydalanuvchilar natijasi',
-      pathName: 'user'
+      pathName: 'user',
     },
     role === 'ROLE_SUPER_ADMIN' && {
       name: 'Hodimlar',
-      pathName: 'employees'
+      pathName: 'employees',
     },
     role === 'ROLE_SUPER_ADMIN' && {
       name: 'Manzil',
-      pathName: 'address'
-    }
+      pathName: 'address',
+    },
   ];
 
   const { pathname } = useLocation();
@@ -52,17 +54,19 @@ const Sidebar = () => {
       </div>
 
       <ul className="space-y-4">
-        {sidebarItems.map((item, index) => (
-          item && typeof item !== 'boolean' && (
-            <Link
-              key={index}
-              to={`/${item.pathName}`}
-              className={`${pathname === `/${item.pathName}` ? 'bg-gray-300' : ''} block px-4 py-5 bg-gray-100 text-gray-700 rounded shadow-xl border hover:bg-gray-400`}
-            >
-              {item.name}
-            </Link>
-          )
-        ))}
+        {sidebarItems.map(
+          (item, index) =>
+            item &&
+            typeof item !== 'boolean' && (
+              <Link
+                key={index}
+                to={`/${item.pathName}`}
+                className={`${pathname === `/${item.pathName}` ? 'bg-gray-300' : ''} block px-4 py-5 bg-gray-100 text-gray-700 rounded shadow-xl border hover:bg-gray-400`}
+              >
+                {item.name}
+              </Link>
+            ),
+        )}
       </ul>
     </aside>
   );
