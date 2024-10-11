@@ -2,7 +2,9 @@ import { baseUrl } from "@/helpers/api/baseUrl";
 import { Logo, registerRasm } from "@/helpers/imports/images";
 import { SignUpType } from "@/helpers/types/LoginType";
 import axios from "axios";
+import { AxiosError } from "axios";
 import { useRef, useState } from "react";
+import { useMutation } from "react-query";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -13,36 +15,36 @@ function SignUp() {
   const firstname = useRef<HTMLInputElement>(null);
   const lastname = useRef<HTMLInputElement>(null);
   const phone = useRef<HTMLInputElement>(null);
-  
+  const register = useMutation({
+    mutationFn: async () =>{
+      const data: SignUpType = {
+        firstname: firstname.current?.value || "",
+        lastname: lastname.current?.value || "", 
+        email: email.current?.value || "",
+        phoneNumber: phone.current?.value || "",
+        password: password.current?.value || "",
+        confirmPassword: confirmPassword.current?.value || "",
+        role: "user", // role ni kerak bo'lganda o'zgartiring
+      }
+      const res = await axios.post(`${baseUrl}auth/register?genderType=${genderValue.toUpperCase()}`, data)
+      console.log(res.data) 
+    } ,
+    onError: (error: AxiosError) => {
+      toast.error(error.message)
+    },
+    onSuccess: () => {
+      toast.success("Ro'yxatdan o'tdingiz")
+      navigate("/auth/")
+    }
+  })
   // Jinsni select orqali tanlash uchun state
   const [genderValue, setGenderValue] = useState<string>("");
- 
+
   function signUpPost() {
     if (!genderValue) {
       toast.error("Iltimos, jinsni tanlang");
       return;
     }
-
-    const data: SignUpType = {
-      firstname: firstname.current?.value || "",
-      lastname: lastname.current?.value || "", 
-      email: email.current?.value || "",
-      phoneNumber: phone.current?.value || "",
-      password: password.current?.value || "",
-      confirmPassword: confirmPassword.current?.value || "",
-      role: "user", // role ni kerak bo'lganda o'zgartiring
-    };
-
-    axios.post(`${baseUrl}auth/register?genderType=${genderValue.toUpperCase()}`, data)
-      .then((res) => {
-        toast.success("Ro'yxatdan o'tdingiz");
-        console.log(res.data);
-      })
-      .catch((err) => {
-        const errorMessage = err.response?.data?.message || "Xatolik yuz berdi";
-        toast.error(errorMessage);
-        console.log(err);
-      });
   }
 
   return (
@@ -178,14 +180,14 @@ function SignUp() {
                     className="form-checkbox h-4 w-4 text-blue-600"
                   />
                   <span className="ml-2 text-sm text-gray-600">
-                    Foydalanish shartlarini qabul qilaman. 
+                    Foydalanish shartlarini qabul qilaman.
                     <Link to={'/auth/offer'} className="text-blue-600 hover:underline">Offer</Link>
                   </span>
                 </label>
               </div>
 
               <button
-                onClick={signUpPost}
+                onClick={() => register.mutate()}
                 type="submit"
                 className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
               >

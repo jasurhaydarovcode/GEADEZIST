@@ -2,6 +2,7 @@ import { loginUrl } from "@/helpers/api/baseUrl";
 import { registerRasm } from "@/helpers/imports/images";
 import { Logo } from "@/helpers/imports/images";
 import axios from "axios";
+import { AxiosResponse } from "axios";
 import { useEffect, useRef } from "react";
 import { useMutation } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
@@ -39,7 +40,7 @@ function SignIn() {
       const res = await axios.post(loginUrl, data)
       return res
     },
-    onSuccess: (res: any) => {
+    onSuccess: (res: AxiosResponse) => {
       localStorage.setItem('token', res.data.token)
       localStorage.setItem('role', res.data.role)
       if (res.data.role === 'ROLE_SUPER_ADMIN') {
