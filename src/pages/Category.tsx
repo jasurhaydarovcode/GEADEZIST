@@ -5,8 +5,9 @@ import axios from "axios";
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
 import { useQuery, useQueryClient } from "react-query";
 import defaultImage from '../assets/images/default.png';
-import { MdDelete, MdEdit } from "react-icons/md";
-import CategoryAddModal from '@/components/Modal/CategoryAddModal'; // Import the modal
+import { MdEdit } from "react-icons/md";
+import CategoryAddModal from '@/components/Modal/CategoryAddModal';
+import CategoryDeleteModal from '@/components/Modal/CategoryDeleteModal'; // Import delete modal
 
 function Category() {
   const queryClient = useQueryClient();
@@ -16,10 +17,19 @@ function Category() {
     return res.data.body.body;
   });
 
-  // Yangi kategoriya qo'shish va kategoriyalar ro'yxatini yangilash uchun ishlov beruvchi
   const handleAddCategory = () => {
-    queryClient.invalidateQueries(['getCategories']); // Bu ma'lumotlarni yangilaydi
-    refetch(); // Ixtiyoriy ravishda, yangi ma'lumotlar ko'rsatilishini ta'minlash uchun qayta so'rov yuborish
+    queryClient.invalidateQueries(['getCategories']);
+    refetch();
+  };
+
+  const handleDeleteCategory = async (categoryId: string) => {
+    try {
+      await axios.delete(`${baseUrl}category/${categoryId}`, config);
+      queryClient.invalidateQueries(['getCategories']);
+      refetch();
+    } catch (error) {
+      console.error('Failed to delete the category', error);
+    }
   };
 
   return (
@@ -32,7 +42,6 @@ function Category() {
           </p>
         </div>
 
-        {/* Add Modal Component */}
         <CategoryAddModal onAddCategory={handleAddCategory} />
 
         <div className="overflow-x-scroll w-[1200px] rounded-lg">
@@ -75,9 +84,8 @@ function Category() {
                     <div className="cursor-pointer">
                       <MdEdit />
                     </div>
-                    <div className="cursor-pointer">
-                      <MdDelete />
-                    </div>
+                    {/* Delete modal for each row */}
+                    <CategoryDeleteModal categoryId={item.id} onDelete={handleDeleteCategory} />
                   </TableCell>
                 </TableRow>
               ))}
