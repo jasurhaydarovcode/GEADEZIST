@@ -5,9 +5,10 @@ import { GetMeResponse } from '@/helpers/types/GetMetype';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { FaRegUser } from 'react-icons/fa';
-import { IoCloseOutline, IoExitOutline } from 'react-icons/io5';
+import { IoExitOutline } from 'react-icons/io5';
 import { useQuery } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
+import LogoutModal from '@/components/Modal/LogoutModal'; // Adjust the import path accordingly
 
 const Navbar: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -16,11 +17,11 @@ const Navbar: React.FC = () => {
   const role = localStorage.getItem('role');
 
   // Log out function
-  function logOut() {
+  const logOut = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
     navigate('/auth/SignIn');
-  }
+  };
 
   // Dropdown toggle
   const toggleDropdown = () => {
@@ -49,7 +50,6 @@ const Navbar: React.FC = () => {
 
   const getMeData: GetMeResponse = getMe.data?.body;
   console.log(getMeData);
-  
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
@@ -76,19 +76,25 @@ const Navbar: React.FC = () => {
                 <h1 className="text-gray-500 mr-2 text-md font-semibold">
                   {getMe.isLoading
                     ? 'Loading...'
-                    : `${getMeData?.fullName} ${role === 'ROLE_SUPER_ADMIN' ? '(super admin)' : role === 'ROLE_TESTER' ? '(tester)' : role === 'ROLE_USER' ? '(client)' : ''}`}
+                    : `${getMeData?.fullName} ${role === 'ROLE_SUPER_ADMIN'
+                      ? '(super admin)'
+                      : role === 'ROLE_TESTER'
+                        ? '(tester)'
+                        : role === 'ROLE_USER'
+                          ? '(client)'
+                          : ''
+                    }`}
                 </h1>
+                <p>Foydalanuvchi</p>
               </div>
               <div>
                 <img
                   src={noImageClientDefaultImage}
-                  // src={getMeData?.profileImage ? getMeData?.profileImage : noImageClientDefaultImage}
                   alt="Admin logo"
                   className="rounded-full w-10"
                 />
               </div>
             </div>
-
 
             {/* Dropdown Modal */}
             {isDropdownOpen && (
@@ -118,34 +124,11 @@ const Navbar: React.FC = () => {
           </div>
 
           {/* Logout Confirmation Modal */}
-          {isLogoutModalOpen && (
-            <div className="fixed z-[11] inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
-              <div className="bg-white rounded-lg shadow-lg p-6 w-[450px]">
-                <div className="flex justify-end items-center">
-                  <button onClick={closeLogoutModal}>
-                    <IoCloseOutline className="text-2xl" />
-                  </button>
-                </div>
-                <div className="flex justify-center my-6">
-                  <IoExitOutline className="text-red-500 text-7xl" />
-                </div>
-                <h2 className="text-xl py-4 font-bold text-center">
-                  Siz aniq tizimdan chiqmoqchimisiz?
-                </h2>
-                <div className="flex justify-around">
-                  <button
-                    className="bg-gray-400 text-white px-4 py-2 rounded-md"
-                    onClick={closeLogoutModal}
-                  >
-                    Yopish
-                  </button>
-                  <button onClick={logOut} className="bg-gray-400 text-white px-4 py-2 rounded-md">
-                    Ha
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
+          <LogoutModal
+            isOpen={isLogoutModalOpen}
+            onClose={closeLogoutModal}
+            onLogout={logOut}
+          />
         </div>
       </div>
     </div>
