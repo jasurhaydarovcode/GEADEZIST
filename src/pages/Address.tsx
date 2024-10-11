@@ -183,14 +183,14 @@ function Address() {
 
         {/* O'chirish modalini qo'shish */}
         <Modal
-          title="Kategoriyani o'chirmoqchimisiz?"
+          title="Viloyatni o'chirmoqchimisiz?"
           open={deleteModalVisible}
           onOk={handleDelete}
           onCancel={handleDeleteCancel}
           okText="O'chirish"
           cancelText="Bekor qilish"
         >
-          <p>Kategoriyani o'chirishni tasdiqlaysizmi?</p>
+          <p className="text-center my-5 font-semibold">Viloyatni o'chirishni tasdiqlaysizmi?</p>
         </Modal>
 
         {/* Put qilish */}
