@@ -261,7 +261,14 @@ function Address() {
               ))}
             </TableBody>
           </Table>
-          
+          {/* pagination */}
+          <Pagination
+            className="mt-5"
+            // current={currentPage}
+            // total={totalItems}
+            // pageSize={pageSize}
+            // onChange={handlePageChange}
+          />
         </div>
       </div>
     </Layout>
