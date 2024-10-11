@@ -54,12 +54,12 @@ function SignIn() {
       }
       toast.success('Tizimga kirish muvaffaqiyatli', { position: 'top-center' })
     },
-    onError: (error: any) => {
 
-      if (email.current?.value === '' || password.current?.value === '') {
-        toast.warning('Email va parolni to\'liq kiriting')
-      } else {
-        toast.error(error.message)
+    onError: (error: unknown) => {
+      if (error instanceof Error) {
+        if (email.current?.value === '' || password.current?.value === '') {
+          toast.warning('Email va parolni to\'liq kiriting')
+        }
       }
     },
   })
