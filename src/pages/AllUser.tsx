@@ -1,6 +1,10 @@
+import Layout from "@/components/Dashboard/Layout"
+
 function AllUser() {
   return (
-    <div>AllUser</div>
+    <Layout>
+      Foydalanuvchilar
+    </Layout>
   )
 }
 
