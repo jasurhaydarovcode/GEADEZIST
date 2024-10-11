@@ -2,7 +2,7 @@ import Layout from "@/components/Dashboard/Layout";
 import { baseUrl, getImage } from "@/helpers/api/baseUrl";
 import { config } from "@/helpers/functions/token";
 import axios from "axios";
-import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
+import { Spinner, Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
 import { useQuery, useQueryClient } from "react-query";
 import defaultImage from '../assets/images/default.png';
 import { MdEdit } from "react-icons/md";
@@ -13,7 +13,7 @@ function Category() {
   const queryClient = useQueryClient();
 
   // Kategoriyalarni olish uchun so'rov
-  const { data, refetch } = useQuery(['getCategories'], async () => {
+  const { data, refetch, isLoading } = useQuery(['getCategories'], async () => {
     const res = await axios.get<{ body: { body: any[] } }>(`${baseUrl}category/page?page=0&size=10`, config);
     return res.data.body.body;
   });
@@ -35,9 +35,12 @@ function Category() {
     }
   };
 
+
+
   return (
     <div>
       <Layout>
+        {isLoading && <div>{<Spinner/>}</div>}
         <div className="flex justify-between">
           <h1 className="text-3xl font-bold font-sans">Kategoriya</h1>
           <p className="font-sans text-gray-700">
