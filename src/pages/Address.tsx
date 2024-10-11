@@ -240,6 +240,29 @@ function Address() {
             <PlusCircleOutlined className="text-xl" />Qo'shish
           </Button>
         </div>
+        <div>
+          {/* Viloyatlarni chiqarish uchun table */}
+          <Table hoverable>
+            <TableHead>
+              <TableHeadCell>T/P</TableHeadCell>
+              <TableHeadCell>Viloyat nomi</TableHeadCell>
+              <TableHeadCell>Harakat</TableHeadCell>
+            </TableHead>
+            <TableBody className="divide-y">
+              {Array.isArray(data.data) && data.data.map((item, index) => (
+                <TableRow className="bg-white text-gray-700 dark:border-gray-700 dark:bg-gray-800" key={item.id}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{item.name}</TableCell>
+                  <TableCell className="flex gap-1 text-xl cursor-pointer">
+                    <MdEdit onClick={() => { setSelectedAddress(item.id); setPutOpen(true); }}/>
+                    <MdDelete onClick={() => { setSelectedAddress(item.id); setDeleteModalVisible(true); }} />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          
+        </div>
       </div>
     </Layout>
   );
