@@ -61,9 +61,9 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
           description: "Kategoriya qo'shishda xatolik yuz berdi, iltimos qayta urinib ko'ring",
         });
       })
-    //   .finally(() => {
-    //     setLoading(false);
-    //   }) as Promise<void>;
+      .finally(() => {
+        setLoading(false);
+      }) as Promise<void>;
   };
 
   const handleCancel = () => {
