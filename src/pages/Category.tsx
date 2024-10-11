@@ -16,18 +16,31 @@ import { MdEdit } from 'react-icons/md';
 import CategoryAddModal from '@/components/Modal/CategoryAddModal';
 import CategoryDeleteModal from '@/components/Modal/CategoryDeleteModal';
 import TableLoading from '@/components/spinner/TableLoading';
+import { Pagination } from 'antd'; // Pagination komponentini import qilamiz
+import { useState } from 'react';
 
 function Category() {
   const queryClient = useQueryClient();
 
+  const [currentPage, setCurrentPage] = useState(1); // Hozirgi sahifa holati
+  const [pageSize, setPageSize] = useState(10); // Har bir sahifadagi ma'lumotlar soni
+  const [totalItems, setTotalItems] = useState(0); // Jami ma'lumotlar soni
+
   // Kategoriyalarni olish uchun so'rov
-  const { data, refetch, isLoading } = useQuery(['getCategories'], async () => {
-    const res = await axios.get<{ body: { body: any[] } }>(
-      `${baseUrl}category/page?page=0&size=10`,
-      config,
-    );
-    return res.data.body.body;
-  });
+  const { data, refetch, isLoading } = useQuery(
+    ['getCategories', currentPage], // Sahifa o'zgarganda qayta so'rov
+    async () => {
+      const res = await axios.get<{ body: { body: any[]; totalElements: number } }>(
+        `${baseUrl}category/page?page=${currentPage - 1}&size=${pageSize}`, // Sahifa va hajm bo'yicha so'rov
+        config,
+      );
+      setTotalItems(res.data.body.totalElements); // Jami ma'lumotlar sonini yangilash
+      return res.data.body.body;
+    },
+    {
+      keepPreviousData: true, // Eski ma'lumotlarni saqlash
+    }
+  );
 
   // Yangi kategoriya qo'shilgandan keyin ma'lumotlarni yangilaydi
   const handleAddCategory = () => {
@@ -46,6 +59,11 @@ function Category() {
     }
   };
 
+  // Sahifa o'zgarganda ishlaydigan funksiya
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   return (
     <div>
       <Layout>
@@ -53,7 +71,7 @@ function Category() {
           <div>{<TableLoading />}</div>
         ) : (
           <>
-            <div className="flex justify-between">
+            <div className="flex justify-between px-[20px]">
               <h1 className="text-3xl font-bold font-sans">Kategoriya</h1>
               <p className="font-sans text-gray-700">
                 Boshqaruv paneli /{' '}
@@ -64,11 +82,12 @@ function Category() {
             {/* Kategoriya qo'shish modali */}
             <CategoryAddModal onAddCategory={handleAddCategory} /> 
 
-            <div className="overflow-x-scroll w-[1200px] rounded-lg">
+            <div className="px-[20px] overflow-x-scroll w-[1170px] rounded-lg">
               <Table hoverable className="border-collapse">
                 <TableHead>
                   <TableHeadCell>T/P</TableHeadCell>
                   <TableHeadCell>Kategoriya rasmi</TableHeadCell>
+                  <TableHeadCell>Kategoriya nomi</TableHeadCell>
                   <TableHeadCell>Tavsifi</TableHeadCell>
                   <TableHeadCell>Savollar soni</TableHeadCell>
                   <TableHeadCell>Testlar soni</TableHeadCell>
@@ -87,7 +106,7 @@ function Category() {
                         key={item.id}
                         className="bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800"
                       >
-                        <TableCell>{index + 1}</TableCell>
+                        <TableCell>{(currentPage - 1) * pageSize + index + 1}</TableCell>
                         <TableCell>
                           <img
                             alt={item.name}
@@ -106,7 +125,8 @@ function Category() {
                         <TableCell>{item.durationTime}</TableCell>
                         <TableCell>{item.retakeDate}</TableCell>
                         <TableCell>{item.createdBy}</TableCell>
-                        <TableCell>{item.deleted && 'O"chirilgan'}</TableCell>
+                        <TableCell>{item.deletedBy}</TableCell> 
+                        <TableCell>{item.deleted && "O'chirilgan"}</TableCell>
                         <TableCell>{item.deletedBy}</TableCell>
                         <TableCell className="flex gap-4 text-xl">
                           <div className="cursor-pointer">
@@ -122,6 +142,17 @@ function Category() {
                     ))}
                 </TableBody>
               </Table>
+            </div>
+
+            {/* Pagination qo'shildi */}
+            <div className="flex mt-4">
+              <Pagination
+                current={currentPage} // Hozirgi sahifa
+                pageSize={pageSize} // Har bir sahifadagi elementlar soni
+                total={totalItems} // Jami elementlar soni
+                onChange={handlePageChange} // Sahifa o'zgarganda
+                showSizeChanger={false} // Sahifa hajmini o'zgartirishni o'chirish
+              />
             </div>
           </>
         )}
