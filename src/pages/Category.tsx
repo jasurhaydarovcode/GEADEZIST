@@ -7,7 +7,7 @@ import { useQuery, useQueryClient } from "react-query";
 import defaultImage from '../assets/images/default.png';
 import { MdEdit } from "react-icons/md";
 import CategoryAddModal from '@/components/Modal/CategoryAddModal';
-import CategoryDeleteModal from '@/components/Modal/CategoryDeleteModal'; // Delete modalni import qiling
+import CategoryDeleteModal from '@/components/Modal/CategoryDeleteModal'; 
 
 function Category() {
   const queryClient = useQueryClient();
@@ -18,9 +18,9 @@ function Category() {
     return res.data.body.body;
   });
 
-  // Yangi kategoriya qo'shilgandan keyin ma'lumotlarni yangilash
+  // Yangi kategoriya qo'shilgandan keyin ma'lumotlarni yangilaydi
   const handleAddCategory = () => {
-    queryClient.invalidateQueries(['getCategories']); // Keshni yangilash
+    queryClient.invalidateQueries(['getCategories']); // Keshni yangilaydi
     refetch(); // Yangi ma'lumotlarni olish
   };
 
@@ -88,7 +88,7 @@ function Category() {
                     <div className="cursor-pointer">
                       <MdEdit />
                     </div>
-                    {/* Har bir qator uchun Delete modal */}
+                    {/* Delete modal */}
                     <CategoryDeleteModal categoryId={item.id} onDelete={handleDeleteCategory} />
                   </TableCell>
                 </TableRow>
