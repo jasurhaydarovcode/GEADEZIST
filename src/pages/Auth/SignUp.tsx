@@ -1,7 +1,7 @@
 import { baseUrl } from "@/helpers/api/baseUrl";
 import { Logo, registerRasm } from "@/helpers/imports/images";
 import { SignUpType } from "@/helpers/types/LoginType";
-import axios from "axios";
+import axios  from "axios";
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -13,36 +13,59 @@ function SignUp() {
   const firstname = useRef<HTMLInputElement>(null);
   const lastname = useRef<HTMLInputElement>(null);
   const phone = useRef<HTMLInputElement>(null);
+  const offer = useRef<HTMLInputElement>(null);
   
   // Jinsni select orqali tanlash uchun state
   const [genderValue, setGenderValue] = useState<string>("");
  
   function signUpPost() {
+    if (!firstname.current?.value || !lastname.current?.value || !phone.current?.value) {
+      toast.error("Iltimos, bo'shliqni to'ldiring");
+      return;
+    }
+    if (!email.current?.value || !password.current?.value || !confirmPassword.current?.value) {
+      toast.error("Iltimos, bo'shliqni to'ldiring");
+      
+      return;
+    }
+    if (password.current?.value !== confirmPassword.current?.value) {
+      toast.error("Parollar bir xil emas");
+      return;
+    }
+    // if (!offer.current?.value) {
+    //   toast.error("Iltimos, Offer bilan tanishib chiqing");
+    //   return;
+    // }
     if (!genderValue) {
       toast.error("Iltimos, jinsni tanlang");
       return;
     }
-
     const data: SignUpType = {
-      firstname: firstname.current?.value || "",
-      lastname: lastname.current?.value || "", 
-      email: email.current?.value || "",
-      phoneNumber: phone.current?.value || "",
-      password: password.current?.value || "",
-      confirmPassword: confirmPassword.current?.value || "",
-      role: "user", // role ni kerak bo'lganda o'zgartiring
-    };
+        "firstname": firstname.current?.value,
+        "lastname": lastname.current?.value,
+        "email": email.current?.value,
+        "phoneNumber": phone.current?.value,
+        "password": password.current?.value,
+        "confirmPassword": confirmPassword.current?.value,
+        "role": "ROLE_USER"
+      };
 
-    axios.post(`${baseUrl}auth/register?genderType=${genderValue.toUpperCase()}`, data)
+    axios.post(`${baseUrl}auth/register?genderType=${genderValue}`, data)
       .then((res) => {
+
+        if (res.status === 200) {
+          toast.success("Ro'yxatdan o'tdingiz");
+          
+        }
         toast.success("Ro'yxatdan o'tdingiz");
-        console.log(res.data);
+        console.log(res);
       })
       .catch((err) => {
         const errorMessage = err.response?.data?.message || "Xatolik yuz berdi";
         toast.error(errorMessage);
         console.log(err);
       });
+      
   }
 
   return (
@@ -163,7 +186,7 @@ function SignUp() {
                   required
                   className="w-full px-4 mt-2 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                 >
-                  <option value="">Jinsni tanlang</option>
+                  <option value="" disabled>Jinsni tanlang</option>
                   <option value="MALE">Erkak</option>
                   <option value="FEMALE">Ayol</option>
                 </select>
@@ -177,7 +200,7 @@ function SignUp() {
                     name="acceptedTerms"
                     className="form-checkbox h-4 w-4 text-blue-600"
                   />
-                  <span className="ml-2 text-sm text-gray-600">
+                  <span ref={offer} className="ml-2 text-sm text-gray-600">
                     Foydalanish shartlarini qabul qilaman. 
                     <Link to={'/auth/offer'} className="text-blue-600 hover:underline">Offer</Link>
                   </span>
