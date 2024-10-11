@@ -13,7 +13,7 @@ import {
 import { useQuery, useQueryClient } from 'react-query';
 import defaultImage from '../assets/images/default.png';
 import { MdEdit } from 'react-icons/md';
-// import CategoryAddModal from '@/components/Modal/CategoryAddModal';
+import CategoryAddModal from '@/components/Modal/CategoryAddModal';
 import CategoryDeleteModal from '@/components/Modal/CategoryDeleteModal';
 import TableLoading from '@/components/spinner/TableLoading';
 
@@ -29,11 +29,11 @@ function Category() {
     return res.data.body.body;
   });
 
-  // // Yangi kategoriya qo'shilgandan keyin ma'lumotlarni yangilaydi
-  // const handleAddCategory = () => {
-  //   queryClient.invalidateQueries(['getCategories']); // Keshni yangilaydi
-  //   refetch(); // Yangi ma'lumotlarni olish
-  // };
+  // Yangi kategoriya qo'shilgandan keyin ma'lumotlarni yangilaydi
+  const handleAddCategory = () => {
+    queryClient.invalidateQueries(['getCategories']); // Keshni yangilaydi
+    refetch(); // Yangi ma'lumotlarni olish
+  };
 
   // Kategoriyani o'chirish funksiyasi
   const handleDeleteCategory = async (categoryId: string) => {
@@ -62,7 +62,7 @@ function Category() {
             </div>
 
             {/* Kategoriya qo'shish modali */}
-            {/* <CategoryAddModal onAddCategory={handleAddCategory} /> */}
+            <CategoryAddModal onAddCategory={handleAddCategory} /> 
 
             <div className="overflow-x-scroll w-[1200px] rounded-lg">
               <Table hoverable className="border-collapse">
