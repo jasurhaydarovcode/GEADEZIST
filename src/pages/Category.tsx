@@ -7,28 +7,31 @@ import { useQuery, useQueryClient } from "react-query";
 import defaultImage from '../assets/images/default.png';
 import { MdEdit } from "react-icons/md";
 import CategoryAddModal from '@/components/Modal/CategoryAddModal';
-import CategoryDeleteModal from '@/components/Modal/CategoryDeleteModal'; // Import delete modal
+import CategoryDeleteModal from '@/components/Modal/CategoryDeleteModal'; // Delete modalni import qiling
 
 function Category() {
   const queryClient = useQueryClient();
 
+  // Kategoriyalarni olish uchun so'rov
   const { data, refetch } = useQuery(['getCategories'], async () => {
     const res = await axios.get<{ body: { body: any[] } }>(`${baseUrl}category/page?page=0&size=10`, config);
     return res.data.body.body;
   });
 
+  // Yangi kategoriya qo'shilgandan keyin ma'lumotlarni yangilash
   const handleAddCategory = () => {
-    queryClient.invalidateQueries(['getCategories']);
-    refetch();
+    queryClient.invalidateQueries(['getCategories']); // Keshni yangilash
+    refetch(); // Yangi ma'lumotlarni olish
   };
 
+  // Kategoriyani o'chirish funksiyasi
   const handleDeleteCategory = async (categoryId: string) => {
     try {
       await axios.delete(`${baseUrl}category/${categoryId}`, config);
       queryClient.invalidateQueries(['getCategories']);
       refetch();
     } catch (error) {
-      console.error('Failed to delete the category', error);
+      console.error('Kategoriya o\'chirishda xatolik yuz berdi', error);
     }
   };
 
@@ -42,6 +45,7 @@ function Category() {
           </p>
         </div>
 
+        {/* Kategoriya qo'shish modali */}
         <CategoryAddModal onAddCategory={handleAddCategory} />
 
         <div className="overflow-x-scroll w-[1200px] rounded-lg">
@@ -84,7 +88,7 @@ function Category() {
                     <div className="cursor-pointer">
                       <MdEdit />
                     </div>
-                    {/* Delete modal for each row */}
+                    {/* Har bir qator uchun Delete modal */}
                     <CategoryDeleteModal categoryId={item.id} onDelete={handleDeleteCategory} />
                   </TableCell>
                 </TableRow>
