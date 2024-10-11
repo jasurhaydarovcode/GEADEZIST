@@ -1,4 +1,5 @@
 import Layout from '@/components/Dashboard/Layout';
+import TableLoading from '@/components/spinner/TableLoading';
 import { baseUrl } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import { PlusCircleOutlined } from '@ant-design/icons';
@@ -82,7 +83,7 @@ function Address() {
   };
 
   // Viloyatlarni get qilish
-  const data = useQuery(
+  const { data: addresses, isLoading } = useQuery(
     ['getAddress', currentPage],
     async () => {
       const res = await axios.get(
@@ -158,6 +159,11 @@ function Address() {
 
   return (
     <Layout>
+      {isLoading ?(
+        <div className="flex justify-center items-center h-[80vh]">
+          <TableLoading/>
+        </div>
+      ) : (
       <div className="p-5">
         <div className="flex justify-between">
           <h1 className="text-3xl font-bold font-sans">Manzillar</h1>
@@ -205,8 +211,8 @@ function Address() {
               <TableHeadCell>Harakat</TableHeadCell>
             </TableHead>
             <TableBody className="divide-y">
-              {Array.isArray(data.data) &&
-                data.data.map((item, index) => (
+              {Array.isArray(addresses) &&
+                addresses.map((item, index) => (
                   <TableRow
                     className="bg-white text-gray-700 dark:border-gray-700 dark:bg-gray-800"
                     key={item.id}
@@ -314,6 +320,7 @@ function Address() {
           />
         </div>
       </div>
+      )}
     </Layout>
   );
 }
