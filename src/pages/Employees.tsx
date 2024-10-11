@@ -14,7 +14,10 @@ import { toast } from "react-toastify";
 function Employees() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-
+     // Pagination holati
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
   
   function checkRoleClient() {
     const role = localStorage.getItem('role')
@@ -23,10 +26,19 @@ function Employees() {
     } 
   }
 
-  const { data: admins,} = useQuery(['getADmin'], async () => {
-    const res = await axios.get(`${baseUrl}user/get/admin/list?page=0&size=10`, config);
-    return (res.data as { body: { body: string }}).body.body;
+  const { data: admins,} = useQuery(['getADmin', currentPage], async () => {
+    const res = await axios.get(`${baseUrl}user/get/admin/list?page=${currentPage - 1}&size=${pageSize}`, config);
+    const responseData = (res.data as { body: { body: string, totalElements: number, totalPage: number }}).body;
+    setTotalItems(responseData.totalElements); // Umumiy ma'lumotlar sonini saqlaymiz
+    return responseData.body;
+  }, {
+    keepPreviousData: true, // Sahifa o'zgarganda eski ma'lumotlarni saqlab qoladi
   });
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page); // Hozirgi sahifani yangilash
+    setPageSize(pageSize);
+  };
 
   const navigate = useNavigate()
   useEffect(() => {
@@ -233,7 +245,13 @@ function Employees() {
               ))}
             </TableBody>
           </Table>
-          <Pagination className="mt-5" defaultCurrent={1} total={10} />
+          <Pagination
+            className="mt-5"
+            current={currentPage}
+            total={totalItems}
+            pageSize={pageSize}
+            onChange={handlePageChange}
+          />
         </div>
       </div>
     </Layout>

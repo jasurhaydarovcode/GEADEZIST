@@ -74,6 +74,7 @@ function Address() {
     setPutOpen(false);
   };  
 
+  // Viloyatlarni get qilish
   const data = useQuery(['getAddress', currentPage], async () => {
     const res = await axios.get(`${baseUrl}region/getAllRegionPage?page=${currentPage - 1}&size=${pageSize}`, config);
     const responseData = (res.data as { body: { body: string, totalElements: number, totalPage: number }}).body;
@@ -151,6 +152,7 @@ function Address() {
           <Button onClick={showModal} color="default" variant="solid" className="text-xl px-5 py-6 my-5">
             <PlusCircleOutlined className="text-xl" />Qo'shish
           </Button>
+          {/* Viloyat qo'shish uchun modal */}
           <Modal
             title="Viloyat qo'shish"
             open={open}
@@ -171,6 +173,7 @@ function Address() {
           </Modal>
         </div>
         <div>
+          {/* Viloyatlarni chiqarish uchun table */}
           <Table hoverable>
             <TableHead>
               <TableHeadCell>T/P</TableHeadCell>
@@ -190,6 +193,7 @@ function Address() {
               ))}
             </TableBody>
           </Table>
+          {/* pagination */}
           <Pagination
             className="mt-5"
             current={currentPage}
@@ -211,7 +215,7 @@ function Address() {
           <p className="text-center my-5 font-semibold">Viloyatni o'chirishni tasdiqlaysizmi?</p>
         </Modal>
 
-        {/* Put qilish */}
+        {/* Put qilish uchun modal */}
         <Modal
           title="Viloyatni o'zgartirmoqchimisiz?"
           open={putOpen}
@@ -230,6 +234,40 @@ function Address() {
             />
           </div>
         </Modal>
+        <div className="flex justify-between items-center">
+          <p className="font-sans text-2xl text-gray-700">Tumanlar</p>
+          <Button color="default" variant="solid" className="text-xl px-5 py-6 my-5">
+            <PlusCircleOutlined className="text-xl" />Qo'shish
+          </Button>
+        </div>
+        <div>
+          {/* Viloyatlarni chiqarish uchun table */}
+          <Table hoverable>
+            <TableHead>
+              <TableHeadCell>T/P</TableHeadCell>
+              <TableHeadCell>Viloyat nomi</TableHeadCell>
+              <TableHeadCell>Harakat</TableHeadCell>
+            </TableHead>
+            <TableBody className="divide-y">
+                <TableRow className="bg-white text-gray-700 dark:border-gray-700 dark:bg-gray-800" >
+                  <TableCell>1</TableCell>
+                  <TableCell>2</TableCell>
+                  <TableCell className="flex gap-1 text-xl cursor-pointer">
+                    <MdEdit />
+                    <MdDelete  />
+                  </TableCell>
+                </TableRow>
+            </TableBody>
+          </Table>
+          {/* pagination */}
+          <Pagination
+            className="mt-5"
+            // current={currentPage}
+            // total={totalItems}
+            // pageSize={pageSize}
+            // onChange={handlePageChange}
+          />
+        </div>
       </div>
     </Layout>
   );

@@ -50,7 +50,9 @@ const Navbar: React.FC = () => {
   });
 
   const getMeData: GetMeResponse = getMe.data?.body;
-
+  // useEffect(() => {
+  //   getMe.refetch();
+  // }, [getMe.refetch]);
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
       if (event.key) {
