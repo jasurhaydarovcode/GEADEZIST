@@ -16,6 +16,7 @@ function Address() {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false); // O'chirish modalini ko'rsatish uchun
   const [selectedAddress, setSelectedAddress] = useState(null); // O'chiriladigan manzilni saqlash
+  const [putOpen, setPutOpen] = useState(false);
 
   const showModal = () => {
     setOpen(true);
@@ -58,11 +59,24 @@ function Address() {
     setDeleteModalVisible(false); // O'chirishni bekor qilish
   };
 
-  const data = useQuery(['getAddress'], async () => {
+  const handlePutOk = () => {
+    if (selectedAddress !== null) {
+      updateAddress.mutate(selectedAddress);
+      setPutOpen(false);
+    }
+  };
+
+  const handlePutCancel = () => {
+    setPutOpen(false);
+  };  
+
+  // Manzillarni get qilib olish
+  const data = useQuery('getAddress', async () => {
     const res = await axios.get(`${baseUrl}region/getAllRegionPage?page=0&size=10`, config);
     return (res.data as { body: { body: string }}).body.body;
   });
 
+  // Manzillarni post qilish
   const queryClient = new QueryClient();
 
   const [name, setName] = useState('');
@@ -80,13 +94,29 @@ function Address() {
       console.log('Xatolik:', error);
     }
   });
-
+  
+  // Manzillarni o'chirish 
   const deleteAddress = useMutation({
     mutationFn: async (addressId) => {
       await axios.delete(`${baseUrl}region/${addressId}`, config);
     },
     onSuccess: () => {
       toast.success("Manzil o'chirildi");
+      queryClient.invalidateQueries('getAddress');
+    },
+    onError: (error) => {
+      toast.error('Xatolik yuz berdi');
+      console.log('Xatolik:', error);
+    }
+  });
+
+  // Manzillarni put qilish
+  const updateAddress = useMutation({
+    mutationFn: async (addressId) => {
+      await axios.put(`${baseUrl}region/${addressId}`, { name }, config);
+    },
+    onSuccess: () => {
+      toast.success("Manzil yangilandi");
       queryClient.invalidateQueries('getAddress');
     },
     onError: (error) => {
@@ -141,7 +171,7 @@ function Address() {
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>{item.name}</TableCell>
                   <TableCell className="flex gap-1 text-xl cursor-pointer">
-                    <MdEdit />
+                    <MdEdit onClick={() => { setSelectedAddress(item.id); setPutOpen(true); }}/>
                     <MdDelete onClick={() => { setSelectedAddress(item.id); setDeleteModalVisible(true); }} />
                   </TableCell>
                 </TableRow>
@@ -153,14 +183,34 @@ function Address() {
 
         {/* O'chirish modalini qo'shish */}
         <Modal
-          title="Kategoriyani o'chirmoqchimisiz?"
+          title="Viloyatni o'chirmoqchimisiz?"
           open={deleteModalVisible}
           onOk={handleDelete}
           onCancel={handleDeleteCancel}
           okText="O'chirish"
           cancelText="Bekor qilish"
         >
-          <p>Kategoriyani o'chirishni tasdiqlaysizmi?</p>
+          <p className="text-center my-5 font-semibold">Viloyatni o'chirishni tasdiqlaysizmi?</p>
+        </Modal>
+
+        {/* Put qilish */}
+        <Modal
+          title="Viloyatni o'zgartirmoqchimisiz?"
+          open={putOpen}
+          onOk={handlePutOk}
+          onCancel={handlePutCancel}
+          okText="O'zgartirish"
+          cancelText="Bekor qilish"
+        >
+          <div className="mb-4">
+            <input
+              type="text"
+              value={name}
+              placeholder="Viloyat nomini O'zgartiring"
+              className="border w-full p-2 rounded"
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
         </Modal>
       </div>
     </Layout>

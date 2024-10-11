@@ -46,7 +46,7 @@ function SignIn() {
         navigate('/dashboard')
       } else if (res.data.role === 'ROLE_TESTER') {
         navigate('/category')
-      } else if (res.data.role === 'ROLE_CLIENT') {
+      } else if (res.data.role === 'ROLE_USER') {
         navigate('/client/dashboard')
       } else if (res.data.role === 'ROLE_ADMIN') {
         navigate('/dashboard')
@@ -54,10 +54,15 @@ function SignIn() {
       toast.success('Tizimga kirish muvaffaqiyatli', { position: 'top-center' })
     },
     onError: (error: any) => {
+      
 
       if (email.current?.value === '' || password.current?.value === '') {
         toast.warning('Email va parolni to\'liq kiriting')
-      } else {
+      }
+      else if(error.status === 401 || error.status === 400) {
+        toast.error("Email yoki parol xato")
+      }
+      else {
         toast.error(error.message)
       }
     },
