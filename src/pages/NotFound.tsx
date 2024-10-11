@@ -19,7 +19,9 @@ function NotFound() {
           <Link to="/">
             <button className="relative inline-block text-sm font-medium text-[#a8a9ac] group focus:outline-none rounded">
               <span className="absolute inset-0 transition-transform translate-x-0.5 translate-y-0.5 bg-[#ffffff] "></span>
-
+              <span className="relative my-[100px] block px-[200px] py-3 bg-[#ffff] border border-current">
+                Go Home
+              </span>
             </button>
           </Link>
         </div>
