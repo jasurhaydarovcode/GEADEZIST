@@ -8,6 +8,7 @@ import { BrowserRouter } from 'react-router-dom';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { ToastContainer } from 'react-toastify';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import 'aos/dist/aos.css'; 
 
 const queryClient = new QueryClient();
 

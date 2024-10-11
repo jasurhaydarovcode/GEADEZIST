@@ -19,17 +19,16 @@ function Profile() {
   });
   const navigate = useNavigate();
 
-  // Move checkRoleClient inside useEffect or wrap it in useCallback
   const checkRoleClient = useCallback(() => {
     const role = localStorage.getItem('role');
     if (role == 'ROLE_CLIENT') {
       navigate('/client/dashboard');
     }
-  }, [navigate]); // 'navigate' dependency added
+  }, [navigate]);
 
   useEffect(() => {
     checkRoleClient();
-  }, [checkRoleClient]); // Ensure checkRoleClient is included in dependencies
+  }, [checkRoleClient]);
 
   interface UserProfileData {
     body: GetProfileType;

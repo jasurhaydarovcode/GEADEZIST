@@ -8,11 +8,14 @@ import { FaRegUser } from 'react-icons/fa';
 import { IoExitOutline } from 'react-icons/io5';
 import { useQuery } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
-import LogoutModal from '@/components/Modal/LogoutModal'; // Adjust the import path accordingly
+import LogoutModal from '@/components/Modal/LogoutModal';
+import AOS from 'aos';
+// import 'aos/dist/aos.css'; // uchirilmasin va commentdan chiqarilmasin, test uchun turibdi
 
 const Navbar: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false);
+  const [isEmailTooltipVisible, setIsEmailTooltipVisible] = useState<boolean>(false);
   const role = localStorage.getItem('role');
 
   // ======= START Log out uchun button
@@ -24,11 +27,19 @@ const Navbar: React.FC = () => {
   };
   // ======= END Log out uchun button
 
-  // Toggle dropdown visibility
   const toggleDropdown = () => {
     if (!getMe.isLoading) {
       setIsDropdownOpen(!isDropdownOpen);
     }
+  };
+
+  // Modal Hover bolganda email ni ko'rsatish
+  const handleMouseEnter = () => {
+    setIsEmailTooltipVisible(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsEmailTooltipVisible(false);
   };
 
   // Open Logout Modal
@@ -67,14 +78,16 @@ const Navbar: React.FC = () => {
     };
   }, []);
 
+  useEffect(() => {
+    AOS.init({ duration: 500 }); // Aos uchun
+  }, []);
+
   return (
     <nav className="bg-white border-b shadow p-6 flex justify-end items-center">
       <div className="flex justify-between items-center">
-        {/* User section */}
         <div
-          className={`relative ${
-            getMe.isLoading ? 'pointer-events-none opacity-50' : ''
-          }`} // Disable dropdown trigger while loading
+          className={`relative ${getMe.isLoading ? 'pointer-events-none opacity-50' : ''
+            }`}
           onClick={toggleDropdown}
         >
           <div className="flex gap-4 items-center cursor-pointer">
@@ -86,8 +99,8 @@ const Navbar: React.FC = () => {
                 {getMe.isLoading
                   ? 'Loading...'
                   : (role === 'ROLE_SUPER_ADMIN' && 'super admin') ||
-                    (role === 'ROLE_TESTER' && 'tester') ||
-                    (role === 'ROLE_USER' && 'client')}
+                  (role === 'ROLE_TESTER' && 'tester') ||
+                  (role === 'ROLE_USER' && 'client')}
               </span>
             </div>
             <div>
@@ -99,20 +112,31 @@ const Navbar: React.FC = () => {
             </div>
           </div>
 
-          {/* Dropdown Modal */}
           {isDropdownOpen && (
             <div className="absolute z-50 right-0 mt-2 w-56 bg-white border rounded-lg shadow-lg">
               <div className="p-4">
                 <div className="font-bold">{getMeData.fullName}</div>
-                <div className="text-gray-500 text-sm">{getMeData.email}</div>
+                {/* Email with hover effect */}
+                <div
+                  className="text-md w-full text-left pt-5 pb-2 rounded"
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  {getMeData.email}
+                </div>
+                {/* Tooltip email */}
+                {isEmailTooltipVisible && (
+                  <div data-aos="fade-up" className="absolute bg-gray-200 p-2 top-[9px] left-3 rounded shadow-md">
+                    {getMeData.email}
+                  </div>
+                )}
               </div>
               <hr />
               <div>
                 <Link to={'/profile'}>
                   <button
-                    className={`flex items-center gap-2 w-full text-left hover:bg-gray-100 px-3 py-5 rounded ${
-                      getMe.isLoading ? 'pointer-events-none opacity-50' : ''
-                    }`}
+                    className={`flex items-center gap-2 w-full text-left hover:bg-gray-100 px-3 py-5 rounded ${getMe.isLoading ? 'pointer-events-none opacity-50' : ''
+                      }`}
                     disabled={getMe.isLoading}
                   >
                     <FaRegUser />
@@ -120,9 +144,8 @@ const Navbar: React.FC = () => {
                   </button>
                 </Link>
                 <button
-                  className={`flex items-center gap-2 w-full text-left hover:bg-gray-100 px-3 py-5 rounded ${
-                    getMe.isLoading ? 'pointer-events-none opacity-50' : ''
-                  }`}
+                  className={`flex items-center gap-2 w-full text-left hover:bg-gray-100 px-3 py-5 rounded ${getMe.isLoading ? 'pointer-events-none opacity-50' : ''
+                    }`}
                   onClick={openLogoutModal}
                   disabled={getMe.isLoading}
                 >
