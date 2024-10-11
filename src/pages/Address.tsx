@@ -17,6 +17,10 @@ function Address() {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false); // O'chirish modalini ko'rsatish uchun
   const [selectedAddress, setSelectedAddress] = useState(null); // O'chiriladigan manzilni saqlash
   const [putOpen, setPutOpen] = useState(false);
+   // Pagination holati
+   const [currentPage, setCurrentPage] = useState(1);
+   const [pageSize, setPageSize] = useState(10);
+   const [totalItems, setTotalItems] = useState(0); // Umumiy ma'lumotlar soni
 
   const showModal = () => {
     setOpen(true);
@@ -71,10 +75,23 @@ function Address() {
   };  
 
   // Manzillarni get qilib olish
-  const data = useQuery('getAddress', async () => {
-    const res = await axios.get(`${baseUrl}region/getAllRegionPage?page=0&size=10`, config);
-    return (res.data as { body: { body: string }}).body.body;
+  // const data = useQuery('getAddress', async () => {
+  //   const res = await axios.get(`${baseUrl}region/getAllRegionPage?page=0&size=10`, config);
+  //   return (res.data as { body: { body: string }}).body.body;
+  // });
+
+  const data = useQuery(['getAddress', currentPage], async () => {
+    const res = await axios.get(`${baseUrl}region/getAllRegionPage?page=${currentPage - 1}&size=${pageSize}`, config);
+    const responseData = (res.data as { body: { body: string, totalElements: number, totalPage: number }}).body;
+    setTotalItems(responseData.totalElements); // Umumiy ma'lumotlar sonini saqlaymiz
+    return responseData.body;
+  }, {
+    keepPreviousData: true, // Sahifa o'zgarganda eski ma'lumotlarni saqlab qoladi
   });
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page); // Hozirgi sahifani yangilash
+  };
 
   // Manzillarni post qilish
   const queryClient = new QueryClient();
@@ -178,7 +195,13 @@ function Address() {
               ))}
             </TableBody>
           </Table>
-          <Pagination className="mt-5" defaultCurrent={1} total={20} />
+          <Pagination
+            className="mt-5"
+            current={currentPage}
+            total={totalItems}
+            pageSize={pageSize}
+            onChange={handlePageChange}
+          />
         </div>
 
         {/* O'chirish modalini qo'shish */}
