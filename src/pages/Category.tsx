@@ -2,7 +2,7 @@ import Layout from "@/components/Dashboard/Layout";
 import { baseUrl, getImage } from "@/helpers/api/baseUrl";
 import { config } from "@/helpers/functions/token";
 import axios from "axios";
-import { Spinner, Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
+import {Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
 import { useQuery, useQueryClient } from "react-query";
 import defaultImage from '../assets/images/default.png';
 import { MdEdit } from "react-icons/md";
@@ -76,9 +76,7 @@ function Category() {
                       <TableCell>
                         <img
                           alt={item.name}
-                          
                           src={item.fileId ? `${getImage}${item.fileId}` : defaultImage}
-                          
                           className="border-[1px] border-gray-300 w-[43px] h-[43px] rounded-full object-cover hover:cursor-pointer"
                         />
                       </TableCell>
