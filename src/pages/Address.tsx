@@ -74,12 +74,6 @@ function Address() {
     setPutOpen(false);
   };  
 
-  // Manzillarni get qilib olish
-  // const data = useQuery('getAddress', async () => {
-  //   const res = await axios.get(`${baseUrl}region/getAllRegionPage?page=0&size=10`, config);
-  //   return (res.data as { body: { body: string }}).body.body;
-  // });
-
   const data = useQuery(['getAddress', currentPage], async () => {
     const res = await axios.get(`${baseUrl}region/getAllRegionPage?page=${currentPage - 1}&size=${pageSize}`, config);
     const responseData = (res.data as { body: { body: string, totalElements: number, totalPage: number }}).body;
@@ -91,6 +85,7 @@ function Address() {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page); // Hozirgi sahifani yangilash
+    setPageSize(pageSize);
   };
 
   // Manzillarni post qilish
