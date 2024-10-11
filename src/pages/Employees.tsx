@@ -17,6 +17,7 @@ import { baseUrl } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import TableLoading from '@/components/spinner/TableLoading';
 
 function Employees() {
   const [open, setOpen] = useState(false);
@@ -33,7 +34,7 @@ function Employees() {
     }
   }
 
-  const { data: admins } = useQuery(
+  const { data: admins, isLoading } = useQuery(
     ['getADmin', currentPage],
     async () => {
       const res = await axios.get(
@@ -152,6 +153,9 @@ function Employees() {
 
   return (
     <Layout>
+      {isLoading ?(
+        <div className='flex justify-center items-center h-[80vh]'>{<TableLoading />}</div>
+      ) : (
       <div className="p-5">
         <div className="flex justify-between">
           <h1 className="text-3xl font-bold font-sans">Hodimlar</h1>
@@ -302,6 +306,7 @@ function Employees() {
           />
         </div>
       </div>
+      )}
     </Layout>
   );
 }
