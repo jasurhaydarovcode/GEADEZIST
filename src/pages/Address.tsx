@@ -234,6 +234,12 @@ function Address() {
             />
           </div>
         </Modal>
+        <div className="flex justify-between items-center">
+          <p className="font-sans text-2xl text-gray-700">Tumanlar</p>
+          <Button color="default" variant="solid" className="text-xl px-5 py-6 my-5">
+            <PlusCircleOutlined className="text-xl" />Qo'shish
+          </Button>
+        </div>
       </div>
     </Layout>
   );
