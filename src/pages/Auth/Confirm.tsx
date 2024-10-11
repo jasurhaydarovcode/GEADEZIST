@@ -14,7 +14,7 @@ function Confirm() {
     function forgetPassword() {
 
       if (!email.current?.value) {
-        toast.error("Iltimos, elektron pochtangizni kiriting!"); // Elektron pochta kiritilmagan bo'lsa xabar beriladi
+        toast.error("Iltimos, elektron pochtangizni kiriting!");
         return;
       }
 

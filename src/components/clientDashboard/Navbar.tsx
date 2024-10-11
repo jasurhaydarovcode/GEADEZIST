@@ -8,7 +8,7 @@ import { FaRegUser } from 'react-icons/fa';
 import { IoExitOutline } from 'react-icons/io5';
 import { useQuery } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
-import LogoutModal from '@/components/Modal/LogoutModal'; // Adjust the import path accordingly
+import LogoutModal from '@/components/Modal/LogoutModal';
 
 const Navbar: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
