@@ -37,7 +37,7 @@ export const updateImage = `${baseUrl}image/update`
 
 
 
-// ==================== statistics-controller ====================
+// ==================== Statistics-Controller ====================
 // User dashboard reultlari
 export const getUserDashboard = `${baseUrl}statistic/user-dashboard`
 
@@ -45,7 +45,7 @@ export const getUserDashboard = `${baseUrl}statistic/user-dashboard`
 export const superAdminDashboardUsersResultFilter = `${baseUrl}statistic/filter`
 
 // SUPER ADMIN dashboard haftalik statistika
-export const superAdminDashWeekStatistic = `${baseUrl}statistic/filter`
+export const superAdminDashWeekStatistic = `${baseUrl}statistic/dayOfWeek`
 
 // SUPER ADMIN dashboard barcha statstika sonlarda
 export const getStaticAll = `${baseUrl}statistic/counts`
