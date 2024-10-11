@@ -46,7 +46,7 @@ function SignIn() {
         navigate('/dashboard')
       } else if (res.data.role === 'ROLE_TESTER') {
         navigate('/category')
-      } else if (res.data.role === 'ROLE_USER') {
+      } else if (res.data.role === 'ROLE_CLIENT') {
         navigate('/client/dashboard')
       } else if (res.data.role === 'ROLE_ADMIN') {
         navigate('/dashboard')
@@ -59,8 +59,8 @@ function SignIn() {
       if (email.current?.value === '' || password.current?.value === '') {
         toast.warning('Email va parolni to\'liq kiriting')
       }
-      else if(error.status === 401 || error.status === 400) {
-        toast.error("Email yoki parol xato")
+      else if(error.status === 401 || error.status === 400 || error.status === 404) {
+        toast.warning("Email yoki parol xato")
       }
       else {
         toast.error(error.message)
