@@ -71,7 +71,7 @@ function Category() {
           <div>{<TableLoading />}</div>
         ) : (
           <>
-            <div className="flex justify-between">
+            <div className="flex justify-between px-[20px]">
               <h1 className="text-3xl font-bold font-sans">Kategoriya</h1>
               <p className="font-sans text-gray-700">
                 Boshqaruv paneli /{' '}
@@ -82,7 +82,7 @@ function Category() {
             {/* Kategoriya qo'shish modali */}
             <CategoryAddModal onAddCategory={handleAddCategory} /> 
 
-            <div className="overflow-x-scroll w-[1200px] rounded-lg">
+            <div className="px-[20px] overflow-x-scroll w-[1170px] rounded-lg">
               <Table hoverable className="border-collapse">
                 <TableHead>
                   <TableHeadCell>T/P</TableHeadCell>

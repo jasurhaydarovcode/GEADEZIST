@@ -87,7 +87,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
 
   return (
     <>
-      <Button onClick={() => setOpen(true)} className="text-xl bg-black text-white px-5 py-6 my-5">
+      <Button onClick={() => setOpen(true)} className="text-xl bg-black text-white py-6 my-5 rounded-lg hover:bg-gray-800 px-[40px] ml-[20px]">
         <PlusCircleOutlined className="text-xl" /> Qo'shish
       </Button>
       <Modal
