@@ -35,7 +35,7 @@ function User() {
                       type="text"
                       id="inp1"
                       className="pl-10 w-[375px] border-gray-300 rounded-md h-[50px] "
-                      placeholder="Foydalanuvchini qidirish"
+                      placeholder="F.I.O qidirish"
                     />
                   </div>
                   <div className="flex">
