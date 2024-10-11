@@ -6,7 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 
 import { useQuery, useQueryClient } from "react-query";
 import defaultImage from '../assets/images/default.png';
 import { MdEdit } from "react-icons/md";
-import CategoryAddModal from '@/components/Modal/CategoryAddModal';
+// import CategoryAddModal from '@/components/Modal/CategoryAddModal';
 import CategoryDeleteModal from '@/components/Modal/CategoryDeleteModal'; 
 
 function Category() {
@@ -46,7 +46,7 @@ function Category() {
         </div>
 
         {/* Kategoriya qo'shish modali */}
-        <CategoryAddModal onAddCategory={handleAddCategory} />
+        {/* <CategoryAddModal onAddCategory={handleAddCategory} /> */}
 
         <div className="overflow-x-scroll w-[1200px] rounded-lg">
           <Table hoverable className="border-collapse">
