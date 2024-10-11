@@ -4,21 +4,21 @@ import Helmet from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 
 function Home() {
-  checkLogin()
-  const navigate = useNavigate()
+  checkLogin();
+  const navigate = useNavigate();
   function checkRoleClient() {
-    const role = localStorage.getItem('role')
+    const role = localStorage.getItem('role');
     if (role == 'ROLE_CLIENT') {
-      navigate('/client/dashboard')
-    }else if(role == 'ROLE_SUPER_ADMIN'){
-      navigate('/dashboard')
-    }else if(role == 'ROLE_TESTER'){
-      navigate('/category')
+      navigate('/client/dashboard');
+    } else if (role == 'ROLE_SUPER_ADMIN') {
+      navigate('/dashboard');
+    } else if (role == 'ROLE_TESTER') {
+      navigate('/category');
     }
   }
   useEffect(() => {
-    checkRoleClient()
-  }, [checkRoleClient])
+    checkRoleClient();
+  }, [checkRoleClient]);
   return (
     <div>
       <Helmet>
@@ -26,7 +26,7 @@ function Home() {
       </Helmet>
 
       <div>Home</div>
-    </div> 
+    </div>
   );
 }
 

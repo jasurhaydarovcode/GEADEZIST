@@ -64,4 +64,4 @@ const ConfirmSignUp = () => {
   )
 }
 
-export default ConfirmSignUp
+export default ConfirmSignUp;

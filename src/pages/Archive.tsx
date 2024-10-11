@@ -1,20 +1,18 @@
-import { useEffect } from "react"
-import { useNavigate } from "react-router-dom"
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Archive() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   function checkRoleClient() {
-    const role = localStorage.getItem('role')
+    const role = localStorage.getItem('role');
     if (role == 'ROLE_CLIENT') {
-      navigate('/client/dashboard')
-    } 
+      navigate('/client/dashboard');
+    }
   }
   useEffect(() => {
-    checkRoleClient()
-  }, [checkRoleClient])
-  return (
-    <div>Archive</div>
-  );
+    checkRoleClient();
+  }, [checkRoleClient]);
+  return <div>Archive</div>;
 }
 
 export default Archive;

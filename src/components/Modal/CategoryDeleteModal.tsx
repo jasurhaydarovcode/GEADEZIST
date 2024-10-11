@@ -1,8 +1,14 @@
 import { useState } from 'react';
 import { Modal, Button } from 'antd';
-import { MdDelete } from "react-icons/md";
+import { MdDelete } from 'react-icons/md';
 
-function CategoryDeleteModal({ categoryId, onDelete }: { categoryId: string, onDelete: (id: string) => void }) {
+function CategoryDeleteModal({
+  categoryId,
+  onDelete,
+}: {
+  categoryId: string;
+  onDelete: (id: string) => void;
+}) {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const showModal = () => {
@@ -10,7 +16,7 @@ function CategoryDeleteModal({ categoryId, onDelete }: { categoryId: string, onD
   };
 
   const handleOk = () => {
-    onDelete(categoryId);  // Call the delete function passed from parent
+    onDelete(categoryId); // Call the delete function passed from parent
     setIsModalVisible(false);
   };
 

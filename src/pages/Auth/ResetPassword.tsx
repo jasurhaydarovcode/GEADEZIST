@@ -20,9 +20,9 @@ function ResetPassword() {
     event.preventDefault(); // Sahifa yangilanmasligini ta'minlash
 
     const data: ResetPasswordType = {
-    passwordToken :code.current?.value || "", 
-    newPassword: password.current?.value  || "",
-    confirmPassword: confirmPassword.current?.value  || ""
+      passwordToken: code.current?.value || '',
+      newPassword: password.current?.value || '',
+      confirmPassword: confirmPassword.current?.value || '',
     };
     if (!code.current?.value || !password.current?.value || !confirmPassword.current?.value) {
       toast.warning("Iltimos, bo'shliqni  to'ldiring!"); // Elektron pochta kiritilmagan bo'lsa xabar beriladi
@@ -43,10 +43,9 @@ function ResetPassword() {
       .then((res) => {
         if (res.status === 200) {
           toast.success(res.message);
-          navigate("/auth/SignIn");
+          navigate('/auth/SignIn');
         }
         console.log(res.status);
-        
       })
       .catch((err) => {
         if (err.response?.status === 404) {
@@ -165,7 +164,7 @@ function ResetPassword() {
             <div className="flex justify-center items-center mt-4 lg:mt-6">
               <p className="text-sm text-black ">Hisobingiz bormi ?</p>
               <Link
-                to={"/auth/signin"}
+                to={'/auth/signin'}
                 className="text-sm text-blue-500 hover:underline"
               >
                 Ro'yhatdan o'tish
