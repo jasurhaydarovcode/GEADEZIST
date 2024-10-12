@@ -21,11 +21,8 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
   });
 
   const [open, setOpen] = useState(false);
-  //   const [loading, setLoading] = useState(false);
-
   const queryClient = useQueryClient();
 
-  // React Query orqali POST so'rovini bajaryapmiz
   const mutation = useMutation(
     async (newCategory: CategoryModalTypes) => {
       const response = await axios.post(`${baseUrl}category`, newCategory, {
@@ -46,7 +43,6 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
     }
   );
 
-  // Formani tozalash funksiyasi
   const resetForm = () => {
     setFormData({
       name: '',
@@ -56,34 +52,35 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
       durationTime: 0,
       retakeDate: 0,
       fileId: 0,
-      main: true, // Yana asosiy bo'lishi uchun true qiymatga qaytariladi
+      main: true,
     });
   };
 
-  // Ma'lumotlarni saqlash uchun so'rov jo'natiladi
   const handleSave = () => {
     mutation.mutate(formData, {
       onSuccess: (data) => {
-        onAddCategory(data); // Yangi kategoriyani ota-komponenta uzatish
-        setOpen(false); // Modalni yopish
-        resetForm(); // Formani tozalash
-      }
+        onAddCategory(data);
+        setOpen(false);
+        resetForm();
+      },
     });
   };
 
   const handleCancel = () => {
-    resetForm(); // Formani tozalash
-    setOpen(false); // Modalni yopish
+    resetForm();
+    setOpen(false);
   };
 
-  // Input uchun CSS class nomlari
   const InputStyles = {
     input: 'w-full rounded-lg border',
   };
 
   return (
     <>
-      <Button onClick={() => setOpen(true)} className="text-xl bg-black text-white py-6 my-5 rounded-lg hover:bg-gray-800 px-[40px] ml-[20px]">
+      <Button
+        onClick={() => setOpen(true)}
+        className="text-xl bg-black text-white py-6 my-5 rounded-lg hover:bg-gray-800 px-[40px] ml-[20px]"
+      >
         <PlusCircleOutlined className="text-xl" /> Qo'shish
       </Button>
       <Modal
@@ -95,12 +92,12 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
         width={600}
         okText="Saqlash"
         cancelText="Yopish"
-        confirmLoading={mutation.isLoading} // Saqlanish jarayonida yuklanish holati
+        confirmLoading={mutation.isLoading}
         maskClosable={false}
       >
         <div className="space-y-4">
           <div>
-            <label className="block mb-2">Asosiy Kategoriya</label>
+            <label className="block mb-2">Asosiy Turini Tanlang</label>
             <Select
               value={formData.main ? 'asosiy' : 'asosiy-bolmagan'}
               onChange={(value) => setFormData({ ...formData, main: value === 'asosiy' })}
@@ -111,6 +108,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
             </Select>
           </div>
 
+          {/* Show these inputs for all categories */}
           <div>
             <label className="block mb-2">Kategoriya Nomi</label>
             <Input
@@ -120,6 +118,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             />
           </div>
+
           <div>
             <label className="block mb-2">Tavsif</label>
             <Input
@@ -129,50 +128,56 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
             />
           </div>
-          <div>
-            <label className="block mb-2">Umumiy Savollar</label>
-            <Input
-              className={InputStyles.input}
-              type="number"
-              placeholder="Umumiy savollar sonini kiriting"
-              value={formData.questionCount}
-              onChange={(e) => setFormData({ ...formData, questionCount: Number(e.target.value) })}
-              min="0"
-            />
-          </div>
-          <div>
-            <label className="block mb-2">Qo'shimcha savollar</label>
-            <Input
-              className={InputStyles.input}
-              type="number"
-              placeholder="Qo'shimcha savollar sonini kiriting"
-              value={formData.extraQuestionCount}
-              onChange={(e) => setFormData({ ...formData, extraQuestionCount: Number(e.target.value) })}
-              min="0"
-            />
-          </div>
-          <div>
-            <label className="block mb-2">Davomiylik (daqiqa)</label>
-            <Input
-              className={InputStyles.input}
-              type="number"
-              placeholder="Davomiylik (daqiqa)"
-              value={formData.durationTime}
-              onChange={(e) => setFormData({ ...formData, durationTime: Number(e.target.value) })}
-              min="0"
-            />
-          </div>
-          <div>
-            <label className="block mb-2">Qayta qabul qilish sanasi</label>
-            <Input
-              className={InputStyles.input}
-              type="number"
-              placeholder="Qayta qabul qilish sanasi"
-              value={formData.retakeDate}
-              onChange={(e) => setFormData({ ...formData, retakeDate: Number(e.target.value) })}
-              min="0"
-            />
-          </div>
+
+          {/* Render additional inputs only if the category is "asosiy" */}
+          {formData.main && (
+            <>
+              <div>
+                <label className="block mb-2">Umumiy Savollar</label>
+                <Input
+                  className={InputStyles.input}
+                  type="number"
+                  placeholder="Umumiy savollar sonini kiriting"
+                  value={formData.questionCount}
+                  onChange={(e) => setFormData({ ...formData, questionCount: Number(e.target.value) })}
+                  min="0"
+                />
+              </div>
+              <div>
+                <label className="block mb-2">Qo'shimcha savollar</label>
+                <Input
+                  className={InputStyles.input}
+                  type="number"
+                  placeholder="Qo'shimcha savollar sonini kiriting"
+                  value={formData.extraQuestionCount}
+                  onChange={(e) => setFormData({ ...formData, extraQuestionCount: Number(e.target.value) })}
+                  min="0"
+                />
+              </div>
+              <div>
+                <label className="block mb-2">Davomiylik (daqiqa)</label>
+                <Input
+                  className={InputStyles.input}
+                  type="number"
+                  placeholder="Davomiylik (daqiqa)"
+                  value={formData.durationTime}
+                  onChange={(e) => setFormData({ ...formData, durationTime: Number(e.target.value) })}
+                  min="0"
+                />
+              </div>
+              <div>
+                <label className="block mb-2">Qayta qabul qilish sanasi</label>
+                <Input
+                  className={InputStyles.input}
+                  type="number"
+                  placeholder="Qayta qabul qilish sanasi"
+                  value={formData.retakeDate}
+                  onChange={(e) => setFormData({ ...formData, retakeDate: Number(e.target.value) })}
+                  min="0"
+                />
+              </div>
+            </>
+          )}
         </div>
       </Modal>
     </>
