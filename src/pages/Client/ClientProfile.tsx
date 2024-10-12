@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import Layout from '@/components/clientDashboard/laytout';
 import { BiSolidPencil } from 'react-icons/bi';
 import axios from 'axios';
@@ -7,13 +7,12 @@ import { getProfile } from '@/helpers/api/baseUrl';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { config } from '@/helpers/functions/token';
-import { GetMetype } from '../../helpers/types/GetMetype';
+import { GetMetype } from '../../helpers/types/GetMetype.ts';
 
 function ClientProfile() {
   const navigate = useNavigate();
 
-  // Tekshirish uchun role va tokenni faqat bir marta ishlatish uchun useCallback qo'llaymiz
-  const checkRoleClient = () => {
+  const checkRoleClient = useCallback(() => {
     const role = localStorage.getItem('role');
     const token = localStorage.getItem('token');
     if (role === 'ROLE_SUPER_ADMIN') {
@@ -25,10 +24,10 @@ function ClientProfile() {
     if (!token) {
       navigate('/auth/Signin');
     }
-  };
+  }, [navigate]);
 
   // Ma'lumotni React Query orqali olish
-  const { data: getMeUserData, error: queryError } = useQuery({
+  const { data: getMeUserData, } = useQuery({
     queryKey: ['getMeUser'],
     queryFn: async () => {
       const response = await axios.get(getProfile, config);
@@ -46,7 +45,7 @@ function ClientProfile() {
 
   useEffect(() => {
     checkRoleClient();
-  }, []);
+  }, [checkRoleClient]);
 
   return (
     <Layout>
