@@ -1,5 +1,5 @@
 import { Modal, Form, Input, Button, Select } from 'antd';
-import { CategoryFormValues } from '@/helpers/types/CategoryFormValues';
+import { CategoryFormValues } from '../../helpers/types/CategoryFormValues';
 import { useEffect, useState } from 'react';
 
 const { Option } = Select;
