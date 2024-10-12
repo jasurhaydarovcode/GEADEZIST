@@ -1,23 +1,23 @@
-import Layout from '@/components/Dashboard/Layout';
+import Layout from '@/components/Dashboard/Layout'; 
 import TableLoading from '@/components/spinner/TableLoading';
-import { baseUrl } from '@/helpers/api/baseUrl';
-import { config } from '@/helpers/functions/token';
-import { PlusCircleOutlined } from '@ant-design/icons';
-import { Button, Modal, Pagination } from 'antd';
-import axios from 'axios';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeadCell,
-  TableRow,
-} from 'flowbite-react';
-import { useEffect, useState } from 'react';
-import { MdDelete, MdEdit } from 'react-icons/md';
-import { QueryClient, useMutation, useQuery } from 'react-query';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { baseUrl } from '@/helpers/api/baseUrl'; 
+import { config } from '@/helpers/functions/token'; 
+import { PlusCircleOutlined } from '@ant-design/icons'; 
+import { Button, Modal, Pagination } from 'antd'; 
+import axios from 'axios'; 
+import { 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableHead, 
+  TableHeadCell, 
+  TableRow, 
+} from 'flowbite-react'; 
+import { useEffect, useState } from 'react'; 
+import { MdDelete, MdEdit } from 'react-icons/md'; 
+import { QueryClient, useMutation, useQuery } from 'react-query'; 
+import { useNavigate } from 'react-router-dom'; 
+import { toast } from 'react-toastify'; 
 
 function Address() {
   const [open, setOpen] = useState(false);
@@ -156,6 +156,29 @@ function Address() {
       console.log('Xatolik:', error);
     },
   });
+
+  // Tumanlarni get qilish
+  const { data: districts } = useQuery(
+    ['getDistrict', currentPage],
+    async () => {
+      const res = await axios.get(
+        `${baseUrl}district/getAllDistrictPage?page=0&size=10`,
+        config,
+      );
+      return (res.data as { body: { body: string; }}).body.body;
+    },
+    //   const responseData = (
+    //     res.data as {
+    //       body: { body: string; totalElements: number; totalPage: number };
+    //     }
+    //   ).body;
+    //   setTotalItems(responseData.totalElements); // Umumiy ma'lumotlar sonini saqlaymiz
+    //   return responseData.body;
+    // },
+    // {
+    //   keepPreviousData: true, // Sahifa o'zgarganda eski ma'lumotlarni saqlab qoladi
+    // },
+  );
 
   return (
     <Layout>
@@ -296,28 +319,33 @@ function Address() {
           <Table hoverable>
             <TableHead>
               <TableHeadCell>T/P</TableHeadCell>
+              <TableHeadCell>Tuman nomi</TableHeadCell>
               <TableHeadCell>Viloyat nomi</TableHeadCell>
               <TableHeadCell>Harakat</TableHeadCell>
             </TableHead>
             <TableBody className="divide-y">
+            {Array.isArray(districts) &&
+              districts.map((item, index) => (
               <TableRow className="bg-white text-gray-700 dark:border-gray-700 dark:bg-gray-800">
-                <TableCell>1</TableCell>
-                <TableCell>2</TableCell>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{item.name}</TableCell>
+                <TableCell>{item.regionName}</TableCell>
                 <TableCell className="flex gap-1 text-xl cursor-pointer">
                   <MdEdit />
                   <MdDelete />
                 </TableCell>
               </TableRow>
+              ))}
             </TableBody>
           </Table>
           {/* pagination */}
-          <Pagination
+          {/* <Pagination
             className="mt-5"
-            // current={currentPage}
-            // total={totalItems}
-            // pageSize={pageSize}
-            // onChange={handlePageChange}
-          />
+            current={currentPage}
+            total={totalItems}
+            pageSize={pageSize}
+            onChange={handlePageChange}
+          /> */}
         </div>
       </div>
       )}
