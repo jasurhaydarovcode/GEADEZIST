@@ -38,20 +38,20 @@ function Address() {
     setOpen(true);
   };
 
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
 
-  function checkRoleClient() {
-    const role = localStorage.getItem('role');
-    if (role == 'ROLE_CLIENT') {
-      navigate('/client/dashboard');
-    }
-  }
+  function checkRoleClient() { 
+    const role = localStorage.getItem('role'); 
+    if (role == 'ROLE_CLIENT') { 
+      navigate('/client/dashboard'); 
+    } 
+  } 
 
-  useEffect(() => {
-    checkRoleClient();
-  }, [checkRoleClient]);
+  useEffect(() => { 
+    checkRoleClient(); 
+  }, [checkRoleClient]); 
 
-  const handleOk = () => {
+  const handleOk = () => { 
     postAddressData.mutate();
     setConfirmLoading(true);
     setTimeout(() => {
@@ -64,16 +64,16 @@ function Address() {
     setOpen(false);
   };
 
-  const handleDelete = () => {
-    if (selectedAddress !== null) {
-      deleteAddress.mutate(selectedAddress);
-      setDeleteModalVisible(false);
-    }
-  };
+  const handleDelete = () => { 
+    if (selectedAddress !== null) { 
+      deleteAddress.mutate(selectedAddress); 
+      setDeleteModalVisible(false); 
+    } 
+  }; 
 
-  const handleDeleteCancel = () => {
-    setDeleteModalVisible(false); // O'chirishni bekor qilish
-  };
+  const handleDeleteCancel = () => { 
+    setDeleteModalVisible(false); // O'chirishni bekor qilish 
+  }; 
 
   const handlePutOk = () => {
     if (selectedAddress !== null) {
@@ -88,24 +88,24 @@ function Address() {
 
   // Viloyatlarni get qilish
   const { data: addresses, isLoading } = useQuery(
-    ['getAddress', currentPage],
-    async () => {
-      const res = await axios.get(
-        `${baseUrl}region/getAllRegionPage?page=${currentPage - 1}&size=${pageSize}`,
-        config,
-      );
-      const responseData = (
-        res.data as {
-          body: { body: string; totalElements: number; totalPage: number };
-        }
-      ).body;
-      setTotalItems(responseData.totalElements); // Umumiy ma'lumotlar sonini saqlaymiz
-      return responseData.body;
-    },
-    {
-      keepPreviousData: true, // Sahifa o'zgarganda eski ma'lumotlarni saqlab qoladi
-    },
-  );
+    ['getAddress', currentPage], 
+    async () => { 
+      const res = await axios.get( 
+        `${baseUrl}region/getAllRegionPage?page=${currentPage - 1}&size=${pageSize}`, 
+        config, 
+      ); 
+      const responseData = ( 
+        res.data as { 
+          body: { body: string; totalElements: number; totalPage: number }; 
+        } 
+      ).body; 
+      setTotalItems(responseData.totalElements); // Umumiy ma'lumotlar sonini saqlaymiz 
+      return responseData.body; 
+    }, 
+    { 
+      keepPreviousData: true, // Sahifa o'zgarganda eski ma'lumotlarni saqlab qoladi 
+    }, 
+  ); 
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page); // Hozirgi sahifani yangilash
@@ -115,21 +115,21 @@ function Address() {
   // Manzillarni post qilish
   const queryClient = new QueryClient();
 
-  const [name, setName] = useState('');
+  const [name, setName] = useState(''); 
 
   const postAddressData = useMutation({
     mutationFn: async () => {
-      const res = await axios.post(`${baseUrl}region`, { name }, config);
-      return (res.data as { body: { body: string } }).body.body;
-    },
-    onSuccess: () => {
-      toast.success("Manzil qo'shildi");
-      queryClient.invalidateQueries('getAddress');
+      const res = await axios.post(`${baseUrl}region`, { name }, config); 
+      return (res.data as { body: { body: string } }).body.body; 
+    }, 
+    onSuccess: () => { 
+      toast.success("Manzil qo'shildi"); 
+      queryClient.invalidateQueries('getAddress'); 
     },
     onError: (error) => {
       console.log('Xatolik:', error);
-    },
-  });
+    }, 
+  }); 
 
   // Manzillarni o'chirish
   const deleteAddress = useMutation({
@@ -176,7 +176,7 @@ function Address() {
           body: { body: string; totalElements: number; totalPage: number };
         }
       ).body;
-      setTotalItems(responseData.totalElements); // Umumiy ma'lumotlar sonini saqlaymiz
+      setTotalItemss(responseData.totalElements); // Umumiy ma'lumotlar sonini saqlaymiz
       return responseData.body;
     },
     {
