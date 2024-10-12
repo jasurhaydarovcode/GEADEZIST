@@ -7,7 +7,7 @@ import { getProfile } from '@/helpers/api/baseUrl';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { config } from '@/helpers/functions/token';
-import GetMetype from '../../helpers/types/GetMetype.ts';
+import { GetMetype } from '../../helpers/types/GetMetype';
 
 function ClientProfile() {
   const navigate = useNavigate();
