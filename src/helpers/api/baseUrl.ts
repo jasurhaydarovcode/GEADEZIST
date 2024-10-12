@@ -46,3 +46,14 @@ export const superAdminDashWeekStatistic = `${baseUrl}statistic/dayOfWeek`;
 
 // SUPER ADMIN dashboard barcha statstika sonlarda
 export const getStaticAll = `${baseUrl}statistic/counts/`;
+
+
+
+
+
+// --------------- Super Admin address urls -------------------
+// viloyatlarni urls
+export const getRegion = `${baseUrl}region/`;
+export const addRegion = `${baseUrl}region`;
+export const deleteRegion = `${baseUrl}region/`;
+export const updateRegion = `${baseUrl}region/`;
