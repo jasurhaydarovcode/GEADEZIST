@@ -1,15 +1,14 @@
 // ClientTestStart.tsx
-import Layout from '@/components/clientDashboard/laytout';
-import { Logo } from '@/helpers/imports/images';
-import { useNavigate } from 'react-router-dom';
-import { Modal } from 'antd';
-import { useEffect, useState } from 'react';
-import { MdOutlineNotStarted } from 'react-icons/md';
-import { Helmet } from 'react-helmet';
-import { useQuery, useQueryClient } from 'react-query';
-import { baseUrl } from '@/helpers/api/baseUrl';
+import Layout from "@/components/clientDashboard/laytout";
+import { useNavigate } from "react-router-dom";
+import { Modal } from "antd";
+import { useEffect, useState } from "react";
+import { MdOutlineNotStarted } from "react-icons/md";
+import { Helmet } from "react-helmet";
+import { useQuery } from "react-query";
+import { baseUrl } from "@/helpers/api/baseUrl";
+import { toast } from "react-toastify";
 import { ClientCategory } from '@/helpers/types/getClientCategory';
-import { toast } from 'react-toastify';
 import axios from 'axios';
 import { config } from '@/helpers/functions/token';
 
@@ -52,97 +51,92 @@ const ClientTestStart: React.FC = () => {
     setIsModalVisible(false);
   };
 
-  const geodesyData = [
-    { title: 'Йўналиш:', value: 'Умумий Геодезия' },
-    { title: 'Тест ишлашга ажратилган вақт:', value: '60 (дақ.)' },
-    { title: 'Саволлар сони:', value: '20 та' },
-    { title: 'Қайта топшириш вақти:', value: '3 кундан кейин' },
-  ];
-
   const { isLoading, error, data } = useQuery({
     queryKey: ['getClientCategory'],
     queryFn: async () => {
-      const res = await axios.get(`${baseUrl}category?page=0&size=10`, config);
-      return res.data;
+      const res = await axios.get(`${baseUrl}category`, config);
+      return res.data?.body?.body as ClientCategory[];
     },
     onError: (error: AxiosError) => {
       toast.error(error.message);
     },
   });
 
+  if (isLoading) return <div>Loading...</div>
+  if (error) return toast.error(error.message)
+
   return (
-    <Layout>
+    <Layout className="p-8 space-y-6">
       <Helmet>
         <title>Geodeziya</title>
       </Helmet>
       <div className="py-8">
         <h2 className="text-red-600 text-4xl text-center">Yo'nalishlar</h2>
       </div>
-      <div className="border-[1px] items-center shadow-lg relative border-black bg-white rounded-md py-6 px-4 w-full">
-        <div className="flex">
-          <div>
-            <img
-              className="w-40 h-40 mr-4"
-              src={Logo}
-              alt="Orientation Illustration"
-            />
-          </div>
-          <div className="flex-1 mb-4">
-            {/* {geodesyData.map((item, index) => (
+      {Array.isArray(data) && data.map((item: ClientCategory, index: number) => (
+        <div className="border-[0.5px] items-center shadow-xl relative border-black bg-white rounded-md py-6 px-4 w-full">
+          <div className="flex">
+            <div>
+              <img className="w-40 h-40 mr-4" src={item.fileId} alt="Category Image" />
+            </div>
+            <div className="flex-1 mb-4">
               <div key={index} className="flex justify-between mb-2">
-                <span className="text-gray-600 font-semibold">{item.title}</span>
-                <span className="text-gray-800">{item.value}</span>
+                <span className="text-gray-600 font-semibold">Yo'nalish</span>
+                <span className="text-gray-700 font-medium">{item.name}</span>
               </div>
-            ))} */}
-            {Array.isArray(data) &&
-              data.map((item: ClientCategory, index: number) => (
-                <div key={index} className="flex justify-between mb-2">
-                  <span className="text-gray-600 font-semibold">Yo'nalish</span>
-                  <span className="text-gray-800">{item.name}</span>
+
+              <div key={index} className="flex justify-between mb-2">
+                <span className="text-gray-600 font-semibold">Test ishlashga ajratilgan vaqt</span>
+                <span className="text-gray-700 font-medium">{item.duration} (дақ.)</span>
+              </div>
+
+              <div key={index} className="flex justify-between mb-2">
+                <span className="text-gray-600 font-semibold">Savollar soni</span>
+                <span className="text-gray-700 font-medium">{item.questionCount} ta</span>
+              </div>
+
+              <div key={index} className="flex justify-between mb-2">
+                <span className="text-gray-600 font-semibold">Qayta topshirish vaqti</span>
+                <span className="text-gray-700 font-medium">{item.retakeDate} ta</span>
+              </div>
+
+              <button onClick={showModal} className="bg-gray-600 cursor-pointer absolute top-[78%] right-3 text-white p-1 px-4 rounded">
+                Бошлаш
+              </button>
+            </div>
+
+            <Modal
+              title={
+                <div>
+                  <span>
+                    <MdOutlineNotStarted size={90} color="red" className="mx-auto" />
+                  </span>
+                  <span>Haqiqatdan ham </span>
+                  <span className="text-red-600">{data[index].name}</span>
+                  <span> yo'nalishi bo'yicha test boshlamoqchimisiz?</span>
                 </div>
-              ))}
+              }
+              visible={isModalVisible}
+              onOk={handleOk}
+              onCancel={handleCancel}
+              okText="Boshlash"
+              cancelText="Orqaga"
+              maskClosable={false}
+              style={{
+                top: "34%",
+                left: "1%",
+                width: "300px"
+              }}
+              maskStyle={{
+                backgroundColor: "rgba(0, 0, 0, 0.1)",
+              }}
+            >
+            </Modal>
           </div>
         </div>
-        {/* Ant Design Modal */}
-        <Modal
-          title={
-            <div>
-              <span>
-                <MdOutlineNotStarted
-                  size={90}
-                  color="red"
-                  className="mx-auto"
-                />
-              </span>
-              <span>Haqiqatdan ham </span>
-              <span className="text-red-600">{geodesyData[0].value}</span>
-              <span> yo'nalishi bo'yicha test boshlamoqchimisiz?</span>
-            </div>
-          }
-          visible={isModalVisible}
-          onOk={handleOk}
-          onCancel={handleCancel}
-          okText="Boshlash"
-          cancelText="Orqaga"
-          maskClosable={false}
-          style={{
-            top: '36`%',
-            left: '1%',
-            width: '300px',
-          }}
-          maskStyle={{
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          }}
-        ></Modal>
-        <button
-          onClick={showModal}
-          className="bg-gray-600 cursor-pointer absolute top-[78%] right-3 text-white p-1 px-4 rounded"
-        >
-          Бошлаш
-        </button>
-      </div>
+      ))}
     </Layout>
   );
-};
+}
 
 export default ClientTestStart;
