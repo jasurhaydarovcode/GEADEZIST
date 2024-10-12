@@ -1,6 +1,11 @@
 import Layout from '@/components/Dashboard/Layout';
 import TableLoading from '@/components/spinner/TableLoading';
-import { addRegion, baseUrl, deleteRegion, getDistrict, getRegion, updateRegion } from '@/helpers/api/baseUrl';
+import { addRegion,
+  deleteRegion, 
+  getDistrict, 
+  getRegion, 
+  updateRegion 
+} from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Modal, Pagination } from 'antd';
