@@ -53,7 +53,6 @@ function ClientProfile() {
       <Helmet>
         <title>{profileData?.lastName} Profile</title>
       </Helmet>
-
       <Layout>
         <div className="flex flex-col items-center md:p-4 p-0">
           <div className="w-full max-w-7xl bg-white shadow-md rounded-lg p-6">
@@ -186,6 +185,7 @@ function ClientProfile() {
         </div>
       </Layout>
     </div>
+
   );
 }
 
