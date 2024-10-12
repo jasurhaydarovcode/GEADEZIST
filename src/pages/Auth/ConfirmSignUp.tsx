@@ -1,24 +1,37 @@
 import { baseUrl } from '@/helpers/api/baseUrl'
 import { Logo, registerRasm } from '@/helpers/imports/images'
-import { ForgetPasswordType } from '@/helpers/types/LoginType'
 import axios from 'axios'
 import { useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 const ConfirmSignUp = () => {
+  const navigate = useNavigate()
   const code = useRef<HTMLInputElement>(null)
 
   function forgetPassword() {
-    const data:ForgetPasswordType = {
-      'code': code.current?.value || ""
+
+    if (!code.current?.value) {
+      toast.warning('Kodni kiriting')
+      return
     }
-    axios.put(`${baseUrl}/auth/activate?code=${data}`,data)
+    if (code.current?.value.length < 5) {
+      toast.warning('Kod kamida 5 ta raqamdan iborat')
+      return
+    }
+    axios.put(`${baseUrl}auth/activate?code=${code.current?.value}`)
     .then((res) => {
       toast.success("Yaxshi")
       console.log(res.data)
+      navigate('/auth/SignIn')
     })
     .catch((err) => {
-      toast.error(err.response.data.message)
+     if(err.response?.status === 404) {
+      toast.warning('Kod tog`ri kelmadi!')
+     }
+     else {
+      toast.error('Qayta tekshirib ko`ring!')
+     }
     })
   }
   return (
