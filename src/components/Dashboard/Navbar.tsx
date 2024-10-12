@@ -3,7 +3,7 @@ import { config } from '@/helpers/functions/token';
 import { geodeziyaLogo } from '@/helpers/imports/images';
 import { GetMeResponse } from '@/helpers/types/GetMetype';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { FaRegUser } from 'react-icons/fa';
 import { IoExitOutline } from 'react-icons/io5';
 import { useQuery } from 'react-query';
@@ -17,14 +17,15 @@ const Navbar: React.FC = () => {
   const [isEmailTooltipVisible, setIsEmailTooltipVisible] = useState<boolean>(false);
   const role = localStorage.getItem('role');
 
-  // ======= START Log out uchun button
+  const token = localStorage.getItem('token')
   const navigate = useNavigate();
+  const [getUser, setGetUser] = useState<GetMeResponse | null>(null);
+
   const logOut = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
     navigate('/auth/SignIn');
   };
-  // ======= END Log out uchun button
 
   const toggleDropdown = () => {
     if (!getMe.isLoading) {
@@ -32,7 +33,6 @@ const Navbar: React.FC = () => {
     }
   };
 
-  // Modal Hover bolganda email ni ko'rsatish
   const handleMouseEnter = () => {
     setIsEmailTooltipVisible(true);
   };
@@ -41,28 +41,32 @@ const Navbar: React.FC = () => {
     setIsEmailTooltipVisible(false);
   };
 
-  // Open Logout Modal
   const openLogoutModal = () => {
     setIsLogoutModalOpen(true);
   };
 
-  // Close Logout Modal
   const closeLogoutModal = () => {
     setIsLogoutModalOpen(false);
   };
 
   const getMe = useQuery({
     queryKey: ['getMe', config],
-    queryFn: async (): Promise<any> => {
-      const res = await axios.get(getMeUser, config);
-      return res.data;
+    queryFn: async () => {
+      const res = await axios.get<GetMeResponse>(getMeUser, config);
+      return res.data?.body;
     },
+    onSuccess: (data) => {
+      setGetUser(data);  // Ma'lumotni state'ga saqlash
+    }
   });
 
-  const getMeData: GetMeResponse = getMe.data?.body;
-  // useEffect(() => {
-  //   getMe.refetch();
-  // }, [getMe.refetch]);
+
+  useEffect(() => {
+    if (token) {
+      getMe.refetch()
+    }
+  }, [token]);
+
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
       if (event.key) {
@@ -78,7 +82,7 @@ const Navbar: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    AOS.init({ duration: 500 }); // Aos uchun
+    AOS.init({ duration: 500 });
   }, []);
 
   return (
@@ -92,7 +96,7 @@ const Navbar: React.FC = () => {
           <div className="flex gap-4 items-center cursor-pointer">
             <div>
               <h1 className="text-gray-500 mr-2 text-md font-semibold">
-                {getMeData?.fullName}
+                {getUser?.fullName}
               </h1>
               <span>
                 {getMe.isLoading
@@ -114,19 +118,17 @@ const Navbar: React.FC = () => {
           {isDropdownOpen && (
             <div className="absolute z-50 right-0 mt-2 w-56 bg-white border rounded-lg shadow-lg">
               <div className="p-4">
-                <div className="font-bold">{getMeData.fullName}</div>
-                {/* Email with hover effect */}
+                <div className="font-bold">{getUser?.fullName}</div>
                 <div
                   className="text-md w-full text-left pt-5 pb-2 rounded"
                   onMouseEnter={handleMouseEnter}
                   onMouseLeave={handleMouseLeave}
                 >
-                  {getMeData.email}
+                  {getUser?.email}
                 </div>
-                {/* Tooltip email */}
                 {isEmailTooltipVisible && (
                   <div data-aos="fade-up" className="absolute bg-gray-200 p-2 top-[9px] left-3 rounded shadow-md">
-                    {getMeData.email}
+                    {getUser?.email}
                   </div>
                 )}
               </div>
@@ -156,7 +158,6 @@ const Navbar: React.FC = () => {
           )}
         </div>
 
-        {/* Logout Confirmation Modal */}
         <LogoutModal
           isOpen={isLogoutModalOpen}
           onClose={closeLogoutModal}
