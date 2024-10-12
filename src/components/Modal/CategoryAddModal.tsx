@@ -1,18 +1,14 @@
 import { useState } from 'react';
 import { Button, Modal, Input, Select } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
-import { useMutation, useQueryClient } from 'react-query'; // Ma'lumotlarni jo'natish uchun React Query ishlatyapmiz
+import { useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
 import { baseUrl } from '@/helpers/api/baseUrl';
+import { CategoryAddModalProps, CategoryModalTypes } from '@/helpers/types/CategoryModalTypes';
 
 const { Option } = Select;
 
-interface CategoryAddModalProps {
-  onAddCategory: (newCategory: any) => void;
-}
-
 const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) => {
-  // Form qiymatlarini boshqarish uchun useState ishlatyapmiz
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -21,27 +17,27 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
     durationTime: 0,
     retakeDate: 0,
     fileId: 0,
-    main: false, // Asosiy kategoriya uchun boshlang'ich qiymat true
+    main: false,
   });
 
   const [open, setOpen] = useState(false);
-//   const [loading, setLoading] = useState(false);
+  //   const [loading, setLoading] = useState(false);
 
   const queryClient = useQueryClient();
 
   // React Query orqali POST so'rovini bajaryapmiz
   const mutation = useMutation(
-    async (newCategory: any) => {
+    async (newCategory: CategoryModalTypes) => {
       const response = await axios.post(`${baseUrl}category`, newCategory, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      return response.data; // To'g'ridan-to'g'ri response ni emas, balki response.data ni qaytaradi
+      return response.data;
     },
     {
       onSuccess: (data) => {
-        queryClient.invalidateQueries('categories'); // Kategoriyalarni yangilash
+        queryClient.invalidateQueries('categories');
         console.log('Kategoriya muvaffaqiyatli qo\'shildi:', data);
       },
       onError: (error) => {
@@ -103,7 +99,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
         maskClosable={false}
       >
         <div className="space-y-4">
-        <div>
+          <div>
             <label className="block mb-2">Asosiy Kategoriya</label>
             <Select
               value={formData.main ? 'asosiy' : 'asosiy-bolmagan'}

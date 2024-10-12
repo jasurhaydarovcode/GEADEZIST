@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Select } from 'antd';
 
@@ -15,7 +15,7 @@ const QuestionPage: React.FC = () => {
     console.log(`Selected: ${value}`);
   };
 
-  function checkRoleClient() {
+  const checkRoleClient = useCallback(() => {
     const role = localStorage.getItem('role');
     const token = localStorage.getItem('token');
     if (role == 'ROLE_SUPER_ADMIN') {
@@ -27,7 +27,7 @@ const QuestionPage: React.FC = () => {
     if (token == null) {
       navigate('/auth/Signin');
     }
-  }
+  }, []);
 
   useEffect(() => {
     checkRoleClient();
@@ -110,11 +110,10 @@ const QuestionPage: React.FC = () => {
             {answers.map((answer, index) => (
               <label
                 key={index}
-                className={`block p-4 border rounded-lg cursor-pointer ${
-                  selectedAnswers.includes(index)
+                className={`block p-4 border rounded-lg cursor-pointer ${selectedAnswers.includes(index)
                     ? 'bg-blue-100 border-blue-500'
                     : 'border-gray-300'
-                }`}
+                  }`}
                 onClick={() => toggleAnswer(index)}
               >
                 <input

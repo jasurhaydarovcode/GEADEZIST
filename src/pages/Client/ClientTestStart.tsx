@@ -1,8 +1,7 @@
-// ClientTestStart.tsx
 import Layout from "@/components/clientDashboard/laytout";
 import { useNavigate } from "react-router-dom";
 import { Modal } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { MdOutlineNotStarted } from "react-icons/md";
 import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
@@ -28,7 +27,7 @@ const ClientTestStart: React.FC = () => {
     navigate('/client/quiz/:id');
   };
 
-  function checkRoleClient() {
+  const checkRoleClient = useCallback(() => {
     const role = localStorage.getItem('role');
     const token = localStorage.getItem('token');
     if (role == 'ROLE_SUPER_ADMIN') {
@@ -40,7 +39,7 @@ const ClientTestStart: React.FC = () => {
     if (token == null) {
       navigate('/auth/Signin');
     }
-  }
+  }, [navigate]);
 
   useEffect(() => {
     checkRoleClient();
@@ -55,7 +54,7 @@ const ClientTestStart: React.FC = () => {
     queryKey: ['getClientCategory'],
     queryFn: async () => {
       const res = await axios.get(`${baseUrl}category`, config);
-      return res.data?.body?.body as ClientCategory[];
+      return (res.data as { body?: { body: ClientCategory[] } }).body?.body;
     },
     onError: (error: AxiosError) => {
       toast.error(error.message);

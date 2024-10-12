@@ -1,5 +1,4 @@
-// components/clientDashboard/ClientDashboard.tsx
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import Layout from '../../components/clientDashboard/laytout';
 import { CardProps } from '../../helpers/types/CardProp';
 import PreviewOverlay from '@/components/PreviewOverlay';
@@ -49,11 +48,10 @@ const Card: React.FC<CardProps> = ({
           ))}
         </div>
         <button
-          className={`w-full mt-3 py-2 rounded-lg ${
-            status === 'confirmed'
+          className={`w-full mt-3 py-2 rounded-lg ${status === 'confirmed'
               ? 'bg-green-500 text-white'
               : 'bg-yellow-500 text-white'
-          }`}
+            }`}
         >
           {buttonText}
         </button>
@@ -105,12 +103,12 @@ const ClientDashboard: React.FC = () => {
   ];
 
   const navigate = useNavigate();
-  function checkRoleClient() {
+  const checkRoleClient = useCallback(() => {
     const role = localStorage.getItem('role');
     if (role == 'ROLE_SUPER_ADMIN' || role == 'ROLE_TESTER') {
       navigate('/dashboard');
     }
-  }
+  }, [navigate]);
 
   useEffect(() => {
     checkRoleClient();
