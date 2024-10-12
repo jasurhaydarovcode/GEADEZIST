@@ -1,20 +1,19 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { ChevronsLeft } from "lucide-react"
-import { Button } from "antd";
-import { Helmet } from "react-helmet";
-
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ChevronsLeft } from 'lucide-react';
+import { Button } from 'antd';
+import { Helmet } from 'react-helmet';
 
 const NotFound: React.FC = () => {
   const navigate = useNavigate();
 
   const goBack = () => {
     navigate(-1);
-  }
+  };
 
   return (
-    <div className="w-[100%] h-[100vh] flex justify-center items-center bg-[#848485]" >
-     <Helmet>
+    <div className="w-[100%] h-[100vh] flex justify-center items-center bg-[#848485]">
+      <Helmet>
         <title>404 - Page Not Found</title>
       </Helmet>
       <div className="text-6xl font-mono font-bold">
@@ -25,9 +24,8 @@ const NotFound: React.FC = () => {
           <h1 className="text-xl">Go Back</h1>
         </Button>
       </div>
-    </div >
-  )
+    </div>
+  );
+};
 
-}
-
-export default NotFound
+export default NotFound;

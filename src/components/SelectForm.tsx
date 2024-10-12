@@ -6,7 +6,11 @@ interface SelectFormProps {
   options: { value: string; label: string }[];
 }
 
-export const SelectForm: React.FC<SelectFormProps> = ({ val, onChange, options }) => {
+export const SelectForm: React.FC<SelectFormProps> = ({
+  val,
+  onChange,
+  options,
+}) => {
   return (
     <select value={val} onChange={(e) => onChange(e.target.value)}>
       {options.map((option) => (

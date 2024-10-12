@@ -1,6 +1,6 @@
-import { Modal, Form, Input, Button, Select } from "antd";
-import { CategoryFormValues } from "@/helpers/types/CategoryFormValues";
-import { useEffect } from "react";
+import { Modal, Form, Input, Button, Select } from 'antd';
+import { CategoryFormValues } from '@/helpers/types/CategoryFormValues';
+import { useEffect } from 'react';
 
 const { Option } = Select;
 
@@ -71,14 +71,20 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
           <Input.TextArea placeholder="Tavsifni kiriting" />
         </Form.Item>
 
-        {form.getFieldValue("categoryType") === "asosiy-bolmagan" && (
+        {form.getFieldValue('categoryType') === 'asosiy-bolmagan' && (
           <>
             <Form.Item label="Umumiy Savollar" name="totalQuestions">
-              <Input type="number" placeholder="Umumiy savollar sonini kiriting" />
+              <Input
+                type="number"
+                placeholder="Umumiy savollar sonini kiriting"
+              />
             </Form.Item>
 
             <Form.Item label="Qo'shimcha Savollar" name="additionalQuestions">
-              <Input type="number" placeholder="Qo'shimcha savollar sonini kiriting" />
+              <Input
+                type="number"
+                placeholder="Qo'shimcha savollar sonini kiriting"
+              />
             </Form.Item>
 
             <Form.Item label="Davomiylik (daqiqa)" name="duration">

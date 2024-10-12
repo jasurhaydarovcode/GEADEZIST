@@ -3,7 +3,7 @@ import { registerRasm } from "@/helpers/imports/images";
 import { Logo } from "@/helpers/imports/images";
 import { ConfirmType} from "@/helpers/types/LoginType";
 import axios from "axios";
-import { useRef } from "react";
+import { useRef} from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -11,38 +11,43 @@ function Confirm() {
     const email = useRef<HTMLInputElement | null>(null);
     const navigate = useNavigate();
 
-    // Forget Password funksiyasi
     function forgetPassword() {
+
       if (!email.current?.value) {
-        toast.error("Iltimos, elektron pochtangizni kiriting!"); // Elektron pochta kiritilmagan bo'lsa xabar beriladi
+        toast.error("Iltimos, elektron pochtangizni kiriting!");
         return;
       }
 
       const data : ConfirmType = {
         email: email.current?.value,
       };
-
       axios.put(`${baseUrl }auth/forgot-password`,data)
       .then((res) => {
           const data = res.data as { status: string; message: string };
           if(data.status === 'OK') {
-            toast.success(data.message);
+            toast.success("Emailga code yuborildi");
             navigate("/auth/reset-password");
+            console.log(data.message);
+            
         }})
         .catch((err) => {
-          const errorMessage = err.response?.data?.message;
-          toast.error(errorMessage);
-        });
+          if(err.response?.status === 404) {
+            toast.warning('Emailni togri kiritmadingiz!');
+        }
+        else {
+          toast.error('Qayta tekshirib ko\'ring!');
+        }
+      })
     }
 
-    return (
-      <div className="h-screen flex items-center justify-center bg-gray-100">
-        <div className="flex flex-col lg:flex-row w-full lg:w-5/6 lg:h-5/6 bg-white shadow-lg rounded-lg overflow-hidden">
-          <div className="lg:w-3/5 w-full flex flex-col items-center justify-center bg-gray-50 p-8">
-            <img src={Logo} alt="Logo" className="w-30 lg:w-48 mb-4 lg:mb-8" />
-            <div className="w-40 lg:w-60">
-              <img src={registerRasm} alt="Phone Illustration" />
-            </div>
+  return(
+
+    <div className="h-screen flex items-center justify-center bg-gray-100">
+      <div className="flex flex-col lg:flex-row w-full lg:w-5/6 lg:h-5/6 bg-white shadow-lg rounded-lg overflow-hidden">
+        <div className="lg:w-3/5 w-full flex flex-col items-center justify-center bg-gray-50 p-8">
+          <img src={Logo} alt="Logo" className="w-30 lg:w-48 mb-4 lg:mb-8" />
+          <div className="w-40 lg:w-60">
+            <img src={registerRasm} alt="Phone Illustration" />
           </div>
           <div className="flex justify-center items-center w-full lg:w-3/5 p-6 lg:p-8">
             <div className="w-full">
@@ -65,16 +70,25 @@ function Confirm() {
                 <button
                   onClick={forgetPassword}
                   type="submit"
-                  className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+                  className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
                 >
+                  {/* {loading ? "Tasdiqlamoqda" : "Tasdiqlash"} */}
                   Tasdiqlash
                 </button>
               </div>
+              <button
+                onClick={forgetPassword}
+                type="submit"
+                className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+              >
+                Tasdiqlash
+              </button>
             </div>
           </div>
         </div>
       </div>
-    );
+    </div>
+  );
 }
 
 export default Confirm;

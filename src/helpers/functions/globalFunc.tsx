@@ -46,4 +46,3 @@
 //         globalDataFunc: mutation.mutateAsync
 //     }
 // }
-

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "format": "npx prettier . --write",
+    "format": "npx prettier src/ --write",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -18,6 +18,7 @@
     "@types/react-helmet": "^6.1.11",
     "@types/react-modal": "^3.16.3",
     "antd": "^5.21.2",
+    "aos": "^2.3.4",
     "axios": "^1.7.7",
     "bootstrap-icons": "^1.11.3",
     "chart.js": "^4.4.4",
@@ -37,6 +38,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
+    "@types/aos": "^3.0.7",
     "@types/node": "^22.7.4",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",

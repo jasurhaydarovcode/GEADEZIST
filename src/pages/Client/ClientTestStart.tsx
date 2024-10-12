@@ -1,6 +1,5 @@
 // ClientTestStart.tsx
 import Layout from "@/components/clientDashboard/laytout";
-import { Logo } from "@/helpers/imports/images";
 import { useNavigate } from "react-router-dom";
 import { Modal } from "antd";
 import { useEffect, useState } from "react";
@@ -8,10 +7,10 @@ import { MdOutlineNotStarted } from "react-icons/md";
 import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
 import { baseUrl } from "@/helpers/api/baseUrl";
-import { ClientCategory } from "@/helpers/types/getClientCategory";
 import { toast } from "react-toastify";
-import axios from "axios";
-import { config } from "@/helpers/functions/token";
+import { ClientCategory } from '@/helpers/types/getClientCategory';
+import axios from 'axios';
+import { config } from '@/helpers/functions/token';
 
 interface AxiosError {
   message: string;
@@ -19,33 +18,33 @@ interface AxiosError {
 
 const ClientTestStart: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const showModal = () => {
     setIsModalVisible(true);
   };
 
   const handleOk = () => {
-    navigate('/client/quiz/:id')
+    navigate('/client/quiz/:id');
   };
 
   function checkRoleClient() {
-    const role = localStorage.getItem('role')
-    const token = localStorage.getItem('token')
+    const role = localStorage.getItem('role');
+    const token = localStorage.getItem('token');
     if (role == 'ROLE_SUPER_ADMIN') {
-      navigate('/dashboard')
+      navigate('/dashboard');
     } else if (role == 'ROLE_TESTER') {
-      navigate('/category')
+      navigate('/category');
     }
 
     if (token == null) {
-      navigate('/auth/Signin')
+      navigate('/auth/Signin');
     }
   }
 
   useEffect(() => {
-    checkRoleClient()
-  }, [checkRoleClient])
+    checkRoleClient();
+  }, [checkRoleClient]);
 
   // Function to handle modal close
   const handleCancel = () => {
@@ -53,7 +52,7 @@ const ClientTestStart: React.FC = () => {
   };
 
   const { isLoading, error, data } = useQuery({
-    queryKey: ["getClientCategory"],
+    queryKey: ['getClientCategory'],
     queryFn: async () => {
       const res = await axios.get(`${baseUrl}category`, config);
       return res.data?.body?.body as ClientCategory[];
@@ -61,7 +60,7 @@ const ClientTestStart: React.FC = () => {
     onError: (error: AxiosError) => {
       toast.error(error.message);
     },
-  })
+  });
 
   if (isLoading) return <div>Loading...</div>
   if (error) return toast.error(error.message)
@@ -139,4 +138,5 @@ const ClientTestStart: React.FC = () => {
     </Layout>
   );
 }
+
 export default ClientTestStart;
