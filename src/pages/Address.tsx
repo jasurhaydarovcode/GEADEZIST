@@ -1,6 +1,6 @@
 import Layout from '@/components/Dashboard/Layout';
 import TableLoading from '@/components/spinner/TableLoading';
-import { addRegion, baseUrl, deleteRegion, getRegion, updateRegion } from '@/helpers/api/baseUrl';
+import { addRegion, baseUrl, deleteRegion, getDistrict, getRegion, updateRegion } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Modal, Pagination } from 'antd';
@@ -167,7 +167,7 @@ function Address() {
     ['getDistrict', currentPage],
     async () => {
       const res = await axios.get(
-        `${baseUrl}district/getAllDistrictPage?page=${currentPages - 1}&size=${pageSizes}`,
+        `${getDistrict}/getAllDistrictPage?page=${currentPages - 1}&size=${pageSizes}`,
         config,
       );
       //   return (res.data as { body: { body: string; }}).body.body;

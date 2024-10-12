@@ -57,3 +57,8 @@ export const getRegion = `${baseUrl}region/`;
 export const addRegion = `${baseUrl}region`;
 export const deleteRegion = `${baseUrl}region/`;
 export const updateRegion = `${baseUrl}region/`;
+// tumanlarni urls
+export const getDistrict = `${baseUrl}district/`;
+export const addDistrict = `${baseUrl}district`;
+export const deleteDistrict = `${baseUrl}district/`;
+export const updateDistrict = `${baseUrl}district`;
