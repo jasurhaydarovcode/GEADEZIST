@@ -1,6 +1,6 @@
 import Layout from '@/components/Dashboard/Layout';
 import TableLoading from '@/components/spinner/TableLoading';
-import { baseUrl } from '@/helpers/api/baseUrl';
+import { addRegion, baseUrl, deleteRegion, getRegion, updateRegion } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Modal, Pagination } from 'antd';
@@ -92,7 +92,7 @@ function Address() {
     ['getAddress', currentPage],
     async () => {
       const res = await axios.get(
-        `${baseUrl}region/getAllRegionPage?page=${currentPage - 1}&size=${pageSize}`,
+        `${getRegion}getAllRegionPage?page=${currentPage - 1}&size=${pageSize}`,
         config,
       );
       const responseData = (
@@ -120,7 +120,7 @@ function Address() {
 
   const postAddressData = useMutation({
     mutationFn: async () => {
-      const res = await axios.post(`${baseUrl}region`, { name }, config);
+      const res = await axios.post(`${addRegion}`, { name }, config);
       return (res.data as { body: { body: string } }).body.body;
     },
     onSuccess: () => {
@@ -135,7 +135,7 @@ function Address() {
   // Manzillarni o'chirish
   const deleteAddress = useMutation({
     mutationFn: async (addressId) => {
-      await axios.delete(`${baseUrl}region/${addressId}`, config);
+      await axios.delete(`${deleteRegion}${addressId}`, config);
     },
     onSuccess: () => {
       toast.success("Manzil o'chirildi");
@@ -150,7 +150,7 @@ function Address() {
   // Manzillarni put qilish
   const updateAddress = useMutation({
     mutationFn: async (addressId) => {
-      await axios.put(`${baseUrl}region/${addressId}`, { name }, config);
+      await axios.put(`${updateRegion}${addressId}`, { name }, config);
     },
     onSuccess: () => {
       toast.success('Manzil yangilandi');
