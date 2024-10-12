@@ -292,7 +292,7 @@ function Address() {
           </Button>
         </div>
         <div>
-          {/* Viloyatlarni chiqarish uchun table */}
+          {/* Tumanlarni chiqarish uchun table */}
           <Table hoverable>
             <TableHead>
               <TableHeadCell>T/P</TableHeadCell>
