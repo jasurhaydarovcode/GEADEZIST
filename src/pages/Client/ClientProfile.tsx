@@ -51,7 +51,7 @@ function ClientProfile() {
   return (
     <div>
       <Helmet>
-        <title>{profileData?.lastName} Profile</title>
+        <title>{profileData?.lastName}</title>
       </Helmet>
       <Layout>
         <div className="flex flex-col items-center md:p-4 p-0">
