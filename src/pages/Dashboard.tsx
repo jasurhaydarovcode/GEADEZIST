@@ -43,7 +43,8 @@ const Dashboard = () => {
     queryKey: ['dashboardStatic', config],
     queryFn: async () => {
       const res = await axios.get(getStaticAll, config);
-      return (res.data as { body: any }).body;
+      const data = res.data as { body: any }; // Type assertion added
+      return data.body; 
     },
     onError: (error: any) => {
       toast.error(error.message);
@@ -51,6 +52,7 @@ const Dashboard = () => {
   });
   const staticData: GetStaticsAllResponse =
     dashboardStatic.data as GetStaticsAllResponse;
+  console.log(staticData);
   const categories = ['Топография', 'Маркшейдерлик', 'Умумий Геодезия'];
   const regions = ['Toshkent', 'Samarqand', "Farg'ona"];
 
@@ -141,7 +143,7 @@ const Dashboard = () => {
     queryKey: ['getClient', config],
     queryFn: async () => {
       const res = await axios.get<GetClientAllResponse[]>(getClientAll, config);
-      const data = res.data.body?.body as GetClientAllResponse[];
+      const data = res.data.body.body as GetClientAllResponse[]; // 'body?.body' ni olib tashlang
       return data;
     },
   });
