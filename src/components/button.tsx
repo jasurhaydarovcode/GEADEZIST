@@ -9,7 +9,7 @@ const Button: React.FC<ButtonType> = ({
   btnShadow = 'none',
   btnWidth = 'none',
   btnClass = '',
-  iconClass = '', // Ikonka classini qabul qilish
+  iconClass = '',
   btnClick,
 }) => {
   return (

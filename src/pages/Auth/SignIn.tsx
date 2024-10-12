@@ -1,18 +1,18 @@
 import { loginUrl } from '@/helpers/api/baseUrl';
 import { registerRasm } from '@/helpers/imports/images';
 import { Logo } from '@/helpers/imports/images';
-import axios from 'axios';
-import { AxiosResponse } from 'axios';
-import { useEffect, useRef } from 'react';
+import axios, { AxiosResponse } from 'axios';
+import { useEffect, useRef, useCallback } from 'react';
 import { useMutation } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+
 function SignIn() {
   const email = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
-  function checkRoleClient() {
+  const checkRoleClient = useCallback(() => {
     const role = localStorage.getItem('role');
     if (
       (role == 'ROLE_SUPER_ADMIN' && localStorage.getItem('token')) ||
@@ -24,7 +24,8 @@ function SignIn() {
     } else {
       navigate('/auth/Signin');
     }
-  }
+  }, [navigate]);
+
   function handleCheckPassword() {
     if (password.current) {
       if (password.current.type !== 'password') {
@@ -34,9 +35,11 @@ function SignIn() {
       }
     }
   }
+
   useEffect(() => {
     checkRoleClient();
-  }, []);
+  }, [checkRoleClient]);
+
   const login = useMutation({
     mutationFn: async () => {
       const data = {
@@ -68,14 +71,19 @@ function SignIn() {
         if (email.current?.value === '' || password.current?.value === '') {
           toast.warning("Email va parolni to'liq kiriting");
         }
+        else{
+          toast.warning("Email yoki parol noto'g'ri");
+        }
       }
     },
   });
+
   const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       login.mutate();
     }
   };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="flex flex-col lg:flex-row w-full lg:w-5/6 lg:h-[700px] bg-white shadow-lg rounded-lg overflow-hidden">

@@ -45,4 +45,4 @@ export const superAdminDashboardUsersResultFilter = `${baseUrl}statistic/filter`
 export const superAdminDashWeekStatistic = `${baseUrl}statistic/dayOfWeek`;
 
 // SUPER ADMIN dashboard barcha statstika sonlarda
-export const getStaticAll = `${baseUrl}statistic/counts`;
+export const getStaticAll = `${baseUrl}statistic/counts/`;

@@ -23,8 +23,7 @@ function Home() {
     <div>
       <Helmet>
         <title>Homepage</title>
-      </Helmet>
-
+      </Helmet> 
       <div>Home</div>
     </div>
   );

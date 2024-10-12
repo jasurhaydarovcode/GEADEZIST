@@ -3,7 +3,7 @@ import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import React from 'react';
 
-const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const Layout: React.FC<{ children: React.ReactNode, className?: string }> = ({ children, className }) => {
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
@@ -14,7 +14,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <Navbar />
 
         {/* Main Content */}
-        <main className="p-8">{children}</main>
+        <main className={className}>
+          {children}
+        </main>
       </div>
     </div>
   );

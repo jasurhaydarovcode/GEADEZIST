@@ -9,6 +9,7 @@
 1. [Technology](#technologies)
 2. [Developer documentation](#developers)
 3. [Installation](#installation)
+4. [Login](#login)
 
 ---
 
@@ -53,19 +54,19 @@
 
 |    №    |        Name        |          Work          |
 |:-------:|:------------------:|:----------------------:|
-|    1    |  Jasur   | client/dashboard client/profile  |
+|    1    |  Jasur   | client/dash/profile admin/dash  |
 |    2    |   Temur  | client/test-start client/quiz    |
 |    3    |  Javlon  |       SignIn/SignUp      |
-|    4    | Ulug'bek | boshqaruv panel yani admin dashboard, Admin /Test |  
+|    4    | Ulug'bek | admin dashboard, Admin /Test |  
 |    5    | Asliddin | Admin / Foydalanuvchilar |
 |    6    |   Nodir  | Admin Category |
 |    7    |   Uktam  | Admin /Test |
-|    8    | Shohjahon| Admin Foydalanuvchilar Natijasi |
+|    8    | Shohjahon| Admin Users Natijasi |
 |    9    |  Alibek  | Client Edit |
-|   10    |  Asilbek | Admin/Employees, auth/offerta  |
+|   10    |  Asilbek | Admin/Employees, Admin Adress  |
 |   11    |  Dilshod | Admin Adress |
 |   12    |  Bexruz  | Admin Adress Dilshod bilan birga |
-|   13    | Asil aka | Uktam bilan birga |
+|   13    | Asil aka | Test Uktam bilan birga |
 |   14    |   Ozod   | client/quiz, Timur bilan birga |
 |   15    | Feruzbek | Admin Adress aka ukala bilan |
 
@@ -107,3 +108,9 @@ Make sure you have the following installed on your system:
     ```
 
 That's it! The project should now be running locally.
+
+---
+
+## Login
+
+For `privacy` and `security` reasons, logins and passwords cannot be disclosed
