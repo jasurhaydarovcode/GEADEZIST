@@ -68,6 +68,9 @@ function SignIn() {
         if (email.current?.value === '' || password.current?.value === '') {
           toast.warning("Email va parolni to'liq kiriting");
         }
+        else{
+          toast.warning("Email yoki parol noto'g'ri");
+        }
       }
     },
   });
