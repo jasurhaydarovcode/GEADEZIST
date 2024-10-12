@@ -1,8 +1,7 @@
-// ClientTestStart.tsx
 import Layout from "@/components/clientDashboard/laytout";
 import { useNavigate } from "react-router-dom";
 import { Modal } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { MdOutlineNotStarted } from "react-icons/md";
 import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
@@ -29,7 +28,7 @@ const ClientTestStart: React.FC = () => {
     navigate('/client/quiz/:id');
   };
 
-  function checkRoleClient() {
+  const checkRoleClient = useCallback(() => {
     const role = localStorage.getItem('role');
     const token = localStorage.getItem('token');
     if (role == 'ROLE_SUPER_ADMIN') {
@@ -41,7 +40,7 @@ const ClientTestStart: React.FC = () => {
     if (token == null) {
       navigate('/auth/Signin');
     }
-  }
+  }, [navigate]);
 
   useEffect(() => {
     checkRoleClient();
@@ -57,7 +56,7 @@ const ClientTestStart: React.FC = () => {
     queryKey: ['getClientCategory'],
     queryFn: async () => {
       const res = await axios.get(`${baseUrl}category`, config);
-      return res.data as { body: { body: ClientCategory[] } };
+      return (res.data as { body?: { body: ClientCategory[] } }).body?.body;
     },
     onError: (error: AxiosError) => {
       toast.error(error.message);
@@ -89,7 +88,7 @@ const ClientTestStart: React.FC = () => {
             <div className="py-8">
               <h2 className="text-red-600 text-4xl text-center">Yo'nalishlar</h2>
             </div>
-            {Array.isArray(data?.body.body) && data.body.body.map((item: ClientCategory, index: number) => (
+            {Array.isArray(data) && data.map((item: ClientCategory, index: number) => (
               <div className="border-[0.5px] items-center shadow-xl relative border-black bg-white rounded-md py-6 px-4 w-full">
                 <div className="flex">
                   <div>

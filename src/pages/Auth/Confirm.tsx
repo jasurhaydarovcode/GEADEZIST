@@ -1,4 +1,4 @@
-import { baseUrl } from "@/helpers/api/baseUrl"; // Base URL ning to'g'ri olinganligiga ishonch hosil qiling
+import { baseUrl } from "@/helpers/api/baseUrl";
 import { registerRasm } from "@/helpers/imports/images";
 import { Logo } from "@/helpers/imports/images";
 import { ConfirmType} from "@/helpers/types/LoginType";
