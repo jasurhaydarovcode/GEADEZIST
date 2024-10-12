@@ -95,8 +95,7 @@ function Category() {
                   <TableHeadCell>Kategoriya rasmi</TableHeadCell>
                   <TableHeadCell>Kategoriya nomi</TableHeadCell>
                   <TableHeadCell>Tavsifi</TableHeadCell>
-                  <TableHeadCell>Savollar soni</TableHeadCell>
-                  <TableHeadCell>Testlar soni</TableHeadCell>
+                  <TableHeadCell>Umumiy savollar</TableHeadCell>
                   <TableHeadCell>Qo'shimcha savollar</TableHeadCell>
                   <TableHeadCell>Davomiylik vaqti(m)</TableHeadCell>
                   <TableHeadCell>Qayta qabul qilish sanasi</TableHeadCell>
@@ -131,10 +130,8 @@ function Category() {
                         <TableCell>{item.durationTime}</TableCell>
                         <TableCell>{item.retakeDate}</TableCell>
                         <TableCell>{item.createdBy}</TableCell>
-                        <TableCell>{item.deletedBy}</TableCell> 
-                        <TableCell>{item.updatedBy}</TableCell>
                         <TableCell>{item.deleted && "O'chirilgan"}</TableCell>
-                        <TableCell>{item.deletedBy}</TableCell>
+                        <TableCell>{item.deletedBy}</TableCell> 
                         <TableCell className="flex gap-4 text-xl">
                           <div className="cursor-pointer">
                             <MdEdit />
