@@ -3,6 +3,7 @@ import Layout from '../../components/clientDashboard/laytout';
 import { CardProps } from '../../helpers/types/CardProp';
 import PreviewOverlay from '@/components/PreviewOverlay';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 const Card: React.FC<CardProps> = ({
   image,
@@ -49,8 +50,8 @@ const Card: React.FC<CardProps> = ({
         </div>
         <button
           className={`w-full mt-3 py-2 rounded-lg ${status === 'confirmed'
-              ? 'bg-green-500 text-white'
-              : 'bg-yellow-500 text-white'
+            ? 'bg-green-500 text-white'
+            : 'bg-yellow-500 text-white'
             }`}
         >
           {buttonText}
@@ -114,25 +115,32 @@ const ClientDashboard: React.FC = () => {
     checkRoleClient();
   }, [checkRoleClient]);
   return (
-    <Layout className='p-8'>
-      <div>
-        <h2 className="text-red-600 text-center text-4xl py-10 font-bold">
-          Sizning Natijalaringiz
-        </h2>
+    <div>
+
+      <Helmet>
+        <title>Dashboard</title>
+      </Helmet>
+
+      <Layout className='p-8'>
         <div>
-          <div className="px-16">
-            <h4 className="font-semibold text-xl text-gray-600">
-              Foydalan Foydalaniyev
-            </h4>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-            {cards.map((card, index) => (
-              <Card key={index} {...card} />
-            ))}
+          <h2 className="text-red-600 text-center text-4xl py-10 font-bold">
+            Sizning Natijalaringiz
+          </h2>
+          <div>
+            <div className="px-16">
+              <h4 className="font-semibold text-xl text-gray-600">
+                Foydalan Foydalaniyev
+              </h4>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+              {cards.map((card, index) => (
+                <Card key={index} {...card} />
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-    </Layout>
+      </Layout>
+    </div>
   );
 };
 

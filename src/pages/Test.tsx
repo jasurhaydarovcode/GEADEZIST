@@ -7,6 +7,7 @@ import {
 } from '@ant-design/icons';
 import { Button, Modal, Table } from 'antd';
 import { useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { FcSearch } from 'react-icons/fc';
 
 function Test() {
@@ -145,175 +146,182 @@ function Test() {
   };
 
   return (
-    <Layout>
-      <div className="p-5">
-        <div className="flex justify-between">
-          <h1 className="text-3xl font-bold font-sans">Test</h1>
-          <p className="font-sans text-gray-700">
-            Boshqaruv paneli / <span className="text-blue-700">Test</span>
-          </p>
-        </div>
+    <div>
 
-        <div className="flex justify-between">
-          <Button
-            onClick={showModal}
-            className="bg-black hover:bg-black text-xl px-5 py-6 my-5 text-white"
-          >
-            <PlusCircleOutlined className="text-xl" /> Qo'shish
-          </Button>
+      <Helmet>
+        <title>Testlar</title>
+      </Helmet>
 
-          <Modal
-            title="Savol qo'shish"
-            open={open}
-            onOk={handleOk}
-            confirmLoading={confirmLoading}
-            onCancel={handleCancel}
-            maskClosable={false}
-          >
-            <div className="mb-4">
-              <input
-                placeholder="Savolni kiriting"
-                className="border w-full p-2 rounded"
-              />
-            </div>
+      <Layout>
+        <div className="p-5">
+          <div className="flex justify-between">
+            <h1 className="text-3xl font-bold font-sans">Test</h1>
+            <p className="font-sans text-gray-700">
+              Boshqaruv paneli / <span className="text-blue-700">Test</span>
+            </p>
+          </div>
 
-            <div className="mb-4">
-              <select className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
-                <option disabled selected value="">
-                  Kategoriyani tanlang
-                </option>
-                <option value="" className="text text-black">
-                  Umumiy savollar
-                </option>
-                <option value="" className="text text-black">
-                  Umumiy geodeziya
-                </option>
-                <option value="" className="text text-black">
-                  Topografiya
-                </option>
-                <option value="" className="text text-black">
-                  Oliy geodeziya
-                </option>
-                <option value="" className="text text-black">
-                  Har qanday to'g'ri
-                </option>
-              </select>
-            </div>
+          <div className="flex justify-between">
+            <Button
+              onClick={showModal}
+              className="bg-black hover:bg-black text-xl px-5 py-6 my-5 text-white"
+            >
+              <PlusCircleOutlined className="text-xl" /> Qo'shish
+            </Button>
 
-            <div className="mb-4">
-              <select className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
-                <option disabled selected>
-                  Qiyinchilik darajasini tanlang
-                </option>
-                <option value="" className="text text-black">
-                  Qiyin
-                </option>
-                <option value="" className="text text-black">
-                  Oson
-                </option>
-                <option value="" className="text text-black">
-                  O'rta
-                </option>
-              </select>
-            </div>
+            <Modal
+              title="Savol qo'shish"
+              open={open}
+              onOk={handleOk}
+              confirmLoading={confirmLoading}
+              onCancel={handleCancel}
+              maskClosable={false}
+            >
+              <div className="mb-4">
+                <input
+                  placeholder="Savolni kiriting"
+                  className="border w-full p-2 rounded"
+                />
+              </div>
 
-            <div className="mb-4">
-              <select className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
-                <option disabled selected>
-                  Turlarni tanlang
-                </option>
-                <option value="" className="text text-black">
-                  Hisoblangan natija
-                </option>
-                <option value="" className="text text-black">
-                  Bir to'g'ri javobli test
-                </option>
-                <option value="" className="text text-black">
-                  Ko'p to'g'ri javobli test
-                </option>
-              </select>
-            </div>
+              <div className="mb-4">
+                <select className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
+                  <option disabled selected value="">
+                    Kategoriyani tanlang
+                  </option>
+                  <option value="" className="text text-black">
+                    Umumiy savollar
+                  </option>
+                  <option value="" className="text text-black">
+                    Umumiy geodeziya
+                  </option>
+                  <option value="" className="text text-black">
+                    Topografiya
+                  </option>
+                  <option value="" className="text text-black">
+                    Oliy geodeziya
+                  </option>
+                  <option value="" className="text text-black">
+                    Har qanday to'g'ri
+                  </option>
+                </select>
+              </div>
 
-            <div className="mb-4 ml-[180px] mt-5">
-              <Button className="w-[90px] h-[90px] rounded border-dashed border-2 border-gray-400 flex flex-col items-center justify-center">
-                <img
-                  src="https://example.com/your-icon.png"
-                  alt="Rasm yuklash"
-                  className="w-6 h-6"
-                />{' '}
-                {/* Ikonka rasm manzilingiz bilan almashtiring */}
-                Rasm yuklash
-              </Button>
-              <h2 className="mt-2 mr-2">Rasm yuklash ixtiyoriy</h2>{' '}
-              {/* Markazdan chapga joylashtirildi */}
-            </div>
-          </Modal>
+              <div className="mb-4">
+                <select className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
+                  <option disabled selected>
+                    Qiyinchilik darajasini tanlang
+                  </option>
+                  <option value="" className="text text-black">
+                    Qiyin
+                  </option>
+                  <option value="" className="text text-black">
+                    Oson
+                  </option>
+                  <option value="" className="text text-black">
+                    O'rta
+                  </option>
+                </select>
+              </div>
 
-          <div className="flex justify-end pt-5 gap-5">
-            <div className="flex">
-              <label htmlFor="inp1">
-                <FcSearch className="absolute mt-4 ml-3 text-[20px]" />
-              </label>
-              <input
-                type="text"
-                id="inp1"
-                className="w-[200px] pl-10 border-gray-300 rounded-md h-[50px]"
-                placeholder="Testni qidirish"
-              />
-            </div>
+              <div className="mb-4">
+                <select className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
+                  <option disabled selected>
+                    Turlarni tanlang
+                  </option>
+                  <option value="" className="text text-black">
+                    Hisoblangan natija
+                  </option>
+                  <option value="" className="text text-black">
+                    Bir to'g'ri javobli test
+                  </option>
+                  <option value="" className="text text-black">
+                    Ko'p to'g'ri javobli test
+                  </option>
+                </select>
+              </div>
 
-            <div className="flex">
-              <select className="w-[200px] text-gray-400 bg-white rounded-md h-[50px]">
-                <option disabled selected>
-                  Kategoriyani tanlang
-                </option>
-                <option value="" className="text text-black">
-                  Umumiy savollar
-                </option>
-                <option value="" className="text text-black">
-                  Umumiy geodeziya
-                </option>
-                <option value="" className="text text-black">
-                  Topografiya
-                </option>
-                <option value="" className="text text-black">
-                  Oliy geodeziya
-                </option>
-                <option value="" className="text text-black">
-                  Har qanday to'g'ri
-                </option>
-              </select>
-            </div>
+              <div className="mb-4 ml-[180px] mt-5">
+                <Button className="w-[90px] h-[90px] rounded border-dashed border-2 border-gray-400 flex flex-col items-center justify-center">
+                  <img
+                    src="https://example.com/your-icon.png"
+                    alt="Rasm yuklash"
+                    className="w-6 h-6"
+                  />{' '}
+                  {/* Ikonka rasm manzilingiz bilan almashtiring */}
+                  Rasm yuklash
+                </Button>
+                <h2 className="mt-2 mr-2">Rasm yuklash ixtiyoriy</h2>{' '}
+                {/* Markazdan chapga joylashtirildi */}
+              </div>
+            </Modal>
 
-            <div className="flex">
-              <select className="w-[200px] text-gray-400 bg-white rounded-md h-[50px]">
-                <option disabled selected>
-                  Turlarni tanlang
-                </option>
-                <option value="calculated" className="text text-black">
-                  Hisoblangan natija
-                </option>
-                <option value="single-choice" className="text text-black">
-                  Bir to'g'ri javobli test
-                </option>
-                <option value="multiple-choice" className="text text-black">
-                  Ko'p to'g'ri javobli test
-                </option>
-                <option value="" className="text text-black">
-                  Har qanday to'g'ri
-                </option>
-              </select>
+            <div className="flex justify-end pt-5 gap-5">
+              <div className="flex">
+                <label htmlFor="inp1">
+                  <FcSearch className="absolute mt-4 ml-3 text-[20px]" />
+                </label>
+                <input
+                  type="text"
+                  id="inp1"
+                  className="w-[200px] pl-10 border-gray-300 rounded-md h-[50px]"
+                  placeholder="Testni qidirish"
+                />
+              </div>
+
+              <div className="flex">
+                <select className="w-[200px] text-gray-400 bg-white rounded-md h-[50px]">
+                  <option disabled selected>
+                    Kategoriyani tanlang
+                  </option>
+                  <option value="" className="text text-black">
+                    Umumiy savollar
+                  </option>
+                  <option value="" className="text text-black">
+                    Umumiy geodeziya
+                  </option>
+                  <option value="" className="text text-black">
+                    Topografiya
+                  </option>
+                  <option value="" className="text text-black">
+                    Oliy geodeziya
+                  </option>
+                  <option value="" className="text text-black">
+                    Har qanday to'g'ri
+                  </option>
+                </select>
+              </div>
+
+              <div className="flex">
+                <select className="w-[200px] text-gray-400 bg-white rounded-md h-[50px]">
+                  <option disabled selected>
+                    Turlarni tanlang
+                  </option>
+                  <option value="calculated" className="text text-black">
+                    Hisoblangan natija
+                  </option>
+                  <option value="single-choice" className="text text-black">
+                    Bir to'g'ri javobli test
+                  </option>
+                  <option value="multiple-choice" className="text text-black">
+                    Ko'p to'g'ri javobli test
+                  </option>
+                  <option value="" className="text text-black">
+                    Har qanday to'g'ri
+                  </option>
+                </select>
+              </div>
             </div>
           </div>
-        </div>
 
-        <Table
-          dataSource={dataSource}
-          columns={columns}
-          pagination={{ pageSize: 5 }} // Pagination added here
-        />
-      </div>
-    </Layout>
+          <Table
+            dataSource={dataSource}
+            columns={columns}
+            pagination={{ pageSize: 5 }} // Pagination added here
+          />
+        </div>
+      </Layout>
+    </div>
   );
 }
 

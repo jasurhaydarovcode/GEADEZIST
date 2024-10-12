@@ -67,7 +67,7 @@ const ClientTestStart: React.FC = () => {
   return (
     <Layout className="p-8 space-y-6">
       <Helmet>
-        <title>Geodeziya</title>
+        <title>Testlar</title>
       </Helmet>
       <div className="py-8">
         <h2 className="text-red-600 text-4xl text-center">Yo'nalishlar</h2>

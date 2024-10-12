@@ -18,6 +18,7 @@ import CategoryDeleteModal from '@/components/Modal/CategoryDeleteModal';
 import TableLoading from '@/components/spinner/TableLoading';
 import { Pagination } from 'antd'; // Pagination komponentini import qilamiz
 import { useState } from 'react';
+import { Helmet } from 'react-helmet';
 
 function Category() {
   const queryClient = useQueryClient();
@@ -66,6 +67,11 @@ function Category() {
 
   return (
     <div>
+
+      <Helmet>
+        <title>Kategoriyalar</title>
+      </Helmet>
+
       <Layout>
         {isLoading ? (
           <div>{<TableLoading />}</div>
