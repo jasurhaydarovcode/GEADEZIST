@@ -132,6 +132,7 @@ function Category() {
                         <TableCell>{item.retakeDate}</TableCell>
                         <TableCell>{item.createdBy}</TableCell>
                         <TableCell>{item.deletedBy}</TableCell> 
+                        <TableCell>{item.updatedBy}</TableCell>
                         <TableCell>{item.deleted && "O'chirilgan"}</TableCell>
                         <TableCell>{item.deletedBy}</TableCell>
                         <TableCell className="flex gap-4 text-xl">
