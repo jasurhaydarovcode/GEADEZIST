@@ -62,3 +62,10 @@ export const getDistrict = `${baseUrl}district/`;
 export const addDistrict = `${baseUrl}district`;
 export const deleteDistrict = `${baseUrl}district/`;
 export const updateDistrict = `${baseUrl}district`;
+
+
+// --------------- Super Admin employees urls -------------------
+// employees urls
+export const getEmployee = `${baseUrl}user/get/admin/list`;
+export const addEmployee = `${baseUrl}auth/save/admin`;
+export const activeEmployee = `${baseUrl}user/active/`;

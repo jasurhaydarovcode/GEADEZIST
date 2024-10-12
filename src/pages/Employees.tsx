@@ -13,7 +13,7 @@ import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import axios from 'axios';
-import { baseUrl } from '@/helpers/api/baseUrl';
+import { activeEmployee, addEmployee, baseUrl, getEmployee } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -39,7 +39,7 @@ function Employees() {
     ['getADmin', currentPage],
     async () => {
       const res = await axios.get(
-        `${baseUrl}user/get/admin/list?page=${currentPage - 1}&size=${pageSize}`,
+        `${getEmployee}?page=${currentPage - 1}&size=${pageSize}`,
         config,
       );
       const responseData = (
@@ -102,7 +102,7 @@ function Employees() {
   // Hodim holatini yangilash uchun mutatsiya yaratish 
   const updateEmployeeStatus = useMutation(
     async ({ id, enabled }: { id: string; enabled: boolean }) => {
-      return axios.put(`${baseUrl}user/active/${id}`, { enabled }, config);
+      return axios.put(`${activeEmployee}${id}`, { enabled }, config);
     },
     {
       // Mutatsiya muvaffaqiyatli bo'lganda, hodimlar ro'yxatini toastga chiqarish 
@@ -138,7 +138,7 @@ function Employees() {
 
   const postAdmin = useMutation(async () => {
     return axios.post(
-      `${baseUrl}auth/save/admin`,
+      `${addEmployee}`,
       {
         firstname,
         lastname,
