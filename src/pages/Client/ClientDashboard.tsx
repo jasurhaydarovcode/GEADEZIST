@@ -95,7 +95,7 @@ const ClientDashboard: React.FC = () => {
     checkRoleClient()
   }, [checkRoleClient])
   return (
-    <Layout>
+    <Layout className='p-8'>
       <div>
         <h2 className='text-red-600 text-center text-4xl py-10 font-bold'>Sizning Natijalaringiz</h2>
         <div>

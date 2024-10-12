@@ -4,5 +4,5 @@ export interface ClientCategory {
     "duration": number,
     "questionCount": number,
     "retakeDate": string,
-    "fileId": null;
+    "fileId": string;
 }
