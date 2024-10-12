@@ -52,20 +52,29 @@ export const getStaticAll = `${baseUrl}statistic/counts/`;
 
 
 // --------------- Super Admin address urls -------------------
-// viloyatlarni urls
+// viloyatlarni get urls
 export const getRegion = `${baseUrl}region/`;
+// viloyatlar post urls
 export const addRegion = `${baseUrl}region`;
+// viloyatlar delete urls
 export const deleteRegion = `${baseUrl}region/`;
+// viloyatlar update urls
 export const updateRegion = `${baseUrl}region/`;
-// tumanlarni urls
+
+// tumanlarni get urls
 export const getDistrict = `${baseUrl}district/`;
+// tumanlar post urls
 export const addDistrict = `${baseUrl}district`;
+// tumanlar delete urls
 export const deleteDistrict = `${baseUrl}district/`;
+// tumanlar update urls
 export const updateDistrict = `${baseUrl}district`;
 
 
 // --------------- Super Admin employees urls -------------------
-// employees urls
+// employees get url
 export const getEmployee = `${baseUrl}user/get/admin/list`;
+// employees post url
 export const addEmployee = `${baseUrl}auth/save/admin`;
+// employees active url
 export const activeEmployee = `${baseUrl}user/active/`;
