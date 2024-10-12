@@ -89,7 +89,7 @@ function Category() {
 
       <Layout>
         {isLoading ? (
-          <div>{<TableLoading />}</div>
+          <div className="flex justify-center items-center h-[80vh]">{<TableLoading />}</div>
         ) : (
           <>
             <div className="flex justify-between px-[20px]">
