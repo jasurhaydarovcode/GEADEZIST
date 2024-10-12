@@ -1,4 +1,5 @@
 import Navbar from '@/components/Dashboard/Navbar';
+import { Helmet } from 'react-helmet';
 import { FcSearch } from 'react-icons/fc';
 import { useNavigate } from 'react-router-dom';
 
@@ -6,6 +7,11 @@ function AllUser() {
   const navigate = useNavigate();
   return (
     <>
+
+      <Helmet>
+        <title>Foydalanuvchilar</title>
+      </Helmet>
+
       <Navbar />
       <div className="p-5 px-10" onClick={() => navigate(-1)}>
         <i className="bi bi-arrow-left text-3xl cursor-pointer"></i>

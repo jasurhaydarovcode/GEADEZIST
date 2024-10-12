@@ -25,7 +25,7 @@ function ResetPassword() {
       confirmPassword: confirmPassword.current?.value || '',
     };
     if (!code.current?.value || !password.current?.value || !confirmPassword.current?.value) {
-      toast.warning("Iltimos, bo'shliqni  to'ldiring!"); // Elektron pochta kiritilmagan bo'lsa xabar beriladi
+      toast.warning("Iltimos, bo'shliqni  to'ldiring!");
       return;
     }
 

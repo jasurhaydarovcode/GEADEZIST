@@ -1,4 +1,3 @@
-// components/PreviewOverlay.tsx
 import React from 'react';
 import { IoEyeOutline } from 'react-icons/io5';
 

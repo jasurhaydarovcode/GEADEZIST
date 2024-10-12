@@ -1,5 +1,6 @@
 import { FaArrowLeft } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+
 const OfferPage = () => {
   return (
     <div className="h-screen px-12 py-12 bg-gray-100 ">

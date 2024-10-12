@@ -10,7 +10,6 @@ import { useQuery } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import LogoutModal from '@/components/Modal/LogoutModal';
 import AOS from 'aos';
-// import 'aos/dist/aos.css'; // uchirilmasin va commentdan chiqarilmasin, test uchun turibdi
 
 const Navbar: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);

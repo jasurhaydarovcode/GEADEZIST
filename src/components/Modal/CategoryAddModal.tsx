@@ -1,17 +1,15 @@
-import { useRef, useState } from 'react';
-import { Button, Modal, Input, Select, notification } from 'antd';
+import { useState } from 'react';
+import { Button, Modal, Input, Select } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
+import { useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
 import { baseUrl } from '@/helpers/api/baseUrl';
+import { CategoryAddModalProps, CategoryModalTypes } from '@/helpers/types/CategoryModalTypes';
 
 const { Option } = Select;
 
-interface CategoryAddModalProps {
-  onAddCategory: (newCategory: any) => void;
-}
-
 const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) => {
-  const formRef = useRef({
+  const [formData, setFormData] = useState({
     name: '',
     description: '',
     questionCount: 0,
@@ -19,14 +17,34 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
     durationTime: 0,
     retakeDate: 0,
     fileId: 0,
-    main: true,
+    main: false,
   });
 
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(
+    async (newCategory: CategoryModalTypes) => {
+      const response = await axios.post(`${baseUrl}category`, newCategory, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+        queryClient.invalidateQueries('categories');
+        console.log('Kategoriya muvaffaqiyatli qo\'shildi:', data);
+      },
+      onError: (error) => {
+        console.error('Xatolik yuz berdi:', error);
+      },
+    }
+  );
 
   const resetForm = () => {
-    formRef.current = {
+    setFormData({
       name: '',
       description: '',
       questionCount: 0,
@@ -34,36 +52,18 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
       durationTime: 0,
       retakeDate: 0,
       fileId: 0,
-      main: false,
-    };
+      main: true,
+    });
   };
 
-  const handleSave = async () => {
-    setLoading(true);
-    axios
-      .post(`${baseUrl}category`, formRef.current, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
-      .then((response) => {
-        onAddCategory(response.data);
-        notification.success({
-          message: "Kategoriya muvaffaqiyatli qo'shildi",
-        });
-        resetForm();
+  const handleSave = () => {
+    mutation.mutate(formData, {
+      onSuccess: (data) => {
+        onAddCategory(data);
         setOpen(false);
-      })
-      .catch((error) => {
-        console.error('Xatolik:', error);
-        notification.error({
-          message: 'Xatolik yuz berdi',
-          description: "Kategoriya qo'shishda xatolik yuz berdi, iltimos qayta urinib ko'ring",
-        });
-      })
-    //   .finally(() => {
-    //     setLoading(false);
-    //   }) as Promise<void>;
+        resetForm();
+      },
+    });
   };
 
   const handleCancel = () => {
@@ -77,7 +77,10 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
 
   return (
     <>
-      <Button onClick={() => setOpen(true)} className="text-xl bg-black text-white px-5 py-6 my-5">
+      <Button
+        onClick={() => setOpen(true)}
+        className="text-xl bg-black text-white py-6 my-5 rounded-lg hover:bg-gray-800 px-[40px] ml-[20px]"
+      >
         <PlusCircleOutlined className="text-xl" /> Qo'shish
       </Button>
       <Modal
@@ -89,83 +92,92 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
         width={600}
         okText="Saqlash"
         cancelText="Yopish"
-        confirmLoading={loading}
+        confirmLoading={mutation.isLoading}
         maskClosable={false}
       >
         <div className="space-y-4">
           <div>
-            <label className="block mb-2">Kategoriya Nomi</label>
-            <Input
-              className={InputStyles.input}
-              placeholder="Kategoriya nomini kiriting"
-              defaultValue={formRef.current.name}
-              onChange={(e) => (formRef.current.name = e.target.value)}
-            />
-          </div>
-          <div>
-            <label className="block mb-2">Tavsif</label>
-            <Input
-              className={InputStyles.input}
-              placeholder="Tavsifni kiriting"
-              defaultValue={formRef.current.description}
-              onChange={(e) => (formRef.current.description = e.target.value)}
-            />
-          </div>
-          <div>
-            <label className="block mb-2">Umumiy Savollar</label>
-            <Input
-              className={InputStyles.input}
-              type="number"
-              placeholder="Umumiy savollar sonini kiriting"
-              defaultValue={formRef.current.questionCount}
-              onChange={(e) => (formRef.current.questionCount = Number(e.target.value))}
-              min="0"
-            />
-          </div>
-          <div>
-            <label className="block mb-2">Qo'shimcha savollar</label>
-            <Input
-              className={InputStyles.input}
-              type="number"
-              placeholder="Qo'shimcha savollar sonini kiriting"
-              defaultValue={formRef.current.extraQuestionCount}
-              onChange={(e) => (formRef.current.extraQuestionCount = Number(e.target.value))}
-              min="0"
-            />
-          </div>
-          <div>
-            <label className="block mb-2">Davomiylik (daqiqa)</label>
-            <Input
-              className={InputStyles.input}
-              type="number"
-              placeholder="Davomiylik (daqiqa)"
-              defaultValue={formRef.current.durationTime}
-              onChange={(e) => (formRef.current.durationTime = Number(e.target.value))}
-              min="0"
-            />
-          </div>
-          <div>
-            <label className="block mb-2">Qayta qabul qilish sanasi</label>
-            <Input
-              className={InputStyles.input}
-              type="number"
-              placeholder="Qayta qabul qilish sanasi"
-              defaultValue={formRef.current.retakeDate}
-              onChange={(e) => (formRef.current.retakeDate = Number(e.target.value))}
-              min="0"
-            />
-          </div>
-          <div>
-            <label className="block mb-2">Asosiy Kategoriya</label>
+            <label className="block mb-2">Asosiy Turini Tanlang</label>
             <Select
-              value={formRef.current.main ? 'asosiy' : 'asosiy-bolmagan'}
-              onChange={(value) => (formRef.current.main = value === 'asosiy')}
+              value={formData.main ? 'asosiy' : 'asosiy-bolmagan'}
+              onChange={(value) => setFormData({ ...formData, main: value === 'asosiy' })}
               className="w-full"
             >
               <Option value="asosiy">Asosiy</Option>
               <Option value="asosiy-bolmagan">Asosiy bo'lmagan</Option>
             </Select>
           </div>
+
+          {/* Show these inputs for all categories */}
+          <div>
+            <label className="block mb-2">Kategoriya Nomi</label>
+            <Input
+              className={InputStyles.input}
+              placeholder="Kategoriya nomini kiriting"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            />
+          </div>
+
+          <div>
+            <label className="block mb-2">Tavsif</label>
+            <Input
+              className={InputStyles.input}
+              placeholder="Tavsifni kiriting"
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            />
+          </div>
+
+          {/* Render additional inputs only if the category is "asosiy" */}
+          {formData.main && (
+            <>
+              <div>
+                <label className="block mb-2">Umumiy Savollar</label>
+                <Input
+                  className={InputStyles.input}
+                  type="number"
+                  placeholder="Umumiy savollar sonini kiriting"
+                  value={formData.questionCount}
+                  onChange={(e) => setFormData({ ...formData, questionCount: Number(e.target.value) })}
+                  min="0"
+                />
+              </div>
+              <div>
+                <label className="block mb-2">Qo'shimcha savollar</label>
+                <Input
+                  className={InputStyles.input}
+                  type="number"
+                  placeholder="Qo'shimcha savollar sonini kiriting"
+                  value={formData.extraQuestionCount}
+                  onChange={(e) => setFormData({ ...formData, extraQuestionCount: Number(e.target.value) })}
+                  min="0"
+                />
+              </div>
+              <div>
+                <label className="block mb-2">Davomiylik (daqiqa)</label>
+                <Input
+                  className={InputStyles.input}
+                  type="number"
+                  placeholder="Davomiylik (daqiqa)"
+                  value={formData.durationTime}
+                  onChange={(e) => setFormData({ ...formData, durationTime: Number(e.target.value) })}
+                  min="0"
+                />
+              </div>
+              <div>
+                <label className="block mb-2">Qayta qabul qilish sanasi</label>
+                <Input
+                  className={InputStyles.input}
+                  type="number"
+                  placeholder="Qayta qabul qilish sanasi"
+                  value={formData.retakeDate}
+                  onChange={(e) => setFormData({ ...formData, retakeDate: Number(e.target.value) })}
+                  min="0"
+                />
+              </div>
+            </>
+          )}
         </div>
       </Modal>
     </>

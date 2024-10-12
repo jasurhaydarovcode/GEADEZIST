@@ -14,28 +14,40 @@ import { useQuery, useQueryClient } from 'react-query';
 import defaultImage from '../assets/images/default.png';
 import { MdEdit } from 'react-icons/md';
 import CategoryAddModal from '@/components/Modal/CategoryAddModal';
+import CategoryEditModal from '@/components/Modal/CategoryEditModal'; // Edit modalini import qilamiz
 import CategoryDeleteModal from '@/components/Modal/CategoryDeleteModal';
 import TableLoading from '@/components/spinner/TableLoading';
+import { Pagination } from 'antd';
+import { useState } from 'react';
+import { Helmet } from 'react-helmet';
 
 function Category() {
   const queryClient = useQueryClient();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
 
-  // Kategoriyalarni olish uchun so'rov
-  const { data, refetch, isLoading } = useQuery(['getCategories'], async () => {
-    const res = await axios.get<{ body: { body: any[] } }>(
-      `${baseUrl}category/page?page=0&size=10`,
-      config,
-    );
-    return res.data.body.body;
-  });
+  const [selectedCategory, setSelectedCategory] = useState(null); // Tanlangan kategoriya
+  const [editModalVisible, setEditModalVisible] = useState(false); // Tahrirlash modalining holati
 
-  // Yangi kategoriya qo'shilgandan keyin ma'lumotlarni yangilaydi
+  const { data, refetch, isLoading } = useQuery(
+    ['getCategories', currentPage],
+    async () => {
+      const res = await axios.get<{ body: { body: any[]; totalElements: number } }>(
+        `${baseUrl}category/page?page=${currentPage - 1}&size=${pageSize}`,
+        config
+      );
+      setTotalItems(res.data.body.totalElements);
+      return res.data.body.body;
+    },
+    { keepPreviousData: true }
+  );
+
   const handleAddCategory = () => {
-    queryClient.invalidateQueries(['getCategories']); // Keshni yangilaydi
-    refetch(); // Yangi ma'lumotlarni olish
+    queryClient.invalidateQueries(['getCategories']);
+    refetch();
   };
 
-  // Kategoriyani o'chirish funksiyasi
   const handleDeleteCategory = async (categoryId: string) => {
     try {
       await axios.delete(`${baseUrl}category/${categoryId}`, config);
@@ -46,32 +58,57 @@ function Category() {
     }
   };
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handleEditClick = (category: any) => {
+    setSelectedCategory(category); // Tanlangan kategoriyani saqlash
+    setEditModalVisible(true); // Tahrirlash modalini ochish
+  };
+
+  const handleEditCategory = async (updatedCategory: any) => {
+    try {
+      await axios.put(
+        `${baseUrl}category/${updatedCategory.id}`,
+        updatedCategory,
+        config
+      );
+      queryClient.invalidateQueries(['getCategories']);
+      setEditModalVisible(false); // Tahrirlash modalini yopish
+    } catch (error) {
+      console.error("Kategoriyani yangilashda xatolik yuz berdi", error);
+    }
+  };
+
   return (
     <div>
+      <Helmet>
+        <title>Kategoriyalar</title>
+      </Helmet>
+
       <Layout>
         {isLoading ? (
           <div>{<TableLoading />}</div>
         ) : (
           <>
-            <div className="flex justify-between">
+            <div className="flex justify-between px-[20px]">
               <h1 className="text-3xl font-bold font-sans">Kategoriya</h1>
               <p className="font-sans text-gray-700">
-                Boshqaruv paneli /{' '}
-                <span className="text-blue-700">Kategoriya</span>
+                Boshqaruv paneli / <span className="text-blue-700">Kategoriya</span>
               </p>
             </div>
 
-            {/* Kategoriya qo'shish modali */}
-            <CategoryAddModal onAddCategory={handleAddCategory} /> 
+            <CategoryAddModal onAddCategory={handleAddCategory} />
 
-            <div className="overflow-x-scroll w-[1200px] rounded-lg">
+            <div className="px-[20px] overflow-x-scroll w-[1170px] rounded-lg">
               <Table hoverable className="border-collapse">
                 <TableHead>
                   <TableHeadCell>T/P</TableHeadCell>
                   <TableHeadCell>Kategoriya rasmi</TableHeadCell>
+                  <TableHeadCell>Kategoriya nomi</TableHeadCell>
                   <TableHeadCell>Tavsifi</TableHeadCell>
-                  <TableHeadCell>Savollar soni</TableHeadCell>
-                  <TableHeadCell>Testlar soni</TableHeadCell>
+                  <TableHeadCell>Umumiy savollar</TableHeadCell>
                   <TableHeadCell>Qo'shimcha savollar</TableHeadCell>
                   <TableHeadCell>Davomiylik vaqti(m)</TableHeadCell>
                   <TableHeadCell>Qayta qabul qilish sanasi</TableHeadCell>
@@ -87,7 +124,7 @@ function Category() {
                         key={item.id}
                         className="bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800"
                       >
-                        <TableCell>{index + 1}</TableCell>
+                        <TableCell>{(currentPage - 1) * pageSize + index + 1}</TableCell>
                         <TableCell>
                           <img
                             alt={item.name}
@@ -106,13 +143,12 @@ function Category() {
                         <TableCell>{item.durationTime}</TableCell>
                         <TableCell>{item.retakeDate}</TableCell>
                         <TableCell>{item.createdBy}</TableCell>
-                        <TableCell>{item.deleted && 'O"chirilgan'}</TableCell>
+                        <TableCell>{item.deleted && "O'chirilgan"}</TableCell>
                         <TableCell>{item.deletedBy}</TableCell>
                         <TableCell className="flex gap-4 text-xl">
-                          <div className="cursor-pointer">
+                          <div className="cursor-pointer" onClick={() => handleEditClick(item)}>
                             <MdEdit />
                           </div>
-                          {/* Delete modal */}
                           <CategoryDeleteModal
                             categoryId={item.id}
                             onDelete={handleDeleteCategory}
@@ -123,6 +159,23 @@ function Category() {
                 </TableBody>
               </Table>
             </div>
+
+            <div className="flex mt-4">
+              <Pagination
+                current={currentPage}
+                pageSize={pageSize}
+                total={totalItems}
+                onChange={handlePageChange}
+                showSizeChanger={false}
+              />
+            </div>
+
+            <CategoryEditModal
+              visible={editModalVisible}
+              onClose={() => setEditModalVisible(false)}
+              onEditCategory={handleEditCategory}
+              category={selectedCategory}
+            />
           </>
         )}
       </Layout>
