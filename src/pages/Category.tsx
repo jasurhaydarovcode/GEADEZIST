@@ -32,6 +32,7 @@ function Category() {
   const [editModalVisible, setEditModalVisible] = useState(false); // Tahrirlash modalining holati
   const [imageModal, setImageModal] = useState({ open: false, imageUrl: '' });
 
+  // Kategoriyalarni olish
   const { data, refetch, isLoading } = useQuery(
     ['getCategories', currentPage],
     async () => {
@@ -45,6 +46,7 @@ function Category() {
     { keepPreviousData: true }
   );
 
+  // Kategoriya qo'shish funksiyasi
   const handleAddCategory = () => {
     queryClient.invalidateQueries(['getCategories']);
     refetch();
@@ -59,7 +61,7 @@ function Category() {
     setImageModal({ open: false, imageUrl: '' }); // Modalni yopish
   };
 
-  
+  // Kategoriya o'chirish funksiyasi
   const handleDeleteCategory = async (categoryId: string) => {
     try {
       await axios.delete(`${baseUrl}category/${categoryId}`, config);
@@ -70,6 +72,7 @@ function Category() {
     }
   };
 
+  // Pagination uchun funksiya
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
@@ -79,6 +82,7 @@ function Category() {
     setEditModalVisible(true); // Tahrirlash modalini ochish
   };
 
+  // Kategoriyani yangilash funksiyasi
   const handleEditCategory = async (updatedCategory: any) => {
     try {
       await axios.put(
