@@ -10,8 +10,8 @@ import {
   TableRow,
 } from 'flowbite-react';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
-import { useEffect, useState } from 'react';
-import { useMutation, useQuery } from 'react-query';
+import { useEffect, useRef, useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import axios from 'axios';
 import { activeEmployee, 
   addEmployee, 
@@ -83,7 +83,7 @@ function Employees() {
 
   const handleOk = () => {
     if (firstname && lastname && email && phoneNumber && password && confirmPassword && role) {
-      if (password === confirmPassword) {
+      if (password.current!.value == confirmPassword.current!.value) {
         postAdmin.mutate(); // POST so'rovini yuborish
         setConfirmLoading(true);
         setTimeout(() => {
@@ -100,13 +100,13 @@ function Employees() {
   };
 
   const resetForm = () => {
-    setFirstname('');
-    setLastname('');
-    setEmail('');
-    setPhoneNumber('');
-    setPassword('');
-    setConfirmPassword('');
-    setRole('');
+    firstname.current!.value = '';
+    lastname.current!.value = '';
+    email.current!.value = '';
+    phoneNumber.current!.value = '';
+    password.current!.value = '';
+    confirmPassword.current!.value = '';
+    role.current!.value = '';
   };
 
   const handleCancel = () => {
@@ -142,27 +142,29 @@ function Employees() {
     updateEmployeeStatus.mutate({ id, enabled: checked });
   };
 
-  // yangi hodim qo'shish funksiyasi 
-  const [firstname, setFirstname] = useState('');
-  const [lastname, setLastname] = useState('');
-  const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [role, setRole] = useState('');
+  // yangi hodim qo'shish funksiyasi
+  const firstname = useRef<HTMLInputElement>(null);
+  const lastname = useRef<HTMLInputElement>(null);
+  const email = useRef<HTMLInputElement>(null);
+  const phoneNumber = useRef<HTMLInputElement>(null);
+  const password = useRef<HTMLInputElement>(null);
+  const confirmPassword = useRef<HTMLInputElement>(null);
+  const role = useRef<HTMLSelectElement>(null);
+
+  const queryClient = useQueryClient();
 
   const postAdmin = useMutation(
     async () => {
       return axios.post(
         `${addEmployee}`,
         {
-          firstname,
-          lastname,
-          email,
-          phoneNumber,
-          password,
-          confirmPassword,
-          role,
+          firstname: firstname.current?.value,  // Ref'dan qiymat olish
+          lastname: lastname.current?.value,
+          email: email.current?.value,
+          phoneNumber: phoneNumber.current?.value,
+          password: password.current?.value,
+          confirmPassword: confirmPassword.current?.value,
+          role: role.current?.value,
         },
         config,
       );
@@ -171,6 +173,7 @@ function Employees() {
       onSuccess: () => {
         toast.success("Hodim muvaffaqiyatli qo'shildi");
         setOpen(false);
+        queryClient.invalidateQueries('getADmin');
         resetForm(); // Forma maydonlarini tozalash
       },
       onError: (error) => {
@@ -223,8 +226,9 @@ function Employees() {
                   {/* <label className="block mb-2">Admin toifasini tanlang</label> */}
                   <select
                     className="border w-full p-2 rounded"
-                    value={role}
-                    onChange={(e) => setRole(e.target.value)}
+                    // value={role}
+                    // onChange={(e) => setRole(e.target.value)}
+                    ref={role}
                   >
                     <option value="">Admin toifasini tanlang</option>
                     <option value="ROLE_TESTER">Tester admin</option>
@@ -237,18 +241,20 @@ function Employees() {
                     type="text"
                     placeholder="Ismni kiriting"
                     className="border w-full p-2 rounded"
-                    value={firstname}
-                    onChange={(e) => setFirstname(e.target.value)}
+                    // value={firstname}
+                    // onChange={(e) => setFirstname(e.target.value)}
+                    ref={firstname}
                   />
                 </div>
                 <div className="mb-4">
-                  <label className="block mb-2">Ism</label>
+                  <label className="block mb-2">Familiya</label>
                   <input
                     type="text"
-                    placeholder="Ismni kiriting"
+                    placeholder="Familiyani kiriting"
                     className="border w-full p-2 rounded"
-                    value={lastname}
-                    onChange={(e) => setLastname(e.target.value)}
+                    // value={lastname}
+                    // onChange={(e) => setLastname(e.target.value)}
+                    ref={lastname}
                   />
                 </div>
                 <div className="mb-4">
@@ -257,8 +263,9 @@ function Employees() {
                     type="text"
                     placeholder="Telfon raqamni kiriting"
                     className="border w-full p-2 rounded"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    // value={phoneNumber}
+                    // onChange={(e) => setPhoneNumber(e.target.value)}
+                    ref={phoneNumber}
                   />
                 </div>
                 <div className="mb-4">
@@ -267,8 +274,9 @@ function Employees() {
                     type="email"
                     placeholder="Email kiriting"
                     className="border w-full p-2 rounded"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    // value={email}
+                    // onChange={(e) => setEmail(e.target.value)}
+                    ref={email}
                   />
                 </div>
                 <div className="mb-4">
@@ -277,8 +285,9 @@ function Employees() {
                     type="password"
                     placeholder="Parolni kiriting"
                     className="border w-full p-2 rounded"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    // value={password}
+                    // onChange={(e) => setPassword(e.target.value)}
+                    ref={password}
                   />
                 </div>
                 <div className="mb-4">
@@ -287,8 +296,9 @@ function Employees() {
                     type="password"
                     placeholder="Parolni tasdiqlang"
                     className="border w-full p-2 rounded"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    // value={confirmPassword}
+                    // onChange={(e) => setConfirmPassword(e.target.value)}
+                    ref={confirmPassword}
                   />
                 </div>
               </Modal>
