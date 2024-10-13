@@ -236,6 +236,10 @@ function Address() {
                 confirmLoading={confirmLoading}
                 onCancel={handleCancel}
                 maskClosable={false}
+                okText="Saqlash"
+                cancelText="Bekor qilish"
+                okButtonProps={{ style: { backgroundColor: 'black', color: 'white', } }}
+                cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white', } }}
               >
                 <div className="mb-4">
                   <input
@@ -302,6 +306,8 @@ function Address() {
               onCancel={handleDeleteCancel}
               okText="O'chirish"
               cancelText="Bekor qilish"
+              okButtonProps={{ style: { backgroundColor: 'black', color: 'white', } }}
+              cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white', } }}
             >
               <p className="text-center my-5 font-semibold">
                 Viloyatni o'chirishni tasdiqlaysizmi?
@@ -316,6 +322,8 @@ function Address() {
               onCancel={handlePutCancel}
               okText="O'zgartirish"
               cancelText="Bekor qilish"
+              okButtonProps={{ style: { backgroundColor: 'black', color: 'white', } }}
+              cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white', } }}
             >
               <div className="mb-4">
                 <input
