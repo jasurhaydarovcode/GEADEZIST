@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Modal, Input, Select, message } from 'antd'; // 'message' import qildik
+import { Button, Modal, Input, Select, message } from 'antd'; 
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
@@ -39,9 +39,11 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({
     },
     {
       onSuccess: (data) => {
-        queryClient.invalidateQueries('categories'); // Keshni yangilash
-        message.success("Kategoriya muvaffaqiyatli qo'shildi!"); // Muvaffaqiyat xabari
-        console.log("Kategoriya muvaffaqiyatli qo'shildi:", data);
+        queryClient.invalidateQueries('categories');
+        message.success("Kategoriya muvaffaqiyatli qo'shildi!");
+        onAddCategory(data as CategoryModalTypes);
+        setOpen(false);
+        resetForm();
       },
       onError: (error: any) => {
         if (error.response?.status === 409) {
@@ -88,13 +90,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({
 
   const handleSave = () => {
     if (isFormValid()) {
-      mutation.mutate(formData, {
-        onSuccess: (data) => {
-          onAddCategory(data as CategoryModalTypes);
-          setOpen(false);
-          resetForm();
-        },
-      });
+      mutation.mutate(formData);
     }
   };
 
@@ -126,6 +122,8 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({
         cancelText="Yopish"
         confirmLoading={mutation.isLoading}
         maskClosable={false}
+        okButtonProps={{ className: 'bg-black text-white hover:bg-gray-800' }} // Saqlash tugmasi uchun
+        cancelButtonProps={{ className: 'bg-black text-white hover:bg-gray-800' }} // Yopish tugmasi uchun
       >
         <div className="space-y-4">
           <div>
