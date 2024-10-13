@@ -188,7 +188,7 @@ function Category() {
                 showSizeChanger={false}
               />
             </div>
-
+            {/* Tahrirlash modal */}
             <CategoryEditModal
               visible={editModalVisible}
               onClose={() => setEditModalVisible(false)}
