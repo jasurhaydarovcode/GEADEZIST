@@ -20,6 +20,7 @@ import TableLoading from '@/components/spinner/TableLoading';
 import { Pagination } from 'antd';
 import { useState } from 'react';
 import { Helmet } from 'react-helmet';
+import { Modal } from 'antd';
 
 function Category() {
   const queryClient = useQueryClient();
@@ -29,6 +30,7 @@ function Category() {
 
   const [selectedCategory, setSelectedCategory] = useState(null); // Tanlangan kategoriya
   const [editModalVisible, setEditModalVisible] = useState(false); // Tahrirlash modalining holati
+  const [imageModal, setImageModal] = useState({ open: false, imageUrl: '' });
 
   const { data, refetch, isLoading } = useQuery(
     ['getCategories', currentPage],
@@ -48,6 +50,16 @@ function Category() {
     refetch();
   };
 
+  {/* Rasm modal */}
+  const handleImageClick = (imageUrl: string) => {
+    setImageModal({ open: true, imageUrl }); // Rasm modalini ochish
+  };
+
+  const handleImageModalClose = () => {
+    setImageModal({ open: false, imageUrl: '' }); // Modalni yopish
+  };
+
+  
   const handleDeleteCategory = async (categoryId: string) => {
     try {
       await axios.delete(`${baseUrl}category/${categoryId}`, config);
@@ -133,6 +145,7 @@ function Category() {
                                 ? `${getImage}${item.fileId}`
                                 : defaultImage
                             }
+                            onClick={() => handleImageClick(item.fileId ? `${getImage}${item.fileId}` : defaultImage)}
                             className="border-[1px] border-gray-300 w-[43px] h-[43px] rounded-full object-cover hover:cursor-pointer"
                           />
                         </TableCell>
@@ -178,6 +191,20 @@ function Category() {
             />
           </>
         )}
+
+        {/* Rasm modal */}
+        <Modal
+          open={imageModal.open}
+          onCancel={handleImageModalClose}
+          footer={null}
+          centered
+        >
+          <img
+            src={imageModal.imageUrl}
+            alt="Kategoriya rasmi"
+            style={{ width: '100%' }}
+          />
+        </Modal>
       </Layout>
     </div>
   );
