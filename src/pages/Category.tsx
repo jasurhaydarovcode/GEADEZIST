@@ -96,6 +96,7 @@ function Category() {
       console.error("Kategoriyani yangilashda xatolik yuz berdi", error);
     }
   };
+  
 
   return (
     <div>
