@@ -209,7 +209,6 @@ const Dashboard = () => {
 
   return (
     <div>
-
       <Helmet>
         <title>Dashboard</title>
       </Helmet>
@@ -289,7 +288,10 @@ const Dashboard = () => {
               </thead>
               <tbody>
                 {getClient.isLoading ? (
-                  <div role="status" className="flex justify-center items-center">
+                  <div
+                    role="status"
+                    className="flex justify-center items-center"
+                  >
                     <svg
                       aria-hidden="true"
                       className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
@@ -311,16 +313,22 @@ const Dashboard = () => {
                 ) : (
                   clientData &&
                   clientData.length > 0 &&
-                  clientData.map((user: GetClientAllResponse, index: number) => (
-                    <tr key={index}>
-                      <td className="py-2 border text-center">{index + 1}</td>
-                      <td className="py-2 border text-center">
-                        {user.firstName}
-                      </td>
-                      <td className="py-2 border text-center">{user.lastName}</td>
-                      <td className="py-2 border text-center">{user.email}</td>
-                    </tr>
-                  ))
+                  clientData.map(
+                    (user: GetClientAllResponse, index: number) => (
+                      <tr key={index}>
+                        <td className="py-2 border text-center">{index + 1}</td>
+                        <td className="py-2 border text-center">
+                          {user.firstName}
+                        </td>
+                        <td className="py-2 border text-center">
+                          {user.lastName}
+                        </td>
+                        <td className="py-2 border text-center">
+                          {user.email}
+                        </td>
+                      </tr>
+                    ),
+                  )
                 )}
               </tbody>
             </table>

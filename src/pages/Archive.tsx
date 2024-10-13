@@ -21,9 +21,7 @@ function Archive() {
         <title>Arxiv</title>
       </Helmet>
 
-      <div>
-        Archive
-      </div>
+      <div>Archive</div>
     </div>
   );
 }

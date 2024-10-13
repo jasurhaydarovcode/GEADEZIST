@@ -12,18 +12,18 @@ const Sidebar = () => {
       name: 'Kategoriya',
       pathName: 'category',
     }) ||
-    (role === 'ROLE_TESTER' && {
-      name: 'Kategoriya',
-      pathName: 'category',
-    }),
+      (role === 'ROLE_TESTER' && {
+        name: 'Kategoriya',
+        pathName: 'category',
+      }),
     (role === 'ROLE_SUPER_ADMIN' && {
       name: 'Test',
       pathName: 'test',
     }) ||
-    (role === 'ROLE_TESTER' && {
-      name: 'Test',
-      pathName: 'test',
-    }),
+      (role === 'ROLE_TESTER' && {
+        name: 'Test',
+        pathName: 'test',
+      }),
     role === 'ROLE_SUPER_ADMIN' && {
       name: 'Foydalanuvchilar',
       pathName: 'all-user',

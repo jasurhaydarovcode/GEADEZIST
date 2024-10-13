@@ -70,8 +70,7 @@ function SignIn() {
       if (error instanceof Error) {
         if (email.current?.value === '' || password.current?.value === '') {
           toast.warning("Email va parolni to'liq kiriting");
-        }
-        else{
+        } else {
           toast.warning("Email yoki parol noto'g'ri");
         }
       }

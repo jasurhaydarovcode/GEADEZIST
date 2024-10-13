@@ -20,7 +20,7 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
   const [form] = Form.useForm();
   const [isMainCategory, setIsMainCategory] = useState<boolean>(false);
 
-  // Load category data into form when the modal opens 
+  // Load category data into form when the modal opens
   useEffect(() => {
     if (category) {
       form.setFieldsValue({
@@ -71,10 +71,7 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
         }}
       >
         <Form.Item label="Kategoriya turi" name="categoryType">
-          <Select
-            onChange={handleCategoryTypeChange}
-            className="w-full"
-          >
+          <Select onChange={handleCategoryTypeChange} className="w-full">
             <Option value="asosiy">Asosiy kategoriya</Option>
             <Option value="asosiy-bolmagan">Asosiy bo'lmagan kategoriya</Option>
           </Select>
@@ -115,7 +112,10 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
               label="Qo'shimcha Savollar"
               name="extraQuestionCount"
               rules={[
-                { required: true, message: 'Qo\'shimcha savollar sonini kiriting!' },
+                {
+                  required: true,
+                  message: "Qo'shimcha savollar sonini kiriting!",
+                },
               ]}
             >
               <Input
@@ -130,18 +130,17 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
               name="durationTime"
               rules={[{ required: true, message: 'Davomiylikni kiriting!' }]}
             >
-              <Input
-                type="number"
-                placeholder="Davomiylik (daqiqa)"
-                min={0}
-              />
+              <Input type="number" placeholder="Davomiylik (daqiqa)" min={0} />
             </Form.Item>
 
             <Form.Item
               label="Qayta qabul qilish sanasi"
               name="retakeDate"
               rules={[
-                { required: true, message: 'Qayta qabul qilish sanasini kiriting!' },
+                {
+                  required: true,
+                  message: 'Qayta qabul qilish sanasini kiriting!',
+                },
               ]}
             >
               <Input

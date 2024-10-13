@@ -18,11 +18,11 @@ export interface GetMetype {
   fileId?: null;
 
   firstName?: string;
-  lastName? : string;
-  region? : string;
-  district? : string;
-  address? : string;
-  phoneNumber? : string;
-  dateOfBirth? : string;
-  profileImage? : string;
+  lastName?: string;
+  region?: string;
+  district?: string;
+  address?: string;
+  phoneNumber?: string;
+  dateOfBirth?: string;
+  profileImage?: string;
 }

@@ -1,12 +1,23 @@
 import Layout from '@/components/Dashboard/Layout';
 import { Button, Space, Switch, Pagination, Modal } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
-import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow,} from 'flowbite-react';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeadCell,
+  TableRow,
+} from 'flowbite-react';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import axios from 'axios';
-import { activeEmployee, addEmployee, getEmployee } from '@/helpers/api/baseUrl';
+import {
+  activeEmployee,
+  addEmployee,
+  getEmployee,
+} from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -16,7 +27,7 @@ import { Helmet } from 'react-helmet';
 function Employees() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  // Pagination holati 
+  // Pagination holati
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
@@ -34,36 +45,36 @@ function Employees() {
   }, [checkRoleClient]);
 
   // Adminlarni get qilib olish
-  const { data: admins, isLoading } = useQuery (
-    [ 'getADmin', currentPage ],
-    async ( ) => {
-      const res = await axios.get (
+  const { data: admins, isLoading } = useQuery(
+    ['getADmin', currentPage],
+    async () => {
+      const res = await axios.get(
         `${getEmployee}?page=${currentPage - 1}&size=${pageSize}`,
-        config ,
-      ); 
-      const responseData = ( 
-        res.data  as {
+        config,
+      );
+      const responseData = (
+        res.data as {
           body: { body: string; totalElements: number; totalPage: number }; // Type berish
-        } 
-      ).body ;
-      setTotalItems(responseData.totalElements); // Umumiy ma'lumotlar sonini saqlaymiz 
+        }
+      ).body;
+      setTotalItems(responseData.totalElements); // Umumiy ma'lumotlar sonini saqlaymiz
       return responseData.body; // Umumiy ma'lumotlarni saqlaymiz
     },
-    { 
-      keepPreviousData: true, // Sahifa o'zgarganda eski ma'lumotlarni saqlab qoladi 
+    {
+      keepPreviousData: true, // Sahifa o'zgarganda eski ma'lumotlarni saqlab qoladi
     },
   );
 
-  const handlePageChange = ( page: number ) => {
-    setCurrentPage(page); // Hozirgi sahifani yangilash 
-    setPageSize( pageSize );
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page); // Hozirgi sahifani yangilash
+    setPageSize(pageSize);
   };
 
   // Modal ochilishi
   const showModal = () => {
     setOpen(true);
   };
-  
+
   // Modal yopilishi
   const handleCancel = () => {
     resetForm();
@@ -80,22 +91,26 @@ function Employees() {
   // };
 
   const handleOk = () => {
-    if (firstname && lastname && email && phoneNumber && password && confirmPassword && role) {
+    if (
+      firstname.current!.value &&
+      lastname.current!.value &&
+      email.current!.value &&
+      phoneNumber.current!.value &&
+      password.current!.value &&
+      confirmPassword.current!.value &&
+      role.current!.value
+    ) {
       if (password.current!.value === confirmPassword.current!.value) {
-        if(role.current!.value) {
-          toast.error("Rolni tanlang");
-          postAdmin.mutate(); // POST so'rovini yuborish
-          setConfirmLoading(true);
-          setTimeout(() => {
-            setOpen(false);
-            setConfirmLoading(false);
-            resetForm(); // Forma maydonlarini tozalash
-          }, 2000);
-        } else {
-          toast.error("Rolni tanlang");
-        }
+        toast.error('Rolni tanlang');
+        postAdmin.mutate(); // POST so'rovini yuborish
+        setConfirmLoading(true);
+        setTimeout(() => {
+          setOpen(false);
+          setConfirmLoading(false);
+          resetForm(); // Forma maydonlarini tozalash
+        }, 2000);
       } else {
-        toast.error("Parollar mos kelmadi");
+        toast.error('Parollar mos kelmadi');
       }
     } else {
       toast.error("Barcha maydonlarni to'ldiring");
@@ -113,18 +128,17 @@ function Employees() {
     role.current!.value = '';
   };
 
-
-  // Hodim holatini yangilash uchun mutatsiya yaratish 
-  const updateEmployeeStatus = useMutation (
-    async ( { id, enabled }: { id: string; enabled: boolean } ) => {
+  // Hodim holatini yangilash uchun mutatsiya yaratish
+  const updateEmployeeStatus = useMutation(
+    async ({ id, enabled }: { id: string; enabled: boolean }) => {
       return axios.put(`${activeEmployee}${id}`, { enabled }, config);
     },
     {
-      // Mutatsiya muvaffaqiyatli bo'lganda, hodimlar ro'yxatini toastga chiqarish 
+      // Mutatsiya muvaffaqiyatli bo'lganda, hodimlar ro'yxatini toastga chiqarish
       onSuccess: (data, variables) => {
         const { enabled } = variables;
         console.log('Yangilandi:', data);
-        // queryClient.invalidateQueries('getADmin'); // Adminlar ma'lumotini qayta yuklash 
+        // queryClient.invalidateQueries('getADmin'); // Adminlar ma'lumotini qayta yuklash
         if (enabled === true) {
           toast.success('Hodim muvaffaqiyatli ishga tushirildi');
         } else {
@@ -137,7 +151,7 @@ function Employees() {
     },
   );
 
-  // Switch o'zgarganda ishlaydigan funksiya 
+  // Switch o'zgarganda ishlaydigan funksiya
   const handleSwitchChange = (checked: boolean, id: string) => {
     updateEmployeeStatus.mutate({ id, enabled: checked });
   };
@@ -158,7 +172,7 @@ function Employees() {
       return axios.post(
         `${addEmployee}`,
         {
-          firstname: firstname.current?.value,  // Ref'dan qiymat olish
+          firstname: firstname.current?.value, // Ref'dan qiymat olish
           lastname: lastname.current?.value,
           email: email.current?.value,
           phoneNumber: phoneNumber.current?.value,
@@ -178,7 +192,7 @@ function Employees() {
       },
       onError: (error) => {
         console.error('Xatolik:', error);
-        toast.error('Hodim qo\'shishda xatolik yuz berdi');
+        toast.error("Hodim qo'shishda xatolik yuz berdi");
       },
     },
   );
@@ -191,13 +205,16 @@ function Employees() {
 
       <Layout>
         {isLoading ? (
-          <div className='flex justify-center items-center h-[80vh]'>{<TableLoading />}</div>
+          <div className="flex justify-center items-center h-[80vh]">
+            {<TableLoading />}
+          </div>
         ) : (
           <div className="p-5">
             <div className="flex justify-between">
               <h1 className="text-3xl font-bold font-sans">Hodimlar</h1>
               <p className="font-sans text-gray-700">
-                Boshqaruv paneli / <span className="text-blue-700">Hodimlar</span>
+                Boshqaruv paneli /{' '}
+                <span className="text-blue-700">Hodimlar</span>
               </p>
             </div>
             <div>
@@ -219,17 +236,18 @@ function Employees() {
                 cancelText="Bekor qilish"
                 confirmLoading={confirmLoading}
                 maskClosable={false}
-                okButtonProps={{ style: { backgroundColor: 'black', color: 'white', } }}
-                cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white', } }}
+                okButtonProps={{
+                  style: { backgroundColor: 'black', color: 'white' },
+                }}
+                cancelButtonProps={{
+                  style: { backgroundColor: 'black', color: 'white' },
+                }}
               >
                 {/* Modal mazmuni */}
                 <div className="mb-4">
                   {/* <label className="block mb-2">Admin toifasini tanlang</label> */}
-                  <select
-                    className="border w-full p-2 rounded"
-                    ref={role}
-                  >
-                    <option value="" disabled>Admin toifasini tanlang</option>
+                  <select className="border w-full p-2 rounded" ref={role}>
+                    <option value="">Admin toifasini tanlang</option>
                     <option value="ROLE_TESTER">Tester admin</option>
                     <option value="ROLE_ADMIN">Tekshiruvchi admin</option>
                   </select>
@@ -348,5 +366,3 @@ function Employees() {
 }
 
 export default Employees;
-
-

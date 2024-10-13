@@ -47,9 +47,9 @@ function App() {
       {/* START Authentication Routes */}
       <Route path="/auth/SignIn" element={<SignIn />} />
       <Route path="/auth/SignUp" element={<SignUp />} />
-      <Route path="/auth/confirm" element={<Confirm/>} />
-      <Route path="/auth/confirm-signup" element={<ConfirmSignUp/>} />
-      <Route path="/auth/reset-password" element={<ResetPassword/>} />
+      <Route path="/auth/confirm" element={<Confirm />} />
+      <Route path="/auth/confirm-signup" element={<ConfirmSignUp />} />
+      <Route path="/auth/reset-password" element={<ResetPassword />} />
       <Route path="/auth/offer" element={<Offer />} />
       {/* END Authentication Routes */}
 
