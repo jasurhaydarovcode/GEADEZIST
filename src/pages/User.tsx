@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom';
 function User() {
   return (
     <div>
-
       <Helmet>
         <title>Foydalanuvchilar Natijasi</title>
       </Helmet>

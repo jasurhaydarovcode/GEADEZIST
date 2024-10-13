@@ -36,14 +36,16 @@ function Category() {
   const { data, refetch, isLoading } = useQuery(
     ['getCategories', currentPage],
     async () => {
-      const res = await axios.get<{ body: { body: any[]; totalElements: number } }>(
+      const res = await axios.get<{
+        body: { body: any[]; totalElements: number };
+      }>(
         `${baseUrl}category/page?page=${currentPage - 1}&size=${pageSize}`,
-        config
+        config,
       );
       setTotalItems(res.data.body.totalElements);
       return res.data.body.body;
     },
-    { keepPreviousData: true }
+    { keepPreviousData: true },
   );
 
   // Kategoriya qo'shish funksiyasi
@@ -52,7 +54,9 @@ function Category() {
     refetch();
   };
 
-  {/* Rasm modal */}
+  {
+    /* Rasm modal */
+  }
   const handleImageClick = (imageUrl: string) => {
     setImageModal({ open: true, imageUrl }); // Rasm modalini ochish
   };
@@ -88,15 +92,14 @@ function Category() {
       await axios.put(
         `${baseUrl}category/${updatedCategory.id}`,
         updatedCategory,
-        config
+        config,
       );
       queryClient.invalidateQueries(['getCategories']);
       setEditModalVisible(false); // Tahrirlash modalini yopish
     } catch (error) {
-      console.error("Kategoriyani yangilashda xatolik yuz berdi", error);
+      console.error('Kategoriyani yangilashda xatolik yuz berdi', error);
     }
   };
-  
 
   return (
     <div>
@@ -106,13 +109,16 @@ function Category() {
 
       <Layout>
         {isLoading ? (
-          <div className="flex justify-center items-center h-[80vh]">{<TableLoading />}</div>
+          <div className="flex justify-center items-center h-[80vh]">
+            {<TableLoading />}
+          </div>
         ) : (
           <>
             <div className="flex justify-between px-[20px]">
               <h1 className="text-3xl font-bold font-sans">Kategoriya</h1>
               <p className="font-sans text-gray-700">
-                Boshqaruv paneli / <span className="text-blue-700">Kategoriya</span>
+                Boshqaruv paneli /{' '}
+                <span className="text-blue-700">Kategoriya</span>
               </p>
             </div>
 
@@ -141,7 +147,9 @@ function Category() {
                         key={item.id}
                         className="bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800"
                       >
-                        <TableCell>{(currentPage - 1) * pageSize + index + 1}</TableCell>
+                        <TableCell>
+                          {(currentPage - 1) * pageSize + index + 1}
+                        </TableCell>
                         <TableCell>
                           <img
                             alt={item.name}
@@ -150,7 +158,13 @@ function Category() {
                                 ? `${getImage}${item.fileId}`
                                 : defaultImage
                             }
-                            onClick={() => handleImageClick(item.fileId ? `${getImage}${item.fileId}` : defaultImage)}
+                            onClick={() =>
+                              handleImageClick(
+                                item.fileId
+                                  ? `${getImage}${item.fileId}`
+                                  : defaultImage,
+                              )
+                            }
                             className="border-[1px] border-gray-300 w-[43px] h-[43px] rounded-full object-cover hover:cursor-pointer"
                           />
                         </TableCell>
@@ -165,7 +179,10 @@ function Category() {
                         <TableCell>{item.deletedBy}</TableCell>
                         {/* Xarakatlar */}
                         <TableCell className="flex gap-4 text-xl">
-                          <div className="cursor-pointer" onClick={() => handleEditClick(item)}>
+                          <div
+                            className="cursor-pointer"
+                            onClick={() => handleEditClick(item)}
+                          >
                             <MdEdit />
                           </div>
                           <CategoryDeleteModal

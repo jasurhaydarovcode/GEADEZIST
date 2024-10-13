@@ -16,10 +16,6 @@ const Card: React.FC<CardProps> = ({
   buttonText,
   status,
 }) => {
-
-
-
-
   return (
     <div className="container bg-white rounded-md max-w-[450px]">
       <div className="border rounded-lg shadow-lg p-4">
@@ -53,10 +49,11 @@ const Card: React.FC<CardProps> = ({
           ))}
         </div>
         <button
-          className={`w-full mt-3 py-2 rounded-lg ${status === 'confirmed'
-            ? 'bg-green-500 text-white'
-            : 'bg-yellow-500 text-white'
-            }`}
+          className={`w-full mt-3 py-2 rounded-lg ${
+            status === 'confirmed'
+              ? 'bg-green-500 text-white'
+              : 'bg-yellow-500 text-white'
+          }`}
         >
           {buttonText}
         </button>
@@ -120,12 +117,11 @@ const ClientDashboard: React.FC = () => {
   }, [checkRoleClient]);
   return (
     <div>
-
       <Helmet>
         <title>Dashboard</title>
       </Helmet>
 
-      <Layout className='p-8'>
+      <Layout className="p-8">
         <div>
           <h2 className="text-red-600 text-center text-4xl py-10 font-bold">
             Sizning Natijalaringiz

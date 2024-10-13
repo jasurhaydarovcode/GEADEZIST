@@ -22,7 +22,7 @@ const Sidebar: React.FC = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const { pathname } = useLocation()
+  const { pathname } = useLocation();
 
   return (
     <>
@@ -59,7 +59,13 @@ const Sidebar: React.FC = () => {
         <ul className="mt-20">
           {clientSidebarItems.map((item, index) => (
             <Link to={item.path} key={index}>
-              <li className={pathname === item.path ? "shadow-xl hover:shadow-2xl bg-gray-300 text-white transition duration-150 py-5 mb-5" : "border shadow-xl hover:shadow-2xl transition duration-150 py-5 mb-5"}>
+              <li
+                className={
+                  pathname === item.path
+                    ? 'shadow-xl hover:shadow-2xl bg-gray-300 text-white transition duration-150 py-5 mb-5'
+                    : 'border shadow-xl hover:shadow-2xl transition duration-150 py-5 mb-5'
+                }
+              >
                 <span className="p-4 text-xl text-gray-500">{item.label}</span>
               </li>
             </Link>

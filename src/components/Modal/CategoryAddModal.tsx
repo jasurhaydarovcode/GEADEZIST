@@ -4,11 +4,16 @@ import { PlusCircleOutlined } from '@ant-design/icons';
 import { useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
 import { baseUrl } from '@/helpers/api/baseUrl';
-import { CategoryAddModalProps, CategoryModalTypes } from '@/helpers/types/CategoryModalTypes';
+import {
+  CategoryAddModalProps,
+  CategoryModalTypes,
+} from '@/helpers/types/CategoryModalTypes';
 
 const { Option } = Select;
 
-const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) => {
+const CategoryAddModal: React.FC<CategoryAddModalProps> = ({
+  onAddCategory,
+}) => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -35,8 +40,8 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
     {
       onSuccess: (data) => {
         queryClient.invalidateQueries('categories'); // Keshni yangilash
-        message.success('Kategoriya muvaffaqiyatli qo\'shildi!'); // Muvaffaqiyat xabari
-        console.log('Kategoriya muvaffaqiyatli qo\'shildi:', data);
+        message.success("Kategoriya muvaffaqiyatli qo'shildi!"); // Muvaffaqiyat xabari
+        console.log("Kategoriya muvaffaqiyatli qo'shildi:", data);
       },
       onError: (error: any) => {
         if (error.response?.status === 409) {
@@ -45,7 +50,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
           message.error('Xatolik yuz berdi, iltimos qaytadan urinib ko‘ring.');
         }
       },
-    }
+    },
   );
 
   const resetForm = () => {
@@ -63,7 +68,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
 
   const isFormValid = () => {
     if (!formData.name || !formData.description) {
-      message.error('Barcha maydonlarni to\'ldiring!');
+      message.error("Barcha maydonlarni to'ldiring!");
       return false;
     }
     if (
@@ -73,7 +78,9 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
         formData.durationTime <= 0 ||
         formData.retakeDate <= 0)
     ) {
-      message.error('Asosiy kategoriya uchun barcha qiymatlar musbat bo\'lishi kerak!');
+      message.error(
+        "Asosiy kategoriya uchun barcha qiymatlar musbat bo'lishi kerak!",
+      );
       return false;
     }
     return true;
@@ -125,7 +132,9 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
             <label className="block mb-2">Asosiy Turini Tanlang</label>
             <Select
               value={formData.main ? 'asosiy' : 'asosiy-bolmagan'}
-              onChange={(value) => setFormData({ ...formData, main: value === 'asosiy' })}
+              onChange={(value) =>
+                setFormData({ ...formData, main: value === 'asosiy' })
+              }
               className="w-full"
             >
               <Option value="asosiy">Asosiy</Option>
@@ -139,7 +148,9 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
               className={InputStyles.input}
               placeholder="Kategoriya nomini kiriting"
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
             />
           </div>
 
@@ -149,7 +160,9 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
               className={InputStyles.input}
               placeholder="Tavsifni kiriting"
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
             />
           </div>
 
@@ -162,7 +175,12 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
                   type="number"
                   placeholder="Umumiy savollar sonini kiriting"
                   value={formData.questionCount}
-                  onChange={(e) => setFormData({ ...formData, questionCount: Number(e.target.value) })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      questionCount: Number(e.target.value),
+                    })
+                  }
                   min="0"
                 />
               </div>
@@ -173,7 +191,12 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
                   type="number"
                   placeholder="Qo'shimcha savollar sonini kiriting"
                   value={formData.extraQuestionCount}
-                  onChange={(e) => setFormData({ ...formData, extraQuestionCount: Number(e.target.value) })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      extraQuestionCount: Number(e.target.value),
+                    })
+                  }
                   min="0"
                 />
               </div>
@@ -184,7 +207,12 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
                   type="number"
                   placeholder="Davomiylik (daqiqa)"
                   value={formData.durationTime}
-                  onChange={(e) => setFormData({ ...formData, durationTime: Number(e.target.value) })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      durationTime: Number(e.target.value),
+                    })
+                  }
                   min="0"
                 />
               </div>
@@ -195,7 +223,12 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
                   type="number"
                   placeholder="Qayta qabul qilish sanasi"
                   value={formData.retakeDate}
-                  onChange={(e) => setFormData({ ...formData, retakeDate: Number(e.target.value) })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      retakeDate: Number(e.target.value),
+                    })
+                  }
                   min="0"
                 />
               </div>

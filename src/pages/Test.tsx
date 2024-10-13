@@ -18,11 +18,14 @@ import { ApiResponse, FetchedTest } from '@/helpers/types/test';
 function Test() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [datas, useDatas] = useState<FetchedTest[]>([])
+  const [datas, useDatas] = useState<FetchedTest[]>([]);
   const dataSource = datas;
 
   const testData = async (): Promise<ApiResponse> => {
-    const response = await axios.get<ApiResponse>(`${baseUrl}question/categoryNull-quest`, config);
+    const response = await axios.get<ApiResponse>(
+      `${baseUrl}question/categoryNull-quest`,
+      config,
+    );
     return response.data;
   };
 
@@ -37,9 +40,9 @@ function Test() {
       const fetchedTests = response.body.body.map((item, index) => ({
         key: item.id.toString(),
         numer: index + 1,
-        testRasm: ".", // Haqiqiy rasm mavjud bo'lsa, o'zgartiring
+        testRasm: '.', // Haqiqiy rasm mavjud bo'lsa, o'zgartiring
         savol: item.name,
-        catygoria: item.categoryName || "No category",
+        catygoria: item.categoryName || 'No category',
         savolTuri: item.type,
         qiyinligi: item.difficulty,
         yaratganOdam: item.createdByName,
@@ -49,14 +52,11 @@ function Test() {
     },
   });
 
-
-
   console.log(data);
   console.log(error);
 
   if (isLoading) return <p>Yuklanmoqda...</p>;
   if (isError) return <p>Xatolik yuz berdi.</p>;
-
 
   const columns = [
     { title: '№', dataIndex: 'numer', key: 'numer' },
@@ -98,7 +98,6 @@ function Test() {
 
   return (
     <div>
-
       <Helmet>
         <title>Testlar</title>
       </Helmet>

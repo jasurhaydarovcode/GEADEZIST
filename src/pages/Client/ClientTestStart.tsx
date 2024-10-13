@@ -1,16 +1,16 @@
-import Layout from "@/components/clientDashboard/laytout";
-import { useNavigate } from "react-router-dom";
-import { Modal } from "antd";
-import { useEffect, useState, useCallback } from "react";
-import { MdOutlineNotStarted } from "react-icons/md";
-import { Helmet } from "react-helmet";
-import { useQuery } from "react-query";
-import { baseUrl } from "@/helpers/api/baseUrl";
-import { toast } from "react-toastify";
+import Layout from '@/components/clientDashboard/laytout';
+import { useNavigate } from 'react-router-dom';
+import { Modal } from 'antd';
+import { useEffect, useState, useCallback } from 'react';
+import { MdOutlineNotStarted } from 'react-icons/md';
+import { Helmet } from 'react-helmet';
+import { useQuery } from 'react-query';
+import { baseUrl } from '@/helpers/api/baseUrl';
+import { toast } from 'react-toastify';
 import { ClientCategory } from '@/helpers/types/getClientCategory';
 import axios from 'axios';
 import { config } from '@/helpers/functions/token';
-import TableLoading from "@/components/spinner/TableLoading";
+import TableLoading from '@/components/spinner/TableLoading';
 import defaultImage from '@/assets/images/default.png';
 export const getImage = `${baseUrl}api/videos/files`;
 
@@ -46,7 +46,6 @@ const ClientTestStart: React.FC = () => {
 
   useEffect(() => {
     checkRoleClient();
-
   }, [checkRoleClient]);
 
   // Function to handle modal close
@@ -65,10 +64,9 @@ const ClientTestStart: React.FC = () => {
     },
   });
 
-  if (error) return toast.error(error.message)
+  if (error) return toast.error(error.message);
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-
 
   const handleStartClick = (category: { name: string }) => {
     setSelectedCategory(category.name); // Kategoriyani state'ga o'rnatamiz
@@ -77,58 +75,75 @@ const ClientTestStart: React.FC = () => {
 
   return (
     <Layout className="p-8 space-y-6">
-      {
-        isLoading ? (
-          <div className="flex justify-center absolute top-[42%] left-[57%]">
-            <TableLoading />
+      {isLoading ? (
+        <div className="flex justify-center absolute top-[42%] left-[57%]">
+          <TableLoading />
+        </div>
+      ) : (
+        <>
+          <Helmet>
+            <title>Geodeziya</title>
+          </Helmet>
+          <div className="py-8">
+            <h2 className="text-red-600 text-4xl text-center">Yo'nalishlar</h2>
           </div>
-        ) : (
-          <>
-            <Helmet>
-              <title>Geodeziya</title>
-            </Helmet>
-            <div className="py-8">
-              <h2 className="text-red-600 text-4xl text-center">Yo'nalishlar</h2>
-            </div>
-            {Array.isArray(data) && data.map((item: ClientCategory, index: number) => (
+          {Array.isArray(data) &&
+            data.map((item: ClientCategory, index: number) => (
               <div className="border-[0.5px] items-center shadow-xl relative border-black bg-white rounded-md py-6 px-4 w-full">
                 <div className="px-3 flex items-center space-x-12">
                   <div>
                     <img
                       alt={item.name}
                       src={
-                        item.fileId
-                          ? `${getImage}${item.fileId}`
-                          : defaultImage
+                        item.fileId ? `${getImage}${item.fileId}` : defaultImage
                       }
                       className="border-[1px] border-gray-300 w-[100px] h-[100px] rounded-full object-cover hover:cursor-pointer"
                     />
                   </div>
                   <div className="flex-1 mb-4">
                     <div key={index} className="flex justify-between mb-2">
-                      <span className="text-gray-600 font-semibold">Yo'nalish</span>
-                      <span className="text-gray-700 font-medium">{item.name}</span>
+                      <span className="text-gray-600 font-semibold">
+                        Yo'nalish
+                      </span>
+                      <span className="text-gray-700 font-medium">
+                        {item.name}
+                      </span>
                     </div>
 
                     <div key={index} className="flex justify-between mb-2">
-                      <span className="text-gray-600 font-semibold">Test ishlashga ajratilgan vaqt</span>
-                      <span className="text-gray-700 font-medium">{item.duration} (дақ.)</span>
+                      <span className="text-gray-600 font-semibold">
+                        Test ishlashga ajratilgan vaqt
+                      </span>
+                      <span className="text-gray-700 font-medium">
+                        {item.duration} (дақ.)
+                      </span>
                     </div>
 
                     <div key={index} className="flex justify-between mb-2">
-                      <span className="text-gray-600 font-semibold">Savollar soni</span>
-                      <span className="text-gray-700 font-medium">{item.questionCount} ta</span>
+                      <span className="text-gray-600 font-semibold">
+                        Savollar soni
+                      </span>
+                      <span className="text-gray-700 font-medium">
+                        {item.questionCount} ta
+                      </span>
                     </div>
 
                     <div key={index} className="flex justify-between mb-2">
-                      <span className="text-gray-600 font-semibold">Qayta topshirish vaqti</span>
-                      <span className="text-gray-700 font-medium">{item.retakeDate} ta</span>
+                      <span className="text-gray-600 font-semibold">
+                        Qayta topshirish vaqti
+                      </span>
+                      <span className="text-gray-700 font-medium">
+                        {item.retakeDate} ta
+                      </span>
                     </div>
 
-                    <button onClick={() => {
-                      showModal()
-                      handleStartClick(item);
-                    }} className="bg-gray-600 cursor-pointer absolute top-[78%] right-5 text-white p-1 px-4 rounded">
+                    <button
+                      onClick={() => {
+                        showModal();
+                        handleStartClick(item);
+                      }}
+                      className="bg-gray-600 cursor-pointer absolute top-[78%] right-5 text-white p-1 px-4 rounded"
+                    >
                       Бошлаш
                     </button>
                   </div>
@@ -139,11 +154,20 @@ const ClientTestStart: React.FC = () => {
                         title={
                           <div>
                             <span>
-                              <MdOutlineNotStarted size={90} color="red" className="mx-auto" />
+                              <MdOutlineNotStarted
+                                size={90}
+                                color="red"
+                                className="mx-auto"
+                              />
                             </span>
                             <span>Haqiqatdan ham </span>
-                            <span className="text-red-600">{selectedCategory}</span>
-                            <span> yo'nalishi bo'yicha test boshlamoqchimisiz?</span>
+                            <span className="text-red-600">
+                              {selectedCategory}
+                            </span>
+                            <span>
+                              {' '}
+                              yo'nalishi bo'yicha test boshlamoqchimisiz?
+                            </span>
                           </div>
                         }
                         visible={isModalVisible}
@@ -153,27 +177,23 @@ const ClientTestStart: React.FC = () => {
                         cancelText="Orqaga"
                         maskClosable={false}
                         style={{
-                          top: "34%",
-                          left: "1%",
-                          width: "300px"
+                          top: '34%',
+                          left: '1%',
+                          width: '300px',
                         }}
                         maskStyle={{
-                          backgroundColor: "rgba(0, 0, 0, 0.1)",
+                          backgroundColor: 'rgba(0, 0, 0, 0.1)',
                         }}
-                      >
-                      </Modal>
+                      ></Modal>
                     </>
-                  )
-
-                  }
+                  )}
                 </div>
               </div>
             ))}
-          </>
-        )
-      }
+        </>
+      )}
     </Layout>
   );
-}
+};
 
 export default ClientTestStart;

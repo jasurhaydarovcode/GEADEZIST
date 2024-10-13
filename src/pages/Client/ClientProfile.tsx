@@ -28,7 +28,7 @@ function ClientProfile() {
   }, [navigate]);
 
   // Ma'lumotni React Query orqali olish
-  const { data: getMeUserData, } = useQuery({
+  const { data: getMeUserData } = useQuery({
     queryKey: ['getMeUser'],
     queryFn: async () => {
       const response = await axios.get(getProfile, config);
@@ -168,7 +168,8 @@ function ClientProfile() {
               {/* User Brithday */}
               <div>
                 <label className="block text-lg text-gray-600">
-                  Tug'ilgan kuningiz <span>(namuna: yil-oy-kun: 2003-02-09)</span>
+                  Tug'ilgan kuningiz{' '}
+                  <span>(namuna: yil-oy-kun: 2003-02-09)</span>
                 </label>
                 <input
                   type="text"
@@ -185,7 +186,6 @@ function ClientProfile() {
         </div>
       </Layout>
     </div>
-
   );
 }
 

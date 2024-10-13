@@ -109,7 +109,9 @@ function Profile() {
 
                 {/* Surname */}
                 <div>
-                  <label className="block text-sm text-gray-600">Familiya</label>
+                  <label className="block text-sm text-gray-600">
+                    Familiya
+                  </label>
                   <input
                     type="text"
                     value={getProfileData?.lastName || 'Admin'}
@@ -172,7 +174,7 @@ function Profile() {
                       getProfileData?.street == null
                         ? 'No data'
                         : getProfileData?.street ||
-                        "Admin MFY Exam Ko'chasi 21-uy"
+                          "Admin MFY Exam Ko'chasi 21-uy"
                     }
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                     readOnly

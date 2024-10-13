@@ -1,11 +1,24 @@
 import Layout from '@/components/Dashboard/Layout';
 import TableLoading from '@/components/spinner/TableLoading';
 import axios from 'axios';
-import { addRegion, deleteRegion, getDistrict, getRegion, updateRegion } from '@/helpers/api/baseUrl';
+import {
+  addRegion,
+  deleteRegion,
+  getDistrict,
+  getRegion,
+  updateRegion,
+} from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Modal, Pagination } from 'antd';
-import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow, } from 'flowbite-react';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeadCell,
+  TableRow,
+} from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { MdDelete, MdEdit } from 'react-icons/md';
@@ -16,13 +29,13 @@ import { toast } from 'react-toastify';
 function Address() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [deleteModalVisible, setDeleteModalVisible] = useState(false); // O'chirish modalini ko'rsatish uchun 
-  const [selectedAddress, setSelectedAddress] = useState(null); // O'chiriladigan manzilni saqlash 
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false); // O'chirish modalini ko'rsatish uchun
+  const [selectedAddress, setSelectedAddress] = useState(null); // O'chiriladigan manzilni saqlash
   const [putOpen, setPutOpen] = useState(false);
-  // Pagination holati 
+  // Pagination holati
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [totalItems, setTotalItems] = useState(0); // Umumiy ma'lumotlar soni 
+  const [totalItems, setTotalItems] = useState(0); // Umumiy ma'lumotlar soni
   // Pagination tuman uchun
   const [currentPages, setCurrentPages] = useState(1);
   const [pageSizes, setPageSizes] = useState(10);
@@ -68,7 +81,7 @@ function Address() {
   };
 
   const handleDeleteCancel = () => {
-    setDeleteModalVisible(false); // O'chirishni bekor qilish 
+    setDeleteModalVisible(false); // O'chirishni bekor qilish
   };
 
   const handlePutOk = () => {
@@ -102,11 +115,11 @@ function Address() {
           body: { body: string; totalElements: number; totalPage: number };
         }
       ).body;
-      setTotalItems(responseData.totalElements); // Umumiy ma'lumotlar sonini saqlaymiz 
+      setTotalItems(responseData.totalElements); // Umumiy ma'lumotlar sonini saqlaymiz
       return responseData.body;
     },
     {
-      keepPreviousData: true, // Sahifa o'zgarganda eski ma'lumotlarni saqlab qoladi 
+      keepPreviousData: true, // Sahifa o'zgarganda eski ma'lumotlarni saqlab qoladi
     },
   );
 
@@ -199,7 +212,6 @@ function Address() {
 
   return (
     <div>
-      
       <Helmet>
         <title>Address</title>
       </Helmet>
@@ -238,8 +250,12 @@ function Address() {
                 maskClosable={false}
                 okText="Saqlash"
                 cancelText="Bekor qilish"
-                okButtonProps={{ style: { backgroundColor: 'black', color: 'white', } }}
-                cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white', } }}
+                okButtonProps={{
+                  style: { backgroundColor: 'black', color: 'white' },
+                }}
+                cancelButtonProps={{
+                  style: { backgroundColor: 'black', color: 'white' },
+                }}
               >
                 <div className="mb-4">
                   <input
@@ -306,8 +322,12 @@ function Address() {
               onCancel={handleDeleteCancel}
               okText="O'chirish"
               cancelText="Bekor qilish"
-              okButtonProps={{ style: { backgroundColor: 'black', color: 'white', } }}
-              cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white', } }}
+              okButtonProps={{
+                style: { backgroundColor: 'black', color: 'white' },
+              }}
+              cancelButtonProps={{
+                style: { backgroundColor: 'black', color: 'white' },
+              }}
             >
               <p className="text-center text-xl my-5 font-semibold">
                 Viloyatni o'chirmoqchimisiz?
@@ -322,8 +342,12 @@ function Address() {
               onCancel={handlePutCancel}
               okText="O'zgartirish"
               cancelText="Bekor qilish"
-              okButtonProps={{ style: { backgroundColor: 'black', color: 'white', } }}
-              cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white', } }}
+              okButtonProps={{
+                style: { backgroundColor: 'black', color: 'white' },
+              }}
+              cancelButtonProps={{
+                style: { backgroundColor: 'black', color: 'white' },
+              }}
             >
               <div className="mb-4">
                 <input
@@ -388,11 +412,13 @@ function Address() {
                 // onCancel={handlePutCancel}
                 okText="O'zgartirish"
                 cancelText="Bekor qilish"
-                okButtonProps={{ style: { backgroundColor: 'black', color: 'white', } }}
-                cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white', } }}
-              >
-                
-              </Modal>
+                okButtonProps={{
+                  style: { backgroundColor: 'black', color: 'white' },
+                }}
+                cancelButtonProps={{
+                  style: { backgroundColor: 'black', color: 'white' },
+                }}
+              ></Modal>
             </div>
           </div>
         )}
