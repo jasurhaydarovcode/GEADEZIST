@@ -80,20 +80,16 @@ function Employees() {
   // };
 
   const handleOk = () => {
-    if (firstname && lastname && email && phoneNumber && password && confirmPassword && role) {
+    if (firstname.current!.value && lastname.current!.value && email.current!.value && phoneNumber.current!.value && password.current!.value && confirmPassword.current!.value && role.current!.value) {
       if (password.current!.value === confirmPassword.current!.value) {
-        if(role.current!.value) {
-          toast.error("Rolni tanlang");
-          postAdmin.mutate(); // POST so'rovini yuborish
-          setConfirmLoading(true);
-          setTimeout(() => {
-            setOpen(false);
-            setConfirmLoading(false);
-            resetForm(); // Forma maydonlarini tozalash
-          }, 2000);
-        } else {
-          toast.error("Rolni tanlang");
-        }
+        toast.error("Rolni tanlang");
+        postAdmin.mutate(); // POST so'rovini yuborish
+        setConfirmLoading(true);
+        setTimeout(() => {
+          setOpen(false);
+          setConfirmLoading(false);
+          resetForm(); // Forma maydonlarini tozalash
+        }, 2000);
       } else {
         toast.error("Parollar mos kelmadi");
       }
@@ -229,7 +225,7 @@ function Employees() {
                     className="border w-full p-2 rounded"
                     ref={role}
                   >
-                    <option value="" disabled>Admin toifasini tanlang</option>
+                    <option value="">Admin toifasini tanlang</option>
                     <option value="ROLE_TESTER">Tester admin</option>
                     <option value="ROLE_ADMIN">Tekshiruvchi admin</option>
                   </select>
