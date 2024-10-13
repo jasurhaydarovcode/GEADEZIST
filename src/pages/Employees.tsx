@@ -1,22 +1,12 @@
 import Layout from '@/components/Dashboard/Layout';
-import { PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Space, Switch, Pagination, Modal } from 'antd';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeadCell,
-  TableRow,
-} from 'flowbite-react';
+import { PlusCircleOutlined } from '@ant-design/icons';
+import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow,} from 'flowbite-react';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import axios from 'axios';
-import { activeEmployee, 
-  addEmployee, 
-  getEmployee 
-} from '@/helpers/api/baseUrl';
+import { activeEmployee, addEmployee, getEmployee } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -38,38 +28,46 @@ function Employees() {
     }
   }
 
-  const { data: admins, isLoading } = useQuery(
-    ['getADmin', currentPage],
-    async () => {
-      const res = await axios.get(
-        `${getEmployee}?page=${currentPage - 1}&size=${pageSize}`,
-        config,
-      );
-      const responseData = (
-        res.data as {
-          body: { body: string; totalElements: number; totalPage: number };
-        }
-      ).body;
-      setTotalItems(responseData.totalElements); // Umumiy ma'lumotlar sonini saqlaymiz 
-      return responseData.body;
-    },
-    {
-      keepPreviousData: true, // Sahifa o'zgarganda eski ma'lumotlarni saqlab qoladi 
-    },
-  );
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page); // Hozirgi sahifani yangilash 
-    setPageSize(pageSize);
-  };
-
   const navigate = useNavigate();
   useEffect(() => {
     checkRoleClient();
   }, [checkRoleClient]);
 
+  // Adminlarni get qilib olish
+  const { data: admins, isLoading } = useQuery (
+    [ 'getADmin', currentPage ],
+    async ( ) => {
+      const res = await axios.get (
+        `${getEmployee}?page=${currentPage - 1}&size=${pageSize}`,
+        config ,
+      ); 
+      const responseData = ( 
+        res.data  as {
+          body: { body: string; totalElements: number; totalPage: number }; // Type berish
+        } 
+      ).body ;
+      setTotalItems(responseData.totalElements); // Umumiy ma'lumotlar sonini saqlaymiz 
+      return responseData.body; // Umumiy ma'lumotlarni saqlaymiz
+    },
+    { 
+      keepPreviousData: true, // Sahifa o'zgarganda eski ma'lumotlarni saqlab qoladi 
+    },
+  );
+
+  const handlePageChange = ( page: number ) => {
+    setCurrentPage(page); // Hozirgi sahifani yangilash 
+    setPageSize( pageSize );
+  };
+
+  // Modal ochilishi
   const showModal = () => {
     setOpen(true);
+  };
+  
+  // Modal yopilishi
+  const handleCancel = () => {
+    resetForm();
+    setOpen(false);
   };
 
   // const handleOk = () => {
@@ -99,6 +97,7 @@ function Employees() {
     }
   };
 
+  // input maydonlarini tozalash
   const resetForm = () => {
     firstname.current!.value = '';
     lastname.current!.value = '';
@@ -109,14 +108,10 @@ function Employees() {
     role.current!.value = '';
   };
 
-  const handleCancel = () => {
-    resetForm();
-    setOpen(false);
-  };
 
   // Hodim holatini yangilash uchun mutatsiya yaratish 
-  const updateEmployeeStatus = useMutation(
-    async ({ id, enabled }: { id: string; enabled: boolean }) => {
+  const updateEmployeeStatus = useMutation (
+    async ( { id, enabled }: { id: string; enabled: boolean } ) => {
       return axios.put(`${activeEmployee}${id}`, { enabled }, config);
     },
     {
@@ -185,7 +180,6 @@ function Employees() {
 
   return (
     <div>
-
       <Helmet>
         <title>Xodimlar</title>
       </Helmet>
@@ -226,8 +220,6 @@ function Employees() {
                   {/* <label className="block mb-2">Admin toifasini tanlang</label> */}
                   <select
                     className="border w-full p-2 rounded"
-                    // value={role}
-                    // onChange={(e) => setRole(e.target.value)}
                     ref={role}
                   >
                     <option value="">Admin toifasini tanlang</option>
@@ -241,8 +233,6 @@ function Employees() {
                     type="text"
                     placeholder="Ismni kiriting"
                     className="border w-full p-2 rounded"
-                    // value={firstname}
-                    // onChange={(e) => setFirstname(e.target.value)}
                     ref={firstname}
                   />
                 </div>
@@ -252,8 +242,6 @@ function Employees() {
                     type="text"
                     placeholder="Familiyani kiriting"
                     className="border w-full p-2 rounded"
-                    // value={lastname}
-                    // onChange={(e) => setLastname(e.target.value)}
                     ref={lastname}
                   />
                 </div>
@@ -263,8 +251,6 @@ function Employees() {
                     type="text"
                     placeholder="Telfon raqamni kiriting"
                     className="border w-full p-2 rounded"
-                    // value={phoneNumber}
-                    // onChange={(e) => setPhoneNumber(e.target.value)}
                     ref={phoneNumber}
                   />
                 </div>
@@ -274,8 +260,6 @@ function Employees() {
                     type="email"
                     placeholder="Email kiriting"
                     className="border w-full p-2 rounded"
-                    // value={email}
-                    // onChange={(e) => setEmail(e.target.value)}
                     ref={email}
                   />
                 </div>
@@ -285,8 +269,6 @@ function Employees() {
                     type="password"
                     placeholder="Parolni kiriting"
                     className="border w-full p-2 rounded"
-                    // value={password}
-                    // onChange={(e) => setPassword(e.target.value)}
                     ref={password}
                   />
                 </div>
@@ -296,8 +278,6 @@ function Employees() {
                     type="password"
                     placeholder="Parolni tasdiqlang"
                     className="border w-full p-2 rounded"
-                    // value={confirmPassword}
-                    // onChange={(e) => setConfirmPassword(e.target.value)}
                     ref={confirmPassword}
                   />
                 </div>
