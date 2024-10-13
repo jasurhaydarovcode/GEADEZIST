@@ -2,6 +2,7 @@ import Layout from '@/components/Dashboard/Layout';
 import { baseUrl, getImage } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import { Tooltip } from 'antd';
+import TooltipText from '@/components/TooltipText';
 import axios from 'axios';
 import {
   Table,
@@ -127,19 +128,25 @@ function Category() {
 
             <div className="px-[20px] overflow-x-scroll w-[1170px] rounded-lg">
               <Table hoverable className="border-collapse">
-                <TableHead>
-                  <TableHeadCell>T/P</TableHeadCell>
-                  <TableHeadCell>Kategoriya rasmi</TableHeadCell>
-                  <TableHeadCell>Kategoriya nomi</TableHeadCell>
-                  <TableHeadCell>Tavsifi</TableHeadCell>
-                  <TableHeadCell>Umumiy savollar</TableHeadCell>
-                  <TableHeadCell>Qo'shimcha savollar</TableHeadCell>
-                  <TableHeadCell>Davomiylik vaqti(m)</TableHeadCell>
-                  <TableHeadCell>Qayta qabul qilish sanasi</TableHeadCell>
-                  <TableHeadCell>Yaratgan</TableHeadCell>
-                  <TableHeadCell>Kategoriya holati</TableHeadCell>
-                  <TableHeadCell>O'chirgan</TableHeadCell>
-                  <TableHeadCell>Xarakat</TableHeadCell>
+              <TableHead>
+                <TableHeadCell>T/P</TableHeadCell>
+                {[
+                  { title: 'Kategoriya rasmi', tooltip: 'Kategoriya rasmi' },
+                  { title: 'Kategoriya nomi', tooltip: 'Kategoriya nomi' },
+                  { title: 'Tavsifi', tooltip: 'Tavsifi' },
+                  { title: 'Umumiy savollar', tooltip: 'Umumiy savollar' },
+                  { title: 'Qo\'shimcha savollar', tooltip: 'Qo\'shimcha savollar' },
+                  { title: 'Davomiylik vaqti (daqiqa)', tooltip: 'Davomiylik vaqti(m)' },
+                  { title: 'Qayta qabul qilish sanasi', tooltip: 'Qayta qabul qilish sanasi' },
+                  { title: 'Yaratgan', tooltip: 'Yaratgan' },
+                  { title: 'Kategoriya holati', tooltip: 'Kategoriya holati' },
+                  { title: 'O\'chirgan', tooltip: 'O\'chirgan' },
+                  { title: 'Xarakatlar', tooltip: 'Xarakatlar' },
+                  ].map(({ title, tooltip }) => (
+                  <TableHeadCell key={title}>
+                    <TooltipText title={tooltip}>{title}</TooltipText>
+                  </TableHeadCell>
+                  ))}
                 </TableHead>
                 <TableBody className="divide-y">
                   {Array.isArray(data) &&
@@ -187,7 +194,13 @@ function Category() {
                         <TableCell>{item.extraQuestionCount}</TableCell>
                         <TableCell>{item.durationTime}</TableCell>
                         <TableCell>{item.retakeDate}</TableCell>
-                        <TableCell>{item.createdBy}</TableCell>
+                        <TableCell>
+                          <Tooltip title={item.createdBy}>
+                            <span className="truncate w-[120px] inline-block">
+                              {item.createdBy}
+                            </span>
+                          </Tooltip>
+                        </TableCell>
                         <TableCell>{item.deleted && "O'chirilgan"}</TableCell>
                         <TableCell>{item.deletedBy}</TableCell>
                         {/* Xarakatlar */}
