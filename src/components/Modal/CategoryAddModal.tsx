@@ -38,9 +38,12 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
         message.success('Kategoriya muvaffaqiyatli qo\'shildi!'); // Muvaffaqiyat xabari
         console.log('Kategoriya muvaffaqiyatli qo\'shildi:', data);
       },
-      onError: (error) => {
-        message.error('Xatolik yuz berdi, iltimos qaytadan urinib ko‘ring.'); // Xatolik xabari
-        console.error('Xatolik yuz berdi:', error);
+      onError: (error: any) => {
+        if (error.response?.status === 409) {
+          message.error('Bunday nomdagi kategoriya allaqachon mavjud!');
+        } else {
+          message.error('Xatolik yuz berdi, iltimos qaytadan urinib ko‘ring.');
+        }
       },
     }
   );
