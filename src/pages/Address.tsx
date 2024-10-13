@@ -201,7 +201,7 @@ function Address() {
     <div>
       
       <Helmet>
-        <title>Adress</title>
+        <title>Address</title>
       </Helmet>
 
       <Layout>
@@ -341,6 +341,7 @@ function Address() {
                 color="default"
                 variant="solid"
                 className="text-xl px-5 py-6 my-5"
+                // onClick={showModal}
               >
                 <PlusCircleOutlined className="text-xl" />
                 Qo'shish
@@ -378,6 +379,20 @@ function Address() {
                 pageSize={pageSizes}
                 onChange={handlePageChanges}
               />
+            </div>
+            <div>
+              <Modal
+                title="Tuman qo'shish"
+                // open={putOpen}
+                // onOk={handlePutOk}
+                // onCancel={handlePutCancel}
+                okText="O'zgartirish"
+                cancelText="Bekor qilish"
+                okButtonProps={{ style: { backgroundColor: 'black', color: 'white', } }}
+                cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white', } }}
+              >
+                
+              </Modal>
             </div>
           </div>
         )}
