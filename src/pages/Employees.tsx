@@ -72,31 +72,32 @@ function Employees() {
     setOpen(true);
   };
 
-  const handleOk = () => {
-    postAdmin.mutate();
-    setConfirmLoading(true);
-    setTimeout(() => {
-      setOpen(false);
-      setConfirmLoading(false);
-    }, 2000);
-  };
-
-  // const handleOk = () => { 
-  //   if (firstname && lastname && email && phoneNumber && password && confirmPassword && role) {
-  //     if (password === confirmPassword) {
-  //       postAdmin.mutate();
-  //       setConfirmLoading(true);
-  //       setTimeout(() => {
-  //         setOpen(false);
-  //         setConfirmLoading(false);
-  //       }, 2000);
-  //     } else {
-  //       toast.error("Parollar mos kelmadi");
-  //     }
-  //   } else {
-  //     toast.error("Barcha maydonlarni to'ldiring");
-  //   }
+  // const handleOk = () => {
+  //   postAdmin.mutate();
+  //   setConfirmLoading(true);
+  //   setTimeout(() => {
+  //     setOpen(false);
+  //     setConfirmLoading(false);
+  //   }, 2000);
   // };
+
+  const handleOk = () => {
+    if (firstname && lastname && email && phoneNumber && password && confirmPassword && role) {
+      if (password === confirmPassword) {
+        postAdmin.mutate(); // POST so'rovini yuborish
+        setConfirmLoading(true);
+        setTimeout(() => {
+          setOpen(false);
+          setConfirmLoading(false);
+          resetForm(); // Forma maydonlarini tozalash
+        }, 2000);
+      } else {
+        toast.error("Parollar mos kelmadi");
+      }
+    } else {
+      toast.error("Barcha maydonlarni to'ldiring");
+    }
+  };
 
   const resetForm = () => {
     setFirstname('');
@@ -150,21 +151,34 @@ function Employees() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [role, setRole] = useState('');
 
-  const postAdmin = useMutation(async () => {
-    return axios.post(
-      `${addEmployee}`,
-      {
-        firstname,
-        lastname,
-        email,
-        phoneNumber,
-        password,
-        confirmPassword,
-        role,
+  const postAdmin = useMutation(
+    async () => {
+      return axios.post(
+        `${addEmployee}`,
+        {
+          firstname,
+          lastname,
+          email,
+          phoneNumber,
+          password,
+          confirmPassword,
+          role,
+        },
+        config,
+      );
+    },
+    {
+      onSuccess: () => {
+        toast.success("Hodim muvaffaqiyatli qo'shildi");
+        setOpen(false);
+        resetForm(); // Forma maydonlarini tozalash
       },
-      config,
-    );
-  });
+      onError: (error) => {
+        console.error('Xatolik:', error);
+        toast.error('Hodim qo\'shishda xatolik yuz berdi');
+      },
+    },
+  );
 
   return (
     <div>
@@ -260,7 +274,7 @@ function Employees() {
                 <div className="mb-4">
                   <label className="block mb-2">Parolni kiriting</label>
                   <input
-                    type="text"
+                    type="password"
                     placeholder="Parolni kiriting"
                     className="border w-full p-2 rounded"
                     value={password}
@@ -270,8 +284,8 @@ function Employees() {
                 <div className="mb-4">
                   <label className="block mb-2">Parolni takrorlang</label>
                   <input
-                    type="text"
-                    placeholder="Takroriy parolni kiriting"
+                    type="password"
+                    placeholder="Parolni tasdiqlang"
                     className="border w-full p-2 rounded"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
@@ -337,3 +351,5 @@ function Employees() {
 }
 
 export default Employees;
+
+
