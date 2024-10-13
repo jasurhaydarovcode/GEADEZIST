@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Modal, Input, Select, message } from 'antd'; // 'message' qo'shildi
+import { Button, Modal, Input, Select, message } from 'antd'; // 'message' import qildik
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
@@ -34,10 +34,12 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
     },
     {
       onSuccess: (data) => {
-        queryClient.invalidateQueries('categories');
+        queryClient.invalidateQueries('categories'); // Keshni yangilash
+        message.success('Kategoriya muvaffaqiyatli qo\'shildi!'); // Muvaffaqiyat xabari
         console.log('Kategoriya muvaffaqiyatli qo\'shildi:', data);
       },
       onError: (error) => {
+        message.error('Xatolik yuz berdi, iltimos qaytadan urinib ko‘ring.'); // Xatolik xabari
         console.error('Xatolik yuz berdi:', error);
       },
     }
@@ -56,17 +58,17 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
     });
   };
 
-  // **Form validation** funksiyasi
   const isFormValid = () => {
     if (!formData.name || !formData.description) {
       message.error('Barcha maydonlarni to\'ldiring!');
       return false;
     }
-    if (formData.main && 
-      (formData.questionCount <= 0 || 
-       formData.extraQuestionCount <= 0 || 
-       formData.durationTime <= 0 || 
-       formData.retakeDate <= 0)
+    if (
+      formData.main &&
+      (formData.questionCount <= 0 ||
+        formData.extraQuestionCount <= 0 ||
+        formData.durationTime <= 0 ||
+        formData.retakeDate <= 0)
     ) {
       message.error('Asosiy kategoriya uchun barcha qiymatlar musbat bo\'lishi kerak!');
       return false;
@@ -75,7 +77,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
   };
 
   const handleSave = () => {
-    if (isFormValid()) {  // Formni tekshirishdan o'tsa, so‘rov yuboriladi
+    if (isFormValid()) {
       mutation.mutate(formData, {
         onSuccess: (data) => {
           onAddCategory(data as CategoryModalTypes);
