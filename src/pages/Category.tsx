@@ -128,24 +128,36 @@ function Category() {
 
             <div className="px-[20px] overflow-x-scroll w-[1170px] rounded-lg">
               <Table hoverable className="border-collapse">
-              <TableHead>
-                <TableHeadCell>T/P</TableHeadCell>
-                {[
-                  { title: 'Kategoriya rasmi', tooltip: 'Kategoriya rasmi' },
-                  { title: 'Kategoriya nomi', tooltip: 'Kategoriya nomi' },
-                  { title: 'Tavsifi', tooltip: 'Tavsifi' },
-                  { title: 'Umumiy savollar', tooltip: 'Umumiy savollar' },
-                  { title: 'Qo\'shimcha savollar', tooltip: 'Qo\'shimcha savollar' },
-                  { title: 'Davomiylik vaqti (daqiqa)', tooltip: 'Davomiylik vaqti(m)' },
-                  { title: 'Qayta qabul qilish sanasi', tooltip: 'Qayta qabul qilish sanasi' },
-                  { title: 'Yaratgan', tooltip: 'Yaratgan' },
-                  { title: 'Kategoriya holati', tooltip: 'Kategoriya holati' },
-                  { title: 'O\'chirgan', tooltip: 'O\'chirgan' },
-                  { title: 'Xarakatlar', tooltip: 'Xarakatlar' },
+                <TableHead>
+                  <TableHeadCell>T/P</TableHeadCell>
+                  {[
+                    { title: 'Kategoriya rasmi', tooltip: 'Kategoriya rasmi' },
+                    { title: 'Kategoriya nomi', tooltip: 'Kategoriya nomi' },
+                    { title: 'Tavsifi', tooltip: 'Tavsifi' },
+                    { title: 'Umumiy savollar', tooltip: 'Umumiy savollar' },
+                    {
+                      title: "Qo'shimcha savollar",
+                      tooltip: "Qo'shimcha savollar",
+                    },
+                    {
+                      title: 'Davomiylik vaqti (daqiqa)',
+                      tooltip: 'Davomiylik vaqti(m)',
+                    },
+                    {
+                      title: 'Qayta qabul qilish sanasi',
+                      tooltip: 'Qayta qabul qilish sanasi',
+                    },
+                    { title: 'Yaratgan', tooltip: 'Yaratgan' },
+                    {
+                      title: 'Kategoriya holati',
+                      tooltip: 'Kategoriya holati',
+                    },
+                    { title: "O'chirgan", tooltip: "O'chirgan" },
+                    { title: 'Xarakatlar', tooltip: 'Xarakatlar' },
                   ].map(({ title, tooltip }) => (
-                  <TableHeadCell key={title}>
-                    <TooltipText title={tooltip}>{title}</TooltipText>
-                  </TableHeadCell>
+                    <TableHeadCell key={title}>
+                      <TooltipText title={tooltip}>{title}</TooltipText>
+                    </TableHeadCell>
                   ))}
                 </TableHead>
                 <TableBody className="divide-y">

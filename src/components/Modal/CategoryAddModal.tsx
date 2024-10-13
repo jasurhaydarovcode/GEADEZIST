@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Modal, Input, Select, message } from 'antd'; 
+import { Button, Modal, Input, Select, message } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
@@ -123,7 +123,9 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({
         confirmLoading={mutation.isLoading}
         maskClosable={false}
         okButtonProps={{ className: 'bg-black text-white hover:bg-gray-800' }} // Saqlash tugmasi uchun
-        cancelButtonProps={{ className: 'bg-black text-white hover:bg-gray-800' }} // Yopish tugmasi uchun
+        cancelButtonProps={{
+          className: 'bg-black text-white hover:bg-gray-800',
+        }} // Yopish tugmasi uchun
       >
         <div className="space-y-4">
           <div>
