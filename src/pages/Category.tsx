@@ -162,6 +162,7 @@ function Category() {
                         <TableCell>{item.createdBy}</TableCell>
                         <TableCell>{item.deleted && "O'chirilgan"}</TableCell>
                         <TableCell>{item.deletedBy}</TableCell>
+                        {/* Xarakatlar */}
                         <TableCell className="flex gap-4 text-xl">
                           <div className="cursor-pointer" onClick={() => handleEditClick(item)}>
                             <MdEdit />
