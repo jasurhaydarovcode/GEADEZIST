@@ -1,23 +1,11 @@
 import Layout from '@/components/Dashboard/Layout';
 import TableLoading from '@/components/spinner/TableLoading';
-import { addRegion,
-  deleteRegion, 
-  getDistrict, 
-  getRegion, 
-  updateRegion 
-} from '@/helpers/api/baseUrl';
+import axios from 'axios';
+import { addRegion, deleteRegion, getDistrict, getRegion, updateRegion } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Modal, Pagination } from 'antd';
-import axios from 'axios';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeadCell,
-  TableRow,
-} from 'flowbite-react';
+import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow, } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { MdDelete, MdEdit } from 'react-icons/md';
