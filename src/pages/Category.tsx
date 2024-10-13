@@ -1,6 +1,7 @@
 import Layout from '@/components/Dashboard/Layout';
 import { baseUrl, getImage } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
+import { Tooltip } from 'antd';
 import axios from 'axios';
 import {
   Table,
@@ -168,8 +169,20 @@ function Category() {
                             className="border-[1px] border-gray-300 w-[43px] h-[43px] rounded-full object-cover hover:cursor-pointer"
                           />
                         </TableCell>
-                        <TableCell>{item.name}</TableCell>
-                        <TableCell>{item.description}</TableCell>
+                        <TableCell>
+                          <Tooltip title={item.name}>
+                            <span className="truncate w-[120px] inline-block">
+                              {item.name}
+                            </span>
+                          </Tooltip>
+                        </TableCell>
+                        <TableCell>
+                          <Tooltip title={item.description}>
+                            <span className="truncate w-[120px] inline-block">
+                              {item.description}
+                            </span>
+                          </Tooltip>
+                        </TableCell>
                         <TableCell>{item.questionCount}</TableCell>
                         <TableCell>{item.extraQuestionCount}</TableCell>
                         <TableCell>{item.durationTime}</TableCell>
