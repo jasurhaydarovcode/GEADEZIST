@@ -51,8 +51,7 @@ const Dashboard = () => {
       toast.error(error.message);
     },
   });
-  const staticData: GetStaticsAllResponse =
-    dashboardStatic.data as GetStaticsAllResponse;
+  const staticData: GetStaticsAllResponse = dashboardStatic.data as GetStaticsAllResponse;
   console.log(staticData);
   const categories = ['Топография', 'Маркшейдерлик', 'Умумий Геодезия'];
   const regions = ['Toshkent', 'Samarqand', "Farg'ona"];

@@ -8,6 +8,8 @@ export const getMeUser = `${baseUrl}user/get/me`;
 export const getClientAll = `${baseUrl}user?page=0&size=10`;
 export const getMe = `${baseUrl}user/get/me`;
 export const getProfile = `${baseUrl}user/profile`;
+export const getUser = `${baseUrl}user?page=0&size=10`;
+
 
 // category
 export const getClientCategory = `${baseUrl}category/`;
