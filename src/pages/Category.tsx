@@ -20,6 +20,7 @@ import TableLoading from '@/components/spinner/TableLoading';
 import { Pagination } from 'antd';
 import { useState } from 'react';
 import { Helmet } from 'react-helmet';
+import { Modal } from 'antd';
 
 function Category() {
   const queryClient = useQueryClient();
@@ -29,7 +30,9 @@ function Category() {
 
   const [selectedCategory, setSelectedCategory] = useState(null); // Tanlangan kategoriya
   const [editModalVisible, setEditModalVisible] = useState(false); // Tahrirlash modalining holati
+  const [imageModal, setImageModal] = useState({ open: false, imageUrl: '' });
 
+  // Kategoriyalarni olish
   const { data, refetch, isLoading } = useQuery(
     ['getCategories', currentPage],
     async () => {
@@ -43,11 +46,22 @@ function Category() {
     { keepPreviousData: true }
   );
 
+  // Kategoriya qo'shish funksiyasi
   const handleAddCategory = () => {
     queryClient.invalidateQueries(['getCategories']);
     refetch();
   };
 
+  {/* Rasm modal */}
+  const handleImageClick = (imageUrl: string) => {
+    setImageModal({ open: true, imageUrl }); // Rasm modalini ochish
+  };
+
+  const handleImageModalClose = () => {
+    setImageModal({ open: false, imageUrl: '' }); // Modalni yopish
+  };
+
+  // Kategoriya o'chirish funksiyasi
   const handleDeleteCategory = async (categoryId: string) => {
     try {
       await axios.delete(`${baseUrl}category/${categoryId}`, config);
@@ -58,6 +72,7 @@ function Category() {
     }
   };
 
+  // Pagination uchun funksiya
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
@@ -67,6 +82,7 @@ function Category() {
     setEditModalVisible(true); // Tahrirlash modalini ochish
   };
 
+  // Kategoriyani yangilash funksiyasi
   const handleEditCategory = async (updatedCategory: any) => {
     try {
       await axios.put(
@@ -133,6 +149,7 @@ function Category() {
                                 ? `${getImage}${item.fileId}`
                                 : defaultImage
                             }
+                            onClick={() => handleImageClick(item.fileId ? `${getImage}${item.fileId}` : defaultImage)}
                             className="border-[1px] border-gray-300 w-[43px] h-[43px] rounded-full object-cover hover:cursor-pointer"
                           />
                         </TableCell>
@@ -145,6 +162,7 @@ function Category() {
                         <TableCell>{item.createdBy}</TableCell>
                         <TableCell>{item.deleted && "O'chirilgan"}</TableCell>
                         <TableCell>{item.deletedBy}</TableCell>
+                        {/* Xarakatlar */}
                         <TableCell className="flex gap-4 text-xl">
                           <div className="cursor-pointer" onClick={() => handleEditClick(item)}>
                             <MdEdit />
@@ -160,6 +178,7 @@ function Category() {
               </Table>
             </div>
 
+            {/* Pagination funksiyasi */}
             <div className="flex justify-end mt-4 px-[20px]">
               <Pagination
                 current={currentPage}
@@ -169,7 +188,7 @@ function Category() {
                 showSizeChanger={false}
               />
             </div>
-
+            {/* Tahrirlash modal */}
             <CategoryEditModal
               visible={editModalVisible}
               onClose={() => setEditModalVisible(false)}
@@ -178,6 +197,20 @@ function Category() {
             />
           </>
         )}
+
+        {/* Rasm modal */}
+        <Modal
+          open={imageModal.open}
+          onCancel={handleImageModalClose}
+          footer={null}
+          centered
+        >
+          <img
+            src={imageModal.imageUrl}
+            alt="Kategoriya rasmi"
+            style={{ width: '100%' }}
+          />
+        </Modal>
       </Layout>
     </div>
   );
