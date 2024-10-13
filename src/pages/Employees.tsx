@@ -98,7 +98,18 @@ function Employees() {
   //   }
   // };
 
+  const resetForm = () => {
+    setFirstname('');
+    setLastname('');
+    setEmail('');
+    setPhoneNumber('');
+    setPassword('');
+    setConfirmPassword('');
+    setRole('');
+  };
+
   const handleCancel = () => {
+    resetForm();
     setOpen(false);
   };
 
@@ -184,10 +195,13 @@ function Employees() {
               </Button>
               <Modal
                 title="Hodim qo'shish"
+                centered
                 open={open}
                 onOk={handleOk}
-                confirmLoading={confirmLoading}
                 onCancel={handleCancel}
+                okText="Saqlash"
+                cancelText="Bekor qilish"
+                confirmLoading={confirmLoading}
                 maskClosable={false}
               >
                 {/* Modal mazmuni */}
