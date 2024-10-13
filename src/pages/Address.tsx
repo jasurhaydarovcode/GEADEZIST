@@ -51,11 +51,13 @@ function Address() {
     setTimeout(() => {
       setOpen(false);
       setConfirmLoading(false);
+      resetForm();
     }, 2000);
   };
 
   const handleCancel = () => {
     setOpen(false);
+    resetForm();
   };
 
   const handleDelete = () => {
@@ -76,8 +78,15 @@ function Address() {
     }
   };
 
+  const handlePutOpen = (item: any) => {
+    setSelectedAddress(item.id);
+    setName(item.name); // Viloyat nomini oling va setName ga qo'ying
+    setPutOpen(true);
+  };
+
   const handlePutCancel = () => {
     setPutOpen(false);
+    resetForm();
   };
 
   // Viloyatlarni get qilish
@@ -107,6 +116,11 @@ function Address() {
   };
 
   // Manzillarni post qilish
+
+  const resetForm = () => {
+    setName('');
+  };
+
   const queryClient = new QueryClient();
 
   const [name, setName] = useState('');
@@ -253,10 +267,11 @@ function Address() {
                         <TableCell>{item.name}</TableCell>
                         <TableCell className="flex gap-1 text-xl cursor-pointer">
                           <MdEdit
-                            onClick={() => {
-                              setSelectedAddress(item.id);
-                              setPutOpen(true);
-                            }}
+                            // onClick={() => {
+                            //   setSelectedAddress(item.id);
+                            //   setPutOpen(true);
+                            // }}
+                            onClick={() => handlePutOpen(item)}
                           />
                           <MdDelete
                             onClick={() => {
