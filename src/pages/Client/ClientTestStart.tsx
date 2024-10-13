@@ -11,6 +11,8 @@ import { ClientCategory } from '@/helpers/types/getClientCategory';
 import axios from 'axios';
 import { config } from '@/helpers/functions/token';
 import TableLoading from "@/components/spinner/TableLoading";
+import defaultImage from '@/assets/images/default.png';
+export const getImage = `${baseUrl}api/videos/files`;
 
 interface AxiosError {
   message: string;
@@ -90,9 +92,17 @@ const ClientTestStart: React.FC = () => {
             </div>
             {Array.isArray(data) && data.map((item: ClientCategory, index: number) => (
               <div className="border-[0.5px] items-center shadow-xl relative border-black bg-white rounded-md py-6 px-4 w-full">
-                <div className="flex">
+                <div className="px-3 flex items-center space-x-12">
                   <div>
-                    <img className="w-40 h-40 mr-4" src={item.fileId} alt="Category Image" />
+                    <img
+                      alt={item.name}
+                      src={
+                        item.fileId
+                          ? `${getImage}${item.fileId}`
+                          : defaultImage
+                      }
+                      className="border-[1px] border-gray-300 w-[100px] h-[100px] rounded-full object-cover hover:cursor-pointer"
+                    />
                   </div>
                   <div className="flex-1 mb-4">
                     <div key={index} className="flex justify-between mb-2">
@@ -118,7 +128,7 @@ const ClientTestStart: React.FC = () => {
                     <button onClick={() => {
                       showModal()
                       handleStartClick(item);
-                    }} className="bg-gray-600 cursor-pointer absolute top-[78%] right-3 text-white p-1 px-4 rounded">
+                    }} className="bg-gray-600 cursor-pointer absolute top-[78%] right-5 text-white p-1 px-4 rounded">
                       Бошлаш
                     </button>
                   </div>

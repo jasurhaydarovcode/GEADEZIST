@@ -16,6 +16,10 @@ const Card: React.FC<CardProps> = ({
   buttonText,
   status,
 }) => {
+
+
+
+
   return (
     <div className="container bg-white rounded-md max-w-[450px]">
       <div className="border rounded-lg shadow-lg p-4">

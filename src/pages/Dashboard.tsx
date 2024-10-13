@@ -45,7 +45,7 @@ const Dashboard = () => {
     queryFn: async () => {
       const res = await axios.get(getStaticAll, config);
       const data = res.data as { body: any }; // Type assertion added
-      return data.body; 
+      return data.body;
     },
     onError: (error: any) => {
       toast.error(error.message);
@@ -144,7 +144,7 @@ const Dashboard = () => {
     queryKey: ['getClient', config],
     queryFn: async () => {
       const res = await axios.get<GetClientAllResponse[]>(getClientAll, config);
-      const data = res.data.body.body as GetClientAllResponse[]; // 'body?.body' ni olib tashlang
+      const data = res.data as { body?: { body: GetClientAllResponse[] } }; // 'body?.body' ni olib tashlang
       return data;
     },
   });

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Logo } from '@/helpers/imports/images';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { IoMenu, IoCloseOutline } from 'react-icons/io5'; // Icons for burger menu
+import path from 'path';
 
 const Sidebar: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -20,6 +21,8 @@ const Sidebar: React.FC = () => {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
+  const { pathname } = useLocation()
 
   return (
     <>
@@ -56,7 +59,7 @@ const Sidebar: React.FC = () => {
         <ul className="mt-20">
           {clientSidebarItems.map((item, index) => (
             <Link to={item.path} key={index}>
-              <li className="border shadow-xl hover:shadow-2xl hover:bg-gray-200 transition duration-150 py-5 mb-5">
+              <li className={pathname === item.path ? "shadow-xl hover:shadow-2xl bg-gray-300 text-white transition duration-150 py-5 mb-5" : "border shadow-xl hover:shadow-2xl transition duration-150 py-5 mb-5"}>
                 <span className="p-4 text-xl text-gray-500">{item.label}</span>
               </li>
             </Link>
