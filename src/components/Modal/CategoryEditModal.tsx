@@ -20,7 +20,7 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
   const [form] = Form.useForm();
   const [isMainCategory, setIsMainCategory] = useState<boolean>(false);
 
-  // Load category data into form when the modal opens
+  // Load category data into form when the modal opens 
   useEffect(() => {
     if (category) {
       form.setFieldsValue({

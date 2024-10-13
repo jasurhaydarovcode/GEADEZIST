@@ -16,7 +16,7 @@ function CategoryDeleteModal({
   };
 
   const handleOk = () => {
-    onDelete(categoryId); // Call the delete function passed from parent
+    onDelete(categoryId); // Kategoriya o'chirish funksiyasi
     setIsModalVisible(false);
   };
 
