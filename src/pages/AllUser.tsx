@@ -1,22 +1,19 @@
 import Layout from '@/components/Dashboard/Layout';
 import { Helmet } from 'react-helmet';
 import { FcSearch } from 'react-icons/fc';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 function AllUser() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   return (
     <>
       <Layout>
         <Helmet>
           <title>Foydalanuvchilar</title>
         </Helmet>
-        <div className="p-5 px-10" onClick={() => navigate(-1)}>
-          <i className="bi bi-arrow-left text-3xl cursor-pointer"></i>
-        </div>
-        <div className="container mx-auto py-5">
+        <div className="container grid justify-center py-3">
           <h1 className="text-2xl font-bold py-5">Foydalanuvchilar</h1>
-          <div className="flex gap-5">
+          <div className="flex gap-5 max-xl:w-[800px] max-2xl:w-[1000px]">
             <div className="flex pb-5">
               <label htmlFor="inp1">
                 <FcSearch className="absolute mt-4 ml-3 text-[20px]" />
@@ -43,7 +40,7 @@ function AllUser() {
               <option value="">example 2</option>
             </select>
           </div>
-          <div className="table w-full">
+          <div className="table ">
             <div className="relative overflow-x-auto">
               <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
