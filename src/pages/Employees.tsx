@@ -81,14 +81,19 @@ function Employees() {
 
   const handleOk = () => {
     if (firstname && lastname && email && phoneNumber && password && confirmPassword && role) {
-      if (password.current!.value == confirmPassword.current!.value) {
-        postAdmin.mutate(); // POST so'rovini yuborish
-        setConfirmLoading(true);
-        setTimeout(() => {
-          setOpen(false);
-          setConfirmLoading(false);
-          resetForm(); // Forma maydonlarini tozalash
-        }, 2000);
+      if (password.current!.value === confirmPassword.current!.value) {
+        if(role.current!.value) {
+          toast.error("Rolni tanlang");
+          postAdmin.mutate(); // POST so'rovini yuborish
+          setConfirmLoading(true);
+          setTimeout(() => {
+            setOpen(false);
+            setConfirmLoading(false);
+            resetForm(); // Forma maydonlarini tozalash
+          }, 2000);
+        } else {
+          toast.error("Rolni tanlang");
+        }
       } else {
         toast.error("Parollar mos kelmadi");
       }
@@ -214,6 +219,8 @@ function Employees() {
                 cancelText="Bekor qilish"
                 confirmLoading={confirmLoading}
                 maskClosable={false}
+                okButtonProps={{ style: { backgroundColor: 'black', color: 'white', } }}
+                cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white', } }}
               >
                 {/* Modal mazmuni */}
                 <div className="mb-4">
@@ -222,7 +229,7 @@ function Employees() {
                     className="border w-full p-2 rounded"
                     ref={role}
                   >
-                    <option value="">Admin toifasini tanlang</option>
+                    <option value="" disabled>Admin toifasini tanlang</option>
                     <option value="ROLE_TESTER">Tester admin</option>
                     <option value="ROLE_ADMIN">Tekshiruvchi admin</option>
                   </select>
