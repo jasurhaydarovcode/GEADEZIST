@@ -174,7 +174,7 @@ function Address() {
     ['getDistrict', currentPage],
     async () => {
       const res = await axios.get(
-        `${getDistrict}/getAllDistrictPage?page=${currentPages - 1}&size=${pageSizes}`,
+        `${getDistrict}getAllDistrictPage?page=${currentPages - 1}&size=${pageSizes}`,
         config,
       );
       //   return (res.data as { body: { body: string; }}).body.body;
@@ -300,7 +300,7 @@ function Address() {
 
             {/* O'chirish modalini qo'shish */}
             <Modal
-              title="Viloyatni o'chirmoqchimisiz?"
+              // title="Viloyatni o'chirmoqchimisiz?"
               open={deleteModalVisible}
               onOk={handleDelete}
               onCancel={handleDeleteCancel}
@@ -309,8 +309,8 @@ function Address() {
               okButtonProps={{ style: { backgroundColor: 'black', color: 'white', } }}
               cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white', } }}
             >
-              <p className="text-center my-5 font-semibold">
-                Viloyatni o'chirishni tasdiqlaysizmi?
+              <p className="text-center text-xl my-5 font-semibold">
+                Viloyatni o'chirmoqchimisiz?
               </p>
             </Modal>
 
