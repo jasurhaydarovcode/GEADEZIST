@@ -1,4 +1,6 @@
 import Layout from '@/components/Dashboard/Layout';
+import { baseUrl } from '@/helpers/api/baseUrl';
+import { config } from '@/helpers/functions/token';
 import {
   PlusCircleOutlined,
   EditOutlined,
@@ -6,106 +8,55 @@ import {
   ExclamationCircleOutlined,
 } from '@ant-design/icons';
 import { Button, Modal, Table } from 'antd';
+import axios from 'axios';
 import { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { FcSearch } from 'react-icons/fc';
+import { useQuery } from 'react-query';
+import { ApiResponse, FetchedTest } from '@/helpers/types/test';
 
 function Test() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [datas, useDatas] = useState<FetchedTest[]>([])
+  const dataSource = datas;
 
-  const dataSource = [
-    {
-      key: '1',
-      numer: 1,
-      testRasm: '.',
-      savol: 'asd/∛(a + 52)',
-      catygoria: 'Markaziyderlik',
-      savolTuri: "Bir to'g'ri javobli test",
-      qiyinligi: "O'rta",
-      yaratganOdam: 'admin',
+  const testData = async (): Promise<ApiResponse> => {
+    const response = await axios.get<ApiResponse>(`${baseUrl}question/categoryNull-quest`, config);
+    return response.data;
+  };
+
+  // Use the data in a React component
+  const { data, isLoading, isError, error } = useQuery<ApiResponse>({
+    queryKey: ['tests'],
+    queryFn: testData,
+    onSuccess: (response) => {
+      console.log(response);
+
+      // Map the data to your table format
+      const fetchedTests = response.body.body.map((item, index) => ({
+        key: item.id.toString(),
+        numer: index + 1,
+        testRasm: ".", // Haqiqiy rasm mavjud bo'lsa, o'zgartiring
+        savol: item.name,
+        catygoria: item.categoryName || "No category",
+        savolTuri: item.type,
+        qiyinligi: item.difficulty,
+        yaratganOdam: item.createdByName,
+      }));
+
+      useDatas(fetchedTests); // useDatas o'rniga setDatas
     },
-    {
-      key: '2',
-      numer: 2,
-      testRasm: '.',
-      savol: 'asd/∛(a + 52)',
-      catygoria: 'Markaziyderlik',
-      savolTuri: "Bir to'g'ri javobli test",
-      qiyinligi: 'Yurta',
-      yaratganOdam: 'admin',
-    },
-    {
-      key: '3',
-      numer: 3,
-      testRasm: '.',
-      savol: 'asd/∛(a + 52)',
-      catygoria: 'Markaziyderlik',
-      savolTuri: "Bir to'g'ri javobli test",
-      qiyinligi: 'Yurta',
-      yaratganOdam: 'admin',
-    },
-    {
-      key: '4',
-      numer: 4,
-      testRasm: '.',
-      savol: 'asd/∛(a + 52)',
-      catygoria: 'Markaziyderlik',
-      savolTuri: "Bir to'g'ri javobli test",
-      qiyinligi: 'Yurta',
-      yaratganOdam: 'admin',
-    },
-    {
-      key: '5',
-      numer: 5,
-      testRasm: '.',
-      savol: 'asd/∛(a + 52)',
-      catygoria: 'Markaziyderlik',
-      savolTuri: "Bir to'g'ri javobli test",
-      qiyinligi: 'Yurta',
-      yaratganOdam: 'admin',
-    },
-    {
-      key: '6',
-      numer: 6,
-      testRasm: '.',
-      savol: 'asd/∛(a + 52)',
-      catygoria: 'Markaziyderlik',
-      savolTuri: "Bir to'g'ri javobli test",
-      qiyinligi: 'Yurta',
-      yaratganOdam: 'admin',
-    },
-    {
-      key: '7',
-      numer: 7,
-      testRasm: '.',
-      savol: 'asd/∛(a + 52)',
-      catygoria: 'Markaziyderlik',
-      savolTuri: "Bir to'g'ri javobli test",
-      qiyinligi: 'Yurta',
-      yaratganOdam: 'admin',
-    },
-    {
-      key: '8',
-      numer: 8,
-      testRasm: '.',
-      savol: 'asd/∛(a + 52)',
-      catygoria: 'Markaziyderlik',
-      savolTuri: "Bir to'g'ri javobli test",
-      qiyinligi: 'Yurta',
-      yaratganOdam: 'admin',
-    },
-    {
-      key: '9',
-      numer: 9,
-      testRasm: '.',
-      savol: 'asd/∛(a + 52)',
-      catygoria: 'Markaziyderlik',
-      savolTuri: "Bir to'g'ri javobli test",
-      qiyinligi: 'Yurta',
-      yaratganOdam: 'admin',
-    },
-  ];
+  });
+
+
+
+  console.log(data);
+  console.log(error);
+
+  if (isLoading) return <p>Yuklanmoqda...</p>;
+  if (isError) return <p>Xatolik yuz berdi.</p>;
+
 
   const columns = [
     { title: '№', dataIndex: 'numer', key: 'numer' },
