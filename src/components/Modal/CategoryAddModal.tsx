@@ -43,6 +43,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
     }
   );
 
+  // Formni tozalash funksiyasi
   const resetForm = () => {
     setFormData({
       name: '',
@@ -56,6 +57,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
     });
   };
 
+  // Kategoriya qo'shish funksiyasi
   const handleSave = () => {
     mutation.mutate(formData, {
       onSuccess: (data) => {
