@@ -1,9 +1,18 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Select } from 'antd';
+import { ClientCategory } from '@/helpers/types/getClientCategory';
+import { baseUrl } from '@/helpers/api/baseUrl';
+import { config } from '@/helpers/functions/token';
+import { useQuery } from 'react-query';
+import { toast } from 'react-toastify';
 
 const TOTAL_TIME = 60 * 60; // 60 minutes (in seconds)
 const STORAGE_KEY = 'savedRemainingTime';
+
+interface AxiosError extends Error {
+  message: string;
+}
 
 const QuestionPage: React.FC = () => {
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
@@ -81,6 +90,19 @@ const QuestionPage: React.FC = () => {
     }
   };
 
+  const { error, data } = useQuery({
+    queryKey: ['getClientCategory'],
+    queryFn: async () => {
+      const res = await axios.get(`${baseUrl}category`, config);
+      return (res.data as { body?: { body: ClientCategory[] } }).body?.body;
+    },
+    onError: (error: AxiosError) => {
+      toast.error(error.message);
+    },
+  });
+
+  if (error) return toast.error(error.message);
+
   return (
     <div className="px-9 space-y-12">
       <div className="mt-11 bg-white p-6 rounded-2xl">
@@ -110,10 +132,11 @@ const QuestionPage: React.FC = () => {
             {answers.map((answer, index) => (
               <label
                 key={index}
-                className={`block p-4 border rounded-lg cursor-pointer ${selectedAnswers.includes(index)
+                className={`block p-4 border rounded-lg cursor-pointer ${
+                  selectedAnswers.includes(index)
                     ? 'bg-blue-100 border-blue-500'
                     : 'border-gray-300'
-                  }`}
+                }`}
                 onClick={() => toggleAnswer(index)}
               >
                 <input

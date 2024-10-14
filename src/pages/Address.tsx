@@ -1,15 +1,16 @@
 import Layout from '@/components/Dashboard/Layout';
 import TableLoading from '@/components/spinner/TableLoading';
-import { addRegion,
-  deleteRegion, 
-  getDistrict, 
-  getRegion, 
-  updateRegion 
+import axios from 'axios';
+import {
+  addRegion,
+  deleteRegion,
+  getDistrict,
+  getRegion,
+  updateRegion,
 } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Modal, Pagination } from 'antd';
-import axios from 'axios';
 import {
   Table,
   TableBody,
@@ -28,13 +29,13 @@ const queryClient = new QueryClient();
 function Address() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [deleteModalVisible, setDeleteModalVisible] = useState(false); // O'chirish modalini ko'rsatish uchun 
-  const [selectedAddress, setSelectedAddress] = useState(null); // O'chiriladigan manzilni saqlash 
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false); // O'chirish modalini ko'rsatish uchun
+  const [selectedAddress, setSelectedAddress] = useState(null); // O'chiriladigan manzilni saqlash
   const [putOpen, setPutOpen] = useState(false);
-  // Pagination holati 
+  // Pagination holati
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [totalItems, setTotalItems] = useState(0); // Umumiy ma'lumotlar soni 
+  const [totalItems, setTotalItems] = useState(0); // Umumiy ma'lumotlar soni
   // Pagination tuman uchun
   const [currentPages, setCurrentPages] = useState(1);
   const [pageSizes, setPageSizes] = useState(10);
@@ -63,11 +64,13 @@ function Address() {
     setTimeout(() => {
       setOpen(false);
       setConfirmLoading(false);
+      resetForm();
     }, 2000);
   };
 
   const handleCancel = () => {
     setOpen(false);
+    resetForm();
   };
 
   const handleDelete = () => {
@@ -78,7 +81,7 @@ function Address() {
   };
 
   const handleDeleteCancel = () => {
-    setDeleteModalVisible(false); // O'chirishni bekor qilish 
+    setDeleteModalVisible(false); // O'chirishni bekor qilish
   };
 
   const handlePutOk = () => {
@@ -88,8 +91,15 @@ function Address() {
     }
   };
 
+  const handlePutOpen = (item: any) => {
+    setSelectedAddress(item.id);
+    setName(item.name); // Viloyat nomini oling va setName ga qo'ying
+    setPutOpen(true);
+  };
+
   const handlePutCancel = () => {
     setPutOpen(false);
+    resetForm();
   };
 
   // Viloyatlarni get qilish
@@ -105,11 +115,11 @@ function Address() {
           body: { body: string; totalElements: number; totalPage: number };
         }
       ).body;
-      setTotalItems(responseData.totalElements); // Umumiy ma'lumotlar sonini saqlaymiz 
+      setTotalItems(responseData.totalElements); // Umumiy ma'lumotlar sonini saqlaymiz
       return responseData.body;
     },
     {
-      keepPreviousData: true, // Sahifa o'zgarganda eski ma'lumotlarni saqlab qoladi 
+      keepPreviousData: true, // Sahifa o'zgarganda eski ma'lumotlarni saqlab qoladi
     },
   );
 
@@ -119,7 +129,16 @@ function Address() {
   };
 
   // Manzillarni post qilish
+<<<<<<< HEAD
  
+=======
+
+  const resetForm = () => {
+    setName('');
+  };
+
+  const queryClient = new QueryClient();
+>>>>>>> 117fba910922caca72cf0c813d2115d45fee71ae
 
   const [name, setName] = useState('');
 
@@ -172,7 +191,7 @@ function Address() {
     ['getDistrict', currentPage],
     async () => {
       const res = await axios.get(
-        `${getDistrict}/getAllDistrictPage?page=${currentPages - 1}&size=${pageSizes}`,
+        `${getDistrict}getAllDistrictPage?page=${currentPages - 1}&size=${pageSizes}`,
         config,
       );
       //   return (res.data as { body: { body: string; }}).body.body;
@@ -197,9 +216,8 @@ function Address() {
 
   return (
     <div>
-      
       <Helmet>
-        <title>Adress</title>
+        <title>Address</title>
       </Helmet>
 
       <Layout>
@@ -234,6 +252,14 @@ function Address() {
                 confirmLoading={confirmLoading}
                 onCancel={handleCancel}
                 maskClosable={false}
+                okText="Saqlash"
+                cancelText="Bekor qilish"
+                okButtonProps={{
+                  style: { backgroundColor: 'black', color: 'white' },
+                }}
+                cancelButtonProps={{
+                  style: { backgroundColor: 'black', color: 'white' },
+                }}
               >
                 <div className="mb-4">
                   <input
@@ -265,10 +291,11 @@ function Address() {
                         <TableCell>{item.name}</TableCell>
                         <TableCell className="flex gap-1 text-xl cursor-pointer">
                           <MdEdit
-                            onClick={() => {
-                              setSelectedAddress(item.id);
-                              setPutOpen(true);
-                            }}
+                            // onClick={() => {
+                            //   setSelectedAddress(item.id);
+                            //   setPutOpen(true);
+                            // }}
+                            onClick={() => handlePutOpen(item)}
                           />
                           <MdDelete
                             onClick={() => {
@@ -293,15 +320,21 @@ function Address() {
 
             {/* O'chirish modalini qo'shish */}
             <Modal
-              title="Viloyatni o'chirmoqchimisiz?"
+              // title="Viloyatni o'chirmoqchimisiz?"
               open={deleteModalVisible}
               onOk={handleDelete}
               onCancel={handleDeleteCancel}
               okText="O'chirish"
               cancelText="Bekor qilish"
+              okButtonProps={{
+                style: { backgroundColor: 'black', color: 'white' },
+              }}
+              cancelButtonProps={{
+                style: { backgroundColor: 'black', color: 'white' },
+              }}
             >
-              <p className="text-center my-5 font-semibold">
-                Viloyatni o'chirishni tasdiqlaysizmi?
+              <p className="text-center text-xl my-5 font-semibold">
+                Viloyatni o'chirmoqchimisiz?
               </p>
             </Modal>
 
@@ -313,6 +346,12 @@ function Address() {
               onCancel={handlePutCancel}
               okText="O'zgartirish"
               cancelText="Bekor qilish"
+              okButtonProps={{
+                style: { backgroundColor: 'black', color: 'white' },
+              }}
+              cancelButtonProps={{
+                style: { backgroundColor: 'black', color: 'white' },
+              }}
             >
               <div className="mb-4">
                 <input
@@ -330,6 +369,7 @@ function Address() {
                 color="default"
                 variant="solid"
                 className="text-xl px-5 py-6 my-5"
+                // onClick={showModal}
               >
                 <PlusCircleOutlined className="text-xl" />
                 Qo'shish
@@ -367,6 +407,22 @@ function Address() {
                 pageSize={pageSizes}
                 onChange={handlePageChanges}
               />
+            </div>
+            <div>
+              <Modal
+                title="Tuman qo'shish"
+                // open={putOpen}
+                // onOk={handlePutOk}
+                // onCancel={handlePutCancel}
+                okText="O'zgartirish"
+                cancelText="Bekor qilish"
+                okButtonProps={{
+                  style: { backgroundColor: 'black', color: 'white' },
+                }}
+                cancelButtonProps={{
+                  style: { backgroundColor: 'black', color: 'white' },
+                }}
+              ></Modal>
             </div>
           </div>
         )}

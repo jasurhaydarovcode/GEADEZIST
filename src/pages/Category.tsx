@@ -1,6 +1,8 @@
 import Layout from '@/components/Dashboard/Layout';
 import { baseUrl, getImage } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
+import { Tooltip } from 'antd';
+import TooltipText from '@/components/TooltipText';
 import axios from 'axios';
 import {
   Table,
@@ -37,14 +39,16 @@ function Category() {
   const { data, refetch, isLoading } = useQuery(
     ['getCategories', currentPage],
     async () => {
-      const res = await axios.get<{ body: { body: any[]; totalElements: number } }>(
+      const res = await axios.get<{
+        body: { body: any[]; totalElements: number };
+      }>(
         `${baseUrl}category/page?page=${currentPage - 1}&size=${pageSize}`,
-        config
+        config,
       );
       setTotalItems(res.data.body.totalElements);
       return res.data.body.body;
     },
-    { keepPreviousData: true }
+    { keepPreviousData: true },
   );
 
   // Kategoriya qo'shish funksiyasi
@@ -53,7 +57,13 @@ function Category() {
     refetch();
   };
 
+<<<<<<< HEAD
   {/* Rasm modal */ }
+=======
+  {
+    /* Rasm modal */
+  }
+>>>>>>> 117fba910922caca72cf0c813d2115d45fee71ae
   const handleImageClick = (imageUrl: string) => {
     setImageModal({ open: true, imageUrl }); // Rasm modalini ochish
   };
@@ -89,15 +99,18 @@ function Category() {
       await axios.put(
         `${baseUrl}category/${updatedCategory.id}`,
         updatedCategory,
-        config
+        config,
       );
       queryClient.invalidateQueries(['getCategories']);
       setEditModalVisible(false); // Tahrirlash modalini yopish
     } catch (error) {
-      console.error("Kategoriyani yangilashda xatolik yuz berdi", error);
+      console.error('Kategoriyani yangilashda xatolik yuz berdi', error);
     }
   };
+<<<<<<< HEAD
 
+=======
+>>>>>>> 117fba910922caca72cf0c813d2115d45fee71ae
 
   return (
     <div>
@@ -107,16 +120,25 @@ function Category() {
 
       <Layout>
         {isLoading ? (
-          <div className="flex justify-center items-center h-[80vh]">{<TableLoading />}</div>
+          <div className="flex justify-center items-center h-[80vh]">
+            {<TableLoading />}
+          </div>
         ) : (
           <>
             <div className="flex justify-between px-[20px]">
               <h1 className="text-3xl font-bold font-sans">Kategoriya</h1>
+<<<<<<< HEAD
               <Link to="/dashboard">
                 <p className="font-sans text-gray-700">
                   Boshqaruv paneli / <span className="text-blue-700">Kategoriya</span>
                 </p>
               </Link>
+=======
+              <p className="font-sans text-gray-700">
+                Boshqaruv paneli /{' '}
+                <span className="text-blue-700">Kategoriya</span>
+              </p>
+>>>>>>> 117fba910922caca72cf0c813d2115d45fee71ae
             </div>
 
             <CategoryAddModal onAddCategory={handleAddCategory} />
@@ -125,17 +147,35 @@ function Category() {
               <Table hoverable className="border-collapse">
                 <TableHead>
                   <TableHeadCell>T/P</TableHeadCell>
-                  <TableHeadCell>Kategoriya rasmi</TableHeadCell>
-                  <TableHeadCell>Kategoriya nomi</TableHeadCell>
-                  <TableHeadCell>Tavsifi</TableHeadCell>
-                  <TableHeadCell>Umumiy savollar</TableHeadCell>
-                  <TableHeadCell>Qo'shimcha savollar</TableHeadCell>
-                  <TableHeadCell>Davomiylik vaqti(m)</TableHeadCell>
-                  <TableHeadCell>Qayta qabul qilish sanasi</TableHeadCell>
-                  <TableHeadCell>Yaratgan</TableHeadCell>
-                  <TableHeadCell>Kategoriya holati</TableHeadCell>
-                  <TableHeadCell>O'chirgan</TableHeadCell>
-                  <TableHeadCell>Xarakat</TableHeadCell>
+                  {[
+                    { title: 'Kategoriya rasmi', tooltip: 'Kategoriya rasmi' },
+                    { title: 'Kategoriya nomi', tooltip: 'Kategoriya nomi' },
+                    { title: 'Tavsifi', tooltip: 'Tavsifi' },
+                    { title: 'Umumiy savollar', tooltip: 'Umumiy savollar' },
+                    {
+                      title: "Qo'shimcha savollar",
+                      tooltip: "Qo'shimcha savollar",
+                    },
+                    {
+                      title: 'Davomiylik vaqti (daqiqa)',
+                      tooltip: 'Davomiylik vaqti(m)',
+                    },
+                    {
+                      title: 'Qayta qabul qilish sanasi',
+                      tooltip: 'Qayta qabul qilish sanasi',
+                    },
+                    { title: 'Yaratgan', tooltip: 'Yaratgan' },
+                    {
+                      title: 'Kategoriya holati',
+                      tooltip: 'Kategoriya holati',
+                    },
+                    { title: "O'chirgan", tooltip: "O'chirgan" },
+                    { title: 'Xarakatlar', tooltip: 'Xarakatlar' },
+                  ].map(({ title, tooltip }) => (
+                    <TableHeadCell key={title}>
+                      <TooltipText title={tooltip}>{title}</TooltipText>
+                    </TableHeadCell>
+                  ))}
                 </TableHead>
                 <TableBody className="divide-y">
                   {Array.isArray(data) &&
@@ -144,7 +184,9 @@ function Category() {
                         key={item.id}
                         className="bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800"
                       >
-                        <TableCell>{(currentPage - 1) * pageSize + index + 1}</TableCell>
+                        <TableCell>
+                          {(currentPage - 1) * pageSize + index + 1}
+                        </TableCell>
                         <TableCell>
                           <img
                             alt={item.name}
@@ -153,22 +195,49 @@ function Category() {
                                 ? `${getImage}${item.fileId}`
                                 : defaultImage
                             }
-                            onClick={() => handleImageClick(item.fileId ? `${getImage}${item.fileId}` : defaultImage)}
+                            onClick={() =>
+                              handleImageClick(
+                                item.fileId
+                                  ? `${getImage}${item.fileId}`
+                                  : defaultImage,
+                              )
+                            }
                             className="border-[1px] border-gray-300 w-[43px] h-[43px] rounded-full object-cover hover:cursor-pointer"
                           />
                         </TableCell>
-                        <TableCell>{item.name}</TableCell>
-                        <TableCell>{item.description}</TableCell>
+                        <TableCell>
+                          <Tooltip title={item.name}>
+                            <span className="truncate w-[120px] inline-block">
+                              {item.name}
+                            </span>
+                          </Tooltip>
+                        </TableCell>
+                        <TableCell>
+                          <Tooltip title={item.description}>
+                            <span className="truncate w-[120px] inline-block">
+                              {item.description}
+                            </span>
+                          </Tooltip>
+                        </TableCell>
                         <TableCell>{item.questionCount}</TableCell>
                         <TableCell>{item.extraQuestionCount}</TableCell>
                         <TableCell>{item.durationTime}</TableCell>
                         <TableCell>{item.retakeDate}</TableCell>
-                        <TableCell>{item.createdBy}</TableCell>
+                        <TableCell>
+                          <Tooltip title={item.createdBy}>
+                            <span className="truncate w-[120px] inline-block">
+                              {item.createdBy}
+                            </span>
+                          </Tooltip>
+                        </TableCell>
                         <TableCell>{item.deleted && "O'chirilgan"}</TableCell>
                         <TableCell>{item.deletedBy}</TableCell>
                         {/* Xarakatlar */}
                         <TableCell className="flex gap-4 text-xl">
-                          <div className="cursor-pointer" onClick={() => handleEditClick(item)}>
+                          <div
+                            className="cursor-pointer"
+                            onClick={() => handleEditClick(item)}
+                          >
                             <MdEdit />
                           </div>
                           <CategoryDeleteModal

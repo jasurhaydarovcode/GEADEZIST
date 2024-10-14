@@ -14,10 +14,11 @@ import AOS from 'aos';
 const Navbar: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false);
-  const [isEmailTooltipVisible, setIsEmailTooltipVisible] = useState<boolean>(false);
+  const [isEmailTooltipVisible, setIsEmailTooltipVisible] =
+    useState<boolean>(false);
   const role = localStorage.getItem('role');
 
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem('token');
   const navigate = useNavigate();
   const [getUser, setGetUser] = useState<GetMeResponse | null>(null);
 
@@ -56,14 +57,13 @@ const Navbar: React.FC = () => {
       return res.data?.body;
     },
     onSuccess: (data) => {
-      setGetUser(data);  // Ma'lumotni state'ga saqlash
-    }
+      setGetUser(data); // Ma'lumotni state'ga saqlash
+    },
   });
-
 
   useEffect(() => {
     if (token) {
-      getMe.refetch()
+      getMe.refetch();
     }
   }, [token]);
 
@@ -89,8 +89,9 @@ const Navbar: React.FC = () => {
     <nav className="bg-white border-b shadow p-6 flex justify-end items-center">
       <div className="flex justify-between items-center">
         <div
-          className={`relative ${getMe.isLoading ? 'pointer-events-none opacity-50' : ''
-            }`}
+          className={`relative ${
+            getMe.isLoading ? 'pointer-events-none opacity-50' : ''
+          }`}
           onClick={toggleDropdown}
         >
           <div className="flex gap-4 items-center cursor-pointer">
@@ -102,8 +103,8 @@ const Navbar: React.FC = () => {
                 {getMe.isLoading
                   ? 'Loading...'
                   : (role === 'ROLE_SUPER_ADMIN' && 'super admin') ||
-                  (role === 'ROLE_TESTER' && 'tester') ||
-                  (role === 'ROLE_USER' && 'client')}
+                    (role === 'ROLE_TESTER' && 'tester') ||
+                    (role === 'ROLE_USER' && 'client')}
               </span>
             </div>
             <div>
@@ -127,7 +128,10 @@ const Navbar: React.FC = () => {
                   {getUser?.email}
                 </div>
                 {isEmailTooltipVisible && (
-                  <div data-aos="fade-up" className="absolute bg-gray-200 p-2 top-[9px] left-3 rounded shadow-md">
+                  <div
+                    data-aos="fade-up"
+                    className="absolute bg-gray-200 p-2 top-[9px] left-3 rounded shadow-md"
+                  >
                     {getUser?.email}
                   </div>
                 )}
@@ -136,8 +140,9 @@ const Navbar: React.FC = () => {
               <div>
                 <Link to={'/profile'}>
                   <button
-                    className={`flex items-center gap-2 w-full text-left hover:bg-gray-100 px-3 py-5 rounded ${getMe.isLoading ? 'pointer-events-none opacity-50' : ''
-                      }`}
+                    className={`flex items-center gap-2 w-full text-left hover:bg-gray-100 px-3 py-5 rounded ${
+                      getMe.isLoading ? 'pointer-events-none opacity-50' : ''
+                    }`}
                     disabled={getMe.isLoading}
                   >
                     <FaRegUser />
@@ -145,8 +150,9 @@ const Navbar: React.FC = () => {
                   </button>
                 </Link>
                 <button
-                  className={`flex items-center gap-2 w-full text-left hover:bg-gray-100 px-3 py-5 rounded ${getMe.isLoading ? 'pointer-events-none opacity-50' : ''
-                    }`}
+                  className={`flex items-center gap-2 w-full text-left hover:bg-gray-100 px-3 py-5 rounded ${
+                    getMe.isLoading ? 'pointer-events-none opacity-50' : ''
+                  }`}
                   onClick={openLogoutModal}
                   disabled={getMe.isLoading}
                 >

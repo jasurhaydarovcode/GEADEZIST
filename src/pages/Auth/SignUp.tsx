@@ -1,11 +1,11 @@
-import { baseUrl } from "@/helpers/api/baseUrl";
-import { Logo, registerRasm } from "@/helpers/imports/images";
-import { SignUpType } from "@/helpers/types/LoginType";
-import axios  from "axios";
-import { useRef, useState } from "react";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { baseUrl } from '@/helpers/api/baseUrl';
+import { Logo, registerRasm } from '@/helpers/imports/images';
+import { SignUpType } from '@/helpers/types/LoginType';
+import axios from 'axios';
+import { useRef, useState } from 'react';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function SignUp() {
   const email = useRef<HTMLInputElement>(null);
@@ -16,71 +16,82 @@ function SignUp() {
   const phone = useRef<HTMLInputElement>(null);
   const offer = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
-  
+
   // Jinsni select orqali tanlash uchun state
-  const [genderValue, setGenderValue] = useState<string>("");
+  const [genderValue, setGenderValue] = useState<string>('');
   const [showpassword, setShowpassword] = useState<boolean>(false);
-  const [showconfirmPassword, setShowconfirmPassword] = useState<boolean>(false);
- 
+  const [showconfirmPassword, setShowconfirmPassword] =
+    useState<boolean>(false);
+
   function signUpPost() {
-    if (!firstname.current?.value || !lastname.current?.value || !phone.current?.value) {
+    if (
+      !firstname.current?.value ||
+      !lastname.current?.value ||
+      !phone.current?.value
+    ) {
       toast.warning("Iltimos, bo'shliqni to'ldiring");
       return;
     }
-    if (!email.current?.value || !password.current?.value || !confirmPassword.current?.value) {
+    if (
+      !email.current?.value ||
+      !password.current?.value ||
+      !confirmPassword.current?.value
+    ) {
       toast.warning("Iltimos, bo'shliqni to'ldiring");
-      
+
       return;
     }
-    if(!email.current?.value.includes("@gmail.com")) {
+    if (!email.current?.value.includes('@gmail.com')) {
       toast.warning("Iltimos, emailni to'liq kiriting");
       return;
     }
-    if(password.current?.value.length < 5) {
+    if (password.current?.value.length < 5) {
       toast.warning("Parol kamida 5 ta belgidan iborat bo'lishi kerak");
       return;
     }
     if (password.current?.value !== confirmPassword.current?.value) {
-      toast.warning("Parollar bir xil emas");
+      toast.warning('Parollar bir xil emas');
       return;
     }
     if (!offer.current?.checked) {
-      toast.warning("Iltimos, Offer bilan tanishib chiqing");
+      toast.warning('Iltimos, Offer bilan tanishib chiqing');
       return;
     }
     if (!genderValue) {
-      toast.warning("Iltimos, jinsni tanlang");
+      toast.warning('Iltimos, jinsni tanlang');
       return;
     }
     const data: SignUpType = {
-        "firstname": firstname.current?.value,
-        "lastname": lastname.current?.value,
-        "email": email.current?.value,
-        "phoneNumber": phone.current?.value,
-        "password": password.current?.value,
-        "confirmPassword": confirmPassword.current?.value,
-        "role": "ROLE_USER"
-      };
+      firstname: firstname.current?.value,
+      lastname: lastname.current?.value,
+      email: email.current?.value,
+      phoneNumber: phone.current?.value,
+      password: password.current?.value,
+      confirmPassword: confirmPassword.current?.value,
+      role: 'ROLE_USER',
+    };
 
-    axios.post(`${baseUrl}auth/register?genderType=${genderValue}`, data)
+    axios
+      .post(`${baseUrl}auth/register?genderType=${genderValue}`, data)
       .then((res) => {
-
         if (res.status === 200 || res.status === 201) {
           toast.success("Ro'yxatdan o'tdingiz");
-          navigate("/auth/confirm-signup");          
+          navigate('/auth/confirm-signup');
         }
         toast.success("Ro'yxatdan o'tdingiz");
         console.log(res);
       })
       .catch((err) => {
         if (err.response?.status === 404) {
-          toast.warning("Serverda xatolik yuz berdi");
-        }
-        else if(err.response?.status === 400 || err.response?.status === 401 || err.response?.status === 403) {
+          toast.warning('Serverda xatolik yuz berdi');
+        } else if (
+          err.response?.status === 400 ||
+          err.response?.status === 401 ||
+          err.response?.status === 403
+        ) {
           toast.error("Bu email bilan ro'yxatdan o'tilgan");
         }
       });
-      
   }
 
   return (
@@ -100,7 +111,10 @@ function SignUp() {
             </h2>
             <div>
               <div className="mb-4">
-                <label htmlFor="firstName" className="block text-sm font-semibold text-gray-600">
+                <label
+                  htmlFor="firstName"
+                  className="block text-sm font-semibold text-gray-600"
+                >
                   Ism
                 </label>
                 <input
@@ -115,7 +129,10 @@ function SignUp() {
               </div>
 
               <div className="mb-4">
-                <label htmlFor="lastName" className="block text-sm font-semibold text-gray-600">
+                <label
+                  htmlFor="lastName"
+                  className="block text-sm font-semibold text-gray-600"
+                >
                   Familiya
                 </label>
                 <input
@@ -130,7 +147,10 @@ function SignUp() {
               </div>
 
               <div className="mb-4">
-                <label htmlFor="email" className="block text-sm font-semibold text-gray-600">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-semibold text-gray-600"
+                >
                   Email
                 </label>
                 <input
@@ -145,7 +165,10 @@ function SignUp() {
               </div>
 
               <div className="mb-4">
-                <label htmlFor="phoneNumber" className="block text-sm font-semibold text-gray-600">
+                <label
+                  htmlFor="phoneNumber"
+                  className="block text-sm font-semibold text-gray-600"
+                >
                   Telefon raqam
                 </label>
                 <input
@@ -160,66 +183,86 @@ function SignUp() {
               </div>
 
               <div className="mb-4">
-                <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-600">
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-semibold text-gray-600"
+                >
                   Parolni tasdiqlang
                 </label>
-                  {/* Wrapper div to apply flexbox */}
-                  <div className="flex items-center border rounded-lg mt-2">
-                    <input
-                      ref={password}
-                      type={showpassword ? "text" : "password"}
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      placeholder="Parolni qayta kiriting"
-                      required
-                      className="w-full px-4 py-2 text-sm rounded-lg "
-                    />
-                    {/* Eye icon */}
-                    <span
-                      onClick={() => setShowpassword(!showpassword)}
-                      className="px-3 cursor-pointer text-gray-800"
-                    >
-                      {showpassword ? <AiOutlineEye/> : <AiOutlineEyeInvisible />}
-                    </span>
-                  </div>
-  
-                            <p className="text-xs mt-2">Parol kamida 5 ta belgidan iborat</p>
-                          </div>
-
-
-              <div className="mb-4">
-                  <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-600">
-                    Parolni tasdiqlang
-                  </label>
-                  
-                  {/* Wrapper div to apply flexbox */}
-                  <div className="flex items-center border rounded-lg mt-2">
-                    <input
-                      ref={confirmPassword}
-                      type={showconfirmPassword ? "text" : "password"}
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      placeholder="Parolni qayta kiriting"
-                      required
-                      className="w-full px-4 py-2 text-sm rounded-lg "
-                    />
-                    {/* Eye icon */}
-                    <span
-                      onClick={() => setShowconfirmPassword(!showconfirmPassword)}
-                      className="px-3 cursor-pointer text-gray-800"
-                    >
-                      {showconfirmPassword ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
-                    </span>
-                  </div>
-                  
-                  <p className="text-xs mt-2">Parol kamida 5 ta belgidan iborat</p>
+                {/* Wrapper div to apply flexbox */}
+                <div className="flex items-center border rounded-lg mt-2">
+                  <input
+                    ref={password}
+                    type={showpassword ? 'text' : 'password'}
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    placeholder="Parolni qayta kiriting"
+                    required
+                    className="w-full px-4 py-2 text-sm rounded-lg "
+                  />
+                  {/* Eye icon */}
+                  <span
+                    onClick={() => setShowpassword(!showpassword)}
+                    className="px-3 cursor-pointer text-gray-800"
+                  >
+                    {showpassword ? (
+                      <AiOutlineEye />
+                    ) : (
+                      <AiOutlineEyeInvisible />
+                    )}
+                  </span>
                 </div>
 
+                <p className="text-xs mt-2">
+                  Parol kamida 5 ta belgidan iborat
+                </p>
+              </div>
 
+              <div className="mb-4">
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-sm font-semibold text-gray-600"
+                >
+                  Parolni tasdiqlang
+                </label>
+
+                {/* Wrapper div to apply flexbox */}
+                <div className="flex items-center border rounded-lg mt-2">
+                  <input
+                    ref={confirmPassword}
+                    type={showconfirmPassword ? 'text' : 'password'}
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    placeholder="Parolni qayta kiriting"
+                    required
+                    className="w-full px-4 py-2 text-sm rounded-lg "
+                  />
+                  {/* Eye icon */}
+                  <span
+                    onClick={() => setShowconfirmPassword(!showconfirmPassword)}
+                    className="px-3 cursor-pointer text-gray-800"
+                  >
+                    {showconfirmPassword ? (
+                      <AiOutlineEye />
+                    ) : (
+                      <AiOutlineEyeInvisible />
+                    )}
+                  </span>
+                </div>
+
+                <p className="text-xs mt-2">
+                  Parol kamida 5 ta belgidan iborat
+                </p>
+              </div>
 
               {/* Jins tanlash */}
               <div className="mb-4">
-                <label htmlFor="gender" className="block text-sm font-semibold text-gray-600">Jins</label>
+                <label
+                  htmlFor="gender"
+                  className="block text-sm font-semibold text-gray-600"
+                >
+                  Jins
+                </label>
                 <select
                   id="gender"
                   name="gender"
@@ -228,7 +271,9 @@ function SignUp() {
                   required
                   className="w-full px-4 mt-2 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                 >
-                  <option value="" disabled>Jinsni tanlang</option>
+                  <option value="" disabled>
+                    Jinsni tanlang
+                  </option>
                   <option value="MALE">Erkak</option>
                   <option value="FEMALE">Ayol</option>
                 </select>
@@ -243,9 +288,14 @@ function SignUp() {
                     name="acceptedTerms"
                     className="form-checkbox h-4 w-4 text-blue-600"
                   />
-                  <span  className="ml-2 text-sm text-gray-600">
-                    Foydalanish shartlarini qabul qilaman. 
-                    <Link to={'/auth/offer'} className="text-blue-600 hover:underline">Offer</Link>
+                  <span className="ml-2 text-sm text-gray-600">
+                    Foydalanish shartlarini qabul qilaman.
+                    <Link
+                      to={'/auth/offer'}
+                      className="text-blue-600 hover:underline"
+                    >
+                      Offer
+                    </Link>
                   </span>
                 </label>
               </div>
@@ -260,7 +310,10 @@ function SignUp() {
             </div>
 
             <div className="flex justify-center items-center mt-4 lg:mt-6">
-              <Link to={"/auth/SignIn"} className="text-sm text-blue-500 hover:underline">
+              <Link
+                to={'/auth/SignIn'}
+                className="text-sm text-blue-500 hover:underline"
+              >
                 Tizimga kirish
               </Link>
             </div>

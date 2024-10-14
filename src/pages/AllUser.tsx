@@ -1,108 +1,163 @@
 import Layout from '@/components/Dashboard/Layout';
+import { getUser } from '@/helpers/api/baseUrl';
+import { config } from '@/helpers/functions/token';
+import { UserNatijasi } from '@/helpers/types/UserNatijasi';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
+import { AiOutlineEye } from 'react-icons/ai';
 import { FcSearch } from 'react-icons/fc';
-import { useNavigate } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import Modal from 'react-modal'; 
+
+// Accessibility setup
+Modal.setAppElement('#root'); 
 
 function AllUser() {
-  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState(''); 
+  const [selectedUser, setSelectedUser] = useState<UserNatijasi | null>(null); 
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+
+  const { data: usersData, refetch } = useQuery({
+    queryKey: ['User', config],
+    queryFn: async () => {
+      const res = await axios.get(getUser, config);
+      const data = res.data as { body: { body: UserNatijasi[] } };
+      return data.body.body || [];
+    },
+    onError: (error) => {
+      console.log(error);
+      toast.error('Xatolik yuz berdi');
+    },
+  });
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
+  const GetUser: UserNatijasi[] = usersData ?? [];
+
+  const filteredUsers = GetUser.filter((user) =>
+    `${user.firstName} ${user.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleUserClick = (user: UserNatijasi) => {
+    setSelectedUser(user); 
+    setIsModalOpen(true);  
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false); 
+    setSelectedUser(null);
+  };
+
   return (
-    <>
+    <div>
+      <Helmet>
+        <title>Foydalanuvchilar Natijasi</title>
+      </Helmet>
+
       <Layout>
-        <Helmet>
-          <title>Foydalanuvchilar</title>
-        </Helmet>
-        <div className="p-5 px-10" onClick={() => navigate(-1)}>
-          <i className="bi bi-arrow-left text-3xl cursor-pointer"></i>
-        </div>
-        <div className="container mx-auto py-5">
-          <h1 className="text-2xl font-bold py-5">Foydalanuvchilar</h1>
-          <div className="flex gap-5">
-            <div className="flex pb-5">
-              <label htmlFor="inp1">
-                <FcSearch className="absolute mt-4 ml-3 text-[20px]" />
-              </label>
-              <input
-                type="text"
-                id="inp1"
-                className="pl-10 w-[375px] border-gray-300 rounded-md h-[50px] "
-                placeholder="Foydalanuvchini qidirish"
-              />
-            </div>
-            <select className="max-w-[350px] w-[375px] text-gray-40 rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400  placeholder:text-[14px] ">
-              <option selected disabled>
-                Viloyatni tanlang
-              </option>
-              <option value="">example 1</option>
-              <option value="">example 2</option>
-            </select>
-            <select className="max-w-[350px] w-[375px] text-gray-40 rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400  placeholder:text-[14px] ">
-              <option selected disabled>
-                Tumanni tanlang
-              </option>
-              <option value="">example 1</option>
-              <option value="">example 2</option>
-            </select>
-          </div>
-          <div className="table w-full">
-            <div className="relative overflow-x-auto">
-              <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                  <tr>
-                    <th scope="col" className="px-6 py-3">
-                      Product name
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Color
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Category
-                    </th>
-                    <th scope="col" className="px-6 py-3">
-                      Price
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                    <th
-                      scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                    >
-                      Apple MacBook Pro 17"
-                    </th>
-                    <td className="px-6 py-4">Silver</td>
-                    <td className="px-6 py-4">Laptop</td>
-                    <td className="px-6 py-4">$2999</td>
-                  </tr>
-                  <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                    <th
-                      scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                    >
-                      Microsoft Surface Pro
-                    </th>
-                    <td className="px-6 py-4">White</td>
-                    <td className="px-6 py-4">Laptop PC</td>
-                    <td className="px-6 py-4">$1999</td>
-                  </tr>
-                  <tr className="bg-white dark:bg-gray-800">
-                    <th
-                      scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                    >
-                      Magic Mouse 2
-                    </th>
-                    <td className="px-6 py-4">Black</td>
-                    <td className="px-6 py-4">Accessories</td>
-                    <td className="px-6 py-4">$99</td>
-                  </tr>
-                </tbody>
-              </table>
+        <div>
+          <div className="flex justify-center pt-7">
+            <div className="px-8">
+              <div className="w-max">
+                <header className="flex items-center justify-between">
+                  <h3 className="font-bold text-[27px]">Foydalanuvchilar natijasi</h3>
+                  <div className="flex gap-2 text-[18px]">
+                    <Link to={'/dashboard'}>
+                      <h4>Boshqaruv paneli </h4>
+                    </Link>
+                    <h4> / </h4>
+                    <h4 className="text-blue-600"> Foydalanuvchilar</h4>
+                  </div>
+                </header>
+
+                <div className="flex justify-end pt-5 gap-5">
+                  <div className="flex relative">
+                    <FcSearch className="absolute mt-4 ml-3 text-[20px]" />
+                    <input
+                      type="text"
+                      id="inp1"
+                      className="pl-10 w-[375px] border-gray-300 rounded-md h-[50px]"
+                      placeholder="Ism yoki familya bo'yicha qidirish"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                  </div>
+
+                  <select className="max-w-[350px] w-[375px] text-gray-400 rounded-md h-[50px] border-gray-400">
+                    <option value="">Tumanni tanlang</option>
+                    <option value="">example 1</option>
+                    <option value="">example 2</option>
+                  </select>
+                  <select className="max-w-[350px] w-[375px] text-gray-400 rounded-md h-[50px] border-gray-400">
+                    <option value="">Viloyatni tanlang</option>
+                    <option value="">example 1</option>
+                    <option value="">example 2</option>
+                  </select> 
+                </div>
+
+                <div className="py-5">
+                  <table className="mx-3 ml-[0px] w-full bg-white border border-gray-300">
+                    <thead>
+                      <tr className="bg-gray-100">
+                        <th className="text-left px-4 py-7">T/P</th>
+                        <th className="text-left px-4 py-2">Ism</th>
+                        <th className="text-left px-4 py-2">Familya</th>
+                        <th className="text-left px-4 py-2">Email</th>
+                        <th className="text-left px-10 py-4">Harakat</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredUsers.map((item, index) => (
+                        <tr key={index} className="border-b border-gray-300">
+                          <td className="px-4 py-2">{index + 1}</td>
+                          <td className="px-4 py-2">{item.firstName}</td>
+                          <td className="px-4 py-2">{item.lastName}</td>
+                          <td className="px-4 py-2">{item.email}</td>
+                          <td className="px-14 py-2">
+                            <AiOutlineEye
+                              className="cursor-pointer"
+                              onClick={() => handleUserClick(item)}
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
+
+          <Modal
+            isOpen={isModalOpen}
+            onRequestClose={closeModal}
+            contentLabel="User Details"
+            className="relative mx-auto my-10 bg-white rounded-lg shadow-lg max-w-lg w-full p-6"
+            overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+          >
+            {selectedUser && (
+              <div className="text-center pt-3">
+                <h2 className="text-2xl font-bold mb-4">User Details</h2>
+                <p><strong>First Name:</strong> {selectedUser.firstName}</p>
+                <p><strong>Last Name:</strong> {selectedUser.lastName}</p>
+                <p><strong>Email:</strong> {selectedUser.email}</p>
+                <button
+                  onClick={closeModal}
+                  className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                >
+                  Close
+                </button>
+              </div>
+            )}
+          </Modal>
         </div>
       </Layout>
-    </>
+    </div>
   );
 }
 

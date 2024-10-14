@@ -1,8 +1,8 @@
 export interface CategoryModalTypes {
-    name: string;
-    description?: string;
+  name: string;
+  description?: string;
 }
 
 export interface CategoryAddModalProps {
-    onAddCategory: (newCategory: CategoryModalTypes) => void;
+  onAddCategory: (newCategory: CategoryModalTypes) => void;
 }

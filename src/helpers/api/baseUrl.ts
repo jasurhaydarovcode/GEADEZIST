@@ -9,6 +9,9 @@ export const getMeUser = `${baseUrl}user/get/me`;
 export const getClientAll = `${baseUrl}user?`;
 export const getMe = `${baseUrl}user/get/me`;
 export const getProfile = `${baseUrl}user/profile`;
+export const getResult = `${baseUrl}result/results/?page=0&size=10`;
+export const getUser = `${baseUrl}user?page=0&size=10`;
+
 
 // category
 export const getClientCategory = `${baseUrl}category/`;
@@ -48,10 +51,6 @@ export const superAdminDashWeekStatistic = `${baseUrl}statistic/dayOfWeek`;
 // SUPER ADMIN dashboard barcha statstika sonlarda
 export const getStaticAll = `${baseUrl}statistic/counts/`;
 
-
-
-
-
 // --------------- Super Admin address urls -------------------
 // viloyatlarni get urls
 export const getRegion = `${baseUrl}region/`;
@@ -70,7 +69,6 @@ export const addDistrict = `${baseUrl}district`;
 export const deleteDistrict = `${baseUrl}district/`;
 // tumanlar update urls
 export const updateDistrict = `${baseUrl}district`;
-
 
 // --------------- Super Admin employees urls -------------------
 // employees get url

@@ -1,51 +1,49 @@
-import { baseUrl } from "@/helpers/api/baseUrl";
-import { registerRasm } from "@/helpers/imports/images";
-import { Logo } from "@/helpers/imports/images";
-import { ConfirmType} from "@/helpers/types/LoginType";
-import axios from "axios";
-import { useRef} from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { baseUrl } from '@/helpers/api/baseUrl';
+import { registerRasm } from '@/helpers/imports/images';
+import { Logo } from '@/helpers/imports/images';
+import { ConfirmType } from '@/helpers/types/LoginType';
+import axios from 'axios';
+import { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function Confirm() {
-    const email = useRef<HTMLInputElement | null>(null);
-    const navigate = useNavigate();
+  const email = useRef<HTMLInputElement | null>(null);
+  const navigate = useNavigate();
 
-    function forgetPassword() {
-
-      if (!email.current?.value) {
-        toast.error("Iltimos, elektron pochtangizni kiriting!");
-        return;
-      }
-     if(!email.current?.value.includes("@gmail.com")) {
-        toast.error("Iltimos, emailni to'liq kiriting!");
-        return;
-      }
-
-      const data : ConfirmType = {
-        email: email.current?.value,
-      };
-      axios.put(`${baseUrl }auth/forgot-password`,data)
-      .then((res) => {
-          const data = res.data as { status: string; message: string };
-          if(data.status === 'OK') {
-            toast.success("Emailga code yuborildi");
-            navigate("/auth/reset-password");
-            console.log(data.message);
-            
-        }})
-        .catch((err) => {
-          if(err.response?.status === 404) {
-            toast.warning('Emailni togri kiritmadingiz!');
-        }
-        else {
-          toast.error('Qayta tekshirib ko\'ring!');
-        }
-      })
+  function forgetPassword() {
+    if (!email.current?.value) {
+      toast.error('Iltimos, elektron pochtangizni kiriting!');
+      return;
+    }
+    if (!email.current?.value.includes('@gmail.com')) {
+      toast.error("Iltimos, emailni to'liq kiriting!");
+      return;
     }
 
-  return(
+    const data: ConfirmType = {
+      email: email.current?.value,
+    };
+    axios
+      .put(`${baseUrl}auth/forgot-password`, data)
+      .then((res) => {
+        const data = res.data as { status: string; message: string };
+        if (data.status === 'OK') {
+          toast.success('Emailga code yuborildi');
+          navigate('/auth/reset-password');
+          console.log(data.message);
+        }
+      })
+      .catch((err) => {
+        if (err.response?.status === 404) {
+          toast.warning('Emailni togri kiritmadingiz!');
+        } else {
+          toast.error("Qayta tekshirib ko'ring!");
+        }
+      });
+  }
 
+  return (
     <div className="h-screen flex items-center justify-center bg-gray-100">
       <div className="flex flex-col lg:flex-row w-full lg:w-5/6 lg:h-5/6 bg-white shadow-lg rounded-lg overflow-hidden">
         {/* Left side with logo and image */}
@@ -64,7 +62,10 @@ function Confirm() {
             </h2>
             <div>
               <div className="mb-4">
-                <label htmlFor="email" className="block text-sm font-semibold text-gray-600">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-semibold text-gray-600"
+                >
                   Elektron pochtangizni kiriting
                 </label>
                 <input

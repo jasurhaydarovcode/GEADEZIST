@@ -1,14 +1,45 @@
 import Layout from '@/components/Dashboard/Layout';
+import { getResult } from '@/helpers/api/baseUrl';
+import { config } from '@/helpers/functions/token';
+import { UserNatijasi } from '@/helpers/types/UserNatijasi';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
-
 import { FcSearch } from 'react-icons/fc';
 import { SlArrowDown } from 'react-icons/sl';
+import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function User() {
+  const [searchQuery, setSearchQuery] = useState(''); 
+
+  const { data: usersData, refetch} = useQuery({
+    queryKey: ['User', config],
+    queryFn: async () => {
+      const res = await axios.get(getResult, config);
+      const data = res.data as { body: { body: UserNatijasi[] } };
+      console.log(data);
+      return data.body?.body || [];
+    },
+    onError: (error) => {
+      console.log(error);
+      toast.error('Xatolik yuz berdi');
+    },
+  });
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
+  const GetResult: UserNatijasi[] = usersData ?? [];
+
+  const filteredUsers = GetResult.filter((user) =>
+    `${user.firstName} ${user.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div>
-
       <Helmet>
         <title>Foydalanuvchilar Natijasi</title>
       </Helmet>
@@ -40,7 +71,9 @@ function User() {
                       type="text"
                       id="inp1"
                       className="pl-10 w-[375px] border-gray-300 rounded-md h-[50px] "
-                      placeholder="F.I.O qidirish"
+                      placeholder="Ism yoki familya bo'yicha qidirish"
+                      value={searchQuery} // Qidiruv state
+                      onChange={(e) => setSearchQuery(e.target.value)} // Qidiruvni yangilash
                     />
                   </div>
                   <div className="flex">
@@ -57,7 +90,6 @@ function User() {
                     <option value="">example 2</option>
                   </select>
                 </div>
-                {/* sort */}
 
                 <div className="py-5">
                   <table className="mx-3 ml-[0px] w-[100%] bg-white border border-gray-300">
@@ -71,22 +103,24 @@ function User() {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr className="border-b">
-                        <td className="px-4 py-7">1</td>
-                        <td className="px-4 py-2">Asilbek</td>
-                        <td className="px-4 py-2">Normuhammadov</td>
-                        <td className="px-4 py-2">nimadir@gmail.com</td>
-                        <td className="px-4 py-2">
-                          <span className="px-2 py-1 rounded cursor-pointer"></span>
-                        </td>
-                      </tr>
+                      {filteredUsers.map((item, index) => (
+                        <tr key={index} className="border-b border-gray-300">
+                          <td className="px-4 py-2">{index + 1}</td>
+                          <td className="px-4 py-2">{item.lastName}</td>
+                          <td className="px-4 py-2">{item.firstName}</td>
+                          <td className="px-4 py-2">{item.email}</td>
+                          <td className="px-4 py-2">:</td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>
               </div>
             </div>
           </div>
-          <div></div>
+          <div>
+
+          </div>
         </div>
       </Layout>
     </div>
