@@ -129,16 +129,12 @@ function Address() {
   };
 
   // Manzillarni post qilish
-<<<<<<< HEAD
- 
-=======
 
   const resetForm = () => {
     setName('');
   };
 
   const queryClient = new QueryClient();
->>>>>>> 117fba910922caca72cf0c813d2115d45fee71ae
 
   const [name, setName] = useState('');
 

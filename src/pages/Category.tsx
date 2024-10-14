@@ -57,13 +57,7 @@ function Category() {
     refetch();
   };
 
-<<<<<<< HEAD
   {/* Rasm modal */ }
-=======
-  {
-    /* Rasm modal */
-  }
->>>>>>> 117fba910922caca72cf0c813d2115d45fee71ae
   const handleImageClick = (imageUrl: string) => {
     setImageModal({ open: true, imageUrl }); // Rasm modalini ochish
   };
@@ -107,10 +101,6 @@ function Category() {
       console.error('Kategoriyani yangilashda xatolik yuz berdi', error);
     }
   };
-<<<<<<< HEAD
-
-=======
->>>>>>> 117fba910922caca72cf0c813d2115d45fee71ae
 
   return (
     <div>
@@ -127,18 +117,11 @@ function Category() {
           <>
             <div className="flex justify-between px-[20px]">
               <h1 className="text-3xl font-bold font-sans">Kategoriya</h1>
-<<<<<<< HEAD
               <Link to="/dashboard">
                 <p className="font-sans text-gray-700">
                   Boshqaruv paneli / <span className="text-blue-700">Kategoriya</span>
                 </p>
               </Link>
-=======
-              <p className="font-sans text-gray-700">
-                Boshqaruv paneli /{' '}
-                <span className="text-blue-700">Kategoriya</span>
-              </p>
->>>>>>> 117fba910922caca72cf0c813d2115d45fee71ae
             </div>
 
             <CategoryAddModal onAddCategory={handleAddCategory} />

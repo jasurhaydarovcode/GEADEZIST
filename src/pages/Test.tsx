@@ -53,15 +53,6 @@ function Test() {
     },
   });
 
-<<<<<<< HEAD
-=======
-  console.log(data);
-  console.log(error);
-
-  if (isLoading) return <p>Yuklanmoqda...</p>;
-  if (isError) return <p>Xatolik yuz berdi.</p>;
-
->>>>>>> 117fba910922caca72cf0c813d2115d45fee71ae
   const columns = [
     { title: '№', dataIndex: 'numer', key: 'numer' },
     { title: 'Test rasm', dataIndex: 'testRasm', key: 'testRasm' },
