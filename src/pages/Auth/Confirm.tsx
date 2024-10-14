@@ -5,7 +5,7 @@ import { ConfirmType } from '@/helpers/types/LoginType';
 import axios from 'axios';
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { message } from 'antd';
 
 function Confirm() {
   const email = useRef<HTMLInputElement | null>(null);
@@ -13,11 +13,11 @@ function Confirm() {
 
   function forgetPassword() {
     if (!email.current?.value) {
-      toast.error('Iltimos, elektron pochtangizni kiriting!');
+      message.error('Iltimos, elektron pochtangizni kiriting!');
       return;
     }
     if (!email.current?.value.includes('@gmail.com')) {
-      toast.error("Iltimos, emailni to'liq kiriting!");
+      message.error("Iltimos, emailni to'liq kiriting!");
       return;
     }
 
@@ -29,16 +29,16 @@ function Confirm() {
       .then((res) => {
         const data = res.data as { status: string; message: string };
         if (data.status === 'OK') {
-          toast.success('Emailga code yuborildi');
+          message.success('Emailga code yuborildi');
           navigate('/auth/reset-password');
           console.log(data.message);
         }
       })
       .catch((err) => {
         if (err.response?.status === 404) {
-          toast.warning('Emailni togri kiritmadingiz!');
+          message.warning('Emailni togri kiritmadingiz!');
         } else {
-          toast.error("Qayta tekshirib ko'ring!");
+          message.error("Qayta tekshirib ko'ring!");
         }
       });
   }
