@@ -3,33 +3,32 @@ import { Logo, registerRasm } from '@/helpers/imports/images';
 import axios from 'axios';
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-
+import { message } from 'antd';
 const ConfirmSignUp = () => {
   const navigate = useNavigate();
   const code = useRef<HTMLInputElement>(null);
 
   function forgetPassword() {
     if (!code.current?.value) {
-      toast.warning('Kodni kiriting');
+      message.warning('Kodni kiriting');
       return;
     }
     if (code.current?.value.length < 5) {
-      toast.warning('Kod kamida 5 ta raqamdan iborat');
+      message.warning('Kod kamida 5 ta raqamdan iborat');
       return;
     }
     axios
       .put(`${baseUrl}auth/activate?code=${code.current?.value}`)
       .then((res) => {
-        toast.success('Yaxshi');
+        message.success('Yaxshi');
         console.log(res.data);
         navigate('/auth/SignIn');
       })
       .catch((err) => {
         if (err.response?.status === 404) {
-          toast.warning('Kod tog`ri kelmadi!');
+          message.warning('Kod tog`ri kelmadi!');
         } else {
-          toast.error('Qayta tekshirib ko`ring!');
+          message.error('Qayta tekshirib ko`ring!');
         }
       });
   }

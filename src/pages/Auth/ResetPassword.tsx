@@ -5,7 +5,7 @@ import axios from 'axios';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { message } from 'antd';
 
 function ResetPassword() {
   const code = useRef<HTMLInputElement | null>(null);
@@ -29,16 +29,16 @@ function ResetPassword() {
       !password.current?.value ||
       !confirmPassword.current?.value
     ) {
-      toast.warning("Iltimos, bo'shliqni  to'ldiring!");
+      message.warning("Iltimos, bo'shliqni  to'ldiring!");
       return;
     }
 
     if (password.current?.value.length < 5) {
-      toast.warning("Parol kamida 5 ta belgidan iborat bo'lishi kerak!");
+      message.warning("Parol kamida 5 ta belgidan iborat bo'lishi kerak!");
       return;
     }
     if (password.current?.value !== confirmPassword.current?.value) {
-      toast.warning('Parollar bir biriga mos kelmaydi!');
+      message.warning('Parollar bir biriga mos kelmaydi!');
       return;
     }
 
@@ -46,16 +46,16 @@ function ResetPassword() {
       .put(`${baseUrl}auth/reset-password`, data)
       .then((res) => {
         if (res.status === 200) {
-          toast.success(res.message);
+          message.success(res.message);
           navigate('/auth/SignIn');
         }
         console.log(res.status);
       })
       .catch((err) => {
         if (err.response?.status === 404) {
-          toast.warning('Code xato kiritildi!');
+          message.warning('Code xato kiritildi!');
         } else {
-          toast.error("Qayta tekshirib ko'ring!");
+          message.error("Qayta tekshirib ko'ring!");
         }
       });
   }

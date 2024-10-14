@@ -5,7 +5,7 @@ import axios, { AxiosResponse } from 'axios';
 import { useEffect, useRef, useCallback } from 'react';
 import { useMutation } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { message } from 'antd';
 
 function SignIn() {
   const email = useRef<HTMLInputElement>(null);
@@ -61,7 +61,7 @@ function SignIn() {
       } else if (res.data.role === 'ROLE_ADMIN') {
         navigate('/dashboard');
       }
-      toast.success('Tizimga kirish muvaffaqiyatli', {
+      message.success('Tizimga kirish muvaffaqiyatli', {
         position: 'top-center',
       });
     },
@@ -69,9 +69,9 @@ function SignIn() {
     onError: (error: unknown) => {
       if (error instanceof Error) {
         if (email.current?.value === '' || password.current?.value === '') {
-          toast.warning("Email va parolni to'liq kiriting");
+          message.warning("Email va parolni to'liq kiriting");
         } else {
-          toast.warning("Email yoki parol noto'g'ri");
+          message.warning("Email yoki parol noto'g'ri");
         }
       }
     },
