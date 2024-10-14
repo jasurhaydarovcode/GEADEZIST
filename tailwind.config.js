@@ -1,22 +1,15 @@
-const flowbite = require("flowbite-react/tailwind");
+const flowbite = require('flowbite-react/tailwind');
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-    flowbite.content(),
-  ],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}', flowbite.content()],
   theme: {
     colors: {
-      'geadezist': {
-        100: '#DBDDE2'
-      }
+      geadezist: {
+        100: '#DBDDE2',
+      },
     },
     extend: {},
   },
-  plugins: [
-    flowbite.plugin(),
-  ],
-}
-
+  plugins: [flowbite.plugin()],
+};

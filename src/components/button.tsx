@@ -1,4 +1,4 @@
-import { ButtonType } from "@/helpers/types/Button";
+import { ButtonType } from '@/helpers/types/Button';
 
 const Button: React.FC<ButtonType> = ({
   btnText = '',
@@ -9,8 +9,8 @@ const Button: React.FC<ButtonType> = ({
   btnShadow = 'none',
   btnWidth = 'none',
   btnClass = '',
-  iconClass = '', // Ikonka classini qabul qilish
-  btnClick
+  iconClass = '',
+  btnClick,
 }) => {
   return (
     <div>

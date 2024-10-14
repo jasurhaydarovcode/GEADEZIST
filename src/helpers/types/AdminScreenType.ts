@@ -3,4 +3,3 @@ export interface AdminScreenType {
   // path: string
   children?: React.ReactNode;
 }
-

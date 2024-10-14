@@ -1,7 +1,5 @@
 function InspectorAdmin() {
-  return (
-    <div>InspectorAdmin</div>
-  );
+  return <div>InspectorAdmin</div>;
 }
 
 export default InspectorAdmin;

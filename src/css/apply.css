@@ -1,3 +1,5 @@
+/* Format document qilmang! Do not format document! */
+
 .clientProfileDatasStyles {
     @apply mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3
 }
@@ -5,3 +7,19 @@
 .animatsiyaHover {
     @apply transition duration-200 ease-in-out
 }
+
+.truncate {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.ant-btn {
+    background-color: rgb(29, 29, 29) !important;
+    color: white !important;
+  }
+  
+  .ant-btn:hover {
+    background-color: rgb(0, 0, 0) !important;
+    color: rgb(255, 255, 255) !important;
+  }

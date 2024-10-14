@@ -1,11 +1,12 @@
-// helpers/types/CategoryFormValues.ts
+// ... mavjud kod ...
 export interface CategoryFormValues {
-    categoryName: string;
-    categoryType: 'asosiy' | 'asosiy-bolmagan';
-    description: string;
-    totalQuestions: number;
-    additionalQuestions: number;
-    duration: number;
-    retryDate?: number; // Optional, as it might not be applicable for all categories
-  }
-  
+  categoryType: string;
+  name: string;
+  description: string;
+  questionCount?: number;
+  extraQuestionCount?: number;
+  durationTime?: number;
+  retakeDate?: number;
+}
+
+// ... qolgan kod o'zgarishsiz ...
