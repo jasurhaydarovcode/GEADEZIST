@@ -56,7 +56,7 @@ function AllUser() {
   return (
     <div>
       <Helmet>
-        <title>Foydalanuvchilar Natijasi</title>
+        <title>Foydalanuvchilar</title>
       </Helmet>
 
       <Layout>
