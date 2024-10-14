@@ -2,10 +2,7 @@ import Layout from '@/components/Dashboard/Layout';
 import { baseUrl } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import {
-  PlusCircleOutlined,
-  EditOutlined,
-  DeleteOutlined,
-  ExclamationCircleOutlined,
+  PlusCircleOutlined, EditOutlined, DeleteOutlined, EyeOutlined,
 } from '@ant-design/icons';
 import { Button, Modal, Table } from 'antd';
 import axios from 'axios';
@@ -23,7 +20,7 @@ function Test() {
 
   const testData = async (): Promise<ApiResponse> => {
     const response = await axios.get<ApiResponse>(
-      `${baseUrl}question/categoryNull-quest`,
+      `${baseUrl}question/filter?page=0&size=10`,
       config,
     );
     return response.data;
@@ -47,7 +44,6 @@ function Test() {
         qiyinligi: item.difficulty,
         yaratganOdam: item.createdByName,
       }));
-
       useDatas(fetchedTests); // useDatas o'rniga setDatas
     },
   });
@@ -72,14 +68,14 @@ function Test() {
       key: 'harakat',
       render: () => (
         <div className="flex gap-3">
-          <EditOutlined className="text-black cursor-pointer" />
-          <DeleteOutlined className="text-black cursor-pointer" />
-          <ExclamationCircleOutlined className="text-black cursor-pointer" />
+          <EditOutlined className="text-black cursor-pointer" style={{ fontSize: '18px' }} />
+          <DeleteOutlined className="text-black cursor-pointer" style={{ fontSize: '18px' }} />
+          <EyeOutlined className="text-black cursor-pointer" style={{ fontSize: '18px' }} />
         </div>
+
       ),
     },
   ];
-
   const showModal = () => {
     setOpen(true);
   };
@@ -118,6 +114,9 @@ function Test() {
             >
               <PlusCircleOutlined className="text-xl" /> Qo'shish
             </Button>
+
+
+
 
             <Modal
               title="Savol qo'shish"
@@ -198,13 +197,17 @@ function Test() {
                     alt="Rasm yuklash"
                     className="w-6 h-6"
                   />{' '}
-                  {/* Ikonka rasm manzilingiz bilan almashtiring */}
+
                   Rasm yuklash
                 </Button>
-                <h2 className="mt-2 mr-2">Rasm yuklash ixtiyoriy</h2>{' '}
-                {/* Markazdan chapga joylashtirildi */}
+                <h2 className="mt-2 relative right-[20px]">Rasm yuklash ixtiyoriy</h2>{' '}
+
               </div>
             </Modal>
+
+
+
+
 
             <div className="flex justify-end pt-5 gap-5">
               <div className="flex">
@@ -261,14 +264,18 @@ function Test() {
                   </option>
                 </select>
               </div>
+
             </div>
           </div>
 
           <Table
             dataSource={dataSource}
-            columns={columns}
-            pagination={{ pageSize: 5 }} // Pagination added here
+            columns  ={columns}
+            pagination={{ pageSize: 5 }}
+            
+          
           />
+
         </div>
       </Layout>
     </div>
