@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Modal, Button } from 'antd';
+import { Modal, Button, message } from 'antd'; // message komponenti qo'shildi
 import { MdDelete } from 'react-icons/md';
 
 function CategoryDeleteModal({
@@ -18,6 +18,7 @@ function CategoryDeleteModal({
   const handleOk = () => {
     onDelete(categoryId); // Kategoriya o'chirish funksiyasi
     setIsModalVisible(false);
+    message.success("Kategoriya muvaffaqiyatli o'chirildi!"); // Muvaffaqiyatli xabar
   };
 
   const handleCancel = () => {
