@@ -18,9 +18,9 @@ function User() {
     queryKey: ['User', config],
     queryFn: async () => {
       const res = await axios.get(getResult, config);
-      const data = res.data as { body: UserNatijasi[] };
+      const data = res.data as { body: { body: UserNatijasi[] } };
       console.log(data);
-      return data.body?.body || [] ;
+      return data.body?.body || [];
     },
     onError: (error) => {
       console.log(error);
@@ -107,7 +107,7 @@ function User() {
                         <tr key={index} className="border-b border-gray-300">
                           <td className="px-4 py-2">{index + 1}</td>
                           <td className="px-4 py-2">{item.lastName}</td>
-                          <td className="px-4 py-2">{item.id}</td>
+                          <td className="px-4 py-2">{item.firstName}</td>
                           <td className="px-4 py-2">{item.email}</td>
                           <td className="px-4 py-2">:</td>
                         </tr>
