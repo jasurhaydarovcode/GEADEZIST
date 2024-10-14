@@ -9,7 +9,7 @@ import { FcSearch } from 'react-icons/fc';
 import { SlArrowDown } from 'react-icons/sl';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { message } from 'antd';
 
 function User() {
   const [searchQuery, setSearchQuery] = useState(''); 
@@ -24,7 +24,7 @@ function User() {
     },
     onError: (error) => {
       console.log(error);
-      toast.error('Xatolik yuz berdi');
+      message.error('Xatolik yuz berdi');
     },
   });
 
