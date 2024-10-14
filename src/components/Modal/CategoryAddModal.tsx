@@ -81,7 +81,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({
         formData.retakeDate <= 0)
     ) {
       message.error(
-        "Asosiy kategoriya uchun barcha qiymatlar musbat bo'lishi kerak!",
+        "Asosiy kategoriya uchun barcha qiymatlar yozilganbo'lishi kerak!",
       );
       return false;
     }

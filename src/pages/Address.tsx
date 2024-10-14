@@ -1,6 +1,7 @@
 import Layout from '@/components/Dashboard/Layout';
 import TableLoading from '@/components/spinner/TableLoading';
 import axios from 'axios';
+import { message } from 'antd';
 import {
   addRegion,
   deleteRegion,
@@ -25,7 +26,7 @@ import { MdDelete, MdEdit } from 'react-icons/md';
 import { QueryClient, useMutation, useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-
+const queryClient = new QueryClient();
 function Address() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -144,7 +145,7 @@ function Address() {
       return (res.data as { body: { body: string } }).body.body;
     },
     onSuccess: () => {
-      toast.success("Manzil qo'shildi");
+      message.success("Manzil qo'shildi");
       queryClient.invalidateQueries('getAddress');
     },
     onError: (error) => {
@@ -158,11 +159,11 @@ function Address() {
       await axios.delete(`${deleteRegion}${addressId}`, config);
     },
     onSuccess: () => {
-      toast.success("Manzil o'chirildi");
+      message.success("Manzil o'chirildi");
       queryClient.invalidateQueries('getAddress');
     },
     onError: (error) => {
-      toast.error('Xatolik yuz berdi');
+      message.error('Xatolik yuz berdi');
       console.log('Xatolik:', error);
     },
   });
@@ -173,11 +174,11 @@ function Address() {
       await axios.put(`${updateRegion}${addressId}`, { name }, config);
     },
     onSuccess: () => {
-      toast.success('Manzil yangilandi');
-      queryClient.invalidateQueries('getAddress');
+      message.success('Manzil yangilandi');
+      queryClient.invalidateQueries(['getAddress']);
     },
     onError: (error) => {
-      toast.error('Xatolik yuz berdi');
+      message.error('Xatolik yuz berdi');
       console.log('Xatolik:', error);
     },
   });

@@ -1,5 +1,5 @@
 import Layout from '@/components/Dashboard/Layout';
-import { getUser } from '@/helpers/api/baseUrl';
+import { getResult } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import { UserNatijasi } from '@/helpers/types/UserNatijasi';
 import axios from 'axios';
@@ -17,10 +17,10 @@ function User() {
   const { data: usersData, refetch} = useQuery({
     queryKey: ['User', config],
     queryFn: async () => {
-      const res = await axios.get(getUser, config);
-      const data = res.data as { body: UserNatijasi[] };
+      const res = await axios.get(getResult, config);
+      const data = res.data as { body: { body: UserNatijasi[] } };
       console.log(data);
-      return data.body?.body || [] ;
+      return data.body?.body || [];
     },
     onError: (error) => {
       console.log(error);
@@ -32,9 +32,9 @@ function User() {
     refetch();
   }, [refetch]);
 
-  const GetUser: UserNatijasi[] = usersData ?? [];
+  const GetResult: UserNatijasi[] = usersData ?? [];
 
-  const filteredUsers = GetUser.filter((user) =>
+  const filteredUsers = GetResult.filter((user) =>
     `${user.firstName} ${user.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -106,8 +106,8 @@ function User() {
                       {filteredUsers.map((item, index) => (
                         <tr key={index} className="border-b border-gray-300">
                           <td className="px-4 py-2">{index + 1}</td>
-                          <td className="px-4 py-2">{item.firstName}</td>
                           <td className="px-4 py-2">{item.lastName}</td>
+                          <td className="px-4 py-2">{item.firstName}</td>
                           <td className="px-4 py-2">{item.email}</td>
                           <td className="px-4 py-2">:</td>
                         </tr>
@@ -118,7 +118,9 @@ function User() {
               </div>
             </div>
           </div>
-          <div></div>
+          <div>
+
+          </div>
         </div>
       </Layout>
     </div>

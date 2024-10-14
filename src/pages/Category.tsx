@@ -1,9 +1,11 @@
 import Layout from '@/components/Dashboard/Layout';
 import { baseUrl, getImage } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
-import { Tooltip } from 'antd';
+import { message, Tooltip } from 'antd';
 import TooltipText from '@/components/TooltipText';
 import axios from 'axios';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
   Table,
   TableBody,
@@ -14,7 +16,7 @@ import {
 } from 'flowbite-react';
 import { useQuery, useQueryClient } from 'react-query';
 import defaultImage from '../assets/images/default.png';
-import { MdEdit } from 'react-icons/md';
+import { MdDelete, MdEdit } from 'react-icons/md';
 import CategoryAddModal from '@/components/Modal/CategoryAddModal';
 import CategoryEditModal from '@/components/Modal/CategoryEditModal'; // Edit modalini import qilamiz
 import CategoryDeleteModal from '@/components/Modal/CategoryDeleteModal';
@@ -23,6 +25,8 @@ import { Pagination } from 'antd';
 import { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { Modal } from 'antd';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function Category() {
   const queryClient = useQueryClient();
@@ -56,9 +60,7 @@ function Category() {
     refetch();
   };
 
-  {
-    /* Rasm modal */
-  }
+  {/* Rasm modal */ }
   const handleImageClick = (imageUrl: string) => {
     setImageModal({ open: true, imageUrl }); // Rasm modalini ochish
   };
@@ -78,10 +80,10 @@ function Category() {
     }
   };
 
-  // Pagination uchun funksiya
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
+    // Pagination uchun funksiya
+    const handlePageChange = (page: number) => {
+      setCurrentPage(page);
+    };
 
   const handleEditClick = (category: any) => {
     setSelectedCategory(category); // Tanlangan kategoriyani saqlash
@@ -118,10 +120,11 @@ function Category() {
           <>
             <div className="flex justify-between px-[20px]">
               <h1 className="text-3xl font-bold font-sans">Kategoriya</h1>
-              <p className="font-sans text-gray-700">
-                Boshqaruv paneli /{' '}
-                <span className="text-blue-700">Kategoriya</span>
-              </p>
+              <Link to="/dashboard">
+                <p className="font-sans text-gray-700">
+                  Boshqaruv paneli / <span className="text-blue-700">Kategoriya</span>
+                </p>
+              </Link>
             </div>
 
             <CategoryAddModal onAddCategory={handleAddCategory} />
@@ -174,15 +177,11 @@ function Category() {
                           <img
                             alt={item.name}
                             src={
-                              item.fileId
-                                ? `${getImage}${item.fileId}`
-                                : defaultImage
+                              item.fileId ? `${getImage}${item.fileId}` : defaultImage
                             }
                             onClick={() =>
                               handleImageClick(
-                                item.fileId
-                                  ? `${getImage}${item.fileId}`
-                                  : defaultImage,
+                                item.fileId ? `${getImage}${item.fileId}` : defaultImage,
                               )
                             }
                             className="border-[1px] border-gray-300 w-[43px] h-[43px] rounded-full object-cover hover:cursor-pointer"
@@ -215,18 +214,39 @@ function Category() {
                         </TableCell>
                         <TableCell>{item.deleted && "O'chirilgan"}</TableCell>
                         <TableCell>{item.deletedBy}</TableCell>
+
                         {/* Xarakatlar */}
                         <TableCell className="flex gap-4 text-xl">
-                          <div
-                            className="cursor-pointer"
-                            onClick={() => handleEditClick(item)}
-                          >
-                            <MdEdit />
-                          </div>
-                          <CategoryDeleteModal
-                            categoryId={item.id}
-                            onDelete={handleDeleteCategory}
-                          />
+                          {/* Tahrirlash tugmasi */}
+                          <button className="hover:text-yellow-500">
+                            <MdEdit
+                              className="text-[24px] duration-300"
+                              onClick={() => {
+                                if (!item.deleted) {
+                                  handleEditClick(item);
+                                } else {
+                                  message.error("Bu kategoriya o'chirilgan, uni tahrirlash mumkin emas.");
+                                }
+                              }}
+                            />
+                          </button>
+
+                          {/* O'chirish tugmasi */}
+                          <button className="hover:text-red-600">
+                            <MdDelete
+                              className="text-[24px] duration-300"
+                              onClick={() => {
+                                if (!item.deleted) {
+                                  CategoryDeleteModal({ 
+                                    categoryId: item.id, 
+                                    onDelete: handleDeleteCategory 
+                                  });
+                                } else {
+                                  message.error("Bu kategoriya o'chirilgan, uni o'chirish mumkin emas.");
+                                }
+                              }}
+                            />
+                          </button>
                         </TableCell>
                       </TableRow>
                     ))}

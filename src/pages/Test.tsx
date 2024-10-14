@@ -11,6 +11,7 @@ import { Helmet } from 'react-helmet';
 import { FcSearch } from 'react-icons/fc';
 import { useQuery } from 'react-query';
 import { ApiResponse, FetchedTest } from '@/helpers/types/test';
+import TableLoading from '@/components/spinner/TableLoading';
 
 function Test() {
   const [open, setOpen] = useState(false);
@@ -47,12 +48,6 @@ function Test() {
       useDatas(fetchedTests); // useDatas o'rniga setDatas
     },
   });
-
-  console.log(data);
-  console.log(error);
-
-  if (isLoading) return <p>Yuklanmoqda...</p>;
-  if (isError) return <p>Xatolik yuz berdi.</p>;
 
   const columns = [
     { title: '№', dataIndex: 'numer', key: 'numer' },
@@ -99,7 +94,7 @@ function Test() {
       </Helmet>
 
       <Layout>
-        <div className="p-5">
+        {isLoading ? (<div className='flex justify-center items-center h-screen'><TableLoading/></div>) : (<div className="p-5">
           <div className="flex justify-between">
             <h1 className="text-3xl font-bold font-sans">Test</h1>
             <p className="font-sans text-gray-700">
@@ -275,8 +270,7 @@ function Test() {
             
           
           />
-
-        </div>
+        </div>)}
       </Layout>
     </div>
   );

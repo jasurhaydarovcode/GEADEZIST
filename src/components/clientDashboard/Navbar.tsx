@@ -79,15 +79,14 @@ const Navbar: React.FC = () => {
                 <h1 className="text-gray-500 mr-2 text-md font-semibold">
                   {getMe.isLoading
                     ? 'Loading...'
-                    : `${getMeData?.fullName} ${
-                        role === 'ROLE_SUPER_ADMIN'
-                          ? '(super admin)'
-                          : role === 'ROLE_TESTER'
-                            ? '(tester)'
-                            : role === 'ROLE_USER'
-                              ? '(client)'
-                              : ''
-                      }`}
+                    : `${getMeData?.fullName} ${role === 'ROLE_SUPER_ADMIN'
+                      ? '(super admin)'
+                      : role === 'ROLE_TESTER'
+                        ? '(tester)'
+                        : role === 'ROLE_USER'
+                          ? '(client)'
+                          : ''
+                    }`}
                 </h1>
                 <p>Foydalanuvchi</p>
               </div>
@@ -106,7 +105,9 @@ const Navbar: React.FC = () => {
                 <div className="p-4">
                   <div className="font-bold">{getMeData?.fullName}</div>
                   <div className="text-gray-500 text-sm">
-                    {getMeData?.email}
+                    {getMeData?.email && getMeData.email.length > 20
+                      ? `${getMeData.email.substring(0, 20)}...`
+                      : getMeData?.email}
                   </div>
                 </div>
                 <hr />

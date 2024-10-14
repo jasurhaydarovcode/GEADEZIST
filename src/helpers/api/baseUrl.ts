@@ -1,3 +1,4 @@
+
 // ======= Swagger UI =======
 export const baseUrl = 'http://164.92.165.18:8090/';
 
@@ -5,9 +6,10 @@ export const loginUrl = `${baseUrl}auth/login`;
 
 // ==================== User Controller ====================
 export const getMeUser = `${baseUrl}user/get/me`;
-export const getClientAll = `${baseUrl}user?page=0&size=10`;
+export const getClientAll = `${baseUrl}user?`;
 export const getMe = `${baseUrl}user/get/me`;
 export const getProfile = `${baseUrl}user/profile`;
+export const getResult = `${baseUrl}result/results/?page=0&size=10`;
 export const getUser = `${baseUrl}user?page=0&size=10`;
 
 
