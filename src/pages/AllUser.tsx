@@ -1,28 +1,9 @@
 import Layout from '@/components/Dashboard/Layout';
-<<<<<<< HEAD
-import { Pagination, Modal } from 'antd';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeadCell,
-  TableRow,
-} from 'flowbite-react';
-import { useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
-import axios from 'axios';
-import { getEmployee } from '@/helpers/api/baseUrl';
-import { config } from '@/helpers/functions/token';
-import { Link, useNavigate } from 'react-router-dom';
-import TableLoading from '@/components/spinner/TableLoading';
-=======
 import { getUser } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import { UserNatijasi } from '@/helpers/types/UserNatijasi';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
->>>>>>> 08f4ee9130b221f299f668a594f030d58a67e63c
 import { Helmet } from 'react-helmet';
 import { AiOutlineEye } from 'react-icons/ai';
 import { FcSearch } from 'react-icons/fc';
@@ -34,68 +15,6 @@ import Modal from 'react-modal'; // For the modal
 // Accessibility setup
 Modal.setAppElement('#root'); 
 
-<<<<<<< HEAD
-interface User {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber?: string;
-  region?: string;
-  district?: string;
-  street?: string;
-}
-
-function AllUser() {
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(10);
-  const [totalItems, setTotalItems] = useState<number>(0);
-  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const navigate = useNavigate();
-
-  const checkRoleClient = () => {
-    const role = localStorage.getItem('role');
-    if (role === 'ROLE_CLIENT') {
-      navigate('/client/dashboard');
-    }
-  };
-
-  useEffect(() => {
-    checkRoleClient();
-  }, []);
-
-  const { data: admins, isLoading } = useQuery<User[]>(
-    ['getADmin', currentPage],
-    async () => {
-      const res = await axios.get(
-        `${getEmployee}?page=${currentPage - 1}&size=${pageSize}`,
-        config,
-      );
-      const responseData = res.data.body;
-      setTotalItems(responseData.totalElements);
-      return responseData.body;
-    },
-    {
-      keepPreviousData: true,
-    },
-  );
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    setPageSize(pageSize);
-  };
-
-  const showModal = (user: User) => {
-    setSelectedUser(user);
-    setIsModalVisible(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
-=======
 function AllUser() {
   const [searchQuery, setSearchQuery] = useState(''); 
   const [selectedUser, setSelectedUser] = useState<UserNatijasi | null>(null); // Track selected user
@@ -134,7 +53,6 @@ function AllUser() {
     setSelectedUser(null); // Clear the selected user
   };
 
->>>>>>> 08f4ee9130b221f299f668a594f030d58a67e63c
   return (
     <div>
       <Helmet>
@@ -142,100 +60,6 @@ function AllUser() {
       </Helmet>
 
       <Layout>
-<<<<<<< HEAD
-        <Helmet>
-          <title>Foydalanuvchilar</title>
-        </Helmet>
-        <div className="container grid justify-center py-3">
-          <div className='flex justify-between items-center'>
-            <h1 className="text-2xl font-bold py-5">Foydalanuvchilar</h1>
-            <div className='flex gap-2 text-[17px]'>
-              <Link to={"/dashboard"}><h4>Boshqaruv paneli</h4></Link>
-              <h4>/</h4>
-              <h4 className='text-blue-600'>Foydalanuvchilar</h4>
-            </div>
-          </div>
-          <div className="flex gap-5 max-xl:w-[800px] max-2xl:w-[1000px]">
-            <div className="flex pb-5">
-              <input
-                type="text"
-                id="inp1"
-                className="pl-10 w-[375px] border-gray-300 placeholder:text-gray-400 rounded-md h-[50px]"
-                placeholder="Foydalanuvchini qidirish"
-              />
-            </div>
-            <select className="max-w-[350px] w-[375px] text-gray-400 rounded-md h-[50px] placeholder:text-gray-400 border-gray-400">
-              <option selected disabled>
-                Viloyatni tanlang
-              </option>
-              <option value="">example 1</option>
-              <option value="">example 2</option>
-            </select>
-            <select className="max-w-[350px] w-[375px] text-gray-400 rounded-md h-[50px] border-gray-400">
-              <option selected disabled>
-                Tumanni tanlang
-              </option>
-              <option value="">example 1</option>
-              <option value="">example 2</option>
-            </select>
-          </div>
-          <div>
-            {isLoading ? (
-              <div className="flex justify-center items-center h-[80vh]">
-                <TableLoading />
-              </div>
-            ) : (
-              <Table hoverable>
-                <TableHead>
-                  <TableHeadCell>T/P</TableHeadCell>
-                  <TableHeadCell>Ism</TableHeadCell>
-                  <TableHeadCell>Familya</TableHeadCell>
-                  <TableHeadCell>Email</TableHeadCell>
-                  <TableHeadCell>Action</TableHeadCell>
-                </TableHead>
-                <TableBody className="divide-y">
-                  {Array.isArray(admins) &&
-                    admins.map((item, index) => (
-                      <TableRow
-                        key={item.id}
-                        className="text-gray-900 dark:border-gray-700 dark:bg-gray-800"
-                      >
-                        <TableCell>{index + 1}</TableCell>
-                        <TableCell>{item.firstName}</TableCell>
-                        <TableCell>{item.lastName}</TableCell>
-                        <TableCell>{item.email}</TableCell>
-                        <TableCell>
-                          <button onClick={() => showModal(item)} className="text-blue-600">...</button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-            )}
-            <Pagination
-              className="mt-5"
-              current={currentPage}
-              total={totalItems}
-              pageSize={pageSize}
-              onChange={handlePageChange}
-            />
-          </div>
-        </div>
-        <div>
-          <Modal
-            title="Foydalanuvchi ma'lumotlari"
-            visible={isModalVisible}
-            onCancel={handleCancel}
-            footer={null}
-            style={{ textAlign: 'left', backgroundColor: 'white' }}
-          >
-            {selectedUser && (
-              <div>
-                <p>Ismi: {selectedUser.firstName}</p>
-                <p>Familyasi: {selectedUser.lastName}</p>
-                <p>Email: {selectedUser.email}</p>
-              </div>
-=======
         <div>
           <div className="flex justify-center pt-7">
             <div className="px-8">
@@ -330,7 +154,6 @@ function AllUser() {
                   Close
                 </button>
               </div>
->>>>>>> 08f4ee9130b221f299f668a594f030d58a67e63c
             )}
           </Modal>
         </div>
