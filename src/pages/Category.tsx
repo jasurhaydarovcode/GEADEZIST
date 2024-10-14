@@ -21,6 +21,7 @@ import { Pagination } from 'antd';
 import { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { Modal } from 'antd';
+import { Link } from 'react-router-dom';
 
 function Category() {
   const queryClient = useQueryClient();
@@ -52,7 +53,7 @@ function Category() {
     refetch();
   };
 
-  {/* Rasm modal */}
+  {/* Rasm modal */ }
   const handleImageClick = (imageUrl: string) => {
     setImageModal({ open: true, imageUrl }); // Rasm modalini ochish
   };
@@ -72,10 +73,10 @@ function Category() {
     }
   };
 
-  // Pagination uchun funksiya
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
+    // Pagination uchun funksiya
+    const handlePageChange = (page: number) => {
+      setCurrentPage(page);
+    };
 
   const handleEditClick = (category: any) => {
     setSelectedCategory(category); // Tanlangan kategoriyani saqlash
@@ -96,7 +97,7 @@ function Category() {
       console.error("Kategoriyani yangilashda xatolik yuz berdi", error);
     }
   };
-  
+
 
   return (
     <div>
@@ -111,9 +112,11 @@ function Category() {
           <>
             <div className="flex justify-between px-[20px]">
               <h1 className="text-3xl font-bold font-sans">Kategoriya</h1>
-              <p className="font-sans text-gray-700">
-                Boshqaruv paneli / <span className="text-blue-700">Kategoriya</span>
-              </p>
+              <Link to="/dashboard">
+                <p className="font-sans text-gray-700">
+                  Boshqaruv paneli / <span className="text-blue-700">Kategoriya</span>
+                </p>
+              </Link>
             </div>
 
             <CategoryAddModal onAddCategory={handleAddCategory} />

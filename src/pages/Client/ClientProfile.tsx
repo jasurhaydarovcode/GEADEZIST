@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import Layout from '@/components/clientDashboard/laytout';
 import { BiSolidPencil } from 'react-icons/bi';
 import axios from 'axios';
@@ -27,8 +27,8 @@ function ClientProfile() {
     }
   }, [navigate]);
 
-  // Ma'lumotni React Query orqali olish
-  const { data: getMeUserData, } = useQuery({
+  // Fetch data using React Query
+  const { data: getMeUserData } = useQuery({
     queryKey: ['getMeUser'],
     queryFn: async () => {
       const response = await axios.get(getProfile, config);
@@ -44,6 +44,30 @@ function ClientProfile() {
   const profileData: GetMetype =
     (getMeUserData as { body?: GetMetype })?.body || ({} as GetMetype);
 
+  // State for editable fields
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
+  const [region, setRegion] = useState<string>('');
+  const [district, setDistrict] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [address, setAddress] = useState<string>('');
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
+  const [dateOfBirth, setDateOfBirth] = useState<string>('');
+
+  // Update the state when profileData changes
+  useEffect(() => {
+    if (profileData) {
+      setFirstName(profileData.firstName || '');
+      setLastName(profileData.lastName || '');
+      setRegion(profileData.region || '');
+      setDistrict(profileData.district || '');
+      setEmail(profileData.email || '');
+      setAddress(profileData.address || '');
+      setPhoneNumber(profileData.phoneNumber || '');
+      setDateOfBirth(profileData.dateOfBirth || '');
+    }
+  }, [profileData]);
+
   useEffect(() => {
     checkRoleClient();
   }, [checkRoleClient]);
@@ -51,7 +75,7 @@ function ClientProfile() {
   return (
     <div>
       <Helmet>
-        <title>{profileData?.lastName}</title>
+        <title>{lastName}</title>
       </Helmet>
       <Layout>
         <div className="flex flex-col items-center md:p-4 p-0">
@@ -86,9 +110,9 @@ function ClientProfile() {
                 <label className="block text-lg text-gray-600">Ism</label>
                 <input
                   type="text"
-                  value={profileData?.firstName || 'No Name'}
+                  value={firstName ? firstName : 'No name'}
+                  onChange={(e) => setFirstName(e.target.value)}
                   className="clientProfileDatasStyles"
-                  readOnly
                 />
               </div>
 
@@ -97,9 +121,9 @@ function ClientProfile() {
                 <label className="block text-lg text-gray-600">Familiya</label>
                 <input
                   type="text"
-                  value={profileData?.lastName || 'No Last Name'}
+                  value={lastName ? lastName : 'No surname'}
+                  onChange={(e) => setLastName(e.target.value)}
                   className="clientProfileDatasStyles"
-                  readOnly
                 />
               </div>
 
@@ -108,9 +132,9 @@ function ClientProfile() {
                 <label className="block text-lg text-gray-600">Viloyat</label>
                 <input
                   type="text"
-                  value={profileData?.region || 'No Region'}
+                  value={region ? region : 'No region'}
+                  onChange={(e) => setRegion(e.target.value)}
                   className="clientProfileDatasStyles"
-                  readOnly
                 />
               </div>
 
@@ -119,7 +143,7 @@ function ClientProfile() {
                 <label className="block text-lg text-gray-600">Tuman</label>
                 <input
                   type="text"
-                  value={profileData?.district || 'No District'}
+                  value={district ? district : 'No district'}
                   className="clientProfileDatasStyles"
                   readOnly
                 />
@@ -132,9 +156,9 @@ function ClientProfile() {
                 </label>
                 <input
                   type="email"
-                  value={profileData?.email || 'No Email'}
+                  value={email ? email : 'No email'}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="clientProfileDatasStyles"
-                  readOnly
                 />
               </div>
 
@@ -145,9 +169,9 @@ function ClientProfile() {
                 </label>
                 <input
                   type="text"
-                  value={profileData?.address || 'No Address'}
+                  value={address ? address : 'No address'}
+                  onChange={(e) => setAddress(e.target.value)}
                   className="clientProfileDatasStyles"
-                  readOnly
                 />
               </div>
 
@@ -159,24 +183,25 @@ function ClientProfile() {
                 </label>
                 <input
                   type="text"
-                  value={profileData?.phoneNumber || 'No Phone Number'}
+                  value={phoneNumber ? phoneNumber : 'No phone number'}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
                   className="clientProfileDatasStyles"
-                  readOnly
                 />
               </div>
 
-              {/* User Brithday */}
+              {/* User Birthday */}
               <div>
                 <label className="block text-lg text-gray-600">
                   Tug'ilgan kuningiz <span>(namuna: yil-oy-kun: 2003-02-09)</span>
                 </label>
                 <input
                   type="text"
-                  value={profileData?.dateOfBirth || 'No Birthday'}
+                  value={dateOfBirth ? dateOfBirth : 'No birthday'}
+                  onChange={(e) => setDateOfBirth(e.target.value)}
                   className="clientProfileDatasStyles"
-                  readOnly
                 />
               </div>
+
               <button className="p-2 rounded-lg text-md mt-9 bg-gray-600 hover:bg-gray-800 transition duration-200 ease-in-out w-max font-semibold text-white">
                 O'zgartirishlarni saqlang
               </button>
@@ -185,7 +210,6 @@ function ClientProfile() {
         </div>
       </Layout>
     </div>
-
   );
 }
 
