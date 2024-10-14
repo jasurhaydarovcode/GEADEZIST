@@ -110,7 +110,8 @@ function ClientProfile() {
                 <label className="block text-lg text-gray-600">Ism</label>
                 <input
                   type="text"
-                  value={firstName ? firstName : 'No name'}
+                  value={firstName }
+                  placeholder="Namuma: Kimdir"
                   onChange={(e) => setFirstName(e.target.value)}
                   className="clientProfileDatasStyles"
                 />
@@ -121,7 +122,8 @@ function ClientProfile() {
                 <label className="block text-lg text-gray-600">Familiya</label>
                 <input
                   type="text"
-                  value={lastName ? lastName : 'No surname'}
+                  value={lastName }
+                  placeholder="Namuma: Kimdirov"
                   onChange={(e) => setLastName(e.target.value)}
                   className="clientProfileDatasStyles"
                 />
@@ -132,7 +134,8 @@ function ClientProfile() {
                 <label className="block text-lg text-gray-600">Viloyat</label>
                 <input
                   type="text"
-                  value={region ? region : 'No region'}
+                  value={region}
+                  placeholder="Namuma: Uzbekistan"
                   onChange={(e) => setRegion(e.target.value)}
                   className="clientProfileDatasStyles"
                 />
@@ -143,7 +146,8 @@ function ClientProfile() {
                 <label className="block text-lg text-gray-600">Tuman</label>
                 <input
                   type="text"
-                  value={district ? district : 'No district'}
+                  value={district}
+                  placeholder="Namuma: Toshkent, Angor, Angor"
                   className="clientProfileDatasStyles"
                   readOnly
                 />
@@ -156,7 +160,8 @@ function ClientProfile() {
                 </label>
                 <input
                   type="email"
-                  value={email ? email : 'No email'}
+                  value={email}
+                  placeholder="Namuma: example@gmail.com"
                   onChange={(e) => setEmail(e.target.value)}
                   className="clientProfileDatasStyles"
                 />
@@ -169,7 +174,8 @@ function ClientProfile() {
                 </label>
                 <input
                   type="text"
-                  value={address ? address : 'No address'}
+                  value={address}
+                  placeholder="Namuma: 1-uy, 2-uy, 3-uy"
                   onChange={(e) => setAddress(e.target.value)}
                   className="clientProfileDatasStyles"
                 />
@@ -183,7 +189,8 @@ function ClientProfile() {
                 </label>
                 <input
                   type="text"
-                  value={phoneNumber ? phoneNumber : 'No phone number'}
+                  value={phoneNumber}
+                   placeholder="Namuma: 998901111111"
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   className="clientProfileDatasStyles"
                 />
@@ -196,7 +203,8 @@ function ClientProfile() {
                 </label>
                 <input
                   type="text"
-                  value={dateOfBirth ? dateOfBirth : 'No birthday'}
+                  value={dateOfBirth}
+                  placeholder="Namuna: 2003-02-09"
                   onChange={(e) => setDateOfBirth(e.target.value)}
                   className="clientProfileDatasStyles"
                 />
