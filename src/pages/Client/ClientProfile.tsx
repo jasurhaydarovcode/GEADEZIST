@@ -149,7 +149,7 @@ function ClientProfile() {
                   value={district}
                   placeholder="Namuma: Toshkent, Angor, Angor"
                   className="clientProfileDatasStyles"
-                  readOnly
+                  
                 />
               </div>
 
