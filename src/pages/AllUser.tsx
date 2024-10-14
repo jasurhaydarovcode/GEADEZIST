@@ -10,22 +10,22 @@ import { FcSearch } from 'react-icons/fc';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import Modal from 'react-modal'; // For the modal
+import Modal from 'react-modal'; 
 
 // Accessibility setup
 Modal.setAppElement('#root'); 
 
 function AllUser() {
   const [searchQuery, setSearchQuery] = useState(''); 
-  const [selectedUser, setSelectedUser] = useState<UserNatijasi | null>(null); // Track selected user
-  const [isModalOpen, setIsModalOpen] = useState(false); // Track modal open state
+  const [selectedUser, setSelectedUser] = useState<UserNatijasi | null>(null); 
+  const [isModalOpen, setIsModalOpen] = useState(false); 
 
   const { data: usersData, refetch } = useQuery({
     queryKey: ['User', config],
     queryFn: async () => {
       const res = await axios.get(getUser, config);
-      const data = res.data as { body: UserNatijasi[] };
-      return data.body?.body || [] ;
+      const data = res.data as { body: { body: UserNatijasi[] } };
+      return data.body.body || [];
     },
     onError: (error) => {
       console.log(error);
@@ -44,13 +44,13 @@ function AllUser() {
   );
 
   const handleUserClick = (user: UserNatijasi) => {
-    setSelectedUser(user); // Set the selected user
-    setIsModalOpen(true);  // Open the modal
+    setSelectedUser(user); 
+    setIsModalOpen(true);  
   };
 
   const closeModal = () => {
-    setIsModalOpen(false); // Close the modal
-    setSelectedUser(null); // Clear the selected user
+    setIsModalOpen(false); 
+    setSelectedUser(null);
   };
 
   return (
