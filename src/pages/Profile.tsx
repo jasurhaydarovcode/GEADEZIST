@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useCallback } from 'react';
 import { Helmet } from 'react-helmet';
 
+
 function Profile() {
   const getUserProfile = useQuery({
     queryKey: ['getUserProfile', config],

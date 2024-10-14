@@ -13,6 +13,7 @@ import { config } from '@/helpers/functions/token';
 import TableLoading from '@/components/spinner/TableLoading';
 import defaultImage from '@/assets/images/default.png';
 export const getImage = `${baseUrl}api/videos/files`;
+import { message } from 'antd';
 
 interface AxiosError {
   message: string;
@@ -60,7 +61,7 @@ const ClientTestStart: React.FC = () => {
       return (res.data as { body?: { body: ClientCategory[] } }).body?.body;
     },
     onError: (error: AxiosError) => {
-      toast.error(error.message);
+      message.error(error.message);
     },
   });
 
