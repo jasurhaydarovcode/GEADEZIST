@@ -2,31 +2,17 @@ import Layout from '@/components/Dashboard/Layout';
 import TableLoading from '@/components/spinner/TableLoading';
 import axios from 'axios';
 import { message } from 'antd';
-import {
-  addRegion,
-  deleteRegion,
-  getDistrict,
-  getRegion,
-  updateRegion,
-} from '@/helpers/api/baseUrl';
+import { addRegion, deleteRegion, getDistrict, getRegion, updateRegion,} from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Modal, Pagination } from 'antd';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeadCell,
-  TableRow,
-} from 'flowbite-react';
-import { useEffect, useState } from 'react';
+import { Table,TableBody,TableCell, TableHead, TableHeadCell, TableRow,} from 'flowbite-react';
+import { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { MdDelete, MdEdit } from 'react-icons/md';
-import { QueryClient, useMutation, useQuery } from 'react-query';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-const queryClient = new QueryClient();
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { Link } from 'react-router-dom';
+
 function Address() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -46,27 +32,21 @@ function Address() {
     setOpen(true);
   };
 
-  const navigate = useNavigate();
-
-  function checkRoleClient() {
-    const role = localStorage.getItem('role');
-    if (role == 'ROLE_CLIENT') {
-      navigate('/client/dashboard');
-    }
-  }
-
-  useEffect(() => {
-    checkRoleClient();
-  }, [checkRoleClient]);
+  const [hasError, setHasError] = useState(false); // Xatolik holati uchun
 
   const handleOk = () => {
-    postAddressData.mutate();
-    setConfirmLoading(true);
-    setTimeout(() => {
-      setOpen(false);
-      setConfirmLoading(false);
-      resetForm();
-    }, 2000);
+    if (name) {
+      postAddressData.mutate();
+      setConfirmLoading(true);
+      setTimeout(() => {
+        setOpen(false);
+        setConfirmLoading(false);
+        resetForm();
+      }, 2000);
+    }else{
+      setHasError(true);
+      message.error("Barcha maydonlarni to'ldiring");
+    }
   };
 
   const handleCancel = () => {
@@ -133,9 +113,10 @@ function Address() {
 
   const resetForm = () => {
     setName('');
+    setHasError(false); // Reset qilishda xatolikni tozalaymiz
   };
 
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
 
   const [name, setName] = useState('');
 
@@ -144,11 +125,12 @@ function Address() {
       const res = await axios.post(`${addRegion}`, { name }, config);
       return (res.data as { body: { body: string } }).body.body;
     },
-    onSuccess: () => {
-      message.success("Manzil qo'shildi");
-      queryClient.invalidateQueries('getAddress');
+    onSuccess: () => { 
+      message.success("Manzil qo'shildi"); 
+      queryClient.invalidateQueries('getAddress'); 
     },
     onError: (error) => {
+      message.error('Xatolik yuz berdi');
       console.log('Xatolik:', error);
     },
   });
@@ -227,7 +209,7 @@ function Address() {
             <div className="flex justify-between">
               <h1 className="text-3xl font-bold font-sans">Manzillar</h1>
               <p className="font-sans text-gray-700">
-                Boshqaruv paneli / <span className="text-blue-700">Manzil</span>
+               <Link to={'/'}>Boshqaruv paneli </Link> <span className="text-blue-700">Manzil</span>
               </p>
             </div>
             <div className="flex justify-between items-center">
@@ -251,20 +233,20 @@ function Address() {
                 maskClosable={false}
                 okText="Saqlash"
                 cancelText="Bekor qilish"
-                okButtonProps={{
-                  style: { backgroundColor: 'black', color: 'white' },
-                }}
-                cancelButtonProps={{
-                  style: { backgroundColor: 'black', color: 'white' },
-                }}
+                okButtonProps={{ style: { backgroundColor: 'black', color: 'white' },}}
+                cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white' },}}
               >
                 <div className="mb-4">
                   <input
                     type="text"
                     value={name}
                     placeholder="Viloyat nomini kiriting"
-                    className="border w-full p-2 rounded"
-                    onChange={(e) => setName(e.target.value)}
+                    className={`border w-full p-2 rounded ${hasError ? 'border-red-500' : 'border-gray-300'}`}
+                    onChange={(e) => {setName(e.target.value)
+                      if (hasError) {
+                        setHasError(false); // Xato to'g'irlangan bo'lsa qizil rangni olib tashlaymiz
+                      }}
+                    }
                   />
                 </div>
               </Modal>
@@ -295,10 +277,7 @@ function Address() {
                             onClick={() => handlePutOpen(item)}
                           />
                           <MdDelete
-                            onClick={() => {
-                              setSelectedAddress(item.id);
-                              setDeleteModalVisible(true);
-                            }}
+                            onClick={() => {setSelectedAddress(item.id); setDeleteModalVisible(true);}}
                           />
                         </TableCell>
                       </TableRow>
@@ -323,12 +302,8 @@ function Address() {
               onCancel={handleDeleteCancel}
               okText="O'chirish"
               cancelText="Bekor qilish"
-              okButtonProps={{
-                style: { backgroundColor: 'black', color: 'white' },
-              }}
-              cancelButtonProps={{
-                style: { backgroundColor: 'black', color: 'white' },
-              }}
+              okButtonProps={{style: { backgroundColor: 'black', color: 'white' },}}
+              cancelButtonProps={{style: { backgroundColor: 'black', color: 'white' },}}
             >
               <p className="text-center text-xl my-5 font-semibold">
                 Viloyatni o'chirmoqchimisiz?
@@ -343,12 +318,8 @@ function Address() {
               onCancel={handlePutCancel}
               okText="O'zgartirish"
               cancelText="Bekor qilish"
-              okButtonProps={{
-                style: { backgroundColor: 'black', color: 'white' },
-              }}
-              cancelButtonProps={{
-                style: { backgroundColor: 'black', color: 'white' },
-              }}
+              okButtonProps={{ style: { backgroundColor: 'black', color: 'white' },}}
+              cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white' },}}
             >
               <div className="mb-4">
                 <input
@@ -413,12 +384,8 @@ function Address() {
                 // onCancel={handlePutCancel}
                 okText="O'zgartirish"
                 cancelText="Bekor qilish"
-                okButtonProps={{
-                  style: { backgroundColor: 'black', color: 'white' },
-                }}
-                cancelButtonProps={{
-                  style: { backgroundColor: 'black', color: 'white' },
-                }}
+                okButtonProps={{ style: { backgroundColor: 'black', color: 'white' },}}
+                cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white' },}}
               ></Modal>
             </div>
           </div>
