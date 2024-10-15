@@ -29,6 +29,7 @@ function Address() {
   const [pageSizes, setPageSizes] = useState(10);
   const [totalItemss, setTotalItemss] = useState(0);
   const [hasError, setHasError] = useState(false); // Xatolik holati uchun
+  const [hasErrors, setHasErrors] = useState(false); // Xatolik holati uchun
   
   const showModal = () => {
     setOpen(true);
@@ -198,30 +199,36 @@ function Address() {
   };
 
   const tumanOk = () => {
-    postTuman.mutate();
-    setConfirmLoading(true);
-      setTimeout(() => {
-        setTumanModals(false);
-        setConfirmLoading(false);
-        // resetForm();
-      }, 2000);
-    // if (name) {
-    //   postAddressData.mutate();
-    //   setConfirmLoading(true);
+    // postTuman.mutate();
+    // setConfirmLoading(true);
     //   setTimeout(() => {
-    //     setOpen(false);
+    //     setTumanModals(false);
     //     setConfirmLoading(false);
-    //     resetForm();
+    //     // resetForm();
     //   }, 2000);
-    // }else{
-    //   setHasError(true);
-    //   message.error("Barcha maydonlarni to'ldiring");
-    // }
+    if (tumanName.current!.value && regionId.current!.value) {
+      postTuman.mutate();
+      setConfirmLoading(true);
+      setTimeout(() => {
+        setOpen(false);
+        setConfirmLoading(false);
+        resetTumanForm();
+      }, 2000);
+    }else{
+      setHasErrors(true);
+      message.error("Barcha maydonlarni to'ldiring");
+    }
+  };
+
+  const resetTumanForm = () => {
+    tumanName.current!.value = '';
+    regionId.current!.value = '';
+    setHasErrors(false);
   };
 
   const tumanCancel = () => {
     setTumanModals(false);
-    // resetForm();
+    resetTumanForm();
   };
 
   // Viloyatlarni list qilib get qilish
@@ -452,7 +459,7 @@ function Address() {
                 cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white' },}}
               >
                 <div className="mb-4">
-                  <select className="border w-full p-2 rounded" ref={regionId}>
+                  <select className={`border w-full p-2 rounded  ${hasErrors ? 'border-red-500' : 'border-gray-300'}`} ref={regionId} >
                     <option value="">Viloyatni tanlang</option>
                     {Array.isArray(region) &&
                       region.map((item) => (
@@ -467,8 +474,9 @@ function Address() {
                   <input
                     type="text"
                     placeholder="Tuman nomini kiriting"
-                    className="border w-full p-2 rounded"
+                    className={`border w-full p-2 rounded ${hasErrors ? 'border-red-500' : 'border-gray-300'}`}
                     ref={tumanName}
+                    
                   />
                 </div>
               </Modal>
