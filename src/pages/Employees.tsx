@@ -355,9 +355,6 @@ function Employees() {
                 pageSize={pageSize}
                 onChange={handlePageChange}
               />
-              <Modal>
-                
-              </Modal>
             </div>
           </div>
         )}
