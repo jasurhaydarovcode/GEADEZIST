@@ -20,6 +20,9 @@ export const getCategory = `${baseUrl}category/get/all`;
 export const deleteCategory = `${baseUrl}category/delete`;
 export const updateCategory = `${baseUrl}category/update`;
 
+// Question
+export const PostQuestion = `${baseUrl}question `;
+
 // video
 export const getVideo = `${baseUrl}video/get/all`;
 export const addVideo = `${baseUrl}video/add`;
