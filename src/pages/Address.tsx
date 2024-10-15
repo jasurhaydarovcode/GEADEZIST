@@ -261,7 +261,7 @@ function Address() {
 
   const tumanDeleteOk = () => {
     if (selectedDistrict !== null) {
-      updateAddress.mutate(selectedDistrict);
+      deleteTuman.mutate(selectedDistrict);
       setTumanDelete(false);
     }
   };
@@ -270,6 +270,20 @@ function Address() {
     resetTumanForm();
   };
 
+  // Manzillarni o'chirish
+  const deleteTuman = useMutation({
+    mutationFn: async (addressID) => {
+      await axios.delete(`${baseUrl}district/${addressID}`, config);
+    },
+    onSuccess: () => {
+      message.success("Manzil o'chirildi");
+      queryClient.invalidateQueries('getDistrict');
+    },
+    onError: (error) => {
+      message.error('Xatolik yuz berdi');
+      console.log('Xatolik:', error);
+    },
+  });
 
   return (
     <div>
