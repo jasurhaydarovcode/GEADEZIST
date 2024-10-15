@@ -20,6 +20,9 @@ function Address() {
   const [selectedAddress, setSelectedAddress] = useState(null); // O'chiriladigan manzilni saqlash
   const [putOpen, setPutOpen] = useState(false);
   const [tumanModals, setTumanModals] = useState(false);
+  const [tumanDelete, setTumanDelete] = useState(false);
+  const [selectedDistrict, setSelectedDistrict] = useState(null); // O'chiriladigan manzilni saqlash
+
   // Pagination holati
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -199,18 +202,11 @@ function Address() {
   };
 
   const tumanOk = () => {
-    // postTuman.mutate();
-    // setConfirmLoading(true);
-    //   setTimeout(() => {
-    //     setTumanModals(false);
-    //     setConfirmLoading(false);
-    //     // resetForm();
-    //   }, 2000);
     if (tumanName.current!.value && regionId.current!.value) {
       postTuman.mutate();
       setConfirmLoading(true);
       setTimeout(() => {
-        setOpen(false);
+        setTumanModals(false);
         setConfirmLoading(false);
         resetTumanForm();
       }, 2000);
@@ -219,17 +215,17 @@ function Address() {
       message.error("Barcha maydonlarni to'ldiring");
     }
   };
-
+  const tumanCancel = () => {
+    setTumanModals(false);
+    resetTumanForm();
+  };
+  
   const resetTumanForm = () => {
     tumanName.current!.value = '';
     regionId.current!.value = '';
     setHasErrors(false);
   };
 
-  const tumanCancel = () => {
-    setTumanModals(false);
-    resetTumanForm();
-  };
 
   // Viloyatlarni list qilib get qilish
   const { data: region } = useQuery(
@@ -262,6 +258,17 @@ function Address() {
       console.log('Xatolik:', error);
     },
   });
+
+  const tumanDeleteOk = () => {
+    if (selectedDistrict !== null) {
+      updateAddress.mutate(selectedDistrict);
+      setTumanDelete(false);
+    }
+  };
+  const tumanDeleteCancel = () => {
+    setTumanDelete(false);
+    resetTumanForm();
+  };
 
 
   return (
@@ -436,6 +443,7 @@ function Address() {
                           />
                           <MdDelete 
                             className='hover:text-red-700'
+                            onClick={() => {setSelectedDistrict(item.id); setDeleteModalVisible(true);}}
                           />
                         </TableCell>
                       </TableRow>
@@ -485,6 +493,20 @@ function Address() {
                   />
                 </div>
               </Modal>
+              <Modal
+                open={tumanDelete}
+                onOk={tumanDeleteOk}
+                onCancel={tumanDeleteCancel}
+                okText="O'chirish"
+                cancelText="Yopish"
+                maskClosable={false}
+                okButtonProps={{style: { backgroundColor: 'black', color: 'white' },}}
+                cancelButtonProps={{style: { backgroundColor: 'black', color: 'white' },}}
+              >
+                <p className="text-center text-xl my-5 font-semibold">
+                  Tumanni o'chirmoqchimisiz?
+                </p>
+            </Modal>
             </div>
           </div>
         )}
