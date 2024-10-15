@@ -4,7 +4,6 @@ import { config } from '@/helpers/functions/token';
 import { message, Tooltip } from 'antd';
 import TooltipText from '@/components/TooltipText';
 import axios from 'axios';
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {
   Table,
@@ -26,7 +25,6 @@ import { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { Modal } from 'antd';
 import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 function Category() {
   const queryClient = useQueryClient();
