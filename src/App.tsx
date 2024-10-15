@@ -39,6 +39,7 @@ function App() {
   // useEffect(() => {
   //   LocalgaSaqlash()
   // })
+  
   return (
     <Routes>
       <Route path="/" element={<Home />} />
