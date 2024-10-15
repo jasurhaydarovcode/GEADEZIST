@@ -341,13 +341,11 @@ function Address() {
                         <TableCell>{item.name}</TableCell>
                         <TableCell className="flex gap-1 text-xl cursor-pointer">
                           <MdEdit
-                            // onClick={() => {
-                            //   setSelectedAddress(item.id);
-                            //   setPutOpen(true);
-                            // }}
+                            className='hover:text-orange-400'
                             onClick={() => handlePutOpen(item)}
                           />
                           <MdDelete
+                          className='hover:text-red-700'
                             onClick={() => {setSelectedAddress(item.id); setDeleteModalVisible(true);}}
                           />
                         </TableCell>
@@ -431,8 +429,12 @@ function Address() {
                         <TableCell>{item.name}</TableCell>
                         <TableCell>{item.regionName}</TableCell>
                         <TableCell className="flex gap-1 text-xl cursor-pointer">
-                          <MdEdit />
-                          <MdDelete />
+                          <MdEdit 
+                            className='hover:text-orange-400' 
+                          />
+                          <MdDelete 
+                            className='hover:text-red-700'
+                          />
                         </TableCell>
                       </TableRow>
                     ))}
