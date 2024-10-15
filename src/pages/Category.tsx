@@ -43,7 +43,7 @@ function Category() {
       const res = await axios.get<{
         body: { body: any[]; totalElements: number };
       }>(
-        `${baseUrl}category/page?page=${currentPage - 1}&size=${setPageSize}`,
+        `${baseUrl}category/page?page=${currentPage - 1}&size=${pageSize}`,
         config,
       );
       setTotalItems(res.data.body.totalElements);
