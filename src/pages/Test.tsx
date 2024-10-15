@@ -6,22 +6,46 @@ import {
 } from '@ant-design/icons';
 import { Button, Modal, Table } from 'antd';
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { FcSearch } from 'react-icons/fc';
 import { useQuery } from 'react-query';
 import { ApiResponse, FetchedTest } from '@/helpers/types/test';
 import TableLoading from '@/components/spinner/TableLoading';
+import { Answer } from '@/helpers/types/AddQuizType';
 
 function Test() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [datas, useDatas] = useState<FetchedTest[]>([]);
+  const [testType, setTestType] = useState<string | null>(null);
   const dataSource = datas;
+  const quiz = useRef();
+  const category = useRef();
+  const difficulty = useRef();
+  const type = useRef();
+  // bu kod qoshish btn uchun + -funck
+  const [answers, setAnswers] = useState<Answer[]>([{ id: Date.now(), value: '' }]); // Start with one input
+  const handleAddAnswer = () => {
+    setAnswers([...answers, { id: Date.now(), value: '' }]); // Add a new input
+  };
+  const handleRemoveAnswer = () => {
+    if (answers.length > 1) { // Ensure there's at least one input
+      setAnswers(answers.slice(0, -1));
+    }
+  }
+  function removeInp() {
+    if (testType === "Hisoblangan natija") {
+      setAnswers(answers.slice(0, 1));
+    }
+  }
+  useEffect(() => {
+    removeInp();
+  }, [testType]);
 
   const testData = async (): Promise<ApiResponse> => {
     const response = await axios.get<ApiResponse>(
-      `${baseUrl}question/filter?page=0&size=10`,
+      `${baseUrl}question/filter?page=0&size=100`,
       config,
     );
     return response.data;
@@ -49,6 +73,17 @@ function Test() {
     },
   });
 
+  const categoryNames = [
+    {
+      name: "Hisoblangan natija"
+    },
+    {
+      name: "Bir to'g'ri javobli test"
+    },
+    {
+      name: "Ko'p to'g'ri javobli test"
+    }
+  ]
   const columns = [
     { title: '№', dataIndex: 'numer', key: 'numer' },
     { title: 'Test rasm', dataIndex: 'testRasm', key: 'testRasm' },
@@ -86,7 +121,6 @@ function Test() {
       setConfirmLoading(false);
     }, 2000);
   };
-
   return (
     <div>
       <Helmet>
@@ -94,7 +128,7 @@ function Test() {
       </Helmet>
 
       <Layout>
-        {isLoading ? (<div className='flex justify-center items-center h-screen'><TableLoading/></div>) : (<div className="p-5">
+        {isLoading ? (<div className='flex justify-center items-center h-screen'><TableLoading /></div>) : (<div className="p-5">
           <div className="flex justify-between">
             <h1 className="text-3xl font-bold font-sans">Test</h1>
             <p className="font-sans text-gray-700">
@@ -169,34 +203,107 @@ function Test() {
               </div>
 
               <div className="mb-4">
-                <select className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
+                <select onChange={(e) => setTestType(e.target.value)} className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
                   <option disabled selected>
                     Turlarni tanlang
                   </option>
-                  <option value="" className="text text-black">
-                    Hisoblangan natija
-                  </option>
-                  <option value="" className="text text-black">
-                    Bir to'g'ri javobli test
-                  </option>
-                  <option value="" className="text text-black">
-                    Ko'p to'g'ri javobli test
-                  </option>
+                  {categoryNames && categoryNames.length > 0 && categoryNames.map((category, key) => (
+                    <option key={key} value={category.name} className="text text-black">
+                      {category.name}
+                    </option>
+                  ))
+                  }
                 </select>
               </div>
 
+              <div>
+                {testType !== null && ( // Show inputs only when testType is not null
+                  (testType === 'Hisoblangan natija' || testType === 'Ko\'p to\'g\'ri javobli test') &&
+                  answers.map((answer: Answer, index) => (
+                    <div key={answer.id} className="flex items-center mb-4 gap-2">
+                      <input
+                        type="checkbox"
+                        checked={testType === "Hisoblangan natija" || answer.checked} // Automatically checked for "Hisoblangan natija", manually for multiple answers
+                        onChange={(e) => {
+                          if (testType === "Ko'p to'g'ri javobli test") {
+                            const updatedAnswers = answers.map((ans, i) =>
+                              i === index ? { ...ans, checked: e.target.checked } : ans
+                            );
+                            setAnswers(updatedAnswers);
+                          }
+                        }}
+                        disabled={testType === "Hisoblangan natija"} // Disable for "Hisoblangan natija"
+                        className="mr-3 accent-blue-500"
+                      />
+                      <input
+                        placeholder="Savolning javoblarini kiriting"
+                        className="border w-full p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                      <label className="cursor-pointer custom-file-upload px-3 w-[160px] py-2 bg-blue-500 text-white text-[13px] rounded-md">
+                        <input type="file" className="hidden" />
+                        Choose file
+                      </label>
+                      {testType === "Ko'p to'g'ri javobli test" && (
+                        <>
+                          <button
+                            onClick={handleRemoveAnswer}
+                            className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300 ml-2"
+                          >
+                            -
+                          </button>
+                          <button
+                            onClick={handleAddAnswer}
+                            className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300"
+                          >
+                            +
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  ))
+                )}
+              </div>
+
+              <div>
+                {testType !== null && ( // Show inputs only when testType is not null
+                  (testType === 'Bir to\'g\'ri javobli test') &&
+                  answers.map((answer, index) => (
+                    <div key={answer.id} className="flex items-center mb-4 gap-1">
+                      <input type="radio" name='single-choice' className="mr-3 accent-blue-500" />
+                      <input
+                        placeholder="Savolning javoblarini kiriting"
+                        className="border w-full p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                      <label className="cursor-pointer custom-file-upload px-3 w-[150px] py-2 bg-blue-500 text-white text-[13px] rounded-md">
+                        <input type="file" className="hidden" />
+                        Choose file
+                      </label>
+                      <>
+                        <button
+                          onClick={handleRemoveAnswer}
+                          className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300 ml-2"
+                        >
+                          -
+                        </button>
+                        <button
+                          onClick={handleAddAnswer}
+                          className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300"
+                        >
+                          +
+                        </button>
+                      </>
+                    </div>
+                  ))
+                )}
+              </div>
+
+
+
+
               <div className="mb-4 ml-[180px] mt-5">
                 <Button className="w-[90px] h-[90px] rounded border-dashed border-2 border-gray-400 flex flex-col items-center justify-center">
-                  <img
-                    src="https://example.com/your-icon.png"
-                    alt="Rasm yuklash"
-                    className="w-6 h-6"
-                  />{' '}
-
-                  Rasm yuklash
-                </Button>
+                  <img  src="https://example.com/your-icon.png" alt="Rasm yuklash" className="w-6 h-6" /> Rasm yuklash  </Button>
                 <h2 className="mt-2 relative right-[20px]">Rasm yuklash ixtiyoriy</h2>{' '}
-
               </div>
             </Modal>
 
@@ -265,10 +372,10 @@ function Test() {
 
           <Table
             dataSource={dataSource}
-            columns  ={columns}
-            pagination={{ pageSize: 5 }}
-            
-          
+            columns={columns}
+            pagination={{ pageSize: 10 }}
+
+
           />
         </div>)}
       </Layout>
