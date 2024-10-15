@@ -83,25 +83,47 @@ function Category() {
       setCurrentPage(page);
     };
 
-  const handleEditClick = (category: any) => {
-    setSelectedCategory(category); // Tanlangan kategoriyani saqlash
-    setEditModalVisible(true); // Tahrirlash modalini ochish
-  };
+  // const handleEditClick = (category: any) => {
+  //   setSelectedCategory(category); // Tanlangan kategoriyani saqlash
+  //   setEditModalVisible(true); // Tahrirlash modalini ochish
+  // };
 
-  // Kategoriyani yangilash funksiyasi
+  const handleEditClick = (category: any) => {
+    console.log('Tahrirlanayotgan kategoriya:', category);
+    setSelectedCategory(category);
+    setEditModalVisible(true); // Modalni ochish
+  };
+  
   const handleEditCategory = async (updatedCategory: any) => {
+    console.log('Yangilangan kategoriya:', updatedCategory);
     try {
-      await axios.put(
+      const response = await axios.put(
         `${baseUrl}category/${updatedCategory.id}`,
         updatedCategory,
         config,
       );
+      console.log('Tahrir javobi:', response);
       queryClient.invalidateQueries(['getCategories']);
-      setEditModalVisible(false); // Tahrirlash modalini yopish
+      setEditModalVisible(false); // Modalni yopish
     } catch (error) {
       console.error('Kategoriyani yangilashda xatolik yuz berdi', error);
     }
   };
+
+  // Kategoriyani yangilash funksiyasi
+  // const handleEditCategory = async (updatedCategory: any) => {
+  //   try {
+  //     await axios.put(
+  //       `${baseUrl}category/${updatedCategory.id}`,
+  //       updatedCategory,
+  //       config,
+  //     );
+  //     queryClient.invalidateQueries(['getCategories']);
+  //     setEditModalVisible(false); // Tahrirlash modalini yopish
+  //   } catch (error) {
+  //     console.error('Kategoriyani yangilashda xatolik yuz berdi', error);
+  //   }
+  // };
 
   return (
     <div>
