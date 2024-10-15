@@ -14,7 +14,7 @@ import Layout from '@/components/Dashboard/Layout';
 import { PiUsersThreeFill } from 'react-icons/pi';
 import { FaArrowsAlt } from 'react-icons/fa';
 import { FaCircleQuestion } from 'react-icons/fa6';
-import {  MdOutlineCategory } from 'react-icons/md';
+import { MdOutlineCategory } from 'react-icons/md';
 import checkLogin from '@/helpers/functions/checkLogin';
 import { useQuery } from 'react-query';
 import { getClientAll, getStaticAll, } from '@/helpers/api/baseUrl';
@@ -163,7 +163,7 @@ const Dashboard = () => {
   const getClient = useQuery({
     queryKey: ['getClient', config],
     queryFn: async () => {
-      const res = await axios.get<GetClientAllResponse[]>(`${getClientAll}page=${currentPage-1}&size=${pageSize}`, config);
+      const res = await axios.get<GetClientAllResponse[]>(`${getClientAll}page=${currentPage - 1}&size=${pageSize}`, config);
       const data = res.data.body.body as GetClientAllResponse[];
       return data;
     },
@@ -306,31 +306,36 @@ const Dashboard = () => {
 
             {/* User Table Section */}
             <div className="bg-white shadow rounded-lg p-4 overflow-x-auto">
-              <Table hoverable className="border-collapse">
+              <Table hoverable className="table-fixed w-full border-collapse">
                 <TableHead>
-                  <TableRow>
-                    <TableHeadCell>T/P</TableHeadCell>
-                    <TableHeadCell>Ism</TableHeadCell>
-                    <TableHeadCell>Familiya</TableHeadCell>
-                    <TableHeadCell>Email</TableHeadCell>
-                  </TableRow>
+                    <TableHeadCell className="w-1/12 text-center">T/P</TableHeadCell>
+                    <TableHeadCell className="w-3/12 text-left">Ism</TableHeadCell>
+                    <TableHeadCell className="w-3/12 text-left">Familiya</TableHeadCell>
+                    <TableHeadCell className="w-5/12 text-left">Email</TableHeadCell>
                 </TableHead>
                 <TableBody className="divide-y">
-                  {clientData && clientData.length > 0 &&
+                  {clientData && clientData.length > 0 ? (
                     clientData.map((item, index) => (
-                      <TableRow
-                        key={item.id}
-                        className="bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800"
-                      >
-                        <TableCell>{(currentPage - 1) * pageSize + index + 1}</TableCell>
-                        <TableCell>{item.firstName}</TableCell>
-                        <TableCell>{item.lastName}</TableCell>
-                        <TableCell>{item.email}</TableCell>
+                      <TableRow key={item.id} className="bg-white">
+                        <TableCell className="text-center p-4">
+                          {(currentPage - 1) * pageSize + index + 1}
+                        </TableCell>
+                        <TableCell className="text-left p-4">{item.firstName}</TableCell>
+                        <TableCell className="text-left p-4">{item.lastName}</TableCell>
+                        <TableCell className="text-left p-4">{item.email}</TableCell>
                       </TableRow>
-                    ))}
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={4} className="text-center py-4">
+                        Ma'lumotlar topilmadi
+                      </TableCell>
+                    </TableRow>
+                  )}
                 </TableBody>
               </Table>
             </div>
+
 
             <div className="flex justify-end mt-4 px-[20px]">
               <Pagination

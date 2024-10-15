@@ -1,5 +1,5 @@
 import Layout from '@/components/Dashboard/Layout';
-import { baseUrl } from '@/helpers/api/baseUrl';
+import { baseUrl, PostQuestion } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import {
   PlusCircleOutlined, EditOutlined, DeleteOutlined, EyeOutlined,
@@ -9,7 +9,7 @@ import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { FcSearch } from 'react-icons/fc';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { ApiResponse, FetchedTest } from '@/helpers/types/test';
 import TableLoading from '@/components/spinner/TableLoading';
 import { Answer } from '@/helpers/types/AddQuizType';
@@ -20,8 +20,8 @@ function Test() {
   const [datas, useDatas] = useState<FetchedTest[]>([]);
   const [testType, setTestType] = useState<string | null>(null);
   const dataSource = datas;
-  const quiz = useRef();
-  const category = useRef();
+  const quiz = useRef<HTMLInputElement | null>(null);
+  const category = useRef<HTMLSelectElement | null>(null);
   const difficulty = useRef();
   const type = useRef();
   // bu kod qoshish btn uchun + -funck
@@ -121,6 +121,32 @@ function Test() {
       setConfirmLoading(false);
     }, 2000);
   };
+
+
+  // Post question
+  const postQuestion = useMutation({
+    mutationFn: async () =>  {
+      const data = {
+        "name": quiz.current?.value,
+        "categoryId": category.current?.value,
+        "finiteError": 0,
+        "type": "string",
+        "difficulty": "string",
+        "attachmentIds": [
+          0
+        ],
+        "optionDtos": [
+          {
+            "answer": "string",
+            "isCorrect": true,
+            "file": 0
+          }
+        ]
+      }
+      const res = await axios.post(PostQuestion, data, config);
+      return res.data;
+    }
+  });
   return (
     <div>
       <Helmet>
@@ -267,7 +293,7 @@ function Test() {
               <div>
                 {testType !== null && ( // Show inputs only when testType is not null
                   (testType === 'Bir to\'g\'ri javobli test') &&
-                  answers.map((answer, index) => (
+                  answers.map((answer) => (
                     <div key={answer.id} className="flex items-center mb-4 gap-1">
                       <input type="radio" name='single-choice' className="mr-3 accent-blue-500" />
                       <input
@@ -300,9 +326,12 @@ function Test() {
 
 
 
-              <div className="mb-4 ml-[180px] mt-5">
-                <Button className="w-[90px] h-[90px] rounded border-dashed border-2 border-gray-400 flex flex-col items-center justify-center">
-                  <img  src="https://example.com/your-icon.png" alt="Rasm yuklash" className="w-6 h-6" /> Rasm yuklash  </Button>
+              <div className="mb-4 ml-[180px] mt-5 ">
+                <label className="w-[90px] h-[90px] rounded border-dashed border-2 border-gray-400 bg-yellow-100 flex flex-col items-center justify-center">
+                  <input type="file" className='hidden' />
+                  <img src="https://example.com/your-icon.png" alt="Rasm yuklash" className="w-6 h-6" />
+                  Rasm yuklash
+                </label>
                 <h2 className="mt-2 relative right-[20px]">Rasm yuklash ixtiyoriy</h2>{' '}
               </div>
             </Modal>
