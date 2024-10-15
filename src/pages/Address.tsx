@@ -7,7 +7,7 @@ import { config } from '@/helpers/functions/token';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Modal, Pagination } from 'antd';
 import { Table,TableBody,TableCell, TableHead, TableHeadCell, TableRow,} from 'flowbite-react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { MdDelete, MdEdit } from 'react-icons/md';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
@@ -198,6 +198,7 @@ function Address() {
   };
 
   const tumanOk = () => {
+    postTuman.mutate();
     setConfirmLoading(true);
       setTimeout(() => {
         setTumanModals(false);
@@ -234,6 +235,27 @@ function Address() {
         return (res.data as { body: { body: string; }}).body;
     },
   );  
+
+  // Tumanlarni post qilish
+  const tumanName = useRef<HTMLInputElement>(null);
+  const regionId = useRef<HTMLSelectElement>(null);
+
+
+  const postTuman = useMutation({
+    mutationFn: async () => {
+      const res = await axios.post(`${baseUrl}district`, { name: tumanName.current?.value, regionId: regionId.current?.value },  config);
+      return (res.data as { body: { body: string } }).body.body;
+    },
+    onSuccess: () => { 
+      message.success("Manzil qo'shildi"); 
+      queryClient.invalidateQueries('getDistrict'); 
+    },
+    onError: (error) => {
+      message.error('Xatolik yuz berdi');
+      console.log('Xatolik:', error);
+    },
+  });
+
 
   return (
     <div>
@@ -430,11 +452,11 @@ function Address() {
                 cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white' },}}
               >
                 <div className="mb-4">
-                  <select className="border w-full p-2 rounded">
+                  <select className="border w-full p-2 rounded" ref={regionId}>
                     <option value="">Viloyatni tanlang</option>
                     {Array.isArray(region) &&
                       region.map((item) => (
-                        <option key={item.id} value={item.id}>
+                        <option key={item.id} value={item.id} >
                           {item.name}
                         </option>
                     ))}
@@ -446,6 +468,7 @@ function Address() {
                     type="text"
                     placeholder="Tuman nomini kiriting"
                     className="border w-full p-2 rounded"
+                    ref={tumanName}
                   />
                 </div>
               </Modal>
