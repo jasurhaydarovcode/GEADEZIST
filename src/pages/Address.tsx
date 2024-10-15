@@ -2,7 +2,7 @@ import Layout from '@/components/Dashboard/Layout';
 import TableLoading from '@/components/spinner/TableLoading';
 import axios from 'axios';
 import { message } from 'antd';
-import { addRegion, deleteRegion, getDistrict, getRegion, updateRegion,} from '@/helpers/api/baseUrl';
+import { addRegion, baseUrl, deleteRegion, getDistrict, getRegion, updateRegion,} from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Modal, Pagination } from 'antd';
@@ -19,6 +19,7 @@ function Address() {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false); // O'chirish modalini ko'rsatish uchun
   const [selectedAddress, setSelectedAddress] = useState(null); // O'chiriladigan manzilni saqlash
   const [putOpen, setPutOpen] = useState(false);
+  const [tumanModals, setTumanModals] = useState(false);
   // Pagination holati
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -27,12 +28,11 @@ function Address() {
   const [currentPages, setCurrentPages] = useState(1);
   const [pageSizes, setPageSizes] = useState(10);
   const [totalItemss, setTotalItemss] = useState(0);
-
+  const [hasError, setHasError] = useState(false); // Xatolik holati uchun
+  
   const showModal = () => {
     setOpen(true);
   };
-
-  const [hasError, setHasError] = useState(false); // Xatolik holati uchun
 
   const handleOk = () => {
     if (name) {
@@ -193,6 +193,48 @@ function Address() {
     setPageSizes(pageSizes);
   };
 
+  const tumanModal = () => {
+    setTumanModals(true);
+  };
+
+  const tumanOk = () => {
+    setConfirmLoading(true);
+      setTimeout(() => {
+        setTumanModals(false);
+        setConfirmLoading(false);
+        // resetForm();
+      }, 2000);
+    // if (name) {
+    //   postAddressData.mutate();
+    //   setConfirmLoading(true);
+    //   setTimeout(() => {
+    //     setOpen(false);
+    //     setConfirmLoading(false);
+    //     resetForm();
+    //   }, 2000);
+    // }else{
+    //   setHasError(true);
+    //   message.error("Barcha maydonlarni to'ldiring");
+    // }
+  };
+
+  const tumanCancel = () => {
+    setTumanModals(false);
+    // resetForm();
+  };
+
+  // Viloyatlarni list qilib get qilish
+  const { data: region } = useQuery(
+    ['getRegion'],
+    async () => {
+      const res = await axios.get(
+        `${baseUrl}region`,
+        config,
+      );
+        return (res.data as { body: { body: string; }}).body;
+    },
+  );  
+
   return (
     <div>
       <Helmet>
@@ -337,7 +379,7 @@ function Address() {
                 color="default"
                 variant="solid"
                 className="text-xl px-5 py-6 my-5"
-                // onClick={showModal}
+                onClick={tumanModal}
               >
                 <PlusCircleOutlined className="text-xl" />
                 Qo'shish
@@ -379,14 +421,34 @@ function Address() {
             <div>
               <Modal
                 title="Tuman qo'shish"
-                // open={putOpen}
-                // onOk={handlePutOk}
-                // onCancel={handlePutCancel}
-                okText="O'zgartirish"
+                open={tumanModals}
+                onOk={tumanOk}
+                onCancel={tumanCancel}
+                okText="Saqlash"
                 cancelText="Bekor qilish"
                 okButtonProps={{ style: { backgroundColor: 'black', color: 'white' },}}
                 cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white' },}}
-              ></Modal>
+              >
+                <div className="mb-4">
+                  <select className="border w-full p-2 rounded">
+                    <option value="">Viloyatni tanlang</option>
+                    {Array.isArray(region) &&
+                      region.map((item) => (
+                        <option key={item.id} value={item.id}>
+                          {item.name}
+                        </option>
+                    ))}
+                    
+                  </select>
+                </div>
+                <div className="mb-4">
+                  <input
+                    type="text"
+                    placeholder="Tuman nomini kiriting"
+                    className="border w-full p-2 rounded"
+                  />
+                </div>
+              </Modal>
             </div>
           </div>
         )}
