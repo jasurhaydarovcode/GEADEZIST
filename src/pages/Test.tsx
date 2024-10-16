@@ -13,7 +13,7 @@ import { useMutation, useQuery } from 'react-query';
 import { ApiResponse, FetchedTest } from '@/helpers/types/test';
 import TableLoading from '@/components/spinner/TableLoading';
 import { Answer } from '@/helpers/types/AddQuizType';
-import Item from 'antd/es/list/Item';
+import TestVisual from '@/components/test/testVisual';
 
 function Test() {
   const [open, setOpen] = useState(false);
@@ -21,8 +21,8 @@ function Test() {
   const [testType, setTestType] = useState<string | null>(null);
   const quiz = useRef<HTMLInputElement | null>(null);
   const category = useRef<HTMLSelectElement | null>(null);
-  const difficulty = useRef();
-  const type = useRef();
+  // const difficulty = useRef();
+  // const type = useRef();
   // bu kod qoshish btn uchun + -funck
   const [answers, setAnswers] = useState<Answer[]>([{ id: Date.now(), value: '' }]); // Start with one input
   // test get 
@@ -98,7 +98,7 @@ function Test() {
   };
 
   // Use the data in a React component
-  const { data, isLoading, isError, error } = useQuery<ApiResponse>({
+  const { data, isLoading } = useQuery<ApiResponse>({
     queryKey: ['tests'],
     queryFn: testData,
     onSuccess: (response) => {
@@ -118,6 +118,7 @@ function Test() {
       useDatas(fetchedTests); // useDatas o'rniga setDatas
     },
   });
+  console.log(data)
 
   const categoryNames = [
     {
@@ -137,26 +138,41 @@ function Test() {
   // edit modal 
   const [editModal, seteditModal] = useState<boolean>(false);
   const [confirmLoad, setConfirmLoad] = useState<boolean>(false);
+
   const editMod = () => {
     setConfirmLoad(true);
     // Malumotlarni yuborish yoki boshqa amallar
     setTimeout(() => {
       setConfirmLoad(false);
-      setOpen(false);
+      // ha(false);
     }, 2000);
   };
   const closeditmod = () => seteditModal(!editModal);
+  // edit modal 
+  // delete modal 
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 
-  function putTest() {
-    const testData = async (): Promise<ApiResponse> => {
-      const response = await axios.get<ApiResponse>(
-        `${baseUrl}/question/{id}`,
-        config
-      );
-      return response.data;
-    };
+  const handleDelete = () => {
+    // O'chirish amalini bajarish
+    setDeleteModalVisible(false);
+  };
 
-  }
+  const handleDeleteCancel = () => {
+    setDeleteModalVisible(false);
+  };
+
+  // delete modal 
+
+  // function putTest() {
+  //   const testData = async (): Promise<ApiResponse> => {
+  //     const response = await axios.get<ApiResponse>(
+  //       `${baseUrl}/question/{id}`,
+  //       config
+  //     );
+  //     return response.data;
+  //   };
+
+  // }
 
   const columns = [
     { title: '№', dataIndex: 'numer', key: 'numer' },
@@ -175,12 +191,15 @@ function Test() {
           <EditOutlined onClick={() => {
             seteditModal(true)
           }} className="text-black cursor-pointer" style={{ fontSize: '18px' }} />
-          <DeleteOutlined className="text-black cursor-pointer" style={{ fontSize: '18px' }} />
+          <DeleteOutlined onClick={() => {
+            setDeleteModalVisible(true)
+          }} className="text-black cursor-pointer" style={{ fontSize: '18px' }} />
           <EyeOutlined className="text-black cursor-pointer" style={{ fontSize: '18px' }} />
         </div>
       ),
     },
   ];
+
 
   const showModal = () => {
     setOpen(true);
@@ -477,7 +496,7 @@ function Test() {
       <Modal
         title="edit modal"
         open={editModal}
-        onOk={putTest}
+        // onOk={putTest}
         confirmLoading={confirmLoad}
         onCancel={closeditmod}
         maskClosable={false}
@@ -635,6 +654,22 @@ function Test() {
 
         {/* Qolgan kontentni modal ichiga joylang */}
       </Modal>
+      <Modal
+        // title="Viloyatni o'chirmoqchimisiz?"
+        open={deleteModalVisible}
+        onOk={editMod}
+        onCancel={handleDeleteCancel}
+        okText="O'chirish"
+        cancelText="Bekor qilish"
+        maskClosable={false}
+        okButtonProps={{ style: { backgroundColor: 'black', color: 'white' }, }}
+        cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white' }, }}
+      >
+        <p className="text-center text-xl my-5 font-semibold">
+          testni uchirmoqchimisz
+        </p>
+      </Modal>
+      {/* <TestVisual /> */}
     </div>
   );
 }
