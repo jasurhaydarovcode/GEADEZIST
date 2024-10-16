@@ -1,7 +1,7 @@
 ## GEADEZIST README — на русском языке  
 
 <div align="center">  
-  <img src=".github/GEADEZIST.png" width="200">  
+  <img src="../GEADEZIST.png" width="200">  
 </div>  
 
 ---
