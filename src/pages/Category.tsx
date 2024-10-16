@@ -257,7 +257,7 @@ function Category() {
             </div>
 
             {/* Pagination funksiyasi */}
-            <div className="flex justify-end mt-4 px-[20px]">
+            <div className="flex mt-4 px-[20px]">
               <Pagination
                 current={currentPage}
                 pageSize={pageSize}
