@@ -60,6 +60,10 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
     onClose();
   };
 
+  const InputStyles = {
+    input: 'w-full rounded-lg border',
+  };
+
   return (
     <Modal
       title="Kategoriyani tahrirlash"
@@ -91,7 +95,7 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
           name="name"
           rules={[{ required: true, message: 'Kategoriya nomini kiriting!' }]}
         >
-          <Input placeholder="Kategoriya nomini kiriting" />
+          <Input className={InputStyles.input} placeholder="Kategoriya nomini kiriting" />
         </Form.Item>
 
         <Form.Item
@@ -99,7 +103,7 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
           name="description"
           rules={[{ required: true, message: 'Tavsifni kiriting!' }]}
         >
-          <Input.TextArea placeholder="Tavsifni kiriting" />
+          <Input.TextArea className={InputStyles.input} placeholder="Tavsifni kiriting" />
         </Form.Item>
 
         {isMainCategory && (
@@ -109,7 +113,7 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
               name="questionCount"
               rules={[{ required: true, message: 'Savollar sonini kiriting!' }]}
             >
-              <Input type="number" min={0} placeholder="Savollar sonini kiriting" />
+              <Input className={InputStyles.input} type="number" min={0} placeholder="Savollar sonini kiriting" />
             </Form.Item>
 
             <Form.Item
@@ -117,7 +121,7 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
               name="extraQuestionCount"
               rules={[{ required: true, message: "Qo'shimcha savollar sonini kiriting!" }]}
             >
-              <Input type="number" min={0} placeholder="Qo'shimcha savollar sonini kiriting" />
+              <Input className={InputStyles.input} type="number" min={0} placeholder="Qo'shimcha savollar sonini kiriting" />
             </Form.Item>
 
             <Form.Item
@@ -125,7 +129,7 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
               name="durationTime"
               rules={[{ required: true, message: 'Davomiylikni kiriting!' }]}
             >
-              <Input type="number" min={0} placeholder="Davomiylik (daqiqa)" />
+              <Input className={InputStyles.input} type="number" min={0} placeholder="Davomiylik (daqiqa)" />
             </Form.Item>
 
             <Form.Item
@@ -133,7 +137,7 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
               name="retakeDate"
               rules={[{ required: true, message: 'Qayta qabul qilish sanasini kiriting!' }]}
             >
-              <Input type="number" min={0} placeholder="Qayta qabul qilish sanasi" />
+              <Input className={InputStyles.input} type="number" min={0} placeholder="Qayta qabul qilish sanasi" />
             </Form.Item>
           </>
         )}
