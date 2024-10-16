@@ -10,13 +10,11 @@ import { useQuery } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import LogoutModal from '@/components/Modal/LogoutModal';
 import AOS from 'aos';
-import { Tooltip } from 'flowbite-react';
+import EmailTooltip from '../Tooltip/EmailTooltip';
 
 const Navbar: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false);
-  const [isEmailTooltipVisible, setIsEmailTooltipVisible] =
-    useState<boolean>(false);
   const role = localStorage.getItem('role');
 
   const token = localStorage.getItem('token');
@@ -33,14 +31,6 @@ const Navbar: React.FC = () => {
     if (!getMe.isLoading) {
       setIsDropdownOpen(!isDropdownOpen);
     }
-  };
-
-  const handleMouseEnter = () => {
-    setIsEmailTooltipVisible(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsEmailTooltipVisible(false);
   };
 
   const openLogoutModal = () => {
@@ -122,15 +112,7 @@ const Navbar: React.FC = () => {
                 <div className="font-bold">{getUser?.fullName}</div>
 
                 {/* START TOOLTIP */}
-                <Tooltip content={getUser?.email} style='light'>
-                  <div
-                    className="text-md w-full text-left pt-5 pb-2 rounded"
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
-                  >
-                    {getUser?.email}
-                  </div>
-                </Tooltip>
+                <EmailTooltip email={getUser?.email} />
                 {/* END TOOLTIP */}
 
               </div>
