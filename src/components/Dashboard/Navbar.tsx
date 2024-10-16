@@ -3,13 +3,14 @@ import { config } from '@/helpers/functions/token';
 import { geodeziyaLogo } from '@/helpers/imports/images';
 import { GetMeResponse } from '@/helpers/types/GetMetype';
 import axios from 'axios';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaRegUser } from 'react-icons/fa';
 import { IoExitOutline } from 'react-icons/io5';
 import { useQuery } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import LogoutModal from '@/components/Modal/LogoutModal';
 import AOS from 'aos';
+import { Tooltip } from 'flowbite-react';
 
 const Navbar: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
@@ -57,7 +58,7 @@ const Navbar: React.FC = () => {
       return res.data?.body;
     },
     onSuccess: (data) => {
-      setGetUser(data); // Ma'lumotni state'ga saqlash
+      setGetUser(data);
     },
   });
 
@@ -89,9 +90,8 @@ const Navbar: React.FC = () => {
     <nav className="bg-white border-b shadow p-6 flex justify-end items-center">
       <div className="flex justify-between items-center">
         <div
-          className={`relative ${
-            getMe.isLoading ? 'pointer-events-none opacity-50' : ''
-          }`}
+          className={`relative ${getMe.isLoading ? 'pointer-events-none opacity-50' : ''
+            }`}
           onClick={toggleDropdown}
         >
           <div className="flex gap-4 items-center cursor-pointer">
@@ -103,8 +103,8 @@ const Navbar: React.FC = () => {
                 {getMe.isLoading
                   ? 'Loading...'
                   : (role === 'ROLE_SUPER_ADMIN' && 'super admin') ||
-                    (role === 'ROLE_TESTER' && 'tester') ||
-                    (role === 'ROLE_USER' && 'client')}
+                  (role === 'ROLE_TESTER' && 'tester') ||
+                  (role === 'ROLE_USER' && 'client')}
               </span>
             </div>
             <div>
@@ -120,29 +120,26 @@ const Navbar: React.FC = () => {
             <div className="absolute z-50 right-0 mt-2 w-56 bg-white border rounded-lg shadow-lg">
               <div className="p-4">
                 <div className="font-bold">{getUser?.fullName}</div>
-                <div
-                  className="text-md w-full text-left pt-5 pb-2 rounded"
-                  onMouseEnter={handleMouseEnter}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  {getUser?.email}
-                </div>
-                {isEmailTooltipVisible && (
+
+                {/* START TOOLTIP */}
+                <Tooltip content={getUser?.email} style='light'>
                   <div
-                    data-aos="fade-up"
-                    className="absolute bg-gray-200 p-2 top-[9px] left-3 rounded shadow-md"
+                    className="text-md w-full text-left pt-5 pb-2 rounded"
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
                   >
                     {getUser?.email}
                   </div>
-                )}
+                </Tooltip>
+                {/* END TOOLTIP */}
+
               </div>
               <hr />
               <div>
                 <Link to={'/profile'}>
                   <button
-                    className={`flex items-center gap-2 w-full text-left hover:bg-gray-100 px-3 py-5 rounded ${
-                      getMe.isLoading ? 'pointer-events-none opacity-50' : ''
-                    }`}
+                    className={`flex items-center gap-2 w-full text-left hover:bg-gray-100 px-3 py-5 rounded ${getMe.isLoading ? 'pointer-events-none opacity-50' : ''
+                      }`}
                     disabled={getMe.isLoading}
                   >
                     <FaRegUser />
@@ -150,9 +147,8 @@ const Navbar: React.FC = () => {
                   </button>
                 </Link>
                 <button
-                  className={`flex items-center gap-2 w-full text-left hover:bg-gray-100 px-3 py-5 rounded ${
-                    getMe.isLoading ? 'pointer-events-none opacity-50' : ''
-                  }`}
+                  className={`flex items-center gap-2 w-full text-left hover:bg-gray-100 px-3 py-5 rounded ${getMe.isLoading ? 'pointer-events-none opacity-50' : ''
+                    }`}
                   onClick={openLogoutModal}
                   disabled={getMe.isLoading}
                 >

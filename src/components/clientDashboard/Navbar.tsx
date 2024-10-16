@@ -9,6 +9,8 @@ import { IoExitOutline } from 'react-icons/io5';
 import { useQuery } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import LogoutModal from '@/components/Modal/LogoutModal';
+import { ProfileToolip } from '../toolip/ProfileToolip';
+import { Button, Tooltip } from 'flowbite-react';
 
 const Navbar: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -104,11 +106,17 @@ const Navbar: React.FC = () => {
               <div className="absolute z-50 right-0 mt-2 w-56 bg-white border rounded-lg shadow-lg">
                 <div className="p-4">
                   <div className="font-bold">{getMeData?.fullName}</div>
-                  <div className="text-gray-500 text-sm">
-                    {getMeData?.email && getMeData.email.length > 20
-                      ? `${getMeData.email.substring(0, 20)}...`
-                      : getMeData?.email}
-                  </div>
+
+                  {/* START TOOLTIP */}
+                  <Tooltip content={getMeData?.email} style="light">
+                    <div className="pt-4 pb-1 text-md">
+                      {getMeData?.email && getMeData.email.length > 20
+                        ? `${getMeData.email.substring(0, 20)}...`
+                        : getMeData?.email}
+                    </div>
+                  </Tooltip>
+                  {/* END TOOLTIP */}
+
                 </div>
                 <hr />
                 <div>
