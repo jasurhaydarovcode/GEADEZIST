@@ -149,7 +149,7 @@ function Category() {
 
             <CategoryAddModal onAddCategory={handleAddCategory} />
 
-            <div className="px-[20px] overflow-x-scroll w-[1170px] rounded-lg">
+            <div className="px-[20px] overflow-x-scroll w-full rounded-lg">
               <Table hoverable className="border-collapse">
                 <TableHead>
                   <TableHeadCell>T/P</TableHeadCell>

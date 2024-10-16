@@ -84,7 +84,7 @@
 |  2  |   Temur   |  client/test-start client/quiz   |
 |  3  |  Javlon   |  SignIn/SignUp Admin/all-user    |
 |  4  | Ulug'bek  |         admin dashboard          |
-|  6  |   Nodir   |          Admin Category          |
+|  6  |   Nodir   |  Admin Category / NotFont /      |
 | 10  |  Asilbek  |  Admin/Employees, Admin Adress   |
 | 13  | Asil aka  |      Test Uktam bilan birga      |
 |  7  |   Uktam   |     Admin /Test :`slow-work`     |
