@@ -330,7 +330,7 @@ function Address() {
                 onCancel={handleCancel}
                 maskClosable={false}
                 okText="Saqlash"
-                cancelText="Bekor qilish"
+                cancelText="Yopish"
                 okButtonProps={{ style: { backgroundColor: 'black', color: 'white' },}}
                 cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white' },}}
               >
@@ -397,7 +397,7 @@ function Address() {
               onOk={handleDelete}
               onCancel={handleDeleteCancel}
               okText="O'chirish"
-              cancelText="Bekor qilish"
+              cancelText="Yopish"
               maskClosable={false}
               okButtonProps={{style: { backgroundColor: 'black', color: 'white' },}}
               cancelButtonProps={{style: { backgroundColor: 'black', color: 'white' },}}
@@ -414,7 +414,7 @@ function Address() {
               onOk={handlePutOk}
               onCancel={handlePutCancel}
               okText="O'zgartirish"
-              cancelText="Bekor qilish"
+              cancelText="Yopish"
               maskClosable={false}
               okButtonProps={{ style: { backgroundColor: 'black', color: 'white' },}}
               cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white' },}}
@@ -486,7 +486,7 @@ function Address() {
                 onOk={tumanOk}
                 onCancel={tumanCancel}
                 okText="Saqlash"
-                cancelText="Bekor qilish"
+                cancelText="Yopish"
                 maskClosable={false}
                 okButtonProps={{ style: { backgroundColor: 'black', color: 'white' },}}
                 cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white' },}}
