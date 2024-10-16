@@ -17,7 +17,7 @@ import { useQuery, useQueryClient } from 'react-query';
 import defaultImage from '../assets/images/default.png';
 import { MdDelete, MdEdit } from 'react-icons/md';
 import CategoryAddModal from '@/components/Modal/CategoryAddModal';
-import CategoryEditModal from '@/components/Modal/CategoryEditModal'; // Edit modalini import qilamiz
+import CategoryEditModal from '@/components/Modal/CategoryEditModal';
 import CategoryDeleteModal from '@/components/Modal/CategoryDeleteModal';
 import TableLoading from '@/components/spinner/TableLoading';
 import { Pagination } from 'antd';
@@ -34,7 +34,7 @@ function Category() {
 
   const [selectedCategory, setSelectedCategory] = useState(null); // Tanlangan kategoriya
   const [editModalVisible, setEditModalVisible] = useState(false); // Tahrirlash modalining holati
-  const [imageModal, setImageModal] = useState({ open: false, imageUrl: '' });
+  const [imageModal, setImageModal] = useState({ open: false, imageUrl: '' }); // Rasm modalining holati
 
   // Kategoriyalarni olish
   const { data, refetch, isLoading } = useQuery(
@@ -58,11 +58,12 @@ function Category() {
     refetch();
   };
 
-  {/* Rasm modal */ }
+  // Rasm modalini ochish
   const handleImageClick = (imageUrl: string) => {
     setImageModal({ open: true, imageUrl }); // Rasm modalini ochish
   };
 
+  // Rasm modalini yopish
   const handleImageModalClose = () => {
     setImageModal({ open: false, imageUrl: '' }); // Modalni yopish
   };
@@ -78,18 +79,19 @@ function Category() {
     }
   };
 
-    // Pagination uchun funksiya
-    const handlePageChange = (page: number) => {
-      setCurrentPage(page);
-    };
+  // Pagination uchun funksiya
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
-
+  // Tahrirlash tugmasi
   const handleEditClick = (category: any) => {
     console.log('Tahrirlanayotgan kategoriya:', category);
     setSelectedCategory(category);
     setEditModalVisible(true); // Modalni ochish
   };
   
+  // Tahrirlash funksiyasi
   const handleEditCategory = async (updatedCategory: any) => {
     console.log('Yangilangan kategoriya:', updatedCategory);
     try {
