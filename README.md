@@ -83,7 +83,7 @@
 |  1  |   Jasur   |  client/profile admin/dash  |
 |  2  |   Temur   |  client/test-start client/quiz   |
 |  3  |  Javlon   |  SignIn/SignUp Admin/all-user    |
-|  4  | Ulug'bek  |         admin dashboard          |
+|  4  | Ulug'bek  |         admin dashboard admin/profile admin/test-logica        |
 |  6  |   Nodir   |          Admin Category          |
 | 10  |  Asilbek  |  Admin/Employees, Admin Adress   |
 | 13  | Asil aka  |      Test Uktam bilan birga      |

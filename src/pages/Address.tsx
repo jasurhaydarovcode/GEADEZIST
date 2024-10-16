@@ -255,16 +255,17 @@ function Address() {
       queryClient.invalidateQueries('getDistrict'); 
     },
     onError: (error) => {
-      message.error('Xatolik yuz berdi');
+      // message.error('Xatolik yuz berdi');
+      queryClient.invalidateQueries('getDistrict'); 
       console.log('Xatolik:', error);
     },
   });
 
   const tumanDeleteOk = () => {
-    if (selectedDistrict !== null) {
-      deleteTuman.mutate(selectedDistrict);
+    // if (selectedAddress !== null) {
+      deleteTuman.mutate();
       setTumanDelete(false);
-    }
+    // }
   };
   const tumanDeleteCancel = () => {
     setTumanDelete(false);
