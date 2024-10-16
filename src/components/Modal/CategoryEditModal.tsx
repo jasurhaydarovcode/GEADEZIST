@@ -1,4 +1,4 @@
-import { Modal, Form, Input, Button, Select } from 'antd';
+import { Modal, Form, Input, Button, Select, message } from 'antd';
 import { CategoryFormValues } from '../../helpers/types/CategoryFormValues';
 import { useEffect, useState } from 'react';
 
@@ -30,7 +30,6 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
         extraQuestionCount: category.extraQuestionCount || 0,
         durationTime: category.durationTime || 0,
         retakeDate: category.retakeDate || 0,
-        fileId: category.fileId || '',
       });
       setIsMainCategory(category.main || false);
     } else {
@@ -49,6 +48,18 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
     });
   };
 
+  const handleFormSubmit = (values: CategoryFormValues) => {
+    const updatedCategory = {
+      ...category,
+      ...values,
+      fileId: category?.fileId || '0', // Default value if no fileId is provided
+      main: values.categoryType === 'asosiy',
+    };
+    onEditCategory(updatedCategory);
+    message.success('Kategoriya tahrirlandi!'); // Show success toast
+    onClose();
+  };
+
   return (
     <Modal
       title="Kategoriyani tahrirlash"
@@ -62,15 +73,7 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
       <Form
         form={form}
         layout="vertical"
-        onFinish={(values: CategoryFormValues & { fileId?: string }) => {
-          const updatedCategory = {
-            ...category,
-            ...values,
-            main: values.categoryType === 'asosiy',
-          };
-          onEditCategory(updatedCategory);
-          onClose();
-        }}
+        onFinish={handleFormSubmit}
       >
         <Form.Item label="Kategoriya turi" name="categoryType">
           <Select
@@ -97,10 +100,6 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
           rules={[{ required: true, message: 'Tavsifni kiriting!' }]}
         >
           <Input.TextArea placeholder="Tavsifni kiriting" />
-        </Form.Item>
-
-        <Form.Item label="Kategoriya rasmi ID" name="fileId">
-          <Input type="number" placeholder="Rasm ID sini kiriting" min={0} />
         </Form.Item>
 
         {isMainCategory && (
