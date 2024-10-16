@@ -17,17 +17,55 @@ import { Answer } from '@/helpers/types/AddQuizType';
 function Test() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [datas, useDatas] = useState<FetchedTest[]>([]);
   const [testType, setTestType] = useState<string | null>(null);
-  const dataSource = datas;
   const quiz = useRef<HTMLInputElement | null>(null);
   const category = useRef<HTMLSelectElement | null>(null);
   const difficulty = useRef();
   const type = useRef();
   // bu kod qoshish btn uchun + -funck
   const [answers, setAnswers] = useState<Answer[]>([{ id: Date.now(), value: '' }]); // Start with one input
-  
-  
+  const [datas, useDatas] = useState<FetchedTest[]>([]);
+  const dataSource = datas;
+
+  // search
+  const [turi, setTuri] = useState<string | null>(null)
+  const [kategoriya, setKategoriya] = useState<string | null>(null)
+  const [nameSearch, setnameSearch] = useState<string | null>(null)
+
+
+  const searchTest = async (): Promise<void> => {
+    if (turi && kategoriya && nameSearch) {
+      try {
+        const response = await axios.get<ApiResponse>(
+          `${baseUrl}question/filter?questionName=${nameSearch}&categoryId=${kategoriya}&type=${turi}&page=0&size=10`,
+          config
+        );
+
+        // Map the data to your table format
+        const fetchedTests = response.data.body.body.map((item, index) => ({
+          key: item.id.toString(),
+          numer: index + 1,
+          testRasm: '.', // Haqiqiy rasm mavjud bo'lsa, o'zgartiring
+          savol: item.optionDtos[0]?.answer || '',
+          catygoria: item.categoryName || 'No category',
+          savolTuri: item.type,
+          qiyinligi: item.difficulty,
+          yaratganOdam: item.createdByName,
+        }));
+
+        useDatas(fetchedTests);
+        console.log(fetchedTests);
+      } catch (error) {
+        console.error('Error fetching search results:', error);
+      }
+    }
+  };
+
+
+  // search
+
+
+
   const handleAddAnswer = () => {
     setAnswers([...answers, { id: Date.now(), value: '' }]); // Add a new input
   };
@@ -43,7 +81,8 @@ function Test() {
   }
   useEffect(() => {
     removeInp();
-  }, [testType]);
+    searchTest()
+  }, [testType, turi, kategoriya, nameSearch]);
 
   const testData = async (): Promise<ApiResponse> => {
     const response = await axios.get<ApiResponse>(
@@ -77,12 +116,15 @@ function Test() {
 
   const categoryNames = [
     {
+      value: "SUM",
       name: "Hisoblangan natija"
     },
     {
+      value: "ONE_CHOICE",
       name: "Bir to'g'ri javobli test"
     },
     {
+      value: "ANY_CORECT",
       name: "Ko'p to'g'ri javobli test"
     }
   ]
@@ -345,6 +387,7 @@ function Test() {
                   <FcSearch className="absolute mt-4 ml-3 text-[20px]" />
                 </label>
                 <input
+                  onChange={(e) => setnameSearch(e.target.value)}
                   type="text"
                   id="inp1"
                   className="w-[200px] pl-10 border-gray-300 rounded-md h-[50px]"
@@ -353,44 +396,41 @@ function Test() {
               </div>
 
               <div className="flex">
-                <select className="w-[200px] text-gray-400 bg-white rounded-md h-[50px]">
+                <select onChange={(e) => setKategoriya(e.target.value)} className="w-[200px] text-gray-400 bg-white rounded-md h-[50px]">
                   <option disabled selected>
                     Kategoriyani tanlang
                   </option>
-                  <option value="" className="text text-black">
+                  <option value="7" className="text text-black">
                     Umumiy savollar
                   </option>
-                  <option value="" className="text text-black">
+                  <option value="8" className="text text-black">
                     Umumiy geodeziya
                   </option>
-                  <option value="" className="text text-black">
+                  <option value="9" className="text text-black">
                     Topografiya
                   </option>
-                  <option value="" className="text text-black">
+                  <option value="19" className="text text-black">
                     Oliy geodeziya
                   </option>
-                  <option value="" className="text text-black">
+                  <option value="11" className="text text-black">
                     Har qanday to'g'ri
                   </option>
                 </select>
               </div>
 
               <div className="flex">
-                <select className="w-[200px] text-gray-400 bg-white rounded-md h-[50px]">
+                <select onChange={(e) => setTuri(e.target.value)} className="w-[200px] text-gray-400 bg-white rounded-md h-[50px]">
                   <option disabled selected>
                     Turlarni tanlang
                   </option>
-                  <option value="calculated" className="text text-black">
+                  <option value="SUM" className="text text-black">
                     Hisoblangan natija
                   </option>
-                  <option value="single-choice" className="text text-black">
+                  <option value="ONE_CHOICE" className="text text-black">
                     Bir to'g'ri javobli test
                   </option>
-                  <option value="multiple-choice" className="text text-black">
+                  <option value="ANY_CORECT" className="text text-black">
                     Ko'p to'g'ri javobli test
-                  </option>
-                  <option value="" className="text text-black">
-                    Har qanday to'g'ri
                   </option>
                 </select>
               </div>
