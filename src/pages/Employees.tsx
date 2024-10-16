@@ -206,7 +206,7 @@ function Employees() {
             <div className="flex justify-between">
               <h1 className="text-3xl font-bold font-sans">Hodimlar</h1>
               <p className="font-sans text-gray-700">
-               <Link to={'/'}>Boshqaruv paneli </Link> 
+               <Link to={'/'}>Boshqaruv paneli / </Link> 
                 <span className="text-blue-700">Hodimlar</span>
               </p>
             </div>
