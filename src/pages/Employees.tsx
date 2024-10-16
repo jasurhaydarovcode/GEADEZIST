@@ -226,7 +226,7 @@ function Employees() {
                 onOk={handleOk}
                 onCancel={handleCancel}
                 okText="Saqlash"
-                cancelText="Bekor qilish"
+                cancelText="Yopish"
                 confirmLoading={confirmLoading}
                 maskClosable={false}
                 okButtonProps={{ style: { backgroundColor: 'black', color: 'white' },}}
