@@ -85,7 +85,7 @@
 |  3  |  Javlon   |  SignIn/SignUp Admin/all-user    |
 |  4  | Ulug'bek  |         admin dashboard admin/profile admin/test-logica auth/signup-logica     |
 |  6  |   Nodir   |          Admin Category          |
-| 10  |  Asilbek  |  Admin/Employees, Admin Adress   |
+| 10  |  Asilbek  |  Admin/Employees, Admin Adress, oferta   |
 | 13  | Asil aka  |      Test Uktam bilan birga      |
 |  7  |   Uktam   |     Admin /Test :`slow-work`     |
 |  8  | Shohjahon |`Not Working`:`undefined`|
