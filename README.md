@@ -94,7 +94,7 @@
 | 11  |  Dilshod  |`Not Working`|
 | 12  |  Bexruz   |`Not Working`|
 | 14  |   Ozod    |`Not Working`|
-| 15  | Feruzbek  |`Not Working`|
+| 15  | Feruzbek  |`Not Working`| 
 
 </div>
 
