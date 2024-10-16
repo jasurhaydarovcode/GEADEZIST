@@ -32,10 +32,10 @@ function User() {
     refetch();
   }, [refetch]);
 
-  const GetResult: UserNatijasi[] = usersData ?? [];
+  const GetResult: any[] = usersData ?? [];
 
   const filteredUsers = GetResult.filter((user) =>
-    `${user.firstName} ${user.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
+    `${user.fullName} ${user.phoneNumber}`.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -96,19 +96,23 @@ function User() {
                     <thead>
                       <tr className="bg-gray-100">
                         <th className="text-left px-4 py-7">T/P</th>
-                        <th className="text-left px-4 py-2">Ism</th>
-                        <th className="text-left px-4 py-2">familya</th>
-                        <th className="text-left px-4 py-2">elektron pochta</th>
-                        <th className="text-left px-4 py-2">xarakat</th>
+                        <th className="text-left px-4 py-2">Tuliq ismi</th>
+                        <th className="text-left px-4 py-2">Category</th>
+                        <th className="text-left px-4 py-2">Telefon</th>
+                        <th className="text-left px-4 py-2">Qayta test topshirish</th>
+                        <th className="text-left px-4 py-2">Status</th>
+                        <th className="text-left px-4 py-2">Xarakat</th>
                       </tr>
                     </thead>
                     <tbody>
                       {filteredUsers.map((item, index) => (
                         <tr key={index} className="border-b border-gray-300">
                           <td className="px-4 py-2">{index + 1}</td>
-                          <td className="px-4 py-2">{item.lastName}</td>
-                          <td className="px-4 py-2">{item.firstName}</td>
-                          <td className="px-4 py-2">{item.email}</td>
+                          <td className="px-4 py-2">{item.fullName}</td>
+                          <td className="px-4 py-2">{item.categoryName}</td>
+                          <td className="px-4 py-2">{item.phoneNumber}</td>
+                          <td className="px-4 py-2">{item.expiredDate}</td>
+                          <td className="px-4 py-2">{item.status}</td>
                           <td className="px-4 py-2">:</td>
                         </tr>
                       ))}
