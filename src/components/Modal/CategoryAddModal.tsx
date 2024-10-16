@@ -9,8 +9,9 @@ import {
   CategoryModalTypes,
 } from '@/helpers/types/CategoryModalTypes';
 
-const { Option } = Select;
 
+
+const { Option } = Select;
 const CategoryAddModal: React.FC<CategoryAddModalProps> = ({
   onAddCategory,
 }) => {
@@ -54,6 +55,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({
       },
     },
   );
+
 
   const resetForm = () => {
     setFormData({
@@ -131,9 +133,9 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({
           <div>
             <label className="block mb-2">Asosiy Turini Tanlang</label>
             <Select
-              value={formData.main ? 'asosiy' : 'asosiy-bolmagan'}
+              value={formData.main ? 'asosiy-bolmagan' : 'asosiy'}
               onChange={(value) =>
-                setFormData({ ...formData, main: value === 'asosiy' })
+                setFormData({ ...formData, main: value === 'asosiy-bolmagan' })
               }
               className="w-full"
             >

@@ -20,6 +20,9 @@ function Address() {
   const [selectedAddress, setSelectedAddress] = useState(null); // O'chiriladigan manzilni saqlash
   const [putOpen, setPutOpen] = useState(false);
   const [tumanModals, setTumanModals] = useState(false);
+  const [tumanDelete, setTumanDelete] = useState(false);
+  const [selectedDistrict, setSelectedDistrict] = useState(null); // O'chiriladigan manzilni saqlash
+
   // Pagination holati
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -29,6 +32,7 @@ function Address() {
   const [pageSizes, setPageSizes] = useState(10);
   const [totalItemss, setTotalItemss] = useState(0);
   const [hasError, setHasError] = useState(false); // Xatolik holati uchun
+  const [hasErrors, setHasErrors] = useState(false); // Xatolik holati uchun
   
   const showModal = () => {
     setOpen(true);
@@ -198,31 +202,30 @@ function Address() {
   };
 
   const tumanOk = () => {
-    postTuman.mutate();
-    setConfirmLoading(true);
+    if (tumanName.current!.value && regionId.current!.value) {
+      postTuman.mutate();
+      setConfirmLoading(true);
       setTimeout(() => {
         setTumanModals(false);
         setConfirmLoading(false);
-        // resetForm();
+        resetTumanForm();
       }, 2000);
-    // if (name) {
-    //   postAddressData.mutate();
-    //   setConfirmLoading(true);
-    //   setTimeout(() => {
-    //     setOpen(false);
-    //     setConfirmLoading(false);
-    //     resetForm();
-    //   }, 2000);
-    // }else{
-    //   setHasError(true);
-    //   message.error("Barcha maydonlarni to'ldiring");
-    // }
+    }else{
+      setHasErrors(true);
+      message.error("Barcha maydonlarni to'ldiring");
+    }
   };
-
   const tumanCancel = () => {
     setTumanModals(false);
-    // resetForm();
+    resetTumanForm();
   };
+  
+  const resetTumanForm = () => {
+    tumanName.current!.value = '';
+    regionId.current!.value = '';
+    setHasErrors(false);
+  };
+
 
   // Viloyatlarni list qilib get qilish
   const { data: region } = useQuery(
@@ -256,6 +259,31 @@ function Address() {
     },
   });
 
+  const tumanDeleteOk = () => {
+    if (selectedDistrict !== null) {
+      deleteTuman.mutate(selectedDistrict);
+      setTumanDelete(false);
+    }
+  };
+  const tumanDeleteCancel = () => {
+    setTumanDelete(false);
+    resetTumanForm();
+  };
+
+  // Manzillarni o'chirish
+  const deleteTuman = useMutation({
+    mutationFn: async (addressID) => {
+      await axios.delete(`${baseUrl}district/${addressID}`, config);
+    },
+    onSuccess: () => {
+      message.success("Manzil o'chirildi");
+      queryClient.invalidateQueries('getDistrict');
+    },
+    onError: (error) => {
+      message.error('Xatolik yuz berdi');
+      console.log('Xatolik:', error);
+    },
+  });
 
   return (
     <div>
@@ -334,13 +362,11 @@ function Address() {
                         <TableCell>{item.name}</TableCell>
                         <TableCell className="flex gap-1 text-xl cursor-pointer">
                           <MdEdit
-                            // onClick={() => {
-                            //   setSelectedAddress(item.id);
-                            //   setPutOpen(true);
-                            // }}
+                            className='hover:text-orange-400'
                             onClick={() => handlePutOpen(item)}
                           />
                           <MdDelete
+                          className='hover:text-red-700'
                             onClick={() => {setSelectedAddress(item.id); setDeleteModalVisible(true);}}
                           />
                         </TableCell>
@@ -366,6 +392,7 @@ function Address() {
               onCancel={handleDeleteCancel}
               okText="O'chirish"
               cancelText="Bekor qilish"
+              maskClosable={false}
               okButtonProps={{style: { backgroundColor: 'black', color: 'white' },}}
               cancelButtonProps={{style: { backgroundColor: 'black', color: 'white' },}}
             >
@@ -382,6 +409,7 @@ function Address() {
               onCancel={handlePutCancel}
               okText="O'zgartirish"
               cancelText="Bekor qilish"
+              maskClosable={false}
               okButtonProps={{ style: { backgroundColor: 'black', color: 'white' },}}
               cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white' },}}
             >
@@ -424,8 +452,13 @@ function Address() {
                         <TableCell>{item.name}</TableCell>
                         <TableCell>{item.regionName}</TableCell>
                         <TableCell className="flex gap-1 text-xl cursor-pointer">
-                          <MdEdit />
-                          <MdDelete />
+                          <MdEdit 
+                            className='hover:text-orange-400' 
+                          />
+                          <MdDelete 
+                            className='hover:text-red-700'
+                            onClick={() => {setSelectedDistrict(item.id); setDeleteModalVisible(true);}}
+                          />
                         </TableCell>
                       </TableRow>
                     ))}
@@ -448,11 +481,12 @@ function Address() {
                 onCancel={tumanCancel}
                 okText="Saqlash"
                 cancelText="Bekor qilish"
+                maskClosable={false}
                 okButtonProps={{ style: { backgroundColor: 'black', color: 'white' },}}
                 cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white' },}}
               >
                 <div className="mb-4">
-                  <select className="border w-full p-2 rounded" ref={regionId}>
+                  <select className={`border w-full p-2 rounded  ${hasErrors ? 'border-red-500' : 'border-gray-300'}`} ref={regionId} >
                     <option value="">Viloyatni tanlang</option>
                     {Array.isArray(region) &&
                       region.map((item) => (
@@ -467,11 +501,26 @@ function Address() {
                   <input
                     type="text"
                     placeholder="Tuman nomini kiriting"
-                    className="border w-full p-2 rounded"
+                    className={`border w-full p-2 rounded ${hasErrors ? 'border-red-500' : 'border-gray-300'}`}
                     ref={tumanName}
+                    
                   />
                 </div>
               </Modal>
+              <Modal
+                open={tumanDelete}
+                onOk={tumanDeleteOk}
+                onCancel={tumanDeleteCancel}
+                okText="O'chirish"
+                cancelText="Yopish"
+                maskClosable={false}
+                okButtonProps={{style: { backgroundColor: 'black', color: 'white' },}}
+                cancelButtonProps={{style: { backgroundColor: 'black', color: 'white' },}}
+              >
+                <p className="text-center text-xl my-5 font-semibold">
+                  Tumanni o'chirmoqchimisiz?
+                </p>
+            </Modal>
             </div>
           </div>
         )}
