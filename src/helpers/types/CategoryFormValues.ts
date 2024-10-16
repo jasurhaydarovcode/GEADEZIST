@@ -1,4 +1,3 @@
-// ... mavjud kod ...
 export interface CategoryFormValues {
   categoryType: string;
   name: string;
@@ -8,5 +7,3 @@ export interface CategoryFormValues {
   durationTime?: number;
   retakeDate?: number;
 }
-
-// ... qolgan kod o'zgarishsiz ...
