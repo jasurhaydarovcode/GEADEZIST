@@ -26,6 +26,8 @@ function Test() {
   const type = useRef();
   // bu kod qoshish btn uchun + -funck
   const [answers, setAnswers] = useState<Answer[]>([{ id: Date.now(), value: '' }]); // Start with one input
+  
+  
   const handleAddAnswer = () => {
     setAnswers([...answers, { id: Date.now(), value: '' }]); // Add a new input
   };
@@ -63,7 +65,7 @@ function Test() {
         key: item.id.toString(),
         numer: index + 1,
         testRasm: '.', // Haqiqiy rasm mavjud bo'lsa, o'zgartiring
-        savol: item.name,
+        savol: item.optionDtos[0]?.answer || '',
         catygoria: item.categoryName || 'No category',
         savolTuri: item.type,
         qiyinligi: item.difficulty,
@@ -122,10 +124,9 @@ function Test() {
     }, 2000);
   };
 
-
   // Post question
   const postQuestion = useMutation({
-    mutationFn: async () =>  {
+    mutationFn: async () => {
       const data = {
         "name": quiz.current?.value,
         "categoryId": category.current?.value,
@@ -171,8 +172,6 @@ function Test() {
             </Button>
 
 
-
-
             <Modal
               title="Savol qo'shish"
               open={open}
@@ -216,13 +215,13 @@ function Test() {
                   <option disabled selected>
                     Qiyinchilik darajasini tanlang
                   </option>
-                  <option value="" className="text text-black">
+                  <option value="HARD" className="text text-black">
                     Qiyin
                   </option>
-                  <option value="" className="text text-black">
+                  <option value="EASY" className="text text-black">
                     Oson
                   </option>
-                  <option value="" className="text text-black">
+                  <option value="NEDIUM" className="text text-black">
                     O'rta
                   </option>
                 </select>
