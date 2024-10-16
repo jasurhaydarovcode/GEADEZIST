@@ -80,7 +80,7 @@
 
 |  №  |   Name    |               Work               |
 | :-: | :-------: | :------------------------------: |
-|  1  |   Jasur   |  client/profile admin/dash  |
+|  1  |   Jasur   |  client/profile/dashboard admin/dash  |
 |  2  |   Temur   |  client/test-start client/quiz   |
 |  3  |  Javlon   |  SignIn/SignUp Admin/all-user    |
 |  4  | Ulug'bek  |  admin/dashboard/profile/test-logica auth/signup-logica  |
