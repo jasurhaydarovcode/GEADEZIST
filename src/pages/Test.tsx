@@ -4,7 +4,7 @@ import { config } from '@/helpers/functions/token';
 import {
   PlusCircleOutlined, EditOutlined, DeleteOutlined, EyeOutlined,
 } from '@ant-design/icons';
-import { Button, Modal, Table } from 'antd';
+import { Button, message, Modal, Table } from 'antd';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
@@ -13,6 +13,7 @@ import { useMutation, useQuery } from 'react-query';
 import { ApiResponse, FetchedTest } from '@/helpers/types/test';
 import TableLoading from '@/components/spinner/TableLoading';
 import { Answer } from '@/helpers/types/AddQuizType';
+import { AxiosError } from 'axios';
 
 function Test() {
   const [open, setOpen] = useState(false);
@@ -22,8 +23,52 @@ function Test() {
   const dataSource = datas;
   const quiz = useRef<HTMLInputElement | null>(null);
   const category = useRef<HTMLSelectElement | null>(null);
-  const difficulty = useRef();
-  const type = useRef();
+  const difficulty = useRef<HTMLSelectElement | null>(null);
+  const type = useRef<HTMLSelectElement | null>(null);
+  const oneAnswer = useRef<HTMLInputElement | null>(null);
+  const anyAnswer = useRef<HTMLInputElement | null>(null);
+
+
+  const testData = async (): Promise<ApiResponse> => {
+    const response = await axios.get<ApiResponse>(
+      `${baseUrl}question/filter?page=0&size=100`,
+      config,
+    );
+    return response.data;
+  };
+
+  const postQuestion = useMutation({
+    mutationFn: async () => {
+      const data = {
+        "name": quiz.current?.value,
+        "categoryId": category.current?.value,
+        "finiteError": 0,
+        "type": type.current?.value,
+        "difficulty": difficulty.current?.value,
+        "attachmentIds": [
+          0
+        ],
+        "optionDtos": [
+          {
+            "answer": oneAnswer.current?.value,
+            "isCorrect": true,
+            "file": 0
+          }
+        ]
+      }
+      
+      const res = await axios.post(PostQuestion, data, config);
+      return res.data;
+    },
+    onSuccess: (response) => {
+      console.log(response);
+      message.success("Savol muvaffaqiyatli qo'shildi");
+      testData();
+    },
+    onError: (error: AxiosError) => {
+      message.error(error.message);
+    }
+  });
   // bu kod qoshish btn uchun + -funck
   const [answers, setAnswers] = useState<Answer[]>([{ id: Date.now(), value: '' }]); // Start with one input
   const handleAddAnswer = () => {
@@ -43,13 +88,7 @@ function Test() {
     removeInp();
   }, [testType]);
 
-  const testData = async (): Promise<ApiResponse> => {
-    const response = await axios.get<ApiResponse>(
-      `${baseUrl}question/filter?page=0&size=100`,
-      config,
-    );
-    return response.data;
-  };
+ 
 
   // Use the data in a React component
   const { data, isLoading, isError, error } = useQuery<ApiResponse>({
@@ -75,13 +114,16 @@ function Test() {
 
   const categoryNames = [
     {
-      name: "Hisoblangan natija"
+      name: "Hisoblangan natija",
+      value: "SUM"
     },
     {
-      name: "Bir to'g'ri javobli test"
+      name: "Bir to'g'ri javobli test",
+      value: "ONE_CHOICE"
     },
     {
-      name: "Ko'p to'g'ri javobli test"
+      name: "Ko'p to'g'ri javobli test",
+      value: "MANY_CHOICE"
     }
   ]
   const columns = [
@@ -120,33 +162,12 @@ function Test() {
       setOpen(false);
       setConfirmLoading(false);
     }, 2000);
+    postQuestion.mutate();
   };
 
 
   // Post question
-  const postQuestion = useMutation({
-    mutationFn: async () =>  {
-      const data = {
-        "name": quiz.current?.value,
-        "categoryId": category.current?.value,
-        "finiteError": 0,
-        "type": "string",
-        "difficulty": "string",
-        "attachmentIds": [
-          0
-        ],
-        "optionDtos": [
-          {
-            "answer": "string",
-            "isCorrect": true,
-            "file": 0
-          }
-        ]
-      }
-      const res = await axios.post(PostQuestion, data, config);
-      return res.data;
-    }
-  });
+
   return (
     <div>
       <Helmet>
@@ -189,52 +210,52 @@ function Test() {
               </div>
 
               <div className="mb-4">
-                <select className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
+                <select ref={category} className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
                   <option disabled selected value="">
                     Kategoriyani tanlang
                   </option>
-                  <option value="" className="text text-black">
+                  <option value="1" className="text text-black">
                     Umumiy savollar
                   </option>
-                  <option value="" className="text text-black">
+                  <option value="2" className="text text-black">
                     Umumiy geodeziya
                   </option>
-                  <option value="" className="text text-black">
+                  <option value="3" className="text text-black">
                     Topografiya
                   </option>
-                  <option value="" className="text text-black">
+                  <option value="4" className="text text-black">
                     Oliy geodeziya
                   </option>
-                  <option value="" className="text text-black">
+                  <option value="5" className="text text-black">
                     Har qanday to'g'ri
                   </option>
                 </select>
               </div>
 
               <div className="mb-4">
-                <select className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
+                <select ref={difficulty} className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
                   <option disabled selected>
                     Qiyinchilik darajasini tanlang
                   </option>
-                  <option value="" className="text text-black">
+                  <option value="difficuld" className="text text-black">
                     Qiyin
                   </option>
-                  <option value="" className="text text-black">
+                  <option value="easy" className="text text-black">
                     Oson
                   </option>
-                  <option value="" className="text text-black">
+                  <option value="medium" className="text text-black">
                     O'rta
                   </option>
                 </select>
               </div>
 
               <div className="mb-4">
-                <select onChange={(e) => setTestType(e.target.value)} className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
+                <select ref={type} onChange={(e) => setTestType(e.target.value)} className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
                   <option disabled selected>
                     Turlarni tanlang
                   </option>
                   {categoryNames && categoryNames.length > 0 && categoryNames.map((category, key) => (
-                    <option key={key} value={category.name} className="text text-black">
+                    <option key={key} value={category.value} className="text text-black">
                       {category.name}
                     </option>
                   ))
@@ -244,24 +265,25 @@ function Test() {
 
               <div>
                 {testType !== null && ( // Show inputs only when testType is not null
-                  (testType === 'Hisoblangan natija' || testType === 'Ko\'p to\'g\'ri javobli test') &&
+                  (testType === 'SUM' || testType === 'MANY_CHOICE') &&
                   answers.map((answer: Answer, index) => (
                     <div key={answer.id} className="flex items-center mb-4 gap-2">
                       <input
                         type="checkbox"
-                        checked={testType === "Hisoblangan natija" || answer.checked} // Automatically checked for "Hisoblangan natija", manually for multiple answers
+                        checked={testType === "SUM" || answer.checked} // Automatically checked for "Hisoblangan natija", manually for multiple answers
                         onChange={(e) => {
-                          if (testType === "Ko'p to'g'ri javobli test") {
+                          if (testType === "MANY_CHOICE") {
                             const updatedAnswers = answers.map((ans, i) =>
                               i === index ? { ...ans, checked: e.target.checked } : ans
                             );
                             setAnswers(updatedAnswers);
                           }
                         }}
-                        disabled={testType === "Hisoblangan natija"} // Disable for "Hisoblangan natija"
+                        disabled={testType === "SUM"} // Disable for "Hisoblangan natija"
                         className="mr-3 accent-blue-500"
                       />
                       <input
+                        ref={oneAnswer}
                         placeholder="Savolning javoblarini kiriting"
                         className="border w-full p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
@@ -269,7 +291,7 @@ function Test() {
                         <input type="file" className="hidden" />
                         Choose file
                       </label>
-                      {testType === "Ko'p to'g'ri javobli test" && (
+                      {testType === "MANY_CHOICE" && (
                         <>
                           <button
                             onClick={handleRemoveAnswer}
@@ -292,11 +314,12 @@ function Test() {
 
               <div>
                 {testType !== null && ( // Show inputs only when testType is not null
-                  (testType === 'Bir to\'g\'ri javobli test') &&
+                  (testType === 'ONE_CHOICE') &&
                   answers.map((answer) => (
                     <div key={answer.id} className="flex items-center mb-4 gap-1">
                       <input type="radio" name='single-choice' className="mr-3 accent-blue-500" />
                       <input
+                        ref={anyAnswer}
                         placeholder="Savolning javoblarini kiriting"
                         className="border w-full p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
