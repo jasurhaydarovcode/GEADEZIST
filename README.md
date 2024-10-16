@@ -73,7 +73,10 @@
 | 14  |   Ozod    |  client/quiz, Timur bilan birga  |
 | 15  | Feruzbek  |   Admin Adress aka ukala bilan   |
 
-<h3 align="left">Working Developers</h3>
+<div align="left">
+<h3>Working Developers</h3>
+<p>Update date 16.10.2024</p>
+</div>
 
 |  №  |   Name    |               Work               |
 | :-: | :-------: | :------------------------------: |
