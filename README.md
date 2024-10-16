@@ -84,7 +84,7 @@
 |  6  |   Nodir   |          Admin Category          |
 | 10  |  Asilbek  |  Admin/Employees, Admin Adress   |
 | 13  | Asil aka  |      Test Uktam bilan birga      |
-|  7  |   Uktam   |     Admin /Test :`undefined`     |
+|  7  |   Uktam   |     Admin /Test :`slow-work`     |
 |  8  | Shohjahon |`Not Working`:`undefined`|
 |  5  | Asliddin  |`Not Working`|
 |  9  |  Alibek   |`Not Working`|
