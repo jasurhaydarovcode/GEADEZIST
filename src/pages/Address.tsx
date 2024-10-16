@@ -41,12 +41,12 @@ function Address() {
   const handleOk = () => {
     if (name) {
       postAddressData.mutate();
-      setConfirmLoading(true);
-      setTimeout(() => {
+      // setConfirmLoading(true);
+      // setTimeout(() => {
         setOpen(false);
         setConfirmLoading(false);
         resetForm();
-      }, 2000);
+      // }, 2000);
     }else{
       setHasError(true);
       message.error("Barcha maydonlarni to'ldiring");
@@ -134,7 +134,8 @@ function Address() {
       queryClient.invalidateQueries('getAddress'); 
     },
     onError: (error) => {
-      message.error('Xatolik yuz berdi');
+      // message.error('Xatolik yuz berdi');
+      queryClient.invalidateQueries('getAddress'); 
       console.log('Xatolik:', error);
     },
   });
@@ -301,7 +302,7 @@ function Address() {
             <div className="flex justify-between">
               <h1 className="text-3xl font-bold font-sans">Manzillar</h1>
               <p className="font-sans text-gray-700">
-               <Link to={'/'}>Boshqaruv paneli </Link> <span className="text-blue-700">Manzil</span>
+               <Link to={'/'}>Boshqaruv paneli /</Link> <span className="text-blue-700">Manzil</span>
               </p>
             </div>
             <div className="flex justify-between items-center">
