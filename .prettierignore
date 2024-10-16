@@ -2,3 +2,6 @@
 src/css/apply.css
 src/pages/Employees
 src/pages/Address
+src/pages/Dashboard
+src/pages/Test
+src/pages/Auth/SignIn
