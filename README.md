@@ -16,8 +16,8 @@
 
 
 #### Readme Language
-- [UZBEK]()
-- [RUS]()
+- [UZBEK](https://github.com/jasurhaydarovcode/GEADEZIST/blob/main/.github/README/README_UZ.md)
+- [RUS](https://github.com/jasurhaydarovcode/GEADEZIST/blob/main/.github/README/README_RU.md)
 
 
 
