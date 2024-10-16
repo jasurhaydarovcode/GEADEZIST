@@ -21,7 +21,6 @@ function Address() {
   const [putOpen, setPutOpen] = useState(false);
   const [tumanModals, setTumanModals] = useState(false);
   const [tumanDelete, setTumanDelete] = useState(false);
-  const [selectedDistrict, setSelectedDistrict] = useState(null); // O'chiriladigan manzilni saqlash
 
   // Pagination holati
   const [currentPage, setCurrentPage] = useState(1);
@@ -262,10 +261,10 @@ function Address() {
   });
 
   const tumanDeleteOk = () => {
-    // if (selectedAddress !== null) {
-      deleteTuman.mutate();
+    if (selectedAddress !== null) {
+      deleteTuman.mutate(selectedAddress);
       setTumanDelete(false);
-    // }
+    }
   };
   const tumanDeleteCancel = () => {
     setTumanDelete(false);
@@ -274,8 +273,8 @@ function Address() {
 
   // Manzillarni o'chirish
   const deleteTuman = useMutation({
-    mutationFn: async (selectedAddress) => {
-      await axios.delete(`${baseUrl}district/${selectedAddress}`, config);
+    mutationFn: async (addressId) => {
+      await axios.delete(`${baseUrl}district/${addressId}`, config);
     },
     onSuccess: () => {
       message.success("Manzil o'chirildi");
@@ -460,7 +459,7 @@ function Address() {
                           />
                           <MdDelete 
                             className='hover:text-red-700'
-                            onClick={() => {setSelectedDistrict(item.id); setDeleteModalVisible(true);}}
+                            onClick={() => {setSelectedAddress(item.id); setTumanDelete(true);}}
                           />
                         </TableCell>
                       </TableRow>
