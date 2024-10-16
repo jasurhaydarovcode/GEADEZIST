@@ -52,12 +52,15 @@
 
 <div align=center>
 
+
+<h3 align="left">Work</h3>
+
 |  №  |   Name    |               Work               |
 | :-: | :-------: | :------------------------------: |
 |  1  |   Jasur   |  client/dash/profile admin/dash  |
 |  2  |   Temur   |  client/test-start client/quiz   |
 |  3  |  Javlon   |          SignIn/SignUp           |
-|  4  | Ulug'bek  |   admin dashboard, Admin /Test   |
+|  4  | Ulug'bek  |          admin dashboard         |
 |  5  | Asliddin  |     Admin / Foydalanuvchilar     |
 |  6  |   Nodir   |          Admin Category          |
 |  7  |   Uktam   |           Admin /Test            |
@@ -69,6 +72,26 @@
 | 13  | Asil aka  |      Test Uktam bilan birga      |
 | 14  |   Ozod    |  client/quiz, Timur bilan birga  |
 | 15  | Feruzbek  |   Admin Adress aka ukala bilan   |
+
+<h3 align="left">Working Developers</h3>
+
+|  №  |   Name    |               Work               |
+| :-: | :-------: | :------------------------------: |
+|  1  |   Jasur   |  client/profile admin/dash  |
+|  2  |   Temur   |  client/test-start client/quiz   |
+|  3  |  Javlon   |  SignIn/SignUp Admin/all-user    |
+|  4  | Ulug'bek  |         admin dashboard          |
+|  6  |   Nodir   |          Admin Category          |
+| 10  |  Asilbek  |  Admin/Employees, Admin Adress   |
+| 13  | Asil aka  |      Test Uktam bilan birga      |
+|  7  |   Uktam   |     Admin /Test :`undefined`     |
+|  8  | Shohjahon |`Not Working`:`undefined`|
+|  5  | Asliddin  |`Not Working`|
+|  9  |  Alibek   |`Not Working`|
+| 11  |  Dilshod  |`Not Working`|
+| 12  |  Bexruz   |`Not Working`|
+| 14  |   Ozod    |`Not Working`|
+| 15  | Feruzbek  |`Not Working`|
 
 </div>
 
