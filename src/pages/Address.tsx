@@ -131,10 +131,12 @@ function Address() {
     onSuccess: () => { 
       message.success("Manzil qo'shildi"); 
       queryClient.invalidateQueries('getAddress'); 
+      queryClient.invalidateQueries('getRegion');
     },
     onError: (error) => {
       // message.error('Xatolik yuz berdi');
       queryClient.invalidateQueries('getAddress'); 
+      queryClient.invalidateQueries('getRegion');
       console.log('Xatolik:', error);
     },
   });
@@ -147,6 +149,8 @@ function Address() {
     onSuccess: () => {
       message.success("Manzil o'chirildi");
       queryClient.invalidateQueries('getAddress');
+      queryClient.invalidateQueries('getRegion'); 
+      queryClient.invalidateQueries('getDistrict');
     },
     onError: (error) => {
       message.error('Xatolik yuz berdi');
