@@ -274,8 +274,8 @@ function Address() {
 
   // Manzillarni o'chirish
   const deleteTuman = useMutation({
-    mutationFn: async (addressID) => {
-      await axios.delete(`${baseUrl}district/${addressID}`, config);
+    mutationFn: async (selectedAddress) => {
+      await axios.delete(`${baseUrl}district/${selectedAddress}`, config);
     },
     onSuccess: () => {
       message.success("Manzil o'chirildi");
@@ -285,7 +285,8 @@ function Address() {
       message.error('Xatolik yuz berdi');
       console.log('Xatolik:', error);
     },
-  });
+  });  
+
 
   return (
     <div>
