@@ -77,7 +77,7 @@ const Navbar: React.FC = () => {
   }, []);
 
   return (
-    <nav className="bg-white border-b shadow p-6 flex justify-end items-center">
+    <nav className="bg-white  border-b shadow p-6 flex justify-end items-center">
       <div className="flex justify-between items-center">
         <div
           className={`relative ${getMe.isLoading ? 'pointer-events-none opacity-50' : ''
