@@ -214,7 +214,7 @@ function Address() {
         setTumanModals(false);
         setConfirmLoading(false);
         resetTumanForm();
-      }, 2000);
+      }, 100);
     }else{
       setHasErrors(true);
       message.error("Barcha maydonlarni to'ldiring");
@@ -292,13 +292,44 @@ function Address() {
   }); 
   
   
+  const handleTumanEdit = (item: any) => {
+    setSelectedAddress(item.id);
+    tumanName.current!.value = item.name;
+    regionId.current!.value = item.regionId;
+    setTumanEdit(true);
+  };
 
-  const tumanEditOk = () => {
+  const handleTumanEditOk = () => {
+    if (selectedAddress !== null) {
+      updateTuman.mutate(selectedAddress);
       setTumanEdit(false);
+      resetTumanForm();
+    }
   };
-  const tumanEditCancel = () => {
+
+  const handleTumanEditCancel = () => {
     setTumanEdit(false);
+    resetTumanForm();
   };
+
+
+  const updateTuman = useMutation({
+    mutationFn: async () => {
+      await axios.put(
+        `${baseUrl}district`,
+        { name: tumanName.current?.value, regionId: regionId.current?.value },
+        config,
+      );
+    },
+    onSuccess: () => {
+      message.success('Tuman yangilandi');
+      queryClient.invalidateQueries(['getDistrict']);
+    },
+    onError: (error) => {
+      message.error('Xatolik yuz berdi');
+      console.log('Xatolik:', error);
+    },
+  });
 
 
   return (
@@ -470,7 +501,7 @@ function Address() {
                         <TableCell className="flex gap-1 text-xl cursor-pointer">
                           <MdEdit 
                             className='hover:text-orange-400' 
-                            onClick={() => setTumanEdit(true)}
+                            onClick={() => handleTumanEdit(item)}
                           />
                           <MdDelete 
                             className='hover:text-red-700'
@@ -539,15 +570,15 @@ function Address() {
                 </p>
             </Modal>
             <Modal
-              title="Tumanni o'zgartirish"
+              title="Tuman tahrirlash"
               open={tumanEdit}
-              onOk={tumanEditOk}
-              onCancel={tumanEditCancel}
-              okText="O'chirish"
+              onOk={handleTumanEditOk}
+              onCancel={handleTumanEditCancel}
+              okText="Saqlash"
               cancelText="Yopish"
               maskClosable={false}
-              okButtonProps={{style: { backgroundColor: 'black', color: 'white' },}}
-              cancelButtonProps={{style: { backgroundColor: 'black', color: 'white' },}}
+              okButtonProps={{ style: { backgroundColor: 'black', color: 'white' } }}
+              cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white' } }}
             >
               <div className="mb-4">
                 <select className={`border w-full p-2 rounded`} ref={regionId} >
@@ -563,10 +594,11 @@ function Address() {
               <div className="mb-4">
                 <input
                   type="text"
-                  value={name}
+                  // value={tumanName.current?.value}
                   placeholder="Viloyat nomini O'zgartiring"
                   className="border w-full p-2 rounded"
-                  onChange={(e) => setName(e.target.value)}
+                  ref={tumanName}
+                  // onChange={(e) => setName(e.target.value)}
                 />
               </div>
             </Modal>
