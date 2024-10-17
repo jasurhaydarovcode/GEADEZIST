@@ -133,32 +133,21 @@ function Category() {
 
             <CategoryAddModal onAddCategory={handleAddCategory} />
 
-            <div className="px-[20px] overflow-x-scroll w-full rounded-lg">
-              <Table hoverable className="border-collapse">
-                <TableHead>
+            <div className="overflow-x-auto">
+              <Table hoverable className="border-collapse table-auto">
+                <TableHead className="hidden sm:table-header-group">
+                  {/* Kichik ekranlar uchun sarlavhani yashirish */}
                   <TableHeadCell>T/P</TableHeadCell>
                   {[
                     { title: 'Kategoriya rasmi', tooltip: 'Kategoriya rasmi' },
                     { title: 'Kategoriya nomi', tooltip: 'Kategoriya nomi' },
                     { title: 'Tavsifi', tooltip: 'Tavsifi' },
                     { title: 'Umumiy savollar', tooltip: 'Umumiy savollar' },
-                    {
-                      title: "Qo'shimcha savollar",
-                      tooltip: "Qo'shimcha savollar",
-                    },
-                    {
-                      title: 'Davomiylik vaqti (daqiqa)',
-                      tooltip: 'Davomiylik vaqti(m)',
-                    },
-                    {
-                      title: 'Qayta qabul qilish sanasi',
-                      tooltip: 'Qayta qabul qilish sanasi',
-                    },
+                    { title: "Qo'shimcha savollar", tooltip: "Qo'shimcha savollar" },
+                    { title: 'Davomiylik vaqti (daqiqa)', tooltip: 'Davomiylik vaqti(m)' },
+                    { title: 'Qayta qabul qilish sanasi', tooltip: 'Qayta qabul qilish sanasi' },
                     { title: 'Yaratgan', tooltip: 'Yaratgan' },
-                    {
-                      title: 'Kategoriya holati',
-                      tooltip: 'Kategoriya holati',
-                    },
+                    { title: 'Kategoriya holati', tooltip: 'Kategoriya holati' },
                     { title: "O'chirgan", tooltip: "O'chirgan" },
                     { title: 'Xarakatlar', tooltip: 'Xarakatlar' },
                   ].map(({ title, tooltip }) => (
@@ -167,57 +156,90 @@ function Category() {
                     </TableHeadCell>
                   ))}
                 </TableHead>
-                <TableBody className="divide-y">
+
+                <TableBody className="block sm:table-row-group divide-y">
                   {Array.isArray(data) &&
                     data.map((item, index) => (
                       <TableRow
                         key={item.id}
-                        className="bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800"
+                        className="block sm:table-row mb-4 sm:mb-0 bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800"
                       >
-                        <TableCell>
-                          {(currentPage - 1) * pageSize + index + 1}
+                        {/* Har bir jadval qatori kichik ekranlarda blok bo'ladi */}
+                        <TableCell className="flex justify-between py-2 sm:table-cell">
+                          <span className="font-bold sm:hidden">T/P</span>
+                          <span>{(currentPage - 1) * pageSize + index + 1}</span>
                         </TableCell>
-                        <TableCell>
+
+                        <TableCell className="flex justify-between py-2 sm:table-cell">
+                          <span className="font-bold sm:hidden">Kategoriya rasmi</span>
                           <img
                             alt={item.name}
-                            src={
-                              item.fileId ? `${getImage}${item.fileId}` : defaultImage
-                            }
+                            src={item.fileId ? `${getImage}${item.fileId}` : defaultImage}
                             onClick={() =>
                               handleImageClick(
                                 item.fileId ? `${getImage}${item.fileId}` : defaultImage,
                               )
                             }
-                            className="border-[1px] border-gray-300 w-[43px] h-[43px] rounded-full object-cover hover:cursor-pointer"
+                            className="border-[1px] border-gray-300 w-10 h-10 rounded-full object-cover hover:cursor-pointer sm:w-[43px] sm:h-[43px]"
                           />
                         </TableCell>
-                        <TableCell>
+
+                        <TableCell className="flex justify-between py-2 sm:table-cell">
+                          <span className="font-bold sm:hidden">Kategoriya nomi</span>
                           <Tooltip title={item.name}>
-                            <span className="truncate w-[120px] inline-block">
+                            <span className="truncate w-[100px] sm:w-[120px] inline-block">
                               {item.name}
                             </span>
                           </Tooltip>
                         </TableCell>
-                        <TableCell>
+
+                        <TableCell className="flex justify-between py-2 sm:table-cell">
+                          <span className="font-bold sm:hidden">Tavsifi</span>
                           <Tooltip title={item.description}>
-                            <span className="truncate w-[120px] inline-block">
+                            <span className="truncate w-[100px] sm:w-[120px] inline-block">
                               {item.description}
                             </span>
                           </Tooltip>
                         </TableCell>
-                        <TableCell>{item.questionCount}</TableCell>
-                        <TableCell>{item.extraQuestionCount}</TableCell>
-                        <TableCell>{item.durationTime}</TableCell>
-                        <TableCell>{item.retakeDate}</TableCell>
-                        <TableCell>
+
+                        <TableCell className="flex justify-between py-2 sm:table-cell">
+                          <span className="font-bold sm:hidden">Umumiy savollar</span>
+                          <span>{item.questionCount}</span>
+                        </TableCell>
+
+                        <TableCell className="flex justify-between py-2 sm:table-cell">
+                          <span className="font-bold sm:hidden">Qo'shimcha savollar</span>
+                          <span>{item.extraQuestionCount}</span>
+                        </TableCell>
+
+                        <TableCell className="flex justify-between py-2 sm:table-cell">
+                          <span className="font-bold sm:hidden">Davomiylik vaqti (daqiqa)</span>
+                          <span>{item.durationTime}</span>
+                        </TableCell>
+
+                        <TableCell className="flex justify-between py-2 sm:table-cell">
+                          <span className="font-bold sm:hidden">Qayta qabul qilish sanasi</span>
+                          <span>{item.retakeDate}</span>
+                        </TableCell>
+
+                        <TableCell className="flex justify-between py-2 sm:table-cell">
+                          <span className="font-bold sm:hidden">Yaratgan</span>
                           <Tooltip title={item.createdBy}>
-                            <span className="truncate w-[120px] inline-block">
+                            <span className="truncate w-[100px] sm:w-[120px] inline-block">
                               {item.createdBy}
                             </span>
                           </Tooltip>
                         </TableCell>
-                        <TableCell>{item.deleted && "O'chirilgan"}</TableCell>
-                        <TableCell>{item.deletedBy}</TableCell>
+
+                        <TableCell className="flex justify-between py-2 sm:table-cell">
+                          <span className="font-bold sm:hidden">Kategoriya holati</span>
+                          <span>{item.deleted && "O'chirilgan"}</span>
+                        </TableCell>
+
+                        <TableCell className="flex justify-between py-2 sm:table-cell">
+                          <span className="font-bold sm:hidden">O'chirgan</span>
+                          <span>{item.deletedBy}</span>
+                        </TableCell>
 
                         {/* Xarakatlar */}
                         <TableCell className="flex gap-4 text-xl">
@@ -256,6 +278,7 @@ function Category() {
                     ))}
                 </TableBody>
               </Table>
+
             </div>
 
             {/* Pagination funksiyasi */}
