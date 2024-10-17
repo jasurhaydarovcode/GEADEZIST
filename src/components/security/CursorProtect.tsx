@@ -7,13 +7,20 @@ const CursorProtect: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     useEffect(() => {
         const handleMouseLeave = () => setIsProtected(true);
         const handleMouseEnter = () => setIsProtected(false);
-
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Window' + 'g') {
+                e.preventDefault();
+                setIsProtected(true);
+            }
+        };
+        document.addEventListener('keydown', handleKeyDown);
         document.addEventListener('mouseleave', handleMouseLeave);
         document.addEventListener('mouseenter', handleMouseEnter);
 
         return () => {
             document.removeEventListener('mouseleave', handleMouseLeave);
             document.removeEventListener('mouseenter', handleMouseEnter);
+            document.removeEventListener('keydown', handleKeyDown);
         };
     }, []);
 
@@ -28,7 +35,7 @@ const CursorProtect: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                         left: 0,
                         width: '100%',
                         height: '100%',
-                        backgroundColor: 'rgba(0, 0, 0, 0.92)',
+                        backgroundColor: 'rgb(0, 0, 0)',
                         zIndex: 9999,
                         display: 'flex',
                         justifyContent: 'center',
