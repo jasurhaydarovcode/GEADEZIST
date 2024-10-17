@@ -70,15 +70,6 @@ function Employees() {
     setOpen(false);
   };
 
-  // const handleOk = () => {
-  //   postAdmin.mutate();
-  //   setConfirmLoading(true);
-  //   setTimeout(() => {
-  //     setOpen(false);
-  //     setConfirmLoading(false);
-  //   }, 2000);
-  // };
-
   const handleOk = () => {
     if ( firstname.current!.value && lastname.current!.value && email.current!.value && phoneNumber.current!.value && password.current!.value && confirmPassword.current!.value &&  role.current!.value) {
       if (password.current!.value === confirmPassword.current!.value) {
