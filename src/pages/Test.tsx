@@ -25,37 +25,6 @@ function Test() {
   const [testType, setTestType] = useState<string | null>(null);
   const quiz = useRef<HTMLInputElement | null>(null);
   const category = useRef<HTMLSelectElement | null>(null);
-
-  const testData = async (): Promise<ApiResponse> => {
-    const response = await axios.get<ApiResponse>(
-      `${baseUrl}question/filter?page=0&size=100`,
-      config,
-    );
-    return response.data;
-  };
-
-  // Use the data in a React component
-  const { data, isLoading } = useQuery<ApiResponse>({
-    queryKey: ['tests'],
-    queryFn: testData,
-    onSuccess: (response) => {
-      console.log(response);
-
-      // Map the data to your table format
-      const fetchedTests = response.body.body.map((item, index) => ({
-        key: item.id.toString(),
-        numer: index + 1,
-        testRasm: '.', // Haqiqiy rasm mavjud bo'lsa, o'zgartiring
-        savol: item.optionDtos[0]?.answer || '',
-        catygoria: item.categoryName || 'No category',
-        savolTuri: item.type,
-        qiyinligi: item.difficulty,
-        yaratganOdam: item.createdByName,
-      }));
-      useDatas(fetchedTests);
-      setAllData(fetchedTests) // useDatas o'rniga setDatas
-    },
-  });
   // const difficulty = useRef();
   // const type = useRef();
   // bu kod qoshish btn uchun + -funck
@@ -64,7 +33,6 @@ function Test() {
   ]); // Start with one input
   // test get
   const [datas, useDatas] = useState<FetchedTest[]>([]);
-  const [allData, setAllData] = useState<FetchedTest[]>([]);
   const dataSource = datas;
 
   // search
@@ -101,15 +69,6 @@ function Test() {
       useEffect(() => {}, []);
     }
   };
-  const searchTest2 = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const searchText = e.target.value;
-    if (searchText) {
-      const filteredData = datas.filter(item => item.savol.toLowerCase().includes(searchText.toLowerCase()));
-      useDatas(filteredData);
-    } else {
-      useDatas(allData)
-    }
-  }
 
   // search
 
@@ -135,14 +94,14 @@ function Test() {
   const testData = async (): Promise<ApiResponse> => {
     const response = await axios.get<ApiResponse>(
       `${baseUrl}question/filter?page=0&size=100`,
-      config,
+      config
     );
     return response.data;
   };
 
   // Use the data in a React component
   const { data, isLoading } = useQuery<ApiResponse>({
-    queryKey: ['tests'],
+    queryKey: ["tests"],
     queryFn: testData,
     onSuccess: (response) => {
       console.log(response);
@@ -151,9 +110,9 @@ function Test() {
       const fetchedTests = response.body.body.map((item, index) => ({
         key: item.id.toString(),
         numer: index + 1,
-        testRasm: '.', // Haqiqiy rasm mavjud bo'lsa, o'zgartiring
-        savol: item.optionDtos[0]?.answer || '',
-        catygoria: item.categoryName || 'No category',
+        testRasm: ".", // Haqiqiy rasm mavjud bo'lsa, o'zgartiring
+        savol: item.optionDtos[0]?.answer || "",
+        catygoria: item.categoryName || "No category",
         savolTuri: item.type,
         qiyinligi: item.difficulty,
         yaratganOdam: item.createdByName,
@@ -161,7 +120,7 @@ function Test() {
       useDatas(fetchedTests); // useDatas o'rniga setDatas
     },
   });
-  console.log(data)
+  console.log(data);
 
   const categoryNames = [
     {
@@ -508,19 +467,19 @@ function Test() {
                 </div>
               </Modal>
 
-            <div className="flex justify-end pt-5 gap-5">
-              <div className="flex">
-                <label htmlFor="inp1">
-                  <FcSearch className="absolute mt-4 ml-3 text-[20px]" />
-                </label>
-                <input
-                  onChange={(e) => setnameSearch(e.target.value)}
-                  type="text"
-                  id="inp1"
-                  className="w-[200px] pl-10 border-gray-300 rounded-md h-[50px]"
-                  placeholder="Testni qidirish"
-                />
-              </div>
+              <div className="flex justify-end pt-5 gap-5">
+                <div className="flex">
+                  <label htmlFor="inp1">
+                    <FcSearch className="absolute mt-4 ml-3 text-[20px]" />
+                  </label>
+                  <input
+                    onChange={(e) => setnameSearch(e.target.value)}
+                    type="text"
+                    id="inp1"
+                    className="w-[200px] pl-10 border-gray-300 rounded-md h-[50px]"
+                    placeholder="Testni qidirish"
+                  />
+                </div>
 
                 <div className="flex">
                   <select
