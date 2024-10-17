@@ -294,9 +294,9 @@ function Address() {
   
   const handleTumanEdit = (item: any) => {
     setSelectedAddress(item.id);
+    setTumanEdit(true);
     tumanName.current!.value = item.name;
     regionId.current!.value = item.regionId;
-    setTumanEdit(true);
   };
 
   const handleTumanEditOk = () => {
@@ -312,7 +312,7 @@ function Address() {
     resetTumanForm();
   };
 
-
+  // tumanlarni put qilish
   const updateTuman = useMutation({
     mutationFn: async () => {
       await axios.put(
