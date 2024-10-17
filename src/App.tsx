@@ -28,7 +28,7 @@ import Category from './pages/Category';
 import Profile from './pages/Profile';
 import ConfirmSignUp from './pages/Auth/ConfirmSignUp';
 import TestVisual from './components/test/testVisual';
-import CursorProtect from './components/security/CursorProtect';
+// import CursorProtect from './components/security/CursorProtect';
 // import { useEffect } from 'react';
 
 function App() {
@@ -43,7 +43,7 @@ function App() {
   // })
 
   return (
-    <CursorProtect>
+    <>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="*" element={<NotFound />} />
@@ -79,7 +79,7 @@ function App() {
         <Route path="/inspector-admin" element={<InspectorAdmin />} />
         {/* END Admin Routes */}
       </Routes>
-    </CursorProtect>
+    </>
   );
 }
 
