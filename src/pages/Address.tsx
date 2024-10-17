@@ -326,7 +326,7 @@ function Address() {
       queryClient.invalidateQueries(['getDistrict']);
     },
     onError: (error) => {
-      message.error('Xatolik yuz berdi');
+      message.error('Xatolik yuz berdi'); 
       console.log('Xatolik:', error);
     },
   });
