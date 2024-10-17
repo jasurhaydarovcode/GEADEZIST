@@ -21,6 +21,7 @@ function Address() {
   const [putOpen, setPutOpen] = useState(false);
   const [tumanModals, setTumanModals] = useState(false);
   const [tumanDelete, setTumanDelete] = useState(false);
+  const [tumanEdit, setTumanEdit] = useState(false);
 
   // Pagination holati
   const [currentPage, setCurrentPage] = useState(1);
@@ -288,7 +289,16 @@ function Address() {
       message.error('Xatolik yuz berdi');
       console.log('Xatolik:', error);
     },
-  });  
+  }); 
+  
+  
+
+  const tumanEditOk = () => {
+      setTumanEdit(false);
+  };
+  const tumanEditCancel = () => {
+    setTumanEdit(false);
+  };
 
 
   return (
@@ -460,6 +470,7 @@ function Address() {
                         <TableCell className="flex gap-1 text-xl cursor-pointer">
                           <MdEdit 
                             className='hover:text-orange-400' 
+                            onClick={() => setTumanEdit(true)}
                           />
                           <MdDelete 
                             className='hover:text-red-700'
@@ -526,6 +537,38 @@ function Address() {
                 <p className="text-center text-xl my-5 font-semibold">
                   Tumanni o'chirmoqchimisiz?
                 </p>
+            </Modal>
+            <Modal
+              title="Tumanni o'zgartirish"
+              open={tumanEdit}
+              onOk={tumanEditOk}
+              onCancel={tumanEditCancel}
+              okText="O'chirish"
+              cancelText="Yopish"
+              maskClosable={false}
+              okButtonProps={{style: { backgroundColor: 'black', color: 'white' },}}
+              cancelButtonProps={{style: { backgroundColor: 'black', color: 'white' },}}
+            >
+              <div className="mb-4">
+                <select className={`border w-full p-2 rounded`} ref={regionId} >
+                  <option value="">Viloyatni tanlang</option>
+                  {Array.isArray(region) &&
+                    region.map((item) => (
+                      <option key={item.id} value={item.id} >
+                        {item.name}
+                      </option>
+                  ))}
+                </select>
+              </div>
+              <div className="mb-4">
+                <input
+                  type="text"
+                  value={name}
+                  placeholder="Viloyat nomini O'zgartiring"
+                  className="border w-full p-2 rounded"
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
             </Modal>
             </div>
           </div>
