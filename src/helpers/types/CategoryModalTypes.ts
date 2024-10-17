@@ -6,5 +6,4 @@ export interface CategoryModalTypes {
 
 export interface CategoryAddModalProps {
   onAddCategory: (newCategory: CategoryModalTypes) => void;
-  onCancel: () => void;
 }
