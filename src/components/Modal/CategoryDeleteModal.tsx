@@ -1,48 +1,54 @@
 import { useState } from 'react';
-import { Modal, Button, message } from 'antd'; // message komponenti qo'shildi
+import { Modal, message } from 'antd';
 import { MdDelete } from 'react-icons/md';
 
-function CategoryDeleteModal({
-  categoryId,
-  onDelete,
-}: {
-  categoryId: string;
-  onDelete: (id: string) => void;
-}) {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+interface DeleteButtonProps {
+  item: {
+    id: number;
+    deleted: boolean;
+  };
+  handleDeleteCategory: (id: number) => void;
+}
 
-  const showModal = () => {
-    setIsModalVisible(true);
+const DeleteButton = ({ item, handleDeleteCategory }: DeleteButtonProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modalni boshqarish uchun state
+
+  const showDeleteModal = () => {
+    if (!item.deleted) {
+      setIsModalOpen(true); // Modalni ochish
+    } else {
+      message.error("Bu kategoriya o'chirilgan, uni o'chirish mumkin emas.");
+    }
   };
 
   const handleOk = () => {
-    onDelete(categoryId); // Kategoriya o'chirish funksiyasi
-    setIsModalVisible(false);
+    handleDeleteCategory(item.id); // Kategoriya o'chirish
+    setIsModalOpen(false); // Modalni yopish
     message.success("Kategoriya muvaffaqiyatli o'chirildi!"); // Muvaffaqiyatli xabar
   };
 
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
+  const handleCancel = () => setIsModalOpen(false); // Modalni yopish
 
   return (
     <>
-      <Button className="cursor-pointer" onClick={showModal}>
-        <MdDelete />
-      </Button>
+      <button className="hover:text-red-600" onClick={showDeleteModal}>
+        <MdDelete className="text-[24px] duration-300" />
+      </button>
+
       <Modal
         title="Kategoriya o'chirish"
-        visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
+        open={isModalOpen} // Modal holati
+        onOk={handleOk} // O'chirish tasdiqlanganda
+        onCancel={handleCancel} // Bekor qilinsa
         okText="O'chirish"
-        cancelText="Yopish"
+        cancelText="Bekor qilish"
         centered
+        okButtonProps={{ danger: true }}
       >
         <p>Kategoriyani o'chirib tashlamoqchimisiz?</p>
       </Modal>
     </>
   );
-}
+};
 
-export default CategoryDeleteModal;
+export default DeleteButton;
