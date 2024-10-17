@@ -69,7 +69,7 @@ function Category() {
   };
 
   // Kategoriya o'chirish funksiyasi
-  const handleDeleteCategory = async (categoryId: string) => {
+  const handleDeleteCategory = async (categoryId: number) => {
     try {
       await axios.delete(`${baseUrl}category/${categoryId}`, config);
       queryClient.invalidateQueries(["getCategories"]);
@@ -292,23 +292,10 @@ function Category() {
                           </button>
 
                           {/* O'chirish tugmasi */}
-                          <button className="hover:text-red-600">
-                            <MdDelete
-                              className="text-[24px] duration-300"
-                              onClick={() => {
-                                if (!item.deleted) {
-                                  CategoryDeleteModal({
-                                    categoryId: item.id,
-                                    onDelete: handleDeleteCategory,
-                                  });
-                                } else {
-                                  message.error(
-                                    "Bu kategoriya o'chirilgan, uni o'chirish mumkin emas."
-                                  );
-                                }
-                              }}
-                            />
-                          </button>
+                          <CategoryDeleteModal
+                            item={item}
+                            handleDeleteCategory={handleDeleteCategory}
+                          />
                         </TableCell>
                       </TableRow>
                     ))}
