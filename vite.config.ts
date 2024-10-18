@@ -3,6 +3,7 @@
 import { defineConfig, Plugin, ViteDevServer } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
+import { log } from './src/helpers/lib/logger'
 
 // log start development plugin
 import vitePluginLogStart from './vite-plugin-log-start';
@@ -13,7 +14,26 @@ const GEADEZIST = (): Plugin => {
     name: 'console-plugin',
     configureServer(server: ViteDevServer) {
       server.httpServer?.once('listening', () => {
-        console.log('\n ODAMCHALAR, 🫠 🫠 😴\n GEADEZIST\n');
+        log(` \x1b[33m
+JSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJS
+JSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJS
+JSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJS
+JSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJS
+JSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJS
+JSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJS
+JSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJS
+JSJSJSJSJSJSJSJSJ    SJSJS      JSJSJS
+JSJSJSJSJSJSJSJSJ    SJS          JSJS
+JSJSJSJSJSJSJSJSJ    SJS     JSJSJSJSJ
+JSJSJSJSJSJSJSJSJ    SJSJ     SJSJSJSJ
+JSJSJSJSJSJSJSJSJ    SJSJSJ     SJSJSJ
+JSJSJSJSJSJSJSJSJ    SJSJSJSJ     JSJS
+JSJSJSJSJSJSJSJSJ    SJSJSJSJS     JSJ
+JSJSJSJSJS     JS    JSJS          JSJ
+JSJSJSJSJSJ          SJSJSJ      SJSJS
+JSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJS
+JSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJSJS
+\x1b[0m  \n ODAMCHALAR, 🫠 🫠 😴\n GEADEZIST\n`);
       });
     },
   };

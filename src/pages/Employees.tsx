@@ -1,28 +1,17 @@
 import Layout from '@/components/Dashboard/Layout';
-import { Button, Space, Switch, Pagination, Modal } from 'antd';
+import { Button, Space, Switch, Pagination, Modal, message } from 'antd';
 import { PlusCircleOutlined } from '@ant-design/icons';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeadCell,
-  TableRow,
-} from 'flowbite-react';
+import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow, } from 'flowbite-react';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import axios from 'axios';
-import {
-  activeEmployee,
-  addEmployee,
-  getEmployee,
-} from '@/helpers/api/baseUrl';
+import { activeEmployee, addEmployee, getEmployee,} from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import TableLoading from '@/components/spinner/TableLoading';
+import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import TableLoading from '@/components/spinner/TableLoading';
+import axios from 'axios';
+import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
 function Employees() {
   const [open, setOpen] = useState(false);
@@ -81,27 +70,10 @@ function Employees() {
     setOpen(false);
   };
 
-  // const handleOk = () => {
-  //   postAdmin.mutate();
-  //   setConfirmLoading(true);
-  //   setTimeout(() => {
-  //     setOpen(false);
-  //     setConfirmLoading(false);
-  //   }, 2000);
-  // };
-
   const handleOk = () => {
-    if (
-      firstname.current!.value &&
-      lastname.current!.value &&
-      email.current!.value &&
-      phoneNumber.current!.value &&
-      password.current!.value &&
-      confirmPassword.current!.value &&
-      role.current!.value
-    ) {
+    if ( firstname.current!.value && lastname.current!.value && email.current!.value && phoneNumber.current!.value && password.current!.value && confirmPassword.current!.value &&  role.current!.value) {
       if (password.current!.value === confirmPassword.current!.value) {
-        toast.error('Rolni tanlang');
+        // toast.error('Rolni tanlang');
         postAdmin.mutate(); // POST so'rovini yuborish
         setConfirmLoading(true);
         setTimeout(() => {
@@ -110,10 +82,10 @@ function Employees() {
           resetForm(); // Forma maydonlarini tozalash
         }, 2000);
       } else {
-        toast.error('Parollar mos kelmadi');
+        message.error('Parollar mos kelmadi');
       }
     } else {
-      toast.error("Barcha maydonlarni to'ldiring");
+      message.error("Barcha maydonlarni to'ldiring");
     }
   };
 
@@ -140,9 +112,9 @@ function Employees() {
         console.log('Yangilandi:', data);
         // queryClient.invalidateQueries('getADmin'); // Adminlar ma'lumotini qayta yuklash
         if (enabled === true) {
-          toast.success('Hodim muvaffaqiyatli ishga tushirildi');
+          message.success('Hodim muvaffaqiyatli ishga tushirildi');
         } else {
-          toast.success("Hodim muvaffaqiyatli o'chirildi");
+          message.success("Hodim muvaffaqiyatli o'chirildi");
         }
       },
       onError: (error) => {
@@ -185,18 +157,30 @@ function Employees() {
     },
     {
       onSuccess: () => {
-        toast.success("Hodim muvaffaqiyatli qo'shildi");
+        message.success("Hodim muvaffaqiyatli qo'shildi");
         setOpen(false);
         queryClient.invalidateQueries('getADmin');
         resetForm(); // Forma maydonlarini tozalash
       },
       onError: (error) => {
         console.error('Xatolik:', error);
-        toast.error("Hodim qo'shishda xatolik yuz berdi");
+        message.error("Hodim qo'shishda xatolik yuz berdi");
       },
     },
   );
 
+  const [showPassword, setShowPassword] = useState(false); // Parolni ko'rsatish/yashirish holati
+  const [showPasswords, setShowPasswords] = useState(false); // Parolni ko'rsatish/yashirish holati
+
+  // Parol ko'rsatish/yashirish funksiyasi
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+  const togglePasswordVisibilitys = () => {
+    setShowPasswords(!showPasswords);
+  };
+
+  
   return (
     <div>
       <Helmet>
@@ -213,7 +197,7 @@ function Employees() {
             <div className="flex justify-between">
               <h1 className="text-3xl font-bold font-sans">Hodimlar</h1>
               <p className="font-sans text-gray-700">
-                Boshqaruv paneli /{' '}
+               <Link to={'/'}>Boshqaruv paneli / </Link> 
                 <span className="text-blue-700">Hodimlar</span>
               </p>
             </div>
@@ -233,15 +217,11 @@ function Employees() {
                 onOk={handleOk}
                 onCancel={handleCancel}
                 okText="Saqlash"
-                cancelText="Bekor qilish"
+                cancelText="Yopish"
                 confirmLoading={confirmLoading}
                 maskClosable={false}
-                okButtonProps={{
-                  style: { backgroundColor: 'black', color: 'white' },
-                }}
-                cancelButtonProps={{
-                  style: { backgroundColor: 'black', color: 'white' },
-                }}
+                okButtonProps={{ style: { backgroundColor: 'black', color: 'white' },}}
+                cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white' },}}
               >
                 {/* Modal mazmuni */}
                 <div className="mb-4">
@@ -291,20 +271,33 @@ function Employees() {
                 <div className="mb-4">
                   <label className="block mb-2">Parolni kiriting</label>
                   <input
-                    type="password"
+                    type={showPassword ? 'text' : 'password'} // Parol ko'rsatish/yashirish holatiga qarab o'zgaradi
                     placeholder="Parolni kiriting"
                     className="border w-full p-2 rounded"
                     ref={password}
                   />
+                   {/* Iconka qo'shish */}
+                    <span
+                      className="absolute cursor-pointer right-10 top-[495px] text-lg" // Iconkani input ichiga joylash
+                      onClick={togglePasswordVisibility} // Iconkani bosganda parol ko'rinadi/yashirinadi
+                    >
+                      {showPassword ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+                    </span>
                 </div>
                 <div className="mb-4">
                   <label className="block mb-2">Parolni takrorlang</label>
                   <input
-                    type="password"
+                    type={showPasswords ? 'text' : 'password'}
                     placeholder="Parolni tasdiqlang"
                     className="border w-full p-2 rounded"
                     ref={confirmPassword}
                   />
+                    <span
+                      className="absolute cursor-pointer right-10 top-[585px] text-lg" // Iconkani input ichiga joylash
+                      onClick={togglePasswordVisibilitys} // Iconkani bosganda parol ko'rinadi/yashirinadi
+                    >
+                      {showPasswords ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+                    </span>
                 </div>
               </Modal>
             </div>
@@ -330,9 +323,7 @@ function Employees() {
                         <TableCell>{item.lastName}</TableCell>
                         <TableCell>{item.email}</TableCell>
                         <TableCell>
-                          {item.role === 'ROLE_ADMIN'
-                            ? 'Tekshiruvchi admin'
-                            : 'Tester admin'}
+                          {item.role === 'ROLE_ADMIN' ? 'Tekshiruvchi admin' : 'Tester admin'}
                         </TableCell>
                         <TableCell>
                           <Space direction="vertical">
@@ -340,9 +331,7 @@ function Employees() {
                               checkedChildren={<CheckOutlined />}
                               unCheckedChildren={<CloseOutlined />}
                               defaultChecked={item.enabled}
-                              onChange={(checked) =>
-                                handleSwitchChange(checked, item.id)
-                              }
+                              onChange={(checked) => handleSwitchChange(checked, item.id)}
                             />
                           </Space>
                         </TableCell>

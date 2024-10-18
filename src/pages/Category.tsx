@@ -1,11 +1,10 @@
-import Layout from '@/components/Dashboard/Layout';
-import { baseUrl, getImage } from '@/helpers/api/baseUrl';
-import { config } from '@/helpers/functions/token';
-import { message, Tooltip } from 'antd';
-import TooltipText from '@/components/TooltipText';
-import axios from 'axios';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import Layout from "@/components/Dashboard/Layout";
+import { baseUrl, getImage } from "@/helpers/api/baseUrl";
+import { config } from "@/helpers/functions/token";
+import { message, Tooltip } from "antd";
+import TooltipText from "@/components/TooltipText";
+import axios from "axios";
+import "react-toastify/dist/ReactToastify.css";
 import {
   Table,
   TableBody,
@@ -13,20 +12,19 @@ import {
   TableHead,
   TableHeadCell,
   TableRow,
-} from 'flowbite-react';
-import { useQuery, useQueryClient } from 'react-query';
-import defaultImage from '../assets/images/default.png';
-import { MdDelete, MdEdit } from 'react-icons/md';
-import CategoryAddModal from '@/components/Modal/CategoryAddModal';
-import CategoryEditModal from '@/components/Modal/CategoryEditModal'; // Edit modalini import qilamiz
-import CategoryDeleteModal from '@/components/Modal/CategoryDeleteModal';
-import TableLoading from '@/components/spinner/TableLoading';
-import { Pagination } from 'antd';
-import { useState } from 'react';
-import { Helmet } from 'react-helmet';
-import { Modal } from 'antd';
-import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
+} from "flowbite-react";
+import { useQuery, useQueryClient } from "react-query";
+import defaultImage from "../assets/images/default.png";
+import { MdDelete, MdEdit } from "react-icons/md";
+import CategoryAddModal from "@/components/Modal/CategoryAddModal";
+import CategoryEditModal from "@/components/Modal/CategoryEditModal";
+import CategoryDeleteModal from "@/components/Modal/CategoryDeleteModal";
+import TableLoading from "@/components/spinner/TableLoading";
+import { Pagination } from "antd";
+import { useState } from "react";
+import { Helmet } from "react-helmet";
+import { Modal } from "antd";
+import { Link } from "react-router-dom";
 
 function Category() {
   const queryClient = useQueryClient();
@@ -36,72 +34,77 @@ function Category() {
 
   const [selectedCategory, setSelectedCategory] = useState(null); // Tanlangan kategoriya
   const [editModalVisible, setEditModalVisible] = useState(false); // Tahrirlash modalining holati
-  const [imageModal, setImageModal] = useState({ open: false, imageUrl: '' });
+  const [imageModal, setImageModal] = useState({ open: false, imageUrl: "" }); // Rasm modalining holati
 
   // Kategoriyalarni olish
   const { data, refetch, isLoading } = useQuery(
-    ['getCategories', currentPage],
+    ["getCategories", currentPage],
     async () => {
       const res = await axios.get<{
         body: { body: any[]; totalElements: number };
       }>(
         `${baseUrl}category/page?page=${currentPage - 1}&size=${pageSize}`,
-        config,
+        config
       );
       setTotalItems(res.data.body.totalElements);
       return res.data.body.body;
     },
-    { keepPreviousData: true },
+    { keepPreviousData: true }
   );
 
   // Kategoriya qo'shish funksiyasi
   const handleAddCategory = () => {
-    queryClient.invalidateQueries(['getCategories']);
+    queryClient.invalidateQueries(["getCategories"]);
     refetch();
   };
 
-  {/* Rasm modal */ }
+  // Rasm modalini ochish
   const handleImageClick = (imageUrl: string) => {
     setImageModal({ open: true, imageUrl }); // Rasm modalini ochish
   };
 
+  // Rasm modalini yopish
   const handleImageModalClose = () => {
-    setImageModal({ open: false, imageUrl: '' }); // Modalni yopish
+    setImageModal({ open: false, imageUrl: "" }); // Modalni yopish
   };
 
   // Kategoriya o'chirish funksiyasi
   const handleDeleteCategory = async (categoryId: string) => {
     try {
       await axios.delete(`${baseUrl}category/${categoryId}`, config);
-      queryClient.invalidateQueries(['getCategories']);
+      queryClient.invalidateQueries(["getCategories"]);
       refetch();
     } catch (error) {
       console.error("Kategoriya o'chirishda xatolik yuz berdi", error);
     }
   };
 
-    // Pagination uchun funksiya
-    const handlePageChange = (page: number) => {
-      setCurrentPage(page);
-    };
-
-  const handleEditClick = (category: any) => {
-    setSelectedCategory(category); // Tanlangan kategoriyani saqlash
-    setEditModalVisible(true); // Tahrirlash modalini ochish
+  // Pagination uchun funksiya
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
-  // Kategoriyani yangilash funksiyasi
+  // Tahrirlash tugmasi
+  const handleEditClick = (category: any) => {
+    console.log("Tahrirlanayotgan kategoriya:", category);
+    setSelectedCategory(category);
+    setEditModalVisible(true); // Modalni ochish
+  };
+
+  // Tahrirlash funksiyasi
   const handleEditCategory = async (updatedCategory: any) => {
+    console.log("Yangilangan kategoriya:", updatedCategory);
     try {
-      await axios.put(
+      const response = await axios.put(
         `${baseUrl}category/${updatedCategory.id}`,
         updatedCategory,
-        config,
+        config
       );
-      queryClient.invalidateQueries(['getCategories']);
-      setEditModalVisible(false); // Tahrirlash modalini yopish
+      console.log("Tahrir javobi:", response);
+      queryClient.invalidateQueries(["getCategories"]);
+      setEditModalVisible(false); // Modalni yopish
     } catch (error) {
-      console.error('Kategoriyani yangilashda xatolik yuz berdi', error);
+      console.error("Kategoriyani yangilashda xatolik yuz berdi", error);
     }
   };
 
@@ -120,100 +123,155 @@ function Category() {
           <>
             <div className="flex justify-between px-[20px]">
               <h1 className="text-3xl font-bold font-sans">Kategoriya</h1>
-              <Link to="/dashboard">
-                <p className="font-sans text-gray-700">
-                  Boshqaruv paneli / <span className="text-blue-700">Kategoriya</span>
-                </p>
-              </Link>
+              <p className="font-sans text-gray-700">
+                <Link to="/dashboard">Boshqaruv paneli /</Link>
+                <span className="text-blue-700">Kategoriya</span>
+              </p>
             </div>
 
             <CategoryAddModal onAddCategory={handleAddCategory} />
 
-            <div className="px-[20px] overflow-x-scroll w-[1170px] rounded-lg">
-              <Table hoverable className="border-collapse">
-                <TableHead>
+            <div className="container mx-auto w-[1200px] px-[20px] overflow-x-auto">
+              <Table hoverable className="border-collapse table-auto">
+                <TableHead className="hidden sm:table-header-group">
+                  {/* Kichik ekranlar uchun sarlavhani yashirish */}
                   <TableHeadCell>T/P</TableHeadCell>
                   {[
-                    { title: 'Kategoriya rasmi', tooltip: 'Kategoriya rasmi' },
-                    { title: 'Kategoriya nomi', tooltip: 'Kategoriya nomi' },
-                    { title: 'Tavsifi', tooltip: 'Tavsifi' },
-                    { title: 'Umumiy savollar', tooltip: 'Umumiy savollar' },
+                    { title: "Kategoriya rasmi", tooltip: "Kategoriya rasmi" },
+                    { title: "Kategoriya nomi", tooltip: "Kategoriya nomi" },
+                    { title: "Tavsifi", tooltip: "Tavsifi" },
+                    { title: "Umumiy savollar", tooltip: "Umumiy savollar" },
                     {
                       title: "Qo'shimcha savollar",
                       tooltip: "Qo'shimcha savollar",
                     },
                     {
-                      title: 'Davomiylik vaqti (daqiqa)',
-                      tooltip: 'Davomiylik vaqti(m)',
+                      title: "Davomiylik vaqti (daqiqa)",
+                      tooltip: "Davomiylik vaqti(m)",
                     },
                     {
-                      title: 'Qayta qabul qilish sanasi',
-                      tooltip: 'Qayta qabul qilish sanasi',
+                      title: "Qayta qabul qilish sanasi",
+                      tooltip: "Qayta qabul qilish sanasi",
                     },
-                    { title: 'Yaratgan', tooltip: 'Yaratgan' },
+                    { title: "Yaratgan", tooltip: "Yaratgan" },
                     {
-                      title: 'Kategoriya holati',
-                      tooltip: 'Kategoriya holati',
+                      title: "Kategoriya holati",
+                      tooltip: "Kategoriya holati",
                     },
                     { title: "O'chirgan", tooltip: "O'chirgan" },
-                    { title: 'Xarakatlar', tooltip: 'Xarakatlar' },
+                    { title: "Xarakatlar", tooltip: "Xarakatlar" },
                   ].map(({ title, tooltip }) => (
                     <TableHeadCell key={title}>
                       <TooltipText title={tooltip}>{title}</TooltipText>
                     </TableHeadCell>
                   ))}
                 </TableHead>
-                <TableBody className="divide-y">
+
+                <TableBody className="block sm:table-row-group divide-y">
                   {Array.isArray(data) &&
                     data.map((item, index) => (
                       <TableRow
                         key={item.id}
-                        className="bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800"
+                        className="block sm:table-row mb-4 sm:mb-0 bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800"
                       >
-                        <TableCell>
-                          {(currentPage - 1) * pageSize + index + 1}
+                        {/* Har bir jadval qatori kichik ekranlarda blok bo'ladi */}
+                        <TableCell className="flex justify-between py-2 sm:table-cell">
+                          <span className="font-bold sm:hidden">T/P</span>
+                          <span>
+                            {(currentPage - 1) * pageSize + index + 1}
+                          </span>
                         </TableCell>
-                        <TableCell>
+
+                        <TableCell className="flex justify-between py-2 sm:table-cell">
+                          <span className="font-bold sm:hidden">
+                            Kategoriya rasmi
+                          </span>
                           <img
                             alt={item.name}
                             src={
-                              item.fileId ? `${getImage}${item.fileId}` : defaultImage
+                              item.fileId
+                                ? `${getImage}${item.fileId}`
+                                : defaultImage
                             }
                             onClick={() =>
                               handleImageClick(
-                                item.fileId ? `${getImage}${item.fileId}` : defaultImage,
+                                item.fileId
+                                  ? `${getImage}${item.fileId}`
+                                  : defaultImage
                               )
                             }
-                            className="border-[1px] border-gray-300 w-[43px] h-[43px] rounded-full object-cover hover:cursor-pointer"
+                            className="border-[1px] border-gray-300 w-10 h-10 rounded-full object-cover hover:cursor-pointer sm:w-[43px] sm:h-[43px]"
                           />
                         </TableCell>
-                        <TableCell>
+
+                        <TableCell className="flex justify-between py-2 sm:table-cell">
+                          <span className="font-bold sm:hidden">
+                            Kategoriya nomi
+                          </span>
                           <Tooltip title={item.name}>
-                            <span className="truncate w-[120px] inline-block">
+                            <span className="truncate w-[100px] sm:w-[120px] inline-block">
                               {item.name}
                             </span>
                           </Tooltip>
                         </TableCell>
-                        <TableCell>
+
+                        <TableCell className="flex justify-between py-2 sm:table-cell">
+                          <span className="font-bold sm:hidden">Tavsifi</span>
                           <Tooltip title={item.description}>
-                            <span className="truncate w-[120px] inline-block">
+                            <span className="truncate w-[100px] sm:w-[120px] inline-block">
                               {item.description}
                             </span>
                           </Tooltip>
                         </TableCell>
-                        <TableCell>{item.questionCount}</TableCell>
-                        <TableCell>{item.extraQuestionCount}</TableCell>
-                        <TableCell>{item.durationTime}</TableCell>
-                        <TableCell>{item.retakeDate}</TableCell>
-                        <TableCell>
+
+                        <TableCell className="flex justify-between py-2 sm:table-cell">
+                          <span className="font-bold sm:hidden">
+                            Umumiy savollar
+                          </span>
+                          <span>{item.questionCount}</span>
+                        </TableCell>
+
+                        <TableCell className="flex justify-between py-2 sm:table-cell">
+                          <span className="font-bold sm:hidden">
+                            Qo'shimcha savollar
+                          </span>
+                          <span>{item.extraQuestionCount}</span>
+                        </TableCell>
+
+                        <TableCell className="flex justify-between py-2 sm:table-cell">
+                          <span className="font-bold sm:hidden">
+                            Davomiylik vaqti (daqiqa)
+                          </span>
+                          <span>{item.durationTime}</span>
+                        </TableCell>
+
+                        <TableCell className="flex justify-between py-2 sm:table-cell">
+                          <span className="font-bold sm:hidden">
+                            Qayta qabul qilish sanasi
+                          </span>
+                          <span>{item.retakeDate}</span>
+                        </TableCell>
+
+                        <TableCell className="flex justify-between py-2 sm:table-cell">
+                          <span className="font-bold sm:hidden">Yaratgan</span>
                           <Tooltip title={item.createdBy}>
-                            <span className="truncate w-[120px] inline-block">
+                            <span className="truncate w-[100px] sm:w-[120px] inline-block">
                               {item.createdBy}
                             </span>
                           </Tooltip>
                         </TableCell>
-                        <TableCell>{item.deleted && "O'chirilgan"}</TableCell>
-                        <TableCell>{item.deletedBy}</TableCell>
+
+                        <TableCell className="flex justify-between py-2 sm:table-cell">
+                          <span className="font-bold sm:hidden">
+                            Kategoriya holati
+                          </span>
+                          <span>{item.deleted && "O'chirilgan"}</span>
+                        </TableCell>
+
+                        <TableCell className="flex justify-between py-2 sm:table-cell">
+                          <span className="font-bold sm:hidden">O'chirgan</span>
+                          <span>{item.deletedBy}</span>
+                        </TableCell>
 
                         {/* Xarakatlar */}
                         <TableCell className="flex gap-4 text-xl">
@@ -225,7 +283,9 @@ function Category() {
                                 if (!item.deleted) {
                                   handleEditClick(item);
                                 } else {
-                                  message.error("Bu kategoriya o'chirilgan, uni tahrirlash mumkin emas.");
+                                  message.error(
+                                    "Bu kategoriya o'chirilgan, uni tahrirlash mumkin emas."
+                                  );
                                 }
                               }}
                             />
@@ -237,12 +297,14 @@ function Category() {
                               className="text-[24px] duration-300"
                               onClick={() => {
                                 if (!item.deleted) {
-                                  CategoryDeleteModal({ 
-                                    categoryId: item.id, 
-                                    onDelete: handleDeleteCategory 
+                                  CategoryDeleteModal({
+                                    categoryId: item.id,
+                                    onDelete: handleDeleteCategory,
                                   });
                                 } else {
-                                  message.error("Bu kategoriya o'chirilgan, uni o'chirish mumkin emas.");
+                                  message.error(
+                                    "Bu kategoriya o'chirilgan, uni o'chirish mumkin emas."
+                                  );
                                 }
                               }}
                             />
@@ -255,7 +317,7 @@ function Category() {
             </div>
 
             {/* Pagination funksiyasi */}
-            <div className="flex justify-end mt-4 px-[20px]">
+            <div className="flex mt-4 px-[20px]">
               <Pagination
                 current={currentPage}
                 pageSize={pageSize}
@@ -284,7 +346,7 @@ function Category() {
           <img
             src={imageModal.imageUrl}
             alt="Kategoriya rasmi"
-            style={{ width: '100%' }}
+            style={{ width: "100%" }}
           />
         </Modal>
       </Layout>

@@ -1,5 +1,7 @@
 // types.ts
 
+import { Id } from "react-toastify";
+
 // Type for the options of a question
 export type OptionDto = {
   id: number;

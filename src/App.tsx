@@ -27,6 +27,8 @@ import InspectorAdmin from './pages/InspectorAdmin';
 import Category from './pages/Category';
 import Profile from './pages/Profile';
 import ConfirmSignUp from './pages/Auth/ConfirmSignUp';
+import TestVisual from './components/test/testVisual';
+// import CursorProtect from './components/security/CursorProtect';
 // import { useEffect } from 'react';
 
 function App() {
@@ -39,41 +41,45 @@ function App() {
   // useEffect(() => {
   //   LocalgaSaqlash()
   // })
+
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="*" element={<NotFound />} />
+    <>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="*" element={<NotFound />} />
 
-      {/* START Authentication Routes */}
-      <Route path="/auth/SignIn" element={<SignIn />} />
-      <Route path="/auth/SignUp" element={<SignUp />} />
-      <Route path="/auth/confirm" element={<Confirm />} />
-      <Route path="/auth/confirm-signup" element={<ConfirmSignUp />} />
-      <Route path="/auth/reset-password" element={<ResetPassword />} />
-      <Route path="/auth/offer" element={<Offer />} />
-      {/* END Authentication Routes */}
+        {/* START Authentication Routes */}
+        <Route path="/auth/SignIn" element={<SignIn />} />
+        <Route path="/auth/SignUp" element={<SignUp />} />
+        <Route path="/auth/confirm" element={<Confirm />} />
+        <Route path="/auth/confirm-signup" element={<ConfirmSignUp />} />
+        <Route path="/auth/reset-password" element={<ResetPassword />} />
+        <Route path="/auth/offer" element={<Offer />} />
+        {/* END Authentication Routes */}
 
-      {/* START Client Routes */}
-      <Route path="/client/dashboard" element={<ClientDashboard />} />
-      <Route path="/client/profile" element={<ClientProfile />} />
-      <Route path="/client/test/start" element={<ClientTestStart />} />
-      <Route path="/client/quiz/:id" element={<ClientQuiz />} />
-      {/* END Client Routes */}
+        {/* START Client Routes */}
+        <Route path="/client/dashboard" element={<ClientDashboard />} />
+        <Route path="/client/profile" element={<ClientProfile />} />
+        <Route path="/client/test/start" element={<ClientTestStart />} />
+        <Route path="/client/quiz/:id" element={<ClientQuiz />} />
+        {/* END Client Routes */}
 
-      {/* START Admin Routes */}
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/category" element={<Category />} />
-      <Route path="/test" element={<Test />} />
-      <Route path="/all-user" element={<AllUser />} />
-      <Route path="/user" element={<User />} />
-      <Route path="/archive/:id" element={<Archive />} />
-      <Route path="/employees" element={<Employees />} />
-      <Route path="/address" element={<Address />} />
-      <Route path="/profile" element={<Profile />} />
+        {/* START Admin Routes */}
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/category" element={<Category />} />
+        <Route path="/test" element={<Test />} />
+        <Route path="/tests" element={<TestVisual />} />
+        <Route path="/all-user" element={<AllUser />} />
+        <Route path="/user" element={<User />} />
+        <Route path="/archive/:id" element={<Archive />} />
+        <Route path="/employees" element={<Employees />} />
+        <Route path="/address" element={<Address />} />
+        <Route path="/profile" element={<Profile />} />
 
-      <Route path="/inspector-admin" element={<InspectorAdmin />} />
-      {/* END Admin Routes */}
-    </Routes>
+        <Route path="/inspector-admin" element={<InspectorAdmin />} />
+        {/* END Admin Routes */}
+      </Routes>
+    </>
   );
 }
 

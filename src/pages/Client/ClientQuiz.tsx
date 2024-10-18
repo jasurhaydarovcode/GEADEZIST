@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { config } from '@/helpers/functions/token';
 import { useNavigate } from 'react-router-dom';
 import { Select } from 'antd';
-import { ClientCategory } from '@/helpers/types/getClientCategory';
-import { baseUrl } from '@/helpers/api/baseUrl';
-import { config } from '@/helpers/functions/token';
 import { useQuery } from 'react-query';
+import { baseUrl } from '@/helpers/api/baseUrl';
+import { ClientQuizType } from '@/helpers/types/clientQuizType';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const TOTAL_TIME = 60 * 60; // 60 minutes (in seconds)
 const STORAGE_KEY = 'savedRemainingTime';
@@ -90,18 +91,20 @@ const QuestionPage: React.FC = () => {
     }
   };
 
-  const { error, data } = useQuery({
-    queryKey: ['getClientCategory'],
-    queryFn: async () => {
-      const res = await axios.get(`${baseUrl}category`, config);
-      return (res.data as { body?: { body: ClientCategory[] } }).body?.body;
-    },
-    onError: (error: AxiosError) => {
-      toast.error(error.message);
-    },
-  });
+  const [id, setId] = useState<number>(2);
 
-  if (error) return toast.error(error.message);
+  const fetchQuiz = async (id: number) => {
+    const response = await axios.get(`${baseUrl}quiz/start/${id}`, config);
+    return (response.data as { body: ClientQuizType[] })?.body;
+  };
+
+  const { data, error, isLoading } = useQuery(['quiz', id], () => fetchQuiz(id));
+
+  if (isLoading) return <div>Loading...</div>
+
+  if (error) return toast.error(`Error: ${(error as AxiosError).message}`)
+
+  if (!data) return toast.error('Quiz not found');
 
   return (
     <div className="px-9 space-y-12">
@@ -132,11 +135,10 @@ const QuestionPage: React.FC = () => {
             {answers.map((answer, index) => (
               <label
                 key={index}
-                className={`block p-4 border rounded-lg cursor-pointer ${
-                  selectedAnswers.includes(index)
-                    ? 'bg-blue-100 border-blue-500'
-                    : 'border-gray-300'
-                }`}
+                className={`block p-4 border rounded-lg cursor-pointer ${selectedAnswers.includes(index)
+                  ? 'bg-blue-100 border-blue-500'
+                  : 'border-gray-300'
+                  }`}
                 onClick={() => toggleAnswer(index)}
               >
                 <input

@@ -1,4 +1,4 @@
-import { Modal, Form, Input, Button, Select } from 'antd';
+import { Modal, Form, Input, Button, Select, message } from 'antd';
 import { CategoryFormValues } from '../../helpers/types/CategoryFormValues';
 import { useEffect, useState } from 'react';
 
@@ -7,8 +7,8 @@ const { Option } = Select;
 interface CategoryEditModalProps {
   visible: boolean;
   onClose: () => void;
-  onEditCategory: (values: CategoryFormValues) => void;
-  category: CategoryFormValues | null;
+  onEditCategory: (values: CategoryFormValues & { fileId?: string }) => void;
+  category: CategoryFormValues & { main?: boolean; fileId?: string } | null;
 }
 
 const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
@@ -20,11 +20,10 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
   const [form] = Form.useForm();
   const [isMainCategory, setIsMainCategory] = useState<boolean>(false);
 
-  // Load category data into form when the modal opens
   useEffect(() => {
     if (category) {
       form.setFieldsValue({
-        categoryType: category.categoryType || 'asosiy',
+        categoryType: category.main ? 'asosiy' : 'asosiy-bolmagan',
         name: category.name,
         description: category.description,
         questionCount: category.questionCount || 0,
@@ -32,14 +31,13 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
         durationTime: category.durationTime || 0,
         retakeDate: category.retakeDate || 0,
       });
-      setIsMainCategory(category.categoryType === 'asosiy');
+      setIsMainCategory(category.main || false);
     } else {
       form.resetFields();
       setIsMainCategory(false);
     }
   }, [category, form]);
 
-  // Handle category type change
   const handleCategoryTypeChange = (value: string) => {
     setIsMainCategory(value === 'asosiy');
     form.setFieldsValue({
@@ -50,6 +48,22 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
     });
   };
 
+  const handleFormSubmit = (values: CategoryFormValues) => {
+    const updatedCategory = {
+      ...category,
+      ...values,
+      fileId: category?.fileId || '0', // Default value if no fileId is provided
+      main: values.categoryType === 'asosiy',
+    };
+    onEditCategory(updatedCategory);
+    message.success('Kategoriya tahrirlandi!'); // Show success toast
+    onClose();
+  };
+
+  const InputStyles = {
+    input: 'w-full rounded-lg border',
+  };
+
   return (
     <Modal
       title="Kategoriyani tahrirlash"
@@ -57,21 +71,20 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
       visible={visible}
       onCancel={onClose}
       width={600}
-      okText="Saqlash"
-      cancelText="Yopish"
-      maskClosable={false}
       footer={null}
+      maskClosable={false}
     >
       <Form
         form={form}
         layout="vertical"
-        onFinish={(values: CategoryFormValues) => {
-          onEditCategory(values);
-          onClose();
-        }}
+        onFinish={handleFormSubmit}
       >
         <Form.Item label="Kategoriya turi" name="categoryType">
-          <Select onChange={handleCategoryTypeChange} className="w-full">
+          <Select
+            onChange={handleCategoryTypeChange}
+            className="w-full"
+            value={isMainCategory ? 'asosiy' : 'asosiy-bolmagan'}
+          >
             <Option value="asosiy">Asosiy kategoriya</Option>
             <Option value="asosiy-bolmagan">Asosiy bo'lmagan kategoriya</Option>
           </Select>
@@ -82,7 +95,7 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
           name="name"
           rules={[{ required: true, message: 'Kategoriya nomini kiriting!' }]}
         >
-          <Input placeholder="Kategoriya nomini kiriting" />
+          <Input className={InputStyles.input} placeholder="Kategoriya nomini kiriting" />
         </Form.Item>
 
         <Form.Item
@@ -90,10 +103,9 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
           name="description"
           rules={[{ required: true, message: 'Tavsifni kiriting!' }]}
         >
-          <Input.TextArea placeholder="Tavsifni kiriting" />
+          <Input.TextArea className={InputStyles.input} placeholder="Tavsifni kiriting" />
         </Form.Item>
 
-        {/* Additional fields visible only for 'asosiy' category */}
         {isMainCategory && (
           <>
             <Form.Item
@@ -101,28 +113,15 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
               name="questionCount"
               rules={[{ required: true, message: 'Savollar sonini kiriting!' }]}
             >
-              <Input
-                type="number"
-                placeholder="Umumiy savollar sonini kiriting"
-                min={0}
-              />
+              <Input className={InputStyles.input} type="number" min={0} placeholder="Savollar sonini kiriting" />
             </Form.Item>
 
             <Form.Item
               label="Qo'shimcha Savollar"
               name="extraQuestionCount"
-              rules={[
-                {
-                  required: true,
-                  message: "Qo'shimcha savollar sonini kiriting!",
-                },
-              ]}
+              rules={[{ required: true, message: "Qo'shimcha savollar sonini kiriting!" }]}
             >
-              <Input
-                type="number"
-                placeholder="Qo'shimcha savollar sonini kiriting"
-                min={0}
-              />
+              <Input className={InputStyles.input} type="number" min={0} placeholder="Qo'shimcha savollar sonini kiriting" />
             </Form.Item>
 
             <Form.Item
@@ -130,24 +129,15 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
               name="durationTime"
               rules={[{ required: true, message: 'Davomiylikni kiriting!' }]}
             >
-              <Input type="number" placeholder="Davomiylik (daqiqa)" min={0} />
+              <Input className={InputStyles.input} type="number" min={0} placeholder="Davomiylik (daqiqa)" />
             </Form.Item>
 
             <Form.Item
               label="Qayta qabul qilish sanasi"
               name="retakeDate"
-              rules={[
-                {
-                  required: true,
-                  message: 'Qayta qabul qilish sanasini kiriting!',
-                },
-              ]}
+              rules={[{ required: true, message: 'Qayta qabul qilish sanasini kiriting!' }]}
             >
-              <Input
-                type="number"
-                placeholder="Qayta qabul qilish sanasi"
-                min={0}
-              />
+              <Input className={InputStyles.input} type="number" min={0} placeholder="Qayta qabul qilish sanasi" />
             </Form.Item>
           </>
         )}

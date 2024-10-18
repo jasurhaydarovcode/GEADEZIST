@@ -9,12 +9,12 @@ import {
   Legend,
   ChartOptions,
 } from 'chart.js';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '@/components/Dashboard/Layout';
 import { PiUsersThreeFill } from 'react-icons/pi';
 import { FaArrowsAlt } from 'react-icons/fa';
 import { FaCircleQuestion } from 'react-icons/fa6';
-import {  MdOutlineCategory } from 'react-icons/md';
+import { MdOutlineCategory } from 'react-icons/md';
 import checkLogin from '@/helpers/functions/checkLogin';
 import { useQuery } from 'react-query';
 import { getClientAll, getStaticAll, } from '@/helpers/api/baseUrl';
@@ -49,6 +49,8 @@ const Dashboard = () => {
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [clientData, setClientData] = useState<GetClientAllResponse[] | null>(null);
+  const [allClientData, setAllClientData] = useState<GetClientAllResponse[] | null>(null)
   checkLogin();
   // dashboard statiastic
   const dashboardStatic = useQuery({
@@ -163,19 +165,16 @@ const Dashboard = () => {
   const getClient = useQuery({
     queryKey: ['getClient', config],
     queryFn: async () => {
-      const res = await axios.get<GetClientAllResponse[]>(`${getClientAll}page=${currentPage-1}&size=${pageSize}`, config);
+      const res = await axios.get<GetClientAllResponse[]>(`${getClientAll}page=${currentPage - 1}&size=${pageSize}`, config);
       const data = res.data.body.body as GetClientAllResponse[];
       return data;
     },
+    onSuccess: (data) => {
+      setClientData(data);
+      setAllClientData(data)
+    },
   });
 
-  useEffect(() => {
-    getClient.refetch();
-    // dashboardStatic.refetch()
-  }, []);
-
-  const clientData: GetClientAllResponse[] =
-    getClient.data as GetClientAllResponse[];
   // Options for the scatter chart
   const options: ChartOptions<'scatter'> = {
     responsive: true,
@@ -231,6 +230,20 @@ const Dashboard = () => {
     checkRoleClient();
   }, [checkRoleClient]);
 
+  const handleSearchUser = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const searchValue = e.target.value.toLowerCase();
+    if (searchValue === '') {
+      setClientData(allClientData)
+    } else {
+      const filteredData = allClientData?.filter((event) =>
+        event.email.toLowerCase().includes(searchValue) ||
+        event.firstName.toLowerCase().includes(searchValue) ||
+        event.lastName.toLowerCase().includes(searchValue)
+      )
+      setClientData(filteredData || [])
+    }
+  }
+
   return (
     <div>
       <Helmet>
@@ -277,18 +290,19 @@ const Dashboard = () => {
 
             {/* Filters */}
             <div className="flex flex-col md:flex-row justify-between mb-6">
-              <select
-                value={selectedCategory}
-                onChange={handleCategoryChange}
-                className="border p-2 rounded mb-4 md:mb-0 md:mr-4"
-              >
-                <option value="">Kategoriyani tanlang</option>
-                {categories.map((category, index) => (
-                  <option key={index} value={category}>
-                    {category}
-                  </option>
-                ))}
-              </select>
+
+              <div className="">
+                <label htmlFor="simple-search" className="sr-only">Search</label>
+                <div className="relative min-w-[400px]">
+                  <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                    </svg>
+                  </div>
+                  <input type="text" onChange={handleSearchUser} id="simple-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full ps-10 p-2.5 " placeholder="Search branch name..." required />
+                </div>
+              </div>
+
 
               <select
                 value={selectedRegion}
@@ -306,31 +320,36 @@ const Dashboard = () => {
 
             {/* User Table Section */}
             <div className="bg-white shadow rounded-lg p-4 overflow-x-auto">
-              <Table hoverable className="border-collapse">
+              <Table hoverable className="table-fixed w-full border-collapse">
                 <TableHead>
-                  <TableRow>
-                    <TableHeadCell>T/P</TableHeadCell>
-                    <TableHeadCell>Ism</TableHeadCell>
-                    <TableHeadCell>Familiya</TableHeadCell>
-                    <TableHeadCell>Email</TableHeadCell>
-                  </TableRow>
+                  <TableHeadCell className="w-1/12 text-center">T/P</TableHeadCell>
+                  <TableHeadCell className="w-3/12 text-left">Ism</TableHeadCell>
+                  <TableHeadCell className="w-3/12 text-left">Familiya</TableHeadCell>
+                  <TableHeadCell className="w-5/12 text-left">Email</TableHeadCell>
                 </TableHead>
                 <TableBody className="divide-y">
-                  {clientData && clientData.length > 0 &&
+                  {clientData && clientData.length > 0 ? (
                     clientData.map((item, index) => (
-                      <TableRow
-                        key={item.id}
-                        className="bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800"
-                      >
-                        <TableCell>{(currentPage - 1) * pageSize + index + 1}</TableCell>
-                        <TableCell>{item.firstName}</TableCell>
-                        <TableCell>{item.lastName}</TableCell>
-                        <TableCell>{item.email}</TableCell>
+                      <TableRow key={item.id} className="bg-white">
+                        <TableCell className="text-center p-4">
+                          {(currentPage - 1) * pageSize + index + 1}
+                        </TableCell>
+                        <TableCell className="text-left p-4">{item.firstName}</TableCell>
+                        <TableCell className="text-left p-4">{item.lastName}</TableCell>
+                        <TableCell className="text-left p-4">{item.email}</TableCell>
                       </TableRow>
-                    ))}
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={4} className="text-center py-4">
+                        Ma'lumotlar topilmadi
+                      </TableCell>
+                    </TableRow>
+                  )}
                 </TableBody>
               </Table>
             </div>
+
 
             <div className="flex justify-end mt-4 px-[20px]">
               <Pagination
