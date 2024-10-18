@@ -12,12 +12,11 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Modal from 'react-modal';
 import { IoMdCloseCircleOutline } from 'react-icons/io';
-import CheckLogin from '@/helpers/functions/checkLogin';
+import checkLogin from '@/helpers/functions/checkLogin';
 
 // Accessibility setup
 Modal.setAppElement('#root');
-CheckLogin();
-
+checkLogin
 function AllUser() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUser, setSelectedUser] = useState<UserNatijasi | null>(null);
@@ -33,7 +32,6 @@ function AllUser() {
       return data.body.body || [];
     },
     onError: (error) => {
-      console.log(error);
       toast.error('Xatolik yuz berdi');
     },
   });

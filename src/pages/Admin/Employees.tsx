@@ -15,7 +15,7 @@ import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import CheckLogin from '@/helpers/functions/checkLogin';
 
 function Employees() {
-  CheckLogin();
+  CheckLogin
 
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -112,7 +112,6 @@ function Employees() {
       // Mutatsiya muvaffaqiyatli bo'lganda, hodimlar ro'yxatini toastga chiqarish
       onSuccess: (data, variables) => {
         const { enabled } = variables;
-        console.log('Yangilandi:', data);
         // queryClient.invalidateQueries('getADmin'); // Adminlar ma'lumotini qayta yuklash
         if (enabled === true) {
           message.success('Hodim muvaffaqiyatli ishga tushirildi');

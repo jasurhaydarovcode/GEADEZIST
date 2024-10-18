@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 
 function Archive() {
-  CheckLogin();
+  CheckLogin
   const navigate = useNavigate();
   const checkRoleClient = useCallback(() => {
     const role = localStorage.getItem('role');

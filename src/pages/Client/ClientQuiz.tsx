@@ -16,7 +16,7 @@ interface AxiosError extends Error {
 }
 
 const QuestionPage: React.FC = () => {
-  CheckLogin();
+  CheckLogin
 
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
   const [remainingTime, setRemainingTime] = useState(TOTAL_TIME); // In seconds

@@ -17,7 +17,7 @@ const Card: React.FC<CardProps> = ({
   buttonText,
   status,
 }) => {
-  CheckLogin();
+  CheckLogin
   return (
     <div className="container bg-white rounded-md max-w-[450px]">
       <div className="border rounded-lg shadow-lg p-4">

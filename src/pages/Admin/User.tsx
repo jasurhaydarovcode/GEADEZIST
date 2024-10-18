@@ -13,7 +13,7 @@ import { message } from 'antd';
 import CheckLogin from '@/helpers/functions/checkLogin';
 
 function User() {
-  CheckLogin();
+  CheckLogin
 
   const [searchQuery, setSearchQuery] = useState(''); 
 
@@ -22,11 +22,9 @@ function User() {
     queryFn: async () => {
       const res = await axios.get(getResult, config);
       const data = res.data as { body: { body: UserNatijasi[] } };
-      console.log(data);
       return data.body?.body || [];
     },
     onError: (error) => {
-      console.log(error);
       message.error('Xatolik yuz berdi');
     },
   });

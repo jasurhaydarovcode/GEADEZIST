@@ -6,13 +6,13 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { FaRegUser } from 'react-icons/fa';
 import { IoExitOutline } from 'react-icons/io5';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import LogoutModal from '@/components/Modal/LogoutModal';
 import AOS from 'aos';
 import EmailTooltip from '../Tooltip/EmailTooltip';
-
 const Navbar: React.FC = () => {
+  const queryClient = useQueryClient();
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false);
   const role = localStorage.getItem('role');
@@ -20,11 +20,36 @@ const Navbar: React.FC = () => {
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
   const [getUser, setGetUser] = useState<GetMeResponse | null>(null);
+  
+  const getMe = useQuery({
+    queryKey: ['getMe', config],
+    queryFn: async () => {
+      interface GetMeResponse {
+        body: {
+          fullName: string;
+          email: string;
+        };
+      }
+      const res = await axios.get<GetMeResponse>(getMeUser, config);
+      return res.data?.body;
+    },
+    staleTime: 0, // Doim yangi ma'lumotni olish
+    cacheTime: 0, // Cache-ni saqlamaslik
+    onSuccess: (data) => {
+      setGetUser(data);
+    },
+  });
+  useEffect(() => {
+    if (token) {
+      queryClient.invalidateQueries('getMe');
+    }
+  }, [token]);
 
   const logOut = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
     navigate('/auth/SignIn');
+    queryClient.invalidateQueries('getMe');
   };
 
   const toggleDropdown = () => {
@@ -41,23 +66,6 @@ const Navbar: React.FC = () => {
     setIsLogoutModalOpen(false);
   };
 
-  const getMe = useQuery({
-    queryKey: ['getMe', config],
-    queryFn: async () => {
-      interface GetMeResponse {
-        body: {
-          fullName: string;
-          email: string;
-        };
-      }
-
-      const res = await axios.get<GetMeResponse>(getMeUser, config);
-      return res.data?.body;
-    },
-    onSuccess: (data) => {
-      setGetUser(data);
-    },
-  });
 
   // async function getMe() {
   //   interface GetMeResponse {

@@ -13,7 +13,7 @@ import CheckLogin from '@/helpers/functions/checkLogin';
 
 
 function Profile() {
-  CheckLogin();
+  CheckLogin
   const getUserProfile = useQuery({
     queryKey: ['getUserProfile', config],
     queryFn: async () => {

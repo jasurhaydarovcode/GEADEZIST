@@ -4,7 +4,7 @@ import Helmet from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 
 function Home() {
-  checkLogin();
+  checkLogin
   const navigate = useNavigate();
   function checkRoleClient() {
     const role = localStorage.getItem('role');

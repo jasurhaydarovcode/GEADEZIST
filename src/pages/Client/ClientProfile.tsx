@@ -12,7 +12,7 @@ import { Helmet } from 'react-helmet';
 import CheckLogin from '@/helpers/functions/checkLogin.tsx';
 
 function ClientProfile() {
-  CheckLogin();
+  CheckLogin
   const navigate = useNavigate();
 
   const checkRoleClient = useCallback(() => {

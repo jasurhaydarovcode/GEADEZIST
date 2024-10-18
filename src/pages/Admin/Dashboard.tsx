@@ -42,10 +42,9 @@ ChartJS.register(
 );
 
 const Dashboard = () => {
-  CheckLogin();
+  CheckLogin
 
   // states
-  const categories = ['Топография', 'Маркшейдерлик', 'Умумий Геодезия'];
   const regions = ['Toshkent', 'Samarqand', "Farg'ona"];
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedRegion, setSelectedRegion] = useState('');
@@ -54,14 +53,21 @@ const Dashboard = () => {
   const [pageSize, setPageSize] = useState(10);
   const [clientData, setClientData] = useState<GetClientAllResponse[] | null>(null);
   const [allClientData, setAllClientData] = useState<GetClientAllResponse[] | null>(null)
-  checkLogin();
-  // dashboard statiastic
+    // dashboard statiastic
   const dashboardStatic = useQuery({
     queryKey: ['dashboardStatic', config],
     queryFn: async () => {
-      const res = await axios.get(`${getStaticAll}`, config);
-      const data = res.data as { body: any }; // Type assertion added
-      return data.body;
+      interface GetStaticsAllResponse {
+        body: {
+          categoryCount: number;
+          questionCount: number;
+          resultCount: number;
+          userCount: number;
+        };
+      }
+      const res = await axios.get<GetStaticsAllResponse>(`${getStaticAll}`, config);
+      const data = res.data.body // Type assertion added
+      return data
     },
     onError: (error: any) => {
       toast.error(error.message);

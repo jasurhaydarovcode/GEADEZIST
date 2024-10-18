@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom';
 import CheckLogin from '@/helpers/functions/checkLogin';
 
 function Address() {
-  CheckLogin();
+  CheckLogin
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false); // O'chirish modalini ko'rsatish uchun
@@ -140,7 +140,7 @@ function Address() {
       // message.error('Xatolik yuz berdi');
       queryClient.invalidateQueries('getAddress'); 
       queryClient.invalidateQueries('getRegion');
-      console.log('Xatolik:', error);
+      
     },
   });
 
@@ -157,7 +157,7 @@ function Address() {
     },
     onError: (error) => {
       message.error('Xatolik yuz berdi');
-      console.log('Xatolik:', error);
+      
     },
   });
 
@@ -172,7 +172,7 @@ function Address() {
     },
     onError: (error) => {
       message.error('Xatolik yuz berdi');
-      console.log('Xatolik:', error);
+      
     },
   });
 
@@ -263,7 +263,6 @@ function Address() {
     onError: (error) => {
       // message.error('Xatolik yuz berdi');
       queryClient.invalidateQueries('getDistrict'); 
-      console.log('Xatolik:', error);
     },
   });
 
@@ -289,7 +288,6 @@ function Address() {
     },
     onError: (error) => {
       message.error('Xatolik yuz berdi');
-      console.log('Xatolik:', error);
     },
   }); 
   
@@ -329,7 +327,6 @@ function Address() {
     },
     onError: (error) => {
       message.error('Xatolik yuz berdi'); 
-      console.log('Xatolik:', error);
     },
   });
 
