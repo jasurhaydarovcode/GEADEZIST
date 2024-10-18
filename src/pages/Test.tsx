@@ -1,12 +1,7 @@
 import Layout from "@/components/Dashboard/Layout";
 import { baseUrl, PostQuestion } from "@/helpers/api/baseUrl";
 import { config } from "@/helpers/functions/token";
-import {
-  PlusCircleOutlined,
-  EditOutlined,
-  DeleteOutlined,
-  EyeOutlined,
-} from "@ant-design/icons";
+import {PlusCircleOutlined,EditOutlined,DeleteOutlined, EyeOutlined,} from "@ant-design/icons";
 import { Button, Modal, Table } from "antd";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
@@ -25,8 +20,7 @@ function Test() {
   const [testType, setTestType] = useState<string | null>(null);
   const quiz = useRef<HTMLInputElement | null>(null);
   const category = useRef<HTMLSelectElement | null>(null);
-  // const difficulty = useRef();
-  // const type = useRef();
+
   // bu kod qoshish btn uchun + -funck
   const [answers, setAnswers] = useState<Answer[]>([
     { id: Date.now(), value: "" },
@@ -41,34 +35,35 @@ function Test() {
   const [nameSearch, setnameSearch] = useState<string | null>(null);
 
   const searchTest = async (): Promise<void> => {
-    if (turi && kategoriya && nameSearch) {
-      try {
-        const response = await axios.get<ApiResponse>(
-          `${baseUrl}question/filter?questionName=${nameSearch}&categoryId=${kategoriya}&type=${turi}&page=0&size=10`,
-          config
-        );
+  if (nameSearch) {
+    try {
+      const response = await axios.get<ApiResponse>(
+        `${baseUrl}question/filter?questionName=${nameSearch}&page=0&size=10`,
+        config
+      );
 
-        // Map the data to your table format
-        const fetchedTests = response.data.body.body.map((item, index) => ({
-          key: item.id.toString(),
-          numer: index + 1,
-          testRasm: ".", // Haqiqiy rasm mavjud bo'lsa, o'zgartiring
-          savol: item.optionDtos[0]?.answer || "",
-          catygoria: item.categoryName || "No category",
-          savolTuri: item.type,
-          qiyinligi: item.difficulty,
-          yaratganOdam: item.createdByName,
-        }));
+      // Map the data to your table format
+      const fetchedQuestions = response.data.body.body.map((item, index) => ({
+        key: item.id.toString(),
+        numer: index + 1,
+        testRasm: ".", // Replace with actual image if available
+        savol: item.optionDtos[0]?.answer || "",
+        catygoria: item.categoryName || "No category",
+        savolTuri: item.type,
+        qiyinligi: item.difficulty,
+        yaratganOdam: item.createdByName,
+      }));
 
-        useDatas(fetchedTests);
-        console.log(fetchedTests);
-      } catch (error) {
-        console.error("Error fetching search results:", error);
-      }
-    } else {
-      useEffect(() => {}, []);
+      useDatas(fetchedQuestions); // Update your state
+      console.log(fetchedQuestions);
+    } catch (error) {
+      console.error("Error fetching search results:", error);
     }
-  };
+  } else {
+    // Reset data if no search term is provided
+    useDatas([]);
+  }
+};
 
   // search
 
@@ -163,18 +158,6 @@ function Test() {
     setDeleteModalVisible(false);
   };
 
-  // delete modal
-
-  // function putTest() {
-  //   const testData = async (): Promise<ApiResponse> => {
-  //     const response = await axios.get<ApiResponse>(
-  //       `${baseUrl}/question/{id}`,
-  //       config
-  //     );
-  //     return response.data;
-  //   };
-
-  // }
 
   const columns = [
     { title: "№", dataIndex: "numer", key: "numer" },
@@ -266,7 +249,7 @@ function Test() {
         ) : (
           <div className="p-5">
             <div className="flex justify-between px-[20px]">
-              <h1 className="text-3xl font-bold font-sans">Kategoriya</h1>
+              <h1 className="text-3xl font-bold font-sans">Test</h1>
               <p className="font-sans text-gray-700">
                 <Link to="/dashboard">Boshqaruv paneli /</Link>
                 <span className="text-blue-700">Test</span>
@@ -466,7 +449,9 @@ function Test() {
                   </h2>{" "}
                 </div>
               </Modal>
-
+              
+              
+              {/* search  input*/}
               <div className="flex justify-end pt-5 gap-5">
                 <div className="flex">
                   <label htmlFor="inp1">
@@ -481,6 +466,8 @@ function Test() {
                   />
                 </div>
 
+
+                {/* kategory input search */}
                 <div className="flex">
                   <select
                     onChange={(e) => setKategoriya(e.target.value)}
@@ -507,6 +494,7 @@ function Test() {
                   </select>
                 </div>
 
+                  {/* turni tanlash input search */}
                 <div className="flex">
                   <select
                     onChange={(e) => setTuri(e.target.value)}
@@ -528,7 +516,7 @@ function Test() {
                 </div>
               </div>
             </div>
-
+                    {/* table  */}
             <Table
               dataSource={dataSource}
               columns={columns}
@@ -537,6 +525,8 @@ function Test() {
           </div>
         )}
       </Layout>
+
+      {/* edit modal */}
       <Modal
         title="edit modal"
         open={editModal}
@@ -715,24 +705,7 @@ function Test() {
 
         {/* Qolgan kontentni modal ichiga joylang */}
       </Modal>
-      <Modal
-        // title="Viloyatni o'chirmoqchimisiz?"
-        open={deleteModalVisible}
-        onOk={editMod}
-        onCancel={handleDeleteCancel}
-        okText="O'chirish"
-        cancelText="Bekor qilish"
-        maskClosable={false}
-        okButtonProps={{ style: { backgroundColor: "black", color: "white" } }}
-        cancelButtonProps={{
-          style: { backgroundColor: "black", color: "white" },
-        }}
-      >
-        <p className="text-center text-xl my-5 font-semibold">
-          testni uchirmoqchimisz
-        </p>
-      </Modal>
-      {/* <TestVisual /> */}
+     
     </div>
   );
 }
