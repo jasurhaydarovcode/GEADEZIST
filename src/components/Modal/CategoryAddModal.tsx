@@ -226,6 +226,9 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
                   }
                   min="0"
                 />
+                {inputErrors.description && (
+              <span className="text-red-500 text-sm">Umumiy savollar sonini kiriting</span>
+            )}
               </div>
               <div>
                 <label className="block mb-2">Qo'shimcha savollar</label>
@@ -239,6 +242,9 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
                   }
                   min="0"
                 />
+              {inputErrors.description && (
+              <span className="text-red-500 text-sm">Qo'shimcha savollar sonini kiriting</span>
+            )}
               </div>
               <div>
                 <label className="block mb-2">Davomiylik (daqiqa)</label>
@@ -252,6 +258,9 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
                   }
                   min="0"
                 />
+                {inputErrors.description && (
+              <span className="text-red-500 text-sm">Davomiylik (daqiqa)ni kiriting</span>
+            )}
               </div>
               <div>
                 <label className="block mb-2">Qayta qabul qilish sanasi</label>
@@ -265,7 +274,10 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
                   }
                   min="0"
                 />
-              </div>
+                {inputErrors.description && (
+              <span className="text-red-500 text-sm">Qayta qabul qilish sanasini kiriting</span>
+            )}
+            </div>
             </>
           )}
         </div>
