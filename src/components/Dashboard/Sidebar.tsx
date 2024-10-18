@@ -68,7 +68,7 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 w-80 h-full bg-gray-100 px-4 py-8 transition-transform duration-300 ease-in-out z-50 
+        className={`fixed top-0 left-0 w-80 h-full bg-gray-100 px-4 py-8 transition-transform duration-300 ease-in-out max-md:z-40
                 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:static`}
       >
         {/* Close Button (only visible on mobile) */}
