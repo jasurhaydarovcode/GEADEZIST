@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Select } from 'antd';
-import { ClientCategory } from '@/helpers/types/getClientCategory';
-import { baseUrl } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import { useQuery } from 'react-query';
+import { baseUrl } from '@/helpers/api/baseUrl';
+import { ClientQuizType } from '@/helpers/types/clientQuizType';
 import { toast } from 'react-toastify';
 import CheckLogin from '@/helpers/functions/checkLogin';
 
@@ -93,18 +93,15 @@ const QuestionPage: React.FC = () => {
     }
   };
 
-  const { error, data } = useQuery({
-    queryKey: ['getClientCategory'],
-    queryFn: async () => {
-      const res = await axios.get(`${baseUrl}category`, config);
-      return (res.data as { body?: { body: ClientCategory[] } }).body?.body;
-    },
-    onError: (error: AxiosError) => {
-      toast.error(error.message);
-    },
-  });
 
-  if (error) return toast.error(error.message);
+
+  // useQuery to fetch data from server
+
+  const fetchQuestion = async (questionId: number) => {
+    const response = await axios.get(`${baseUrl}quiz/start/${questionId}`); // Replace with your actual API
+    return response.data;
+  };
+
 
   return (
     <div className="px-9 space-y-12">
