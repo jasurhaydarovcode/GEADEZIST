@@ -15,7 +15,7 @@ import {
 } from "flowbite-react";
 import { useQuery, useQueryClient } from "react-query";
 import defaultImage from "../assets/images/default.png";
-import { MdDelete, MdEdit } from "react-icons/md";
+import { MdEdit } from "react-icons/md";
 import CategoryAddModal from "@/components/Modal/CategoryAddModal";
 import CategoryEditModal from "@/components/Modal/CategoryEditModal";
 import CategoryDeleteModal from "@/components/Modal/CategoryDeleteModal";
@@ -69,7 +69,7 @@ function Category() {
   };
 
   // Kategoriya o'chirish funksiyasi
-  const handleDeleteCategory = async (categoryId: string) => {
+  const handleDeleteCategory = async (categoryId: number) => {
     try {
       await axios.delete(`${baseUrl}category/${categoryId}`, config);
       queryClient.invalidateQueries(["getCategories"]);
@@ -174,7 +174,6 @@ function Category() {
                         key={item.id}
                         className="block sm:table-row mb-4 sm:mb-0 bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800"
                       >
-                        {/* Har bir jadval qatori kichik ekranlarda blok bo'ladi */}
                         <TableCell className="flex justify-between py-2 sm:table-cell">
                           <span className="font-bold sm:hidden">T/P</span>
                           <span>
@@ -284,7 +283,7 @@ function Category() {
                                   handleEditClick(item);
                                 } else {
                                   message.error(
-                                    "Bu kategoriya o'chirilgan, uni tahrirlash mumkin emas."
+                                    "Bu kategoriya o'chirilgan, uni tahrirlash olmaysiz"
                                   );
                                 }
                               }}
@@ -292,23 +291,10 @@ function Category() {
                           </button>
 
                           {/* O'chirish tugmasi */}
-                          <button className="hover:text-red-600">
-                            <MdDelete
-                              className="text-[24px] duration-300"
-                              onClick={() => {
-                                if (!item.deleted) {
-                                  CategoryDeleteModal({
-                                    categoryId: item.id,
-                                    onDelete: handleDeleteCategory,
-                                  });
-                                } else {
-                                  message.error(
-                                    "Bu kategoriya o'chirilgan, uni o'chirish mumkin emas."
-                                  );
-                                }
-                              }}
-                            />
-                          </button>
+                          <CategoryDeleteModal
+                            item={item}
+                            handleDeleteCategory={handleDeleteCategory}
+                          />
                         </TableCell>
                       </TableRow>
                     ))}

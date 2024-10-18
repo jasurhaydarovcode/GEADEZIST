@@ -4,7 +4,7 @@
 <!-- # GEADEZIST -->
 </div>
 
-### Table of Contents
+### Manually
 
 1. [Technology](#technologies)
 2. [Developer documentation](#developers)
@@ -15,7 +15,7 @@
 
 
 
-#### Readme Language
+#### Choose Language
 - [UZBEK](https://github.com/jasurhaydarovcode/GEADEZIST/blob/main/.github/README/README_UZ.md)
 - [RUS](https://github.com/jasurhaydarovcode/GEADEZIST/blob/main/.github/README/README_RU.md)
 
@@ -65,27 +65,27 @@
 
 <h3 align="left">Work</h3>
 
-|  №  |   Name    |               Work               |
-| :-: | :-------: | :------------------------------: |
-|  1  |   Jasur   |  client/dash/profile admin/dash  |
-|  2  |   Temur   |  client/test-start client/quiz   |
-|  3  |  Javlon   |          SignIn/SignUp           |
+|  №  |   Name    |               Work               | 
+| :-: | :-------: | :------------------------------: | 
+|  1  |   Jasur   |  client/dash/profile admin/dash  | 
+|  2  |   Temur   |  client/test-start client/quiz   | 
+|  3  |  Javlon   |          SignIn/SignUp           | 
 |  4  | Ulug'bek  |          admin dashboard         |
-|  5  | Asliddin  |     Admin / Foydalanuvchilar     |
-|  6  |   Nodir   |          Admin Category          |
-|  7  |   Uktam   |           Admin /Test            |
-|  8  | Shohjahon |       Admin Users Natijasi       |
-|  9  |  Alibek   |           Client Edit            |
-| 10  |  Asilbek  |  Admin/Employees, Admin Adress   |
-| 11  |  Dilshod  |           Admin Adress           |
-| 12  |  Bexruz   | Admin Adress Dilshod bilan birga |
-| 13  | Asil aka  |      Test Uktam bilan birga      |
-| 14  |   Ozod    |  client/quiz, Timur bilan birga  |
-| 15  | Feruzbek  |   Admin Adress aka ukala bilan   |
+|  5  | Asliddin  |     Admin / Foydalanuvchilar     | 
+|  6  |   Nodir   |          Admin Category          | 
+|  7  |   Uktam   |           Admin /Test            | 
+|  8  | Shohjahon |       Admin Users Natijasi       | 
+|  9  |  Alibek   |           Client Edit            | 
+| 10  |  Asilbek  |  Admin/Employees, Admin Adress   | 
+| 11  |  Dilshod  |           Admin Adress           | 
+| 12  |  Bexruz   | Admin Adress Dilshod bilan birga | 
+| 13  | Asil aka  |      Test Uktam bilan birga      | 
+| 14  |   Ozod    |  client/quiz, Timur bilan birga  | 
+| 15  | Feruzbek  |   Admin Adress aka ukala bilan   | 
 
 <div align="left">
 <h3>Working Developers</h3>
-<p>Update date 16.10.2024</p>
+<p>Update date 18.10.2024</p>
 </div>
 
 |  №  |   Name    |               Work               |
@@ -104,7 +104,7 @@
 | 11  |  Dilshod  |`Not Working`|
 | 12  |  Bexruz   |`Not Working`|
 | 14  |   Ozod    |`Not Working`|
-| 15  | Feruzbek  |`Not Working`| 
+| 15  | Feruzbek  |`Not Working`|
 
 </div>
 
@@ -126,14 +126,14 @@ Make sure you have the following installed on your system:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/jasurhaydarovcode/GEADEZIST.git
+   git clone https://github.com/jasurhaydarovcode/GEADEZIST.git 
    ```
 
 2. Navigate into the project directory:
 
-   ```bash
-   cd GEADEZIST
-   ```
+   ```bash 
+   cd GEADEZIST 
+   ``` 
 
 3. Install the dependencies:
 
@@ -152,5 +152,5 @@ That's it! The project should now be running locally.
 
 ## Login
 
-For `privacy` and `security` reasons, logins and passwords cannot be disclosed
+For `privacy` and `security` reasons, logins and passwords cannot be disclosed 
 
