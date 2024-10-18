@@ -276,7 +276,7 @@ function Address() {
     resetTumanForm();
   };
 
-  // Manzillarni o'chirish
+  // tumanlarni o'chirish
   const deleteTuman = useMutation({
     mutationFn: async (addressId) => {
       await axios.delete(`${baseUrl}district/${addressId}`, config);
