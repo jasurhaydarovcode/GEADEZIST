@@ -11,6 +11,7 @@ import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Modal from 'react-modal';
+import { IoMdCloseCircleOutline } from 'react-icons/io';
 
 // Accessibility setup
 Modal.setAppElement('#root');
@@ -140,18 +141,13 @@ function AllUser() {
             className="relative mx-auto my-10 bg-white rounded-lg shadow-lg max-w-lg w-full p-6"
             overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
           >
+            <div className='flex justify-end text-3xl'><button onClick={closeModal} className='cursor-pointer hover:text-red-500'><IoMdCloseCircleOutline /></button></div>
             {selectedUser && (
-              <div className="text-center pt-3">
-                <h2 className="text-3xl font-extrabold mb-4 text-[#727788]">User Details</h2>
-                <p className='flex justify-between text-lg text-[#727788]'><strong>First Name:</strong><p className='text-blue-400 font-thin'> {selectedUser.firstName}</p></p>
-                <p className='flex justify-between text-lg text-[#727788]'><strong>Last Name:</strong><p className='text-blue-400 font-thin'> {selectedUser.lastName}</p></p>
-                <p className='flex justify-between text-lg text-[#727788]'><strong>Email:</strong><p className='text-blue-400 font-thin'> {selectedUser.email}</p></p>
-                <button
-                  onClick={closeModal}
-                  className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                >
-                  Close
-                </button>
+              <div className="text-center pt-3 mb-6">
+                <h2 className="text-3xl font-extrabold mb-7 text-[#727788] mt-[-10px]">User Details</h2>
+                <p className='flex my-2 justify-between text-lg text-[#727788]'><strong>First Name:</strong><p className='text-blue-400 font-thin'> {selectedUser.firstName}</p></p>
+                <p className='flex my-2 justify-between text-lg text-[#727788]'><strong>Last Name:</strong><p className='text-blue-400 font-thin'> {selectedUser.lastName}</p></p>
+                <p className='flex my-2 justify-between text-lg text-[#727788]'><strong>Email:</strong><p className='text-blue-400 font-thin'> {selectedUser.email}</p></p>
               </div>
             )}
           </Modal>
