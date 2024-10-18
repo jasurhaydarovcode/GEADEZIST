@@ -65,13 +65,13 @@ function AllUser() {
   };
 
   return (
-    <div>
+    <div className='overflow-x-hidden'>
       <Helmet>
         <title>Foydalanuvchilar</title>
       </Helmet>
 
       <Layout>
-        <div>
+        <div >
           <div className="flex justify-center pt-7">
             <div className="px-8">
               <div className="w-max">
@@ -82,7 +82,7 @@ function AllUser() {
                       <h4>Boshqaruv paneli </h4>
                     </Link>
                     <h4> / </h4>
-                    <h4 className="text-blue-600"> Foydalanuvchilar</h4>
+                    <h4 className="text-blue-600">Foydalanuvchilar</h4>
                   </div>
                 </header>
 
@@ -141,7 +141,7 @@ function AllUser() {
                   </table>
                 </div>
 
-                <div className="flex justify-between mt-4">
+                {/* <div className="flex justify-between mt-4">
                   <button
                     onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
@@ -157,7 +157,7 @@ function AllUser() {
                   >
                     Keyingi
                   </button>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
