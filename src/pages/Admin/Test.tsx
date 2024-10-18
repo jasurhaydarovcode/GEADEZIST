@@ -1,7 +1,7 @@
 import Layout from "@/components/Dashboard/Layout";
 import { baseUrl, PostQuestion } from "@/helpers/api/baseUrl";
 import { config } from "@/helpers/functions/token";
-import {PlusCircleOutlined,EditOutlined,DeleteOutlined, EyeOutlined,} from "@ant-design/icons";
+import { PlusCircleOutlined, EditOutlined, DeleteOutlined, EyeOutlined, } from "@ant-design/icons";
 import { Button, Modal, Table } from "antd";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
@@ -36,61 +36,44 @@ function Test() {
   const [turi, setTuri] = useState<string | null>(null);
   const [kategoriya, setKategoriya] = useState<string | null>(null);
   const [nameSearch, setnameSearch] = useState<string | null>(null);
-  const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(null);
-  const [fetchedQuestions, setFetchedQuestions] = useState<any[]>([]);
-
-  // This function will be used to fetch data based on the search term
-  const searchTest = async (searchTerm: string | null): Promise<void> => {
-    if (searchTerm) {
-      try {
-        const response = await axios.get<ApiResponse>(
-          `${baseUrl}question/filter?questionName=${searchTerm}&page=0&size=10`,
-          config
-        );
-
-        // Map the data to your table format
-        const questions = response.data.body.body.map((item, index) => ({
-          key: item.id.toString(),
-          numer: index + 1,
-          testRasm: ".", // Replace with actual image if available
-          savol: item.optionDtos[0]?.answer || "",
-          catygoria: item.categoryName || "No category",
-          savolTuri: item.type,
-          qiyinligi: item.difficulty,
-          yaratganOdam: item.createdByName,
-        }));
-
-        setFetchedQuestions(questions); // Update your state with the fetched data
-      } catch (error) {
-        console.error("Error fetching search results:", error);
-      }
-    } else {
-      // If no search term is provided, you can reset or show all data
-      setFetchedQuestions([]); // Clear data if search term is removed
+  const searchTest2 = () => {
+    if (nameSearch && nameSearch.trim() !== "") {
+      const newData = datas.filter((item) => item.savol.includes(nameSearch));
+      useDatas(newData);
+    } else if (nameSearch === "") {
+      useDatas(datas);
     }
-  };
+  }
+  //   const searchTest = async (): Promise<void> => {
+  //   if (nameSearch) {
+  //     try {
+  //       const response = await axios.get<ApiResponse>(
+  //         `${baseUrl}question/filter?questionName=${nameSearch}&page=0&size=10`,
+  //         config
+  //       );
 
-  // Handle search input change with debounce
-  useEffect(() => {
-    if (searchTimeout) {
-      clearTimeout(searchTimeout); // Clear the previous timeout if the user is still typing
-    }
+  //       // Map the data to your table format
+  //       const fetchedQuestions = response.data.body.body.map((item, index) => ({
+  //         key: item.id.toString(),
+  //         numer: index + 1,
+  //         testRasm: ".", // Replace with actual image if available
+  //         savol: item.optionDtos[0]?.answer || "",
+  //         catygoria: item.categoryName || "No category",
+  //         savolTuri: item.type,
+  //         qiyinligi: item.difficulty,
+  //         yaratganOdam: item.createdByName,
+  //       }));
 
-    const newTimeout = setTimeout(() => {
-      // Only perform search if input is not empty
-      searchTest(nameSearch);
-    }, 500); // Adjust the debounce time as needed (e.g., 500ms)
-
-    setSearchTimeout(newTimeout); // Set new timeout for debounce
-
-    // Cleanup function to clear the timeout when the component unmounts or on re-render
-    return () => clearTimeout(newTimeout);
-  }, [nameSearch]); // Re-run the effect only when nameSearch changes
-
-  // Input change handler
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setnameSearch(e.target.value || null); // Update state when the input changes
-  };
+  //       useDatas(fetchedQuestions); // Update your state
+  //       console.log(fetchedQuestions);
+  //     } catch (error) {
+  //       console.error("Error fetching search results:", error);
+  //     }
+  //   } else {
+  //     // Reset data if no search term is provided
+  //     useDatas([]);
+  //   }
+  // };
 
   // search
 
@@ -110,6 +93,7 @@ function Test() {
   }
   useEffect(() => {
     removeInp();
+    searchTest2();
   }, [testType, turi, kategoriya, nameSearch]);
 
   const testData = async (): Promise<ApiResponse> => {
@@ -125,6 +109,7 @@ function Test() {
     queryKey: ["tests"],
     queryFn: testData,
     onSuccess: (response) => {
+      console.log(response);
 
       // Map the data to your table format
       const fetchedTests = response.body.body.map((item, index) => ({
@@ -140,6 +125,7 @@ function Test() {
       useDatas(fetchedTests); // useDatas o'rniga setDatas
     },
   });
+  console.log(data);
 
   const categoryNames = [
     {
@@ -473,8 +459,8 @@ function Test() {
                   </h2>{" "}
                 </div>
               </Modal>
-              
-              
+
+
               {/* search  input*/}
               <div className="flex justify-end pt-5 gap-5">
                 <div className="flex">
@@ -518,7 +504,7 @@ function Test() {
                   </select>
                 </div>
 
-                  {/* turni tanlash input search */}
+                {/* turni tanlash input search */}
                 <div className="flex">
                   <select
                     onChange={(e) => setTuri(e.target.value)}
@@ -540,7 +526,7 @@ function Test() {
                 </div>
               </div>
             </div>
-                    {/* table  */}
+            {/* table  */}
             <Table
               dataSource={dataSource}
               columns={columns}
@@ -729,7 +715,7 @@ function Test() {
 
         {/* Qolgan kontentni modal ichiga joylang */}
       </Modal>
-     
+
     </div>
   );
 }
