@@ -53,7 +53,7 @@ const Sidebar = () => {
 
 
   return (
-    <>
+    <div className=''>
       {/* Burger Menu Button for mobile view */}
       <button
         className="md:hidden p-4 fixed top-0 left-0 z-50"
@@ -79,12 +79,12 @@ const Sidebar = () => {
           <IoCloseOutline />
         </button>
 
-        <Link to={'/client/dashboard'}>
+        <Link to={'/dashboard'}>
           <img src={Logo} className="w-52" alt="Geodeziya Logo" />
         </Link>
 
         {/* Client Sidebar content */}
-        <ul className="mt-20">
+        <ul className="mt-20 ">
           {sidebarItems.map((item, index) => (
             item && (
               <Link to={`/${item.pathName}`} key={index}>
@@ -110,7 +110,7 @@ const Sidebar = () => {
           onClick={toggleSidebar}
         ></div>
       )}
-    </>
+    </div>
   );
 };
 
