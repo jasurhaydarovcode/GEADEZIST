@@ -141,12 +141,11 @@ function AllUser() {
                   </table>
                 </div>
 
-                {/* Sahifalash tugmalari */}
                 <div className="flex justify-between mt-4">
                   <button
                     onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
-                    className="bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50"
+                    className="bg-white text-gray-600 px-4 py-2 rounded disabled:opacity-50"
                   >
                     Oldingi
                   </button>
@@ -154,7 +153,7 @@ function AllUser() {
                   <button
                     onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                     disabled={currentPage === totalPages}
-                    className="bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50"
+                    className="bg-white text-gray-600 px-4 py-2 rounded disabled:opacity-50"
                   >
                     Keyingi
                   </button>
