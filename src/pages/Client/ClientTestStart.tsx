@@ -14,12 +14,15 @@ import TableLoading from '@/components/spinner/TableLoading';
 import defaultImage from '@/assets/images/default.png';
 export const getImage = `${baseUrl}api/videos/files`;
 import { message } from 'antd';
+import CheckLogin from '@/helpers/functions/checkLogin';
 
 interface AxiosError {
   message: string;
 }
 
 const ClientTestStart: React.FC = () => {
+  CheckLogin();
+
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const navigate = useNavigate();
 

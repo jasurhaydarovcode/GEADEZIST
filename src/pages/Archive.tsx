@@ -1,8 +1,10 @@
+import CheckLogin from '@/helpers/functions/checkLogin';
 import { useEffect, useCallback } from 'react';
 import { Helmet } from 'react-helmet';
 import { useNavigate } from 'react-router-dom';
 
 function Archive() {
+  CheckLogin();
   const navigate = useNavigate();
   const checkRoleClient = useCallback(() => {
     const role = localStorage.getItem('role');

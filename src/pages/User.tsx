@@ -10,8 +10,11 @@ import { SlArrowDown } from 'react-icons/sl';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import { message } from 'antd';
+import CheckLogin from '@/helpers/functions/checkLogin';
 
 function User() {
+  CheckLogin();
+
   const [searchQuery, setSearchQuery] = useState(''); 
 
   const { data: usersData, refetch} = useQuery({

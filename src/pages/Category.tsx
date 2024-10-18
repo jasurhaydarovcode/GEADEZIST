@@ -25,8 +25,10 @@ import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { Modal } from "antd";
 import { Link } from "react-router-dom";
+import CheckLogin from "@/helpers/functions/checkLogin";
 
 function Category() {
+  CheckLogin();
   const queryClient = useQueryClient();
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);

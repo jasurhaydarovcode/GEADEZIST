@@ -12,8 +12,11 @@ import { Helmet } from 'react-helmet';
 import TableLoading from '@/components/spinner/TableLoading';
 import axios from 'axios';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
+import CheckLogin from '@/helpers/functions/checkLogin';
 
 function Employees() {
+  CheckLogin();
+
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   // Pagination holati

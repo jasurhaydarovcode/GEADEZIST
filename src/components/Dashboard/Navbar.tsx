@@ -134,7 +134,7 @@ const Navbar: React.FC = () => {
                 <div className="font-bold">{getUser?.fullName}</div>
 
                 {/* START TOOLTIP */}
-                <EmailTooltip email={getUser?.email} />
+                <EmailTooltip email={getUser?.email || ''} />
                 {/* END TOOLTIP */}
 
               </div>

@@ -12,8 +12,10 @@ import { Helmet } from 'react-helmet';
 import { MdDelete, MdEdit } from 'react-icons/md';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Link } from 'react-router-dom';
+import CheckLogin from '@/helpers/functions/checkLogin';
 
 function Address() {
+  CheckLogin();
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false); // O'chirish modalini ko'rsatish uchun

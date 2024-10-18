@@ -32,6 +32,7 @@ import TestVisual from './components/test/testVisual';
 // import CursorProtect from './components/security/CursorProtect';
 
 function App() {
+
   // const navigate = useNavigate();
   // function LocalgaSaqlash(){
   //   if(!localStorage.getItem('token')){

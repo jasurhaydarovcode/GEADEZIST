@@ -12,9 +12,11 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Modal from 'react-modal';
 import { IoMdCloseCircleOutline } from 'react-icons/io';
+import CheckLogin from '@/helpers/functions/checkLogin';
 
 // Accessibility setup
 Modal.setAppElement('#root');
+CheckLogin();
 
 function AllUser() {
   const [searchQuery, setSearchQuery] = useState('');

@@ -13,8 +13,11 @@ import TableLoading from "@/components/spinner/TableLoading";
 import { Answer } from "@/helpers/types/AddQuizType";
 import TestVisual from "@/components/test/testVisual";
 import { Link } from "react-router-dom";
+import CheckLogin from "@/helpers/functions/checkLogin";
 
 function Test() {
+  CheckLogin();
+
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [testType, setTestType] = useState<string | null>(null);

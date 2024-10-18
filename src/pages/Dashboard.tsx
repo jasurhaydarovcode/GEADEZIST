@@ -29,6 +29,7 @@ import { Helmet } from 'react-helmet';
 import TableLoading from '@/components/spinner/TableLoading';
 import { Pagination } from 'antd';
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 'flowbite-react';
+import CheckLogin from '@/helpers/functions/checkLogin';
 
 
 ChartJS.register(
@@ -41,6 +42,8 @@ ChartJS.register(
 );
 
 const Dashboard = () => {
+  CheckLogin();
+
   // states
   const categories = ['Топография', 'Маркшейдерлик', 'Умумий Геодезия'];
   const regions = ['Toshkent', 'Samarqand', "Farg'ona"];
@@ -165,8 +168,14 @@ const Dashboard = () => {
   const getClient = useQuery({
     queryKey: ['getClient', config],
     queryFn: async () => {
+      interface GetClientAllResponse {
+        id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+      }
       const res = await axios.get<GetClientAllResponse[]>(`${getClientAll}page=${currentPage - 1}&size=${pageSize}`, config);
-      const data = res.data.body.body as GetClientAllResponse[];
+      const data: GetClientAllResponse[] | null = res?.data?.body?.body as GetClientAllResponse[] | null;
       return data;
     },
     onSuccess: (data) => {

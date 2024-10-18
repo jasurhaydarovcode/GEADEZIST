@@ -4,6 +4,7 @@ import { CardProps } from '../../helpers/types/CardProp';
 import PreviewOverlay from '@/components/PreviewOverlay';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import CheckLogin from '@/helpers/functions/checkLogin';
 
 const Card: React.FC<CardProps> = ({
   image,
@@ -16,6 +17,7 @@ const Card: React.FC<CardProps> = ({
   buttonText,
   status,
 }) => {
+  CheckLogin();
   return (
     <div className="container bg-white rounded-md max-w-[450px]">
       <div className="border rounded-lg shadow-lg p-4">
