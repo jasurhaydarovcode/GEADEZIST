@@ -92,7 +92,7 @@
 | :-: | :-------: | :------------------------------: |
 |  1  |   Jasur   |  client/profile/dashboard admin/dash  |
 |  2  |   Temur   |  client/test-start client/quiz   |
-|  3  |  Javlon   |  SignIn/SignUp auth/reset-password Admin/all-user    |
+|  3  |  Javlon   |  auth/opshe Admin/all-user    |
 |  4  | Ulug'bek  |  admin/dashboard/profile/test-logica auth/signin-logica  |
 |  6  |   Nodir   |          Admin Category          |
 | 10  |  Asilbek  |  Admin/Employees, Admin Adress, oferta   |

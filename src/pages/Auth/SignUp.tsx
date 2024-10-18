@@ -13,9 +13,9 @@ function SignUp() {
   const confirmPassword = useRef<HTMLInputElement>(null);
   const firstname = useRef<HTMLInputElement>(null);
   const lastname = useRef<HTMLInputElement>(null);
-  const phone = useRef<HTMLInputElement>(null);
   const offer = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+  const [phone, setPhone] = useState<string>('+998');
 
   const [genderValue, setGenderValue] = useState<string>('');
   const [showpassword, setShowpassword] = useState<boolean>(false);
@@ -26,7 +26,7 @@ function SignUp() {
     if (
       !firstname.current?.value ||
       !lastname.current?.value ||
-      !phone.current?.value
+      !phone
     ) {
       message.warning("Iltimos, bo'shliqni to'ldiring");
       return;
@@ -43,6 +43,13 @@ function SignUp() {
     if (!email.current?.value.includes('@gmail.com')) {
       message.warning("Iltimos, emailni to'liq kiriting");
       return;
+    }
+    if(phone.length < 12){
+      message.warning("Iltimos, telefon raqamni to'liq kiriting");
+      return;
+    }
+    if(phone.length > 12){
+      message.warning("Iltimos, telefon raqam ko'payib ketdi")
     }
     if (password.current?.value.length < 5) {
       message.warning("Parol kamida 5 ta belgidan iborat bo'lishi kerak");
@@ -64,7 +71,7 @@ function SignUp() {
       firstname: firstname.current?.value,
       lastname: lastname.current?.value,
       email: email.current?.value,
-      phoneNumber: phone.current?.value,
+      phoneNumber: phone ,
       password: password.current?.value,
       confirmPassword: confirmPassword.current?.value,
       role: 'ROLE_USER',
@@ -171,8 +178,9 @@ function SignUp() {
                   Telefon raqam
                 </label>
                 <input
-                  ref={phone}
+                  onChange={(e) => setPhone(e.target.value)}
                   type="tel"
+                  value={phone}  
                   id="phoneNumber"
                   name="phoneNumber"
                   placeholder="998 XX XXX XX XX"
@@ -186,7 +194,7 @@ function SignUp() {
                   htmlFor="confirmPassword"
                   className="block text-sm font-semibold text-gray-600"
                 >
-                  Parolni tasdiqlang
+                  Yangi parol kiriting
                 </label>
                 {/* Wrapper div to apply flexbox */}
                 <div className="flex items-center border rounded-lg mt-2">
