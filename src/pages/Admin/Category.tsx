@@ -14,7 +14,7 @@ import {
   TableRow,
 } from "flowbite-react";
 import { useQuery, useQueryClient } from "react-query";
-import defaultImage from "../assets/images/default.png";
+import defaultImage from "../../assets/images/default.png";
 import { MdEdit } from "react-icons/md";
 import CategoryAddModal from "@/components/Modal/CategoryAddModal";
 import CategoryEditModal from "@/components/Modal/CategoryEditModal";
