@@ -23,6 +23,11 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
     main: false,
   });
 
+  const [inputErrors, setInputErrors] = useState({
+    name: false,
+    description: false,
+  });
+
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
 
@@ -47,7 +52,6 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
           // ID bo'yicha o'sish tartibida saralash
           return newData.sort((a, b) => a.id - b.id);
         });
-
 
         message.success("Kategoriya muvaffaqiyatli qo'shildi!");
         onAddCategory(data as CategoryModalTypes);
@@ -76,14 +80,29 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
       fileId: 0,
       main: false,
     });
+    setInputErrors({
+      name: false,
+      description: false,
+    });
   };
 
   // Formani to'g'ri to'ldirilganligini tekshirish
   const isFormValid = () => {
-    if (!formData.name || !formData.description) {
-      message.error("Barcha maydonlarni to'ldiring!");
-      return false;
+    let valid = true;
+    let errors = {
+      name: false,
+      description: false,
+    };
+
+    if (!formData.name.trim()) {
+      errors.name = true;
+      valid = false;
     }
+    if (!formData.description.trim()) {
+      errors.description = true;
+      valid = false;
+    }
+
     if (
       formData.main &&
       (formData.questionCount <= 0 ||
@@ -92,9 +111,14 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
         formData.retakeDate <= 0)
     ) {
       message.error("Asosiy kategoriya uchun barcha qiymatlar to'g'ri bo'lishi kerak!");
-      return false;
+      valid = false;
     }
-    return true;
+
+    setInputErrors(errors);
+    if (!valid) {
+      message.error("Barcha maydonlarni to'ldiring!");
+    }
+    return valid;
   };
 
   // Saqlash tugmasi bosilganda
@@ -118,6 +142,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
   // Input uchun stil
   const InputStyles = {
     input: 'w-full rounded-lg border',
+    error: 'border-red-500', // Error border class
   };
 
   return (
@@ -160,7 +185,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
           <div>
             <label className="block mb-2">Kategoriya Nomi</label>
             <Input
-              className={InputStyles.input}
+              className={`${InputStyles.input} ${inputErrors.name ? InputStyles.error : ''}`}
               placeholder="Kategoriya nomini kiriting"
               value={formData.name}
               onChange={(e) =>
@@ -172,7 +197,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
           <div>
             <label className="block mb-2">Tavsif</label>
             <Input
-              className={InputStyles.input}
+              className={`${InputStyles.input} ${inputErrors.description ? InputStyles.error : ''}`}
               placeholder="Tavsifni kiriting"
               value={formData.description}
               onChange={(e) =>
@@ -234,7 +259,6 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
                   }
                   min="0"
                 />
-                
               </div>
             </>
           )}
