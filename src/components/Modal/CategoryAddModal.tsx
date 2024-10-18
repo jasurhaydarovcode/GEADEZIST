@@ -142,7 +142,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
   // Input uchun stil
   const InputStyles = {
     input: 'w-full rounded-lg border',
-    error: 'border-red-500', // Error border class
+    error: 'border-red-500', 
   };
 
   return (
@@ -192,6 +192,9 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
                 setFormData({ ...formData, name: e.target.value })
               }
             />
+            {inputErrors.name && (
+              <span className="text-red-500 text-sm">Kategoriya nomini kiriting</span>
+            )}
           </div>
 
           <div>
@@ -204,6 +207,9 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
                 setFormData({ ...formData, description: e.target.value })
               }
             />
+            {inputErrors.description && (
+              <span className="text-red-500 text-sm">Tavsifni kiriting</span>
+            )}
           </div>
 
           {formData.main && (
