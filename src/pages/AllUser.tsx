@@ -102,7 +102,7 @@ function AllUser() {
                 </div>
 
                 <div className="py-5">
-                  <table className="mx-3 ml-[0px] w-full bg-white border border-gray-300">
+                  <table className="mx-3 ml-0 w-full bg-white border border-gray-300">
                     <thead>
                       <tr className="bg-gray-100">
                         <th className="text-left px-4 py-7">T/P</th>
@@ -143,8 +143,8 @@ function AllUser() {
           >
             <div className='flex justify-end text-3xl'><button onClick={closeModal} className='cursor-pointer hover:text-red-500'><IoMdCloseCircleOutline /></button></div>
             {selectedUser && (
-              <div className="text-center pt-3 mb-6">
-                <h2 className="text-3xl font-extrabold mb-7 text-[#727788] mt-[-10px]">User Details</h2>
+              <div className="text-center pt-3 mb-">
+                <h2 className="text-3xl font-extrabold mb-8 text-[#727788] mt-[-20px]">User Details</h2>
                 <p className='flex my-2 justify-between text-lg text-[#727788]'><strong>First Name:</strong><p className='text-blue-400 font-thin'> {selectedUser.firstName}</p></p>
                 <p className='flex my-2 justify-between text-lg text-[#727788]'><strong>Last Name:</strong><p className='text-blue-400 font-thin'> {selectedUser.lastName}</p></p>
                 <p className='flex my-2 justify-between text-lg text-[#727788]'><strong>Email:</strong><p className='text-blue-400 font-thin'> {selectedUser.email}</p></p>
