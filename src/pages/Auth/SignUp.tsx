@@ -15,18 +15,20 @@ function SignUp() {
   const lastname = useRef<HTMLInputElement>(null);
   const offer = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
-  const [phone, setPhone] = useState<string>('+998');
-
+  const phone = useRef<HTMLInputElement>(null);
   const [genderValue, setGenderValue] = useState<string>('');
   const [showpassword, setShowpassword] = useState<boolean>(false);
   const [showconfirmPassword, setShowconfirmPassword] =
     useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  
+    
 
   function signUpPost() {
     if (
       !firstname.current?.value ||
       !lastname.current?.value ||
-      !phone
+      !phone.current?.value 
     ) {
       message.warning("Iltimos, bo'shliqni to'ldiring");
       return;
@@ -44,11 +46,11 @@ function SignUp() {
       message.warning("Iltimos, emailni to'liq kiriting");
       return;
     }
-    if(phone.length < 12){
+    if(phone.current?.value.length < 12){
       message.warning("Iltimos, telefon raqamni to'liq kiriting");
       return;
     }
-    if(phone.length > 12){
+    if(phone.current?.value.length > 12){
       message.warning("Iltimos, telefon raqam ko'payib ketdi")
     }
     if (password.current?.value.length < 5) {
@@ -63,6 +65,7 @@ function SignUp() {
       message.warning('Iltimos, Offer bilan tanishib chiqing');
       return;
     }
+    setIsSubmitting(true);
     if (!genderValue) {
       message.warning('Iltimos, jinsni tanlang');
       return;
@@ -71,7 +74,7 @@ function SignUp() {
       firstname: firstname.current?.value,
       lastname: lastname.current?.value,
       email: email.current?.value,
-      phoneNumber: phone ,
+      phoneNumber: phone.current?.value ,
       password: password.current?.value,
       confirmPassword: confirmPassword.current?.value,
       role: 'ROLE_USER',
@@ -97,6 +100,7 @@ function SignUp() {
         ) {
           message .error(err.response?.data.message);
         }
+        setIsSubmitting(false);
       });
   }
 
@@ -178,9 +182,8 @@ function SignUp() {
                   Telefon raqam
                 </label>
                 <input
-                  onChange={(e) => setPhone(e.target.value)}
+                  ref={phone}
                   type="tel"
-                  value={phone}  
                   id="phoneNumber"
                   name="phoneNumber"
                   placeholder="998 XX XXX XX XX"
@@ -310,9 +313,12 @@ function SignUp() {
               <button
                 onClick={signUpPost}
                 type="submit"
-                className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+                disabled={isSubmitting} 
+                className={`w-full text-white py-2 px-4 rounded-lg ${
+                  isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+                } focus:outline-none focus:bg-blue-600`}
               >
-                Ro'yxatdan o'tish
+                {isSubmitting ? 'Yuborilmoqda...' : 'Tasdiqlash'}
               </button>
             </div>
 
