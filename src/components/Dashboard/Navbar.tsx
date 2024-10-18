@@ -44,6 +44,13 @@ const Navbar: React.FC = () => {
   const getMe = useQuery({
     queryKey: ['getMe', config],
     queryFn: async () => {
+      interface GetMeResponse {
+        body: {
+          fullName: string;
+          email: string;
+        };
+      }
+
       const res = await axios.get<GetMeResponse>(getMeUser, config);
       return res.data?.body;
     },
@@ -52,11 +59,26 @@ const Navbar: React.FC = () => {
     },
   });
 
-  useEffect(() => {
-    if (token) {
-      getMe.refetch();
-    }
-  }, [token]);
+  // async function getMe() {
+  //   interface GetMeResponse {
+  //     body: {
+  //       // 'body' ichidagi xususiyatlar
+  //       fullName: string;
+  //       email: string;
+  //       // boshqa kerakli xususiyatlar
+  //     };
+  //   }
+
+  //   try {
+  //     const res = await axios.get<GetMeResponse>(getMeUser, config);
+  //     // Agar `body` `res.data` ichida bo'lsa, to'g'ri kiriting
+  //     const data = res.data.body;  // GetMeResponse turini tekshirish shart emas
+  //     setGetUser(data); // `setGetUser` funksiyasida noto'g'ri ma'lumot berilmasligini tekshiring
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }
+  
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {

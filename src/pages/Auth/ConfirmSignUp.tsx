@@ -1,18 +1,20 @@
 import { baseUrl } from '@/helpers/api/baseUrl';
 import { Logo, registerRasm } from '@/helpers/imports/images';
 import axios from 'axios';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { message } from 'antd';
 const ConfirmSignUp = () => {
   const navigate = useNavigate();
   const code = useRef<HTMLInputElement>(null);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   function forgetPassword() {
     if (!code.current?.value) {
       message.warning('Kodni kiriting');
       return;
     }
+    setIsSubmitting(true);
     if (code.current?.value.length < 5) {
       message.warning('Kod kamida 5 ta raqamdan iborat');
       return;
@@ -30,6 +32,7 @@ const ConfirmSignUp = () => {
         } else {
           message.error('Qayta tekshirib ko`ring!');
         }
+        setIsSubmitting(false);
       });
   }
   return (
@@ -63,12 +66,15 @@ const ConfirmSignUp = () => {
                   />
                 </div>
                 <button
-                  onClick={forgetPassword}
-                  type="submit"
-                  className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
-                >
-                  Tasdiqlash
-                </button>
+                onClick={forgetPassword}
+                type="submit"
+                disabled={isSubmitting} 
+                className={`w-full text-white py-2 px-4 rounded-lg ${
+                  isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+                } focus:outline-none focus:bg-blue-600`}
+              >
+                {isSubmitting ? 'Yuborilmoqda...' : 'Tasdiqlash'}
+              </button>
               </div>
             </div>
           </div>

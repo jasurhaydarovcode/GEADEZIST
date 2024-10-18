@@ -28,8 +28,8 @@ import Category from './pages/Category';
 import Profile from './pages/Profile';
 import ConfirmSignUp from './pages/Auth/ConfirmSignUp';
 import TestVisual from './components/test/testVisual';
+// import DevToolsBlocker from './components/security/DevToolsBlocker';
 // import CursorProtect from './components/security/CursorProtect';
-// import { useEffect } from 'react';
 
 function App() {
   // const navigate = useNavigate();
@@ -44,6 +44,8 @@ function App() {
 
   return (
     <>
+      {/* <DevToolsBlocker> */}
+      {/* <CursorProtect> */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="*" element={<NotFound />} />
@@ -79,6 +81,8 @@ function App() {
         <Route path="/inspector-admin" element={<InspectorAdmin />} />
         {/* END Admin Routes */}
       </Routes>
+      {/* </CursorProtect> */}
+      {/* </DevToolsBlocker> */}
     </>
   );
 }
