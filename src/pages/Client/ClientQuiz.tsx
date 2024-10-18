@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { config } from '@/helpers/functions/token';
 import { useNavigate } from 'react-router-dom';
 import { Select } from 'antd';
+import { config } from '@/helpers/functions/token';
 import { useQuery } from 'react-query';
 import { baseUrl } from '@/helpers/api/baseUrl';
 import { ClientQuizType } from '@/helpers/types/clientQuizType';
@@ -91,20 +91,15 @@ const QuestionPage: React.FC = () => {
     }
   };
 
-  const [id, setId] = useState<number>(2);
 
-  const fetchQuiz = async (id: number) => {
-    const response = await axios.get(`${baseUrl}quiz/start/${id}`, config);
-    return (response.data as { body: ClientQuizType[] })?.body;
+
+  // useQuery to fetch data from server
+
+  const fetchQuestion = async (questionId: number) => {
+    const response = await axios.get(`${baseUrl}quiz/start/${questionId}`); // Replace with your actual API
+    return response.data;
   };
 
-  const { data, error, isLoading } = useQuery(['quiz', id], () => fetchQuiz(id));
-
-  if (isLoading) return <div>Loading...</div>
-
-  if (error) return toast.error(`Error: ${(error as AxiosError).message}`)
-
-  if (!data) return toast.error('Quiz not found');
 
   return (
     <div className="px-9 space-y-12">

@@ -1,11 +1,11 @@
 import { baseUrl } from '@/helpers/api/baseUrl';
 import { Logo, registerRasm } from '@/helpers/imports/images';
 import { SignUpType } from '@/helpers/types/LoginType';
+import { message } from 'antd';
 import axios from 'axios';
 import { useRef, useState } from 'react';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 function SignUp() {
   const email = useRef<HTMLInputElement>(null);
@@ -13,11 +13,10 @@ function SignUp() {
   const confirmPassword = useRef<HTMLInputElement>(null);
   const firstname = useRef<HTMLInputElement>(null);
   const lastname = useRef<HTMLInputElement>(null);
-  const phone = useRef<HTMLInputElement>(null);
   const offer = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+  const [phone, setPhone] = useState<string>('+998');
 
-  // Jinsni select orqali tanlash uchun state
   const [genderValue, setGenderValue] = useState<string>('');
   const [showpassword, setShowpassword] = useState<boolean>(false);
   const [showconfirmPassword, setShowconfirmPassword] =
@@ -27,9 +26,9 @@ function SignUp() {
     if (
       !firstname.current?.value ||
       !lastname.current?.value ||
-      !phone.current?.value
+      !phone
     ) {
-      toast.warning("Iltimos, bo'shliqni to'ldiring");
+      message.warning("Iltimos, bo'shliqni to'ldiring");
       return;
     }
     if (
@@ -37,35 +36,42 @@ function SignUp() {
       !password.current?.value ||
       !confirmPassword.current?.value
     ) {
-      toast.warning("Iltimos, bo'shliqni to'ldiring");
+      message.warning("Iltimos, bo'shliqni to'ldiring");
 
       return;
     }
     if (!email.current?.value.includes('@gmail.com')) {
-      toast.warning("Iltimos, emailni to'liq kiriting");
+      message.warning("Iltimos, emailni to'liq kiriting");
       return;
     }
+    if(phone.length < 12){
+      message.warning("Iltimos, telefon raqamni to'liq kiriting");
+      return;
+    }
+    if(phone.length > 12){
+      message.warning("Iltimos, telefon raqam ko'payib ketdi")
+    }
     if (password.current?.value.length < 5) {
-      toast.warning("Parol kamida 5 ta belgidan iborat bo'lishi kerak");
+      message.warning("Parol kamida 5 ta belgidan iborat bo'lishi kerak");
       return;
     }
     if (password.current?.value !== confirmPassword.current?.value) {
-      toast.warning('Parollar bir xil emas');
+      message.warning('Parollar bir xil emas');
       return;
     }
     if (!offer.current?.checked) {
-      toast.warning('Iltimos, Offer bilan tanishib chiqing');
+      message.warning('Iltimos, Offer bilan tanishib chiqing');
       return;
     }
     if (!genderValue) {
-      toast.warning('Iltimos, jinsni tanlang');
+      message.warning('Iltimos, jinsni tanlang');
       return;
     }
     const data: SignUpType = {
       firstname: firstname.current?.value,
       lastname: lastname.current?.value,
       email: email.current?.value,
-      phoneNumber: phone.current?.value,
+      phoneNumber: phone ,
       password: password.current?.value,
       confirmPassword: confirmPassword.current?.value,
       role: 'ROLE_USER',
@@ -75,21 +81,21 @@ function SignUp() {
       .post(`${baseUrl}auth/register?genderType=${genderValue}`, data)
       .then((res) => {
         if (res.status === 200 || res.status === 201) {
-          toast.success("Ro'yxatdan o'tdingiz");
+          message.success("Ro'yxatdan o'tdingiz");
           navigate('/auth/confirm-signup');
         }
-        toast.success("Ro'yxatdan o'tdingiz");
+        message.success("Ro'yxatdan o'tdingiz");
         console.log(res);
       })
       .catch((err) => {
         if (err.response?.status === 404) {
-          toast.warning('Serverda xatolik yuz berdi');
+          message.warning('Serverda xatolik yuz berdi');
         } else if (
           err.response?.status === 400 ||
           err.response?.status === 401 ||
           err.response?.status === 403
         ) {
-          toast.error("Bu email bilan ro'yxatdan o'tilgan");
+          message .error(err.response?.data.message);
         }
       });
   }
@@ -172,8 +178,9 @@ function SignUp() {
                   Telefon raqam
                 </label>
                 <input
-                  ref={phone}
+                  onChange={(e) => setPhone(e.target.value)}
                   type="tel"
+                  value={phone}  
                   id="phoneNumber"
                   name="phoneNumber"
                   placeholder="998 XX XXX XX XX"
@@ -187,7 +194,7 @@ function SignUp() {
                   htmlFor="confirmPassword"
                   className="block text-sm font-semibold text-gray-600"
                 >
-                  Parolni tasdiqlang
+                  Yangi parol kiriting
                 </label>
                 {/* Wrapper div to apply flexbox */}
                 <div className="flex items-center border rounded-lg mt-2">

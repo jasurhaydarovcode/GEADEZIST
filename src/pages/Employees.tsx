@@ -160,7 +160,7 @@ function Employees() {
         message.success("Hodim muvaffaqiyatli qo'shildi");
         setOpen(false);
         queryClient.invalidateQueries('getADmin');
-        resetForm(); // Forma maydonlarini tozalash
+        resetForm(); 
       },
       onError: (error) => {
         console.error('Xatolik:', error);
