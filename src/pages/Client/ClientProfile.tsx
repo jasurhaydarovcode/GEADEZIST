@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState, useMemo } from 'react';
 import Layout from '@/components/clientDashboard/laytout';
 import { BiSolidPencil } from 'react-icons/bi';
 import axios from 'axios';
@@ -41,10 +41,10 @@ function ClientProfile() {
     cacheTime: 1000 * 60 * 15,
   });
 
-  const profileData: GetMetype =
-    (getMeUserData as { body?: GetMetype })?.body || ({} as GetMetype);
+  const profileData: GetMetype = useMemo(() =>
+    (getMeUserData as { body?: GetMetype })?.body || ({} as GetMetype),
+    [getMeUserData]);
 
-  // State for editable fields
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
   const [region, setRegion] = useState<string>('');
@@ -53,8 +53,8 @@ function ClientProfile() {
   const [address, setAddress] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
   const [dateOfBirth, setDateOfBirth] = useState<string>('');
+  // const [profileImage, setProfileImage] = useState<string>('');
 
-  // Update the state when profileData changes
   useEffect(() => {
     if (profileData) {
       setFirstName(profileData.firstName || '');
@@ -65,6 +65,7 @@ function ClientProfile() {
       setAddress(profileData.address || '');
       setPhoneNumber(profileData.phoneNumber || '');
       setDateOfBirth(profileData.dateOfBirth || '');
+      // setProfileImage(profileData.profileImage || '');
     }
   }, [profileData]);
 
@@ -110,7 +111,7 @@ function ClientProfile() {
                 <label className="block text-lg text-gray-600">Ism</label>
                 <input
                   type="text"
-                  value={firstName }
+                  value={firstName}
                   placeholder="Namuma: Kimdir"
                   onChange={(e) => setFirstName(e.target.value)}
                   className="clientProfileDatasStyles"
@@ -122,7 +123,7 @@ function ClientProfile() {
                 <label className="block text-lg text-gray-600">Familiya</label>
                 <input
                   type="text"
-                  value={lastName }
+                  value={lastName}
                   placeholder="Namuma: Kimdirov"
                   onChange={(e) => setLastName(e.target.value)}
                   className="clientProfileDatasStyles"
@@ -149,7 +150,7 @@ function ClientProfile() {
                   value={district}
                   placeholder="Namuma: Toshkent, Angor, Angor"
                   className="clientProfileDatasStyles"
-                  
+
                 />
               </div>
 
@@ -190,7 +191,7 @@ function ClientProfile() {
                 <input
                   type="text"
                   value={phoneNumber}
-                   placeholder="Namuma: 998901111111"
+                  placeholder="Namuma: 998901111111"
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   className="clientProfileDatasStyles"
                 />

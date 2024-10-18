@@ -15,6 +15,7 @@ function ResetPassword() {
   const [showpassword, setShowpassword] = useState<boolean>(false);
   const [showconfirmPassword, setShowconfirmPassword] =
     useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);  
 
   function resetPasswordPost(event: React.FormEvent) {
     event.preventDefault(); // Sahifa yangilanmasligini ta'minlash
@@ -32,7 +33,7 @@ function ResetPassword() {
       message.warning("Iltimos, bo'shliqni  to'ldiring!");
       return;
     }
-
+    setIsSubmitting(true);
     if (password.current?.value.length < 5) {
       message.warning("Parol kamida 5 ta belgidan iborat bo'lishi kerak!");
       return;
@@ -46,7 +47,7 @@ function ResetPassword() {
       .put(`${baseUrl}auth/reset-password`, data)
       .then((res) => {
         if (res.status === 200) {
-          message.success(res.message);
+          message.success('Parolingiz muvaffaqiyatli o`zgartirildi!');
           navigate('/auth/SignIn');
         }
         console.log(res.status);
@@ -57,6 +58,7 @@ function ResetPassword() {
         } else {
           message.error("Qayta tekshirib ko'ring!");
         }
+        setIsSubmitting(false);
       });
   }
 
@@ -174,9 +176,12 @@ function ResetPassword() {
               <button
                 onClick={resetPasswordPost}
                 type="submit"
-                className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+                disabled={isSubmitting} // Disable the button based on isSubmitting state
+                className={`w-full text-white py-2 px-4 rounded-lg ${
+                  isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+                } focus:outline-none focus:bg-blue-600`}
               >
-                Parolni saqlash
+                {isSubmitting ? 'Yuborilmoqda...' : 'Tasdiqlash'}
               </button>
             </div>
 

@@ -20,6 +20,8 @@ function AllUser() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUser, setSelectedUser] = useState<UserNatijasi | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Har bir sahifada ko'rsatiladigan elementlar soni
 
   const { data: usersData, refetch } = useQuery({
     queryKey: ['User', config],
@@ -43,6 +45,14 @@ function AllUser() {
   const filteredUsers = GetUser.filter((user) =>
     `${user.firstName} ${user.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Sahifalash uchun ma'lumotlarni olish
+  const indexOfLastUser = currentPage * itemsPerPage;
+  const indexOfFirstUser = indexOfLastUser - itemsPerPage;
+  const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
+
+  // Sahifalarni hisoblash
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
 
   const handleUserClick = (user: UserNatijasi) => {
     setSelectedUser(user);
@@ -113,9 +123,9 @@ function AllUser() {
                       </tr>
                     </thead>
                     <tbody>
-                      {filteredUsers.map((item, index) => (
+                      {currentUsers.map((item, index) => (
                         <tr key={index} className="border-b border-gray-300">
-                          <td className="px-4 py-2">{index + 1}</td>
+                          <td className="px-4 py-2">{index + 1 + indexOfFirstUser}</td>
                           <td className="px-4 py-2">{item.firstName}</td>
                           <td className="px-4 py-2">{item.lastName}</td>
                           <td className="px-4 py-2">{item.email}</td>
@@ -130,6 +140,24 @@ function AllUser() {
                     </tbody>
                   </table>
                 </div>
+
+                <div className="flex justify-between mt-4">
+                  <button
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                    className="bg-white text-gray-600 px-4 py-2 rounded disabled:opacity-50"
+                  >
+                    Oldingi
+                  </button>
+                  <span>Sahifa {currentPage} / {totalPages}</span>
+                  <button
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                    className="bg-white text-gray-600 px-4 py-2 rounded disabled:opacity-50"
+                  >
+                    Keyingi
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -141,10 +169,14 @@ function AllUser() {
             className="relative mx-auto my-10 bg-white rounded-lg shadow-lg max-w-lg w-full p-6"
             overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
           >
-            <div className='flex justify-end text-3xl'><button onClick={closeModal} className='cursor-pointer hover:text-red-500'><IoMdCloseCircleOutline /></button></div>
+            <div className='flex justify-end text-3xl'>
+              <button onClick={closeModal} className='cursor-pointer hover:text-red-500'>
+                <IoMdCloseCircleOutline />
+              </button>
+            </div>
             {selectedUser && (
-              <div className="text-center pt-3 mb-6">
-                <h2 className="text-3xl font-extrabold mb-7 text-[#727788] mt-[-10px]">User Details</h2>
+              <div className="text-center pt-3 mb-7">
+                <h2 className="text-3xl font-extrabold mb-8 text-[#727788] mt-[-20px]">User Details</h2>
                 <p className='flex my-2 justify-between text-lg text-[#727788]'><strong>First Name:</strong><p className='text-blue-400 font-thin'> {selectedUser.firstName}</p></p>
                 <p className='flex my-2 justify-between text-lg text-[#727788]'><strong>Last Name:</strong><p className='text-blue-400 font-thin'> {selectedUser.lastName}</p></p>
                 <p className='flex my-2 justify-between text-lg text-[#727788]'><strong>Email:</strong><p className='text-blue-400 font-thin'> {selectedUser.email}</p></p>

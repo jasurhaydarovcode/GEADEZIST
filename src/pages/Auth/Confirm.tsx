@@ -3,13 +3,16 @@ import { registerRasm } from '@/helpers/imports/images';
 import { Logo } from '@/helpers/imports/images';
 import { ConfirmType } from '@/helpers/types/LoginType';
 import axios from 'axios';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { message } from 'antd';
 
 function Confirm() {
   const email = useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
+
+  // State to manage the button's disabled status
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   function forgetPassword() {
     if (!email.current?.value) {
@@ -20,6 +23,7 @@ function Confirm() {
       message.error("Iltimos, emailni to'liq kiriting!");
       return;
     }
+    setIsSubmitting(true);
 
     const data: ConfirmType = {
       email: email.current?.value,
@@ -36,11 +40,13 @@ function Confirm() {
       })
       .catch((err) => {
         if (err.response?.status === 404) {
-          message.warning('Emailni togri kiritmadingiz!');
+          message.warning('Email bilan ro`yhatdan o`tilmagan!');
         } else {
           message.error("Qayta tekshirib ko'ring!");
         }
-      });
+        setIsSubmitting(false);
+      })
+     
   }
 
   return (
@@ -79,9 +85,12 @@ function Confirm() {
               <button
                 onClick={forgetPassword}
                 type="submit"
-                className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+                disabled={isSubmitting} // Disable the button based on isSubmitting state
+                className={`w-full text-white py-2 px-4 rounded-lg ${
+                  isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+                } focus:outline-none focus:bg-blue-600`}
               >
-                Tasdiqlash
+                {isSubmitting ? 'Yuborilmoqda...' : 'Tasdiqlash'}
               </button>
             </div>
           </div>
