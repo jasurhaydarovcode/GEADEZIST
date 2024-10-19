@@ -124,7 +124,8 @@ const Navbar: React.FC = () => {
                   ? 'Loading...'
                   : (role === 'ROLE_SUPER_ADMIN' && 'super admin') ||
                   (role === 'ROLE_TESTER' && 'tester') ||
-                  (role === 'ROLE_USER' && 'client')}
+                  (role === 'ROLE_USER' && 'client') ||
+                  (role === 'ROLE_ADMIN' && 'admin (tekshiruvchi)')}
               </span>
             </div>
             <div>
