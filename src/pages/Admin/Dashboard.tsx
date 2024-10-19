@@ -249,18 +249,22 @@ const Dashboard = () => {
   }, [checkRoleClient]);
 
   const handleSearchUser = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const searchValue = e.target.value.toLowerCase();
-    if (searchValue === '') {
-      setClientData(allClientData)
-    } else {
+    const searchValue = e.target.value.toLowerCase().trim(); // Matndagi bo'shliqlarni olib tashlash
+  
+    // Agar qidiruv so'zi mavjud bo'lsa
+    if (searchValue !== '') {
       const filteredData = allClientData?.filter((event) =>
-        event.email.toLowerCase().includes(searchValue) ||
-        event.firstName.toLowerCase().includes(searchValue) ||
-        event.lastName.toLowerCase().includes(searchValue)
-      )
-      setClientData(filteredData || [])
+        (event.email && event.email.toLowerCase().includes(searchValue)) || 
+        (event.firstName && event.firstName.toLowerCase().includes(searchValue)) || 
+        (event.lastName && event.lastName.toLowerCase().includes(searchValue))
+      );
+      setClientData(filteredData || []);
+    } else {
+      // Qidiruv matni bo'sh bo'lsa, jadvalni asl holatiga qaytarmasdan saqlaymiz
+      setClientData(allClientData);
     }
-  }
+  };
+  
 
   return (
     <div>
