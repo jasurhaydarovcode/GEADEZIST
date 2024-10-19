@@ -17,6 +17,38 @@ import CheckLogin from '@/helpers/functions/checkLogin';
 function Employees() {
   CheckLogin
 
+    // Yangi funksiyalar
+
+
+  const formatPhoneNumber = (value: string) => {
+    let digits = value.replace(/\D/g, '');
+
+    if (!digits.startsWith('998')) {
+      digits = '998' + digits;
+    }
+
+    if (digits.length <= 3) {
+      return '+' + digits;
+    } else if (digits.length <= 5) {
+      return `+${digits.slice(0, 3)} ${digits.slice(3, 5)}`;
+    } else if (digits.length <= 8) {
+      return `+${digits.slice(0, 3)} ${digits.slice(3, 5)} ${digits.slice(5, 8)}`;
+    } else if (digits.length <= 10) {
+      return `+${digits.slice(0, 3)} ${digits.slice(3, 5)} ${digits.slice(5, 8)} ${digits.slice(8, 10)}`;
+    } else {
+      return `+${digits.slice(0, 3)} ${digits.slice(3, 5)} ${digits.slice(5, 8)} ${digits.slice(8, 10)} ${digits.slice(10, 12)}`;
+    }
+  };
+
+  const formatForSwagger = (value: string) => {
+    return value.replace(/\s/g, '');  // Bo'sh joylarni olib tashlash
+};
+
+  const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedPhoneNumber = formatPhoneNumber(e.target.value);
+    phoneNumber.current!.value = formattedPhoneNumber;
+  };
+
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   // Pagination holati
@@ -74,6 +106,8 @@ function Employees() {
   };
 
   const handleOk = () => {
+    const formattedPhoneNumber = formatForSwagger(phoneNumber.current!.value);
+    phoneNumber.current!.value = formattedPhoneNumber;
     if ( firstname.current!.value && lastname.current!.value && email.current!.value && phoneNumber.current!.value && password.current!.value && confirmPassword.current!.value &&  role.current!.value) {
       if (password.current!.value === confirmPassword.current!.value) {
         // toast.error('Rolni tanlang');
@@ -97,7 +131,7 @@ function Employees() {
     firstname.current!.value = '';
     lastname.current!.value = '';
     email.current!.value = '';
-    phoneNumber.current!.value = '';
+    phoneNumber.current!.value = '+998';
     password.current!.value = '';
     confirmPassword.current!.value = '';
     role.current!.value = '';
@@ -112,6 +146,7 @@ function Employees() {
       // Mutatsiya muvaffaqiyatli bo'lganda, hodimlar ro'yxatini toastga chiqarish
       onSuccess: (data, variables) => {
         const { enabled } = variables;
+        console.log(data);
         // queryClient.invalidateQueries('getADmin'); // Adminlar ma'lumotini qayta yuklash
         if (enabled === true) {
           message.success('Hodim muvaffaqiyatli ishga tushirildi');
@@ -143,13 +178,14 @@ function Employees() {
 
   const postAdmin = useMutation(
     async () => {
+      const formattedPhoneNumber = formatForSwagger(phoneNumber.current!.value);
       return axios.post(
         `${addEmployee}`,
         {
           firstname: firstname.current?.value, // Ref'dan qiymat olish
           lastname: lastname.current?.value,
           email: email.current?.value,
-          phoneNumber: phoneNumber.current?.value,
+          phoneNumber: formattedPhoneNumber.replace('+', ''),
           password: password.current?.value,
           confirmPassword: confirmPassword.current?.value,
           role: role.current?.value,
@@ -258,7 +294,9 @@ function Employees() {
                     type="text"
                     placeholder="Telfon raqamni kiriting"
                     className="border w-full p-2 rounded"
+                    defaultValue={"+998"}
                     ref={phoneNumber}
+                    onChange={handlePhoneNumberChange}
                   />
                 </div>
                 <div className="mb-4">
