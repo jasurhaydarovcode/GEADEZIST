@@ -10,6 +10,7 @@ export interface ClientQuizType {
     "id": number,
     "name": string,
     "categoryName": string,
+    "duration": number,
     "categoryId": number,
     "finiteError": number,
     "type": string,

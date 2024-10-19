@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Select } from 'antd';
 import { config } from '@/helpers/functions/token';
@@ -16,14 +16,8 @@ interface AxiosError extends Error {
 }
 
 const QuestionPage: React.FC = () => {
-  const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
   const [remainingTime, setRemainingTime] = useState(TOTAL_TIME); // In seconds
 
-  const { Option } = Select;
-
-  const handleChange = (value: string) => {
-    console.log(`Selected: ${value}`);
-  };
 
   const checkRoleClient = useCallback(() => {
     const role = localStorage.getItem('role');
@@ -45,7 +39,7 @@ const QuestionPage: React.FC = () => {
 
   useEffect(() => {
     // Retrieve saved time from localStorage if available
-    const savedTime = localStorage.getItem(STORAGE_KEY);
+    const savedTime = sessionStorage.getItem(STORAGE_KEY);
     if (savedTime) {
       setRemainingTime(parseInt(savedTime, 10));
     }
@@ -53,17 +47,13 @@ const QuestionPage: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const handleBack = () => {
-    navigate(-1); // Goes to the previous page in the history stack
-  };
-
   useEffect(() => {
     // Timer logic: decrement remaining time every second
     const interval = setInterval(() => {
       setRemainingTime((prevTime) => {
         if (prevTime > 0) {
           const newTime = prevTime - 1;
-          localStorage.setItem(STORAGE_KEY, newTime.toString()); // Save the new remaining time
+          sessionStorage.setItem(STORAGE_KEY, newTime.toString()); // Save the new remaining time
           return newTime;
         }
         return 0; // Timer reaches zero
@@ -83,23 +73,15 @@ const QuestionPage: React.FC = () => {
     return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   };
 
-  const toggleAnswer = (index: number) => {
-    if (selectedAnswers.includes(index)) {
-      setSelectedAnswers(selectedAnswers.filter((answer) => answer !== index));
-    } else {
-      setSelectedAnswers([...selectedAnswers, index]);
-    }
-  };
+
+  // useStates
+
 
 
 
   // useQuery to fetch data from server
 
-  const fetchQuestion = async (questionId: number) => {
-    const response = await axios.get(`${baseUrl}quiz/start/${questionId}`); // Replace with your actual API
-    return response.data;
-  };
-
+  
 
   return (
     <div className="px-9 space-y-12">
@@ -118,34 +100,7 @@ const QuestionPage: React.FC = () => {
           </h2>
         </div>
         <div className="mt-4">
-          <p className="text-lg font-medium">
-            1. AutoCAD дастурида геодезик ўлчаш ишлари билан ишлашни биласизми?
-            Қандай даражада?
-          </p>
-          <p className="text-red-600 mt-2">
-            Бир неча тўғри жавобларни белгиланг
-          </p>
 
-          <div className="mt-4 space-y-3">
-            {answers.map((answer, index) => (
-              <label
-                key={index}
-                className={`block p-4 border rounded-lg cursor-pointer ${selectedAnswers.includes(index)
-                  ? 'bg-blue-100 border-blue-500'
-                  : 'border-gray-300'
-                  }`}
-                onClick={() => toggleAnswer(index)}
-              >
-                <input
-                  type="checkbox"
-                  className="mr-2"
-                  checked={selectedAnswers.includes(index)}
-                  readOnly
-                />
-                {answer}
-              </label>
-            ))}
-          </div>
 
           {/* Progress Bar */}
 
@@ -156,23 +111,6 @@ const QuestionPage: React.FC = () => {
 
           {/* Navigation Buttons */}
           <div className="mt-6 flex justify-between items-center">
-            <button
-              onClick={handleBack}
-              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md"
-            >
-              Орқага
-            </button>
-            <Select
-              defaultValue="Savollar"
-              style={{ width: 150 }}
-              onChange={handleChange}
-            >
-              {number.map((item: number) => (
-                <Option classname="p-3" key={item}>
-                  {item}/{number.length}
-                </Option>
-              ))}
-            </Select>
             <button className="px-4 py-2 bg-blue-500 text-white rounded-md">
               Кейингиси
             </button>
@@ -189,11 +127,6 @@ const answers = [
   'Ҳа биламан. Ўқув жараёнида яхши фойдаланганман.',
   'Дастурни ишлата олмайман.',
   'Дастурни ишлай оламан лекин ўқув ёки иш жараёнида аниқ бир иш битирмаганман.',
-];
-
-const number = [
-  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
-  23, 24, 25, 26, 27, 28, 29, 30,
 ];
 
 export default QuestionPage;
