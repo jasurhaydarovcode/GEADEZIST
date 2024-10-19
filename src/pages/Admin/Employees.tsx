@@ -13,6 +13,7 @@ import TableLoading from '@/components/spinner/TableLoading';
 import axios from 'axios';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import CheckLogin from '@/helpers/functions/checkLogin';
+import { showErrorMessage } from '@/helpers/functions/message';
 
 function Employees() {
   CheckLogin
@@ -118,10 +119,10 @@ function Employees() {
           resetForm(); // Forma maydonlarini tozalash
         }, 2000);
       } else {
-        message.error('Parollar mos kelmadi');
+        showErrorMessage('Parollar mos kelmadi');
       }
     } else {
-      message.error("Barcha maydonlarni to'ldiring");
+      showErrorMessage("Barcha maydonlarni to'ldiring");
     }
   };
 
@@ -145,7 +146,7 @@ function Employees() {
       // Mutatsiya muvaffaqiyatli bo'lganda, hodimlar ro'yxatini toastga chiqarish
       onSuccess: (data, variables) => {
         const { enabled } = variables;
-        console.log(data);
+        // console.log(data);
         // queryClient.invalidateQueries('getADmin'); // Adminlar ma'lumotini qayta yuklash
         if (enabled === true) {
           message.success('Hodim muvaffaqiyatli ishga tushirildi');
@@ -201,7 +202,7 @@ function Employees() {
       },
       onError: (error) => {
         console.error('Xatolik:', error);
-        message.error("Hodim qo'shishda xatolik yuz berdi");
+        showErrorMessage("Hodim qo'shishda xatolik yuz berdi");
       },
     },
   );
