@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Modal, message } from 'antd';
 import { MdDelete } from 'react-icons/md';
+import { showErrorMessage } from '@/helpers/functions/message';
 
 interface DeleteButtonProps {
   item: {
@@ -17,7 +18,7 @@ const DeleteButton = ({ item, handleDeleteCategory }: DeleteButtonProps) => {
     if (!item.deleted) {
       setIsModalOpen(true); // Modalni ochish
     } else {
-      message.error("Bu kategoriya o'chirilgan, uni o'chirish mumkin emas.");
+      showErrorMessage("Bu kategoriya o'chirilgan, uni o'chirish mumkin emas.");
     }
   };
 

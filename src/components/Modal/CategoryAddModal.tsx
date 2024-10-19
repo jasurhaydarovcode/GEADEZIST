@@ -8,6 +8,7 @@ import {
   CategoryAddModalProps,
   CategoryModalTypes,
 } from '@/helpers/types/CategoryModalTypes';
+import { showErrorMessage } from '@/helpers/functions/message';
 
 const { Option } = Select;
 
@@ -59,9 +60,9 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
       },
       onError: (error: any) => {
         if (error.response?.status === 409) {
-          message.error('Bunday nomdagi kategoriya allaqachon mavjud!');
+          showErrorMessage('Bunday nomdagi kategoriya allaqachon mavjud!');
         } else {
-          message.error('Xatolik yuz berdi, iltimos qaytadan urinib ko‘ring.');
+          showErrorMessage('Xatolik yuz berdi, iltimos qaytadan urinib ko‘ring.');
         }
       },
     }
@@ -104,7 +105,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
     valid = !Object.values(errors).some((error) => error);
 
     if (!valid) {
-      message.error("Barcha maydonlarni to'ldiring!");
+      showErrorMessage("Barcha maydonlarni to'ldiring!");
     }
 
     return valid;
