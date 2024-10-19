@@ -14,10 +14,24 @@ import Modal from 'react-modal';
 import { IoMdCloseCircleOutline } from 'react-icons/io';
 import checkLogin from '@/helpers/functions/checkLogin';
 
+
+import type { PaginationProps } from 'antd';
+import { Pagination } from 'antd';
+
+
+
 // Accessibility setup
 Modal.setAppElement('#root');
 checkLogin
 function AllUser() {
+
+  const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, pageSize) => {
+    console.log(current, pageSize);
+  };
+
+
+
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUser, setSelectedUser] = useState<UserNatijasi | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -141,23 +155,13 @@ function AllUser() {
                   </table>
                 </div>
 
-                {/* <div className="flex justify-between mt-4">
-                  <button
-                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                    disabled={currentPage === 1}
-                    className="bg-white text-gray-600 px-4 py-2 rounded disabled:opacity-50"
-                  >
-                    Oldingi
-                  </button>
-                  <span>Sahifa {currentPage} / {totalPages}</span>
-                  <button
-                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                    disabled={currentPage === totalPages}
-                    className="bg-white text-gray-600 px-4 py-2 rounded disabled:opacity-50"
-                  >
-                    Keyingi
-                  </button>
-                </div> */}
+                <div>
+                  <Pagination
+                    onShowSizeChange={onShowSizeChange}
+                    defaultCurrent={1}
+                    total={50}
+                  />
+                </div>
               </div>
             </div>
           </div>
