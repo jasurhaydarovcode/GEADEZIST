@@ -35,7 +35,6 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
 
-  // Axios mutation for adding a category
   const mutation = useMutation(
     async (newCategory: CategoryModalTypes) => {
       const response = await axios.post(`${baseUrl}category`, newCategory, {
@@ -113,8 +112,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
 
   const handleSave = () => {
     if (isFormValid()) {
-      const categoryData: CategoryModalTypes = { ...formData, id: 0 };
-      mutation.mutate(categoryData);
+      mutation.mutate({ ...formData, id: 0 });
     }
   };
 
