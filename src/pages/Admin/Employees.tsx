@@ -110,7 +110,6 @@ function Employees() {
     phoneNumber.current!.value = formattedPhoneNumber;
     if ( firstname.current!.value && lastname.current!.value && email.current!.value && phoneNumber.current!.value && password.current!.value && confirmPassword.current!.value &&  role.current!.value) {
       if (password.current!.value === confirmPassword.current!.value) {
-        // toast.error('Rolni tanlang');
         postAdmin.mutate(); // POST so'rovini yuborish
         setConfirmLoading(true);
         setTimeout(() => {
