@@ -228,7 +228,7 @@ function Address() {
         setTumanModals(false);
         setConfirmLoading(false);
         resetTumanForm();
-      }, 100);
+      }, 500);
     }else{
       setHasErrors(true);
       message.error("Barcha maydonlarni to'ldiring");
@@ -272,7 +272,7 @@ function Address() {
   const tumanDeleteOk = () => {
     if (selectedAddress !== null) {
       deleteTuman.mutate(selectedAddress);
-      setTumanDelete(false);
+      // setTumanDelete(false);
     }
   };
   const tumanDeleteCancel = () => {
@@ -288,6 +288,8 @@ function Address() {
     onSuccess: () => {
       message.success("Manzil o'chirildi");
       queryClient.invalidateQueries('getDistrict');
+      setTumanDelete(false);
+
     },
     onError: (error) => {
       message.error('Xatolik yuz berdi');
