@@ -75,6 +75,7 @@ function Address() {
     if (selectedAddress !== null) {
       updateAddress.mutate(selectedAddress);
       setPutOpen(false);
+      resetForm();
     }
   };
 
