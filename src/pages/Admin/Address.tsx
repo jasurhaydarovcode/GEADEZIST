@@ -7,7 +7,7 @@ import { config } from '@/helpers/functions/token';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Modal, Pagination } from 'antd';
 import { Table,TableBody,TableCell, TableHead, TableHeadCell, TableRow,} from 'flowbite-react';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { MdDelete, MdEdit } from 'react-icons/md';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
@@ -43,12 +43,12 @@ function Address() {
   const handleOk = () => {
     if (name) {
       postAddressData.mutate();
-      // setConfirmLoading(true);
-      // setTimeout(() => {
+      setConfirmLoading(true);
+      setTimeout(() => {
         setOpen(false);
         setConfirmLoading(false);
         resetForm();
-      // }, 2000);
+      }, 500);
     }else{
       setHasError(true);
       message.error("Barcha maydonlarni to'ldiring");
@@ -61,10 +61,15 @@ function Address() {
   };
 
   const handleDelete = () => {
-    if (selectedAddress !== null) {
+    setConfirmLoading(true);
+    setTimeout(() => {
+      if (selectedAddress !== null) {
       deleteAddress.mutate(selectedAddress);
       setDeleteModalVisible(false);
-    }
+      setConfirmLoading(false);
+      resetForm();
+      }
+    }, 500);
   };
 
   const handleDeleteCancel = () => {
@@ -248,8 +253,6 @@ function Address() {
 
 
   // Tumanlarni post qilish
-  // const tumanName = useRef<HTMLInputElement>(null);
-  // const regionId = useRef<HTMLSelectElement>(null);
   const [tumanName, setTumanName] = useState('');
   const [regionId, setRegionId] = useState('');
 
@@ -302,8 +305,6 @@ function Address() {
     setTumanName(item.name);
     setRegionId(item.regionId);
     setTumanEdit(true);
-    // tumanName.current!.value = item.name;
-    // regionId.current!.value = item.regionId;
   };
 
   const handleTumanEditOk = () => {
