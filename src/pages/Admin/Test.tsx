@@ -1,8 +1,9 @@
 import Layout from "@/components/Dashboard/Layout";
 import { baseUrl, PostQuestion } from "@/helpers/api/baseUrl";
+import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow, } from 'flowbite-react';
 import { config } from "@/helpers/functions/token";
 import { PlusCircleOutlined, EditOutlined, DeleteOutlined, EyeOutlined, } from "@ant-design/icons";
-import { Button, Modal, Table } from "antd";
+import { Button, Modal, } from "antd";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
@@ -11,9 +12,10 @@ import { useMutation, useQuery } from "react-query";
 import { ApiResponse, FetchedTest } from "@/helpers/types/test";
 import TableLoading from "@/components/spinner/TableLoading";
 import { Answer } from "@/helpers/types/AddQuizType";
-import TestVisual from "@/components/test/testVisual";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CheckLogin from "@/helpers/functions/checkLogin";
+import defaultImage from "../../assets/images/default.png";
+import TestVisual from "@/components/test/testVisual";
 
 function Test() {
   CheckLogin
@@ -23,14 +25,13 @@ function Test() {
   const [testType, setTestType] = useState<string | null>(null);
   const quiz = useRef<HTMLInputElement | null>(null);
   const category = useRef<HTMLSelectElement | null>(null);
-
+  const navigate = useNavigate();
   // bu kod qoshish btn uchun + -funck
   const [answers, setAnswers] = useState<Answer[]>([
     { id: Date.now(), value: "" },
   ]); // Start with one input
   // test get
   const [datas, useDatas] = useState<FetchedTest[]>([]);
-  const dataSource = datas;
 
   // search
   const [turi, setTuri] = useState<string | null>(null);
@@ -44,38 +45,49 @@ function Test() {
       useDatas(datas);
     }
   }
-  //   const searchTest = async (): Promise<void> => {
-  //   if (nameSearch) {
-  //     try {
-  //       const response = await axios.get<ApiResponse>(
-  //         `${baseUrl}question/filter?questionName=${nameSearch}&page=0&size=10`,
-  //         config
-  //       );
+  const searchTest = async (): Promise<void> => {
+    if (nameSearch) {
+      try {
+        const response = await axios.get<ApiResponse>(
+          `${baseUrl}question/filter?questionName=${nameSearch}&page=0&size=10`,
+          config
+        );
 
-  //       // Map the data to your table format
-  //       const fetchedQuestions = response.data.body.body.map((item, index) => ({
-  //         key: item.id.toString(),
-  //         numer: index + 1,
-  //         testRasm: ".", // Replace with actual image if available
-  //         savol: item.optionDtos[0]?.answer || "",
-  //         catygoria: item.categoryName || "No category",
-  //         savolTuri: item.type,
-  //         qiyinligi: item.difficulty,
-  //         yaratganOdam: item.createdByName,
-  //       }));
+        // Map the data to your table format
+        const fetchedQuestions = response.data.body.body.map((item, index) => ({
+          key: item.id.toString(),
+          numer: index + 1,
+          testRasm: item.optionDtos[0]?.file ? item.optionDtos[0]?.file : defaultImage, // Replace with actual image if available
+          savol: item.optionDtos[0]?.answer || "",
+          catygoria: item.categoryName || "No category",
+          savolTuri: item.type,
+          qiyinligi: item.difficulty,
+          yaratganOdam: item.createdByName,
+        }));
 
-  //       useDatas(fetchedQuestions); // Update your state
-  //       console.log(fetchedQuestions);
-  //     } catch (error) {
-  //       console.error("Error fetching search results:", error);
-  //     }
-  //   } else {
-  //     // Reset data if no search term is provided
-  //     useDatas([]);
-  //   }
-  // };
-
+        useDatas(fetchedQuestions); // Update your state
+      } catch (error) {
+        console.error("Error fetching search results:", error);
+      }
+    } else {
+      // Reset data if no search term is provided
+      useDatas([]);
+    }
+  };
   // search
+
+  // delete
+  const [testID, setTestID] = useState<number | string>('')
+  function isdelete(testID: number | string) {
+    axios.delete(baseUrl + 'question/' + testID, config)
+      .then(res => {
+        console.log(res);
+      }).catch(err => {
+        console.error(err);
+
+      })
+  }
+  // delete
 
   const handleAddAnswer = () => {
     setAnswers([...answers, { id: Date.now(), value: "" }]); // Add a new input
@@ -94,7 +106,7 @@ function Test() {
   useEffect(() => {
     removeInp();
     searchTest2();
-  }, [testType, turi, kategoriya, nameSearch]);
+  }, [testType, turi, kategoriya, nameSearch, datas]);
 
   const testData = async (): Promise<ApiResponse> => {
     const response = await axios.get<ApiResponse>(
@@ -104,15 +116,55 @@ function Test() {
     return response.data;
   };
 
+  // edit 
+  const [editTestID, setEditTestID] = useState<string>('');
+  const [categore, setCategory] = useState<string>('');
+  const [difficulty, setDifficulty] = useState<string>('');
+  const [type, setType] = useState<string>('');
+  const [answer, setanswer] = useState<string | null>(null);
+  const updatedData = {
+    name: answer,
+    categoryName: categore,
+    type: type,
+    difficulty: difficulty,
+    optionDtos: [
+      {
+        id: 1,
+        answer: answer,
+        isCorrect: true,
+      },
+    ],
+  };
+
+  // updateQuestion(1, updatedData);
+
+  function isEdit(ID: string) {
+    const updateQuestion = async (ID: string | number) => {
+      try {
+        const response = await axios.put(`${baseUrl}question/${ID}`, updatedData, config);
+        console.log('Ma\'lumot yangilandi:', response.data);
+        return response.data;
+      } catch (error) {
+        console.error('Ma\'lumotni yangilashda xatolik yuz berdi:', error);
+      }
+    };
+    updateQuestion(ID)
+    seteditModal(!editMod)
+    console.log(updatedData);
+    console.log(ID);
+
+  }
+  // edit 
+
   // Use the data in a React component
-  const { data, isLoading } = useQuery<ApiResponse>({
+  const { isLoading } = useQuery<ApiResponse>({
     queryKey: ["tests"],
     queryFn: testData,
     onSuccess: (response) => {
       console.log(response);
 
-      // Map the data to your table format
       const fetchedTests = response.body.body.map((item, index) => ({
+        name: item.name,
         key: item.id.toString(),
         numer: index + 1,
         testRasm: ".", // Haqiqiy rasm mavjud bo'lsa, o'zgartiring
@@ -122,10 +174,10 @@ function Test() {
         qiyinligi: item.difficulty,
         yaratganOdam: item.createdByName,
       }));
-      useDatas(fetchedTests); // useDatas o'rniga setDatas
+      useDatas(fetchedTests); // useDatas o'rniga setDatas ishlatish
+
     },
   });
-  console.log(data);
 
   const categoryNames = [
     {
@@ -151,60 +203,23 @@ function Test() {
     // Malumotlarni yuborish yoki boshqa amallar
     setTimeout(() => {
       setConfirmLoad(false);
+      isEdit(editTestID)
       // ha(false);
     }, 2000);
   };
   const closeditmod = () => seteditModal(!editModal);
   // edit modal
+
   // delete modal
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-
   const handleDelete = () => {
-    // O'chirish amalini bajarish
     setDeleteModalVisible(false);
+    isdelete(testID)
   };
 
   const handleDeleteCancel = () => {
     setDeleteModalVisible(false);
   };
-
-
-  const columns = [
-    { title: "№", dataIndex: "numer", key: "numer" },
-    { title: "Test rasm", dataIndex: "testRasm", key: "testRasm" },
-    { title: "Savol", dataIndex: "savol", key: "savol" },
-    { title: "Kategoriya", dataIndex: "catygoria", key: "catygoria" },
-    { title: "Savol turi", dataIndex: "savolTuri", key: "savolTuri" },
-    { title: "Qiyinchilik darajasi", dataIndex: "qiyinligi", key: "qiyinligi" },
-    { title: "Yaratgan odam", dataIndex: "yaratganOdam", key: "yaratganOdam" },
-    {
-      title: "Harakat",
-      dataIndex: "harakat",
-      key: "harakat",
-      render: () => (
-        <div className="flex gap-3">
-          <EditOutlined
-            onClick={() => {
-              seteditModal(true);
-            }}
-            className="text-black cursor-pointer"
-            style={{ fontSize: "18px" }}
-          />
-          <DeleteOutlined
-            onClick={() => {
-              setDeleteModalVisible(true);
-            }}
-            className="text-black cursor-pointer"
-            style={{ fontSize: "18px" }}
-          />
-          <EyeOutlined
-            className="text-black cursor-pointer"
-            style={{ fontSize: "18px" }}
-          />
-        </div>
-      ),
-    },
-  ];
 
   const showModal = () => {
     setOpen(true);
@@ -244,6 +259,7 @@ function Test() {
       return res.data;
     },
   });
+
 
   return (
     <div>
@@ -527,37 +543,87 @@ function Test() {
               </div>
             </div>
             {/* table  */}
-            <Table
-              dataSource={dataSource}
-              columns={columns}
-              pagination={{ pageSize: 10 }}
-            />
+
+
+            <Table hoverable>
+              <TableHead>
+                <TableHeadCell>T/P</TableHeadCell>
+                <TableHeadCell>Test rasm</TableHeadCell>
+                <TableHeadCell>Savol</TableHeadCell>
+                <TableHeadCell>Kategoriya</TableHeadCell>
+                <TableHeadCell>Savol turi</TableHeadCell>
+                <TableHeadCell>Qiyinchilik darajasi</TableHeadCell>
+                <TableHeadCell>Yaratgan odam</TableHeadCell>
+                <TableHeadCell>action</TableHeadCell>
+              </TableHead>
+              <TableBody className="divide-y">
+                {Array.isArray(datas) &&
+                  datas.map((item) => (
+                    <TableRow>
+                      <TableCell>{item.numer}</TableCell>
+                      <TableCell><img className="border-[1px] border-gray-300 w-10 h-10 rounded-full object-cover hover:cursor-pointer sm:w-[43px] sm:h-[43px]" src={defaultImage} alt="" /></TableCell>
+                      <TableCell>{item.savol}</TableCell>
+                      <TableCell>{item.catygoria}</TableCell>
+                      <TableCell>{item.qiyinligi}</TableCell>
+                      <TableCell>{item.savolTuri}</TableCell>
+                      <TableCell>{item.yaratganOdam}</TableCell>
+                      <TableCell>
+                        <EditOutlined onClick={() => {
+                          seteditModal(true);
+                          setEditTestID(item.key)
+                        }}
+                          className="text-black cursor-pointer"
+                          style={{ fontSize: "18px" }}
+                        />
+                        <DeleteOutlined onClick={() => {
+                          setDeleteModalVisible(true)
+                          setTestID(item.key)
+                        }}
+                          className="text-black cursor-pointer mx-3"
+                          style={{ fontSize: "18px" }}
+                        />
+                        <EyeOutlined
+                          onClick={() => {
+                            navigate('/tests', { state: { element: item } });
+                          }}
+                          className="text-black cursor-pointer"
+                          style={{ fontSize: "18px" }}
+                        /></TableCell>
+                    </TableRow>
+                  ))
+                }
+
+
+              </TableBody>
+            </Table>
           </div>
-        )}
+        )
+        }
       </Layout>
 
       {/* edit modal */}
       <Modal
         title="edit modal"
         open={editModal}
-        // onOk={putTest}
+        onOk={editMod}
         confirmLoading={confirmLoad}
         onCancel={closeditmod}
         maskClosable={false}
       >
         <div className="mb-4">
           <input
+            onChange={(e) => setanswer(e.target.value)}
             placeholder="Savolni kiriting"
             className="border w-full p-2 rounded"
           />
         </div>
 
         <div className="mb-4">
-          <select className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
+          <select onChange={(e) => setCategory(e.target.value)} className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
             <option disabled selected value="">
               Kategoriyani tanlang
             </option>
-            <option value="" className="text text-black">
+            <option value="SUM" className="text text-black">
               Umumiy savollar
             </option>
             <option value="" className="text text-black">
@@ -576,7 +642,7 @@ function Test() {
         </div>
 
         <div className="mb-4">
-          <select className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
+          <select onChange={(e) => setDifficulty(e.target.value)} className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
             <option disabled selected>
               Qiyinchilik darajasini tanlang
             </option>
@@ -594,7 +660,10 @@ function Test() {
 
         <div className="mb-4">
           <select
-            onChange={(e) => setTestType(e.target.value)}
+            onChange={(e) => {
+              setTestType(e.target.value)
+              setType(e.target.value)
+            }}
             className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]"
           >
             <option disabled selected>
@@ -700,6 +769,7 @@ function Test() {
             ))}
         </div>
 
+
         <div className="mb-4 ml-[180px] mt-5 ">
           <label className="w-[90px] h-[90px] rounded border-dashed border-2 border-gray-400 bg-yellow-100 flex flex-col items-center justify-center">
             <input type="file" className="hidden" />
@@ -716,6 +786,20 @@ function Test() {
         {/* Qolgan kontentni modal ichiga joylang */}
       </Modal>
 
+      <Modal
+        open={deleteModalVisible}
+        onOk={handleDelete}
+        onCancel={handleDeleteCancel}
+        okText="O'chirish"
+        cancelText="Yopish"
+        maskClosable={false}
+        okButtonProps={{ style: { backgroundColor: 'black', color: 'white' }, }}
+        cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white' }, }}
+      >
+        <p className="text-center text-xl my-5 font-semibold">
+          Tumanni o'chirmoqchimisiz?
+        </p>
+      </Modal>
     </div>
   );
 }

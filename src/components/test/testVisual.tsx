@@ -1,33 +1,92 @@
-import { Layout } from "lucide-react";
+import Layout from "@/components/Dashboard/Layout";
+import { baseUrl } from "@/helpers/api/baseUrl";
+import { config } from "@/helpers/functions/token";
+import axios from "axios";
+import "react-toastify/dist/ReactToastify.css";
+import { useQuery } from "react-query";
+import TableLoading from "@/components/spinner/TableLoading";
 import { Helmet } from "react-helmet";
-import TableLoading from "../spinner/TableLoading";
-import { Button } from "antd";
-import { PlusCircleOutlined } from "@ant-design/icons";
+import CheckLogin from "@/helpers/functions/checkLogin";
+import { useLocation } from 'react-router-dom';
 
-function TestVisual() {
-let isLoading = true
+function Category() {
+    CheckLogin
+
+    const location = useLocation();
+    const { element } = location.state || {};
+
+    // Kategoriyalarni olish
+    const { data, isLoading } = useQuery(
+        ["getCategories", 1],
+        async () => {
+            const res = await axios.get<{
+                body: { body: any[]; totalElements: number };
+            }>(
+                `${baseUrl}category/page?page=${1 - 1}&size=${10}`,
+                config
+            );
+            return res.data.body.body;
+        },
+        { keepPreviousData: true }
+    );
+    console.log(data);
+
+
     return (
         <div>
             <Helmet>
-                <title>Testlar</title>
+                <title>Kategoriyalar</title>
             </Helmet>
 
             <Layout>
-                {isLoading ? (<div className='flex justify-center items-center h-screen'><TableLoading /></div>) : (<div className="p-5">
-                    <div className="flex justify-between">
-                        <h1 className="text-3xl font-bold font-sans">Test</h1>
-                        <p className="font-sans text-gray-700">
-                            Boshqaruv paneli / <span className="text-blue-700">Test</span>
-                        </p>
+                {isLoading ? (
+                    <div className="flex justify-center items-center h-[80vh]">
+                        {<TableLoading />}
                     </div>
-                </div>
+                ) : (
+                    <>
+                        <div className="p-6 font-sans text-center">
+                            <h1 className="text-2xl font-bold">Битта савол</h1>
+                            <p className="italic mt-2">
+                                Админ саволни мижозларга қандай кўринишини билиб олиш учун намуна
+                            </p>
+                            <h2 className="text-xl font-semibold mt-4">{element?.name || 'Категория номаълум'}</h2>
+                            <p className="text-lg mt-4">
+                                <span className="italic">{element?.categoriya || 'Савол номаълум'}</span>
+                                <span className="text-2xl">
+                                </span>
+                            </p>
+                            <p className="text-red-600 font-bold mt-4">Фақат битта тўғри жавобни белгиланг</p>
+                            <div className="mt-6">
+                                {element ? (
+                                    <label className="block mb-4 w-[100%]" >
+                                        <input
+                                            type="text"
+                                            name="answer"
+                                            disabled
+                                            value="javob"
+                                            className="mr-2 "
+                                        />
+                                        <input
+                                            type="radio"
+                                            name="answer"
+                                            disabled
+                                            value="javob"
+                                            className="mr-2"
+                                        />
+                                    </label>
+                                ) : (
+                                    <p>Ma'lumotlar mavjud emas.</p>
+                                )
+                                }
+                            </div>
+                        </div>
+                    </>
                 )}
 
-                < div className="flex justify-between">
-                </div>
             </Layout>
         </div>
-
-    )
+    );
 }
-export default TestVisual
+
+export default Category;
