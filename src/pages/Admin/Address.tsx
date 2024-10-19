@@ -142,7 +142,7 @@ function Address() {
       queryClient.invalidateQueries('getAddress'); 
       queryClient.invalidateQueries('getRegion');
     },
-    onError: (error) => {
+    onError: () => {
       // message.error('Xatolik yuz berdi');
       queryClient.invalidateQueries('getAddress'); 
       queryClient.invalidateQueries('getRegion');
@@ -161,8 +161,8 @@ function Address() {
       queryClient.invalidateQueries('getRegion'); 
       queryClient.invalidateQueries('getDistrict');
     },
-    onError: (error) => {
-      message.error('Xatolik yuz berdi');
+    onError: (error: string) => {
+      message.error(error || 'Xatolik yuz berdi');
       
     },
   });
@@ -176,8 +176,8 @@ function Address() {
       message.success('Manzil yangilandi');
       queryClient.invalidateQueries(['getAddress']);
     },
-    onError: (error) => {
-      message.error('Xatolik yuz berdi');
+    onError: (error: string) => {
+      message.error(error || 'Xatolik yuz berdi');
       
     },
   });
@@ -266,7 +266,7 @@ function Address() {
       message.success("Manzil qo'shildi"); 
       queryClient.invalidateQueries('getDistrict'); 
     },
-    onError: (error) => {
+    onError: () => {
       // message.error('Xatolik yuz berdi');
       queryClient.invalidateQueries('getDistrict'); 
     },
@@ -294,8 +294,8 @@ function Address() {
       setTumanDelete(false);
 
     },
-    onError: (error) => {
-      message.error('Xatolik yuz berdi');
+    onError: (error: string) => {
+      message.error(error || 'Xatolik yuz berdi');
     },
   }); 
   
@@ -333,8 +333,8 @@ function Address() {
       message.success('Tuman yangilandi');
       queryClient.invalidateQueries(['getDistrict']);
     },
-    onError: (error) => {
-      message.error('Xatolik yuz berdi'); 
+    onError: (error: string) => {
+      message.error( error || 'Xatolik yuz berdi'); 
     },
   });
 
