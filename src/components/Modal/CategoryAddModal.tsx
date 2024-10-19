@@ -26,12 +26,16 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
   const [inputErrors, setInputErrors] = useState({
     name: false,
     description: false,
+    questionCount: false,
+    extraQuestionCount: false,
+    durationTime: false,
+    retakeDate: false,
   });
 
   const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
 
-  // Yangi kategoriya qo'shish uchun mutatsiya
+  // Axios mutation for adding a category
   const mutation = useMutation(
     async (newCategory: CategoryModalTypes) => {
       const response = await axios.post(`${baseUrl}category`, newCategory, {
@@ -43,13 +47,9 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
     },
     {
       onSuccess: (data) => {
-        // Kategoriyalarni qayta olish va ID bo'yicha saralash
-        queryClient.invalidateQueries('categories'); // Eski keshni yangilash
+        queryClient.invalidateQueries('categories');
         queryClient.setQueryData<CategoryModalTypes[]>('categories', (oldData = []) => {
-          // Eski ma'lumotlar va yangi kategoriya qo'shildi
-          const newData: CategoryModalTypes[] = [...oldData, data as CategoryModalTypes];
-
-          // ID bo'yicha o'sish tartibida saralash
+          const newData = [...oldData, data as CategoryModalTypes];
           return newData.sort((a, b) => a.id - b.id);
         });
 
@@ -68,7 +68,6 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
     }
   );
 
-  // Formani reset qilish
   const resetForm = () => {
     setFormData({
       name: '',
@@ -83,66 +82,50 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
     setInputErrors({
       name: false,
       description: false,
+      questionCount: false,
+      extraQuestionCount: false,
+      durationTime: false,
+      retakeDate: false,
     });
   };
 
-  // Formani to'g'ri to'ldirilganligini tekshirish
   const isFormValid = () => {
     let valid = true;
-    let errors = {
-      name: false,
-      description: false,
+    const errors = {
+      name: !formData.name.trim(),
+      description: !formData.description.trim(),
+      questionCount: formData.main && formData.questionCount <= 0,
+      extraQuestionCount: formData.main && formData.extraQuestionCount <= 0,
+      durationTime: formData.main && formData.durationTime <= 0,
+      retakeDate: formData.main && formData.retakeDate <= 0,
     };
 
-    if (!formData.name.trim()) {
-      errors.name = true;
-      valid = false;
-    }
-    if (!formData.description.trim()) {
-      errors.description = true;
-      valid = false;
-    }
-
-    if (
-      formData.main &&
-      (formData.questionCount <= 0 ||
-        formData.extraQuestionCount <= 0 ||
-        formData.durationTime <= 0 ||
-        formData.retakeDate <= 0)
-    ) {
-      message.error("Asosiy kategoriya uchun barcha qiymatlar to'g'ri bo'lishi kerak!");
-      valid = false;
-    }
-
     setInputErrors(errors);
+
+    valid = !Object.values(errors).some((error) => error);
+
     if (!valid) {
       message.error("Barcha maydonlarni to'ldiring!");
     }
+
     return valid;
   };
 
-  // Saqlash tugmasi bosilganda
   const handleSave = () => {
     if (isFormValid()) {
-      // Kategoriya ma'lumotlarini tayyorlash
-      const categoryData: CategoryModalTypes = {
-        ...formData,
-        id: 0 // Vaqtinchalik ID
-      };
+      const categoryData: CategoryModalTypes = { ...formData, id: 0 };
       mutation.mutate(categoryData);
     }
   };
 
-  // Modalni yopish
   const handleCancel = () => {
     resetForm();
     setOpen(false);
   };
 
-  // Input uchun stil
   const InputStyles = {
     input: 'w-full rounded-lg border',
-    error: 'border-red-500', 
+    error: 'border-red-500',
   };
 
   return (
@@ -188,9 +171,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
               className={`${InputStyles.input} ${inputErrors.name ? InputStyles.error : ''}`}
               placeholder="Kategoriya nomini kiriting"
               value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             />
             {inputErrors.name && (
               <span className="text-red-500 text-sm">Kategoriya nomini kiriting</span>
@@ -203,9 +184,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
               className={`${InputStyles.input} ${inputErrors.description ? InputStyles.error : ''}`}
               placeholder="Tavsifni kiriting"
               value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
             />
             {inputErrors.description && (
               <span className="text-red-500 text-sm">Tavsifni kiriting</span>
@@ -217,67 +196,62 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
               <div>
                 <label className="block mb-2">Umumiy Savollar</label>
                 <Input
-                  className={InputStyles.input}
+                  className={`${InputStyles.input} ${inputErrors.questionCount ? InputStyles.error : ''}`}
                   type="number"
                   placeholder="Umumiy savollar sonini kiriting"
                   value={formData.questionCount}
-                  onChange={(e) =>
-                    setFormData({ ...formData, questionCount: Number(e.target.value) })
-                  }
+                  onChange={(e) => setFormData({ ...formData, questionCount: Number(e.target.value) })}
                   min="0"
                 />
-                {inputErrors.description && (
-              <span className="text-red-500 text-sm">Umumiy savollar sonini kiriting</span>
-            )}
+                {inputErrors.questionCount && (
+                  <span className="text-red-500 text-sm">Umumiy savollar sonini kiriting</span>
+                )}
               </div>
+
               <div>
                 <label className="block mb-2">Qo'shimcha savollar</label>
                 <Input
-                  className={InputStyles.input}
+                  className={`${InputStyles.input} ${inputErrors.extraQuestionCount ? InputStyles.error : ''}`}
                   type="number"
                   placeholder="Qo'shimcha savollar sonini kiriting"
                   value={formData.extraQuestionCount}
-                  onChange={(e) =>
-                    setFormData({ ...formData, extraQuestionCount: Number(e.target.value) })
-                  }
+                  onChange={(e) => setFormData({ ...formData, extraQuestionCount: Number(e.target.value) })}
                   min="0"
                 />
-              {inputErrors.description && (
-              <span className="text-red-500 text-sm">Qo'shimcha savollar sonini kiriting</span>
-            )}
+                {inputErrors.extraQuestionCount && (
+                  <span className="text-red-500 text-sm">Qo'shimcha savollar sonini kiriting</span>
+                )}
               </div>
+
               <div>
                 <label className="block mb-2">Davomiylik (daqiqa)</label>
                 <Input
-                  className={InputStyles.input}
+                  className={`${InputStyles.input} ${inputErrors.durationTime ? InputStyles.error : ''}`}
                   type="number"
                   placeholder="Davomiylik (daqiqa)"
                   value={formData.durationTime}
-                  onChange={(e) =>
-                    setFormData({ ...formData, durationTime: Number(e.target.value) })
-                  }
+                  onChange={(e) => setFormData({ ...formData, durationTime: Number(e.target.value) })}
                   min="0"
                 />
-                {inputErrors.description && (
-              <span className="text-red-500 text-sm">Davomiylik (daqiqa)ni kiriting</span>
-            )}
+                {inputErrors.durationTime && (
+                  <span className="text-red-500 text-sm">Davomiylikni kiriting</span>
+                )}
               </div>
+
               <div>
                 <label className="block mb-2">Qayta qabul qilish sanasi</label>
                 <Input
-                  className={InputStyles.input}
+                  className={`${InputStyles.input} ${inputErrors.retakeDate ? InputStyles.error : ''}`}
                   type="number"
                   placeholder="Qayta qabul qilish sanasi"
                   value={formData.retakeDate}
-                  onChange={(e) =>
-                    setFormData({ ...formData, retakeDate: Number(e.target.value) })
-                  }
+                  onChange={(e) => setFormData({ ...formData, retakeDate: Number(e.target.value) })}
                   min="0"
                 />
-                {inputErrors.description && (
-              <span className="text-red-500 text-sm">Qayta qabul qilish sanasini kiriting</span>
-            )}
-            </div>
+                {inputErrors.retakeDate && (
+                  <span className="text-red-500 text-sm">Qayta qabul qilish sanasini kiriting</span>
+                )}
+              </div>
             </>
           )}
         </div>
