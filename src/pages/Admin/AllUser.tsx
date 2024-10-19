@@ -30,13 +30,11 @@ function AllUser() {
   };
 
 
-
-
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUser, setSelectedUser] = useState<UserNatijasi | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; // Har bir sahifada ko'rsatiladigan elementlar soni
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 5; // Har bir sahifada ko'rsatiladigan elementlar soni
 
   const { data: usersData, refetch } = useQuery({
     queryKey: ['User', config],
@@ -67,6 +65,13 @@ function AllUser() {
 
   // Sahifalarni hisoblash
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+
+
+  const handlePageChange = (page: number, pageSize: number) => {
+    setCurrentPage(page);
+    console.log(`Current page: ${page}, Page size: ${pageSize}`);
+  };
+
 
   const handleUserClick = (user: UserNatijasi) => {
     setSelectedUser(user);
@@ -159,7 +164,8 @@ function AllUser() {
                   <Pagination
                     onShowSizeChange={onShowSizeChange}
                     defaultCurrent={1}
-                    total={50}
+                    total={20}
+                    onChange={handlePageChange}
                   />
                 </div>
               </div>
