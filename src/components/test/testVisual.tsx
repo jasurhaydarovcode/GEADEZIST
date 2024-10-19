@@ -50,31 +50,27 @@ function Category() {
                             <p className="italic mt-2">
                                 Админ саволни мижозларга қандай кўринишини билиб олиш учун намуна
                             </p>
-                            <h2 className="text-xl font-semibold mt-4">{element?.name || 'Категория номаълум'}</h2>
                             <p className="text-lg mt-4">
-                                <span className="italic">{element?.categoriya || 'Савол номаълум'}</span>
-                                <span className="text-2xl">
-                                </span>
+                                <span className="text-3xl">{element?.catygoria || 'kategoriya nomalum'}</span>
                             </p>
+                            <h2 className="text-xl font-semibold mt-4">{element?.savol || 'Категория номаълум'}</h2>
                             <p className="text-red-600 font-bold mt-4">Фақат битта тўғри жавобни белгиланг</p>
                             <div className="mt-6">
                                 {element ? (
-                                    <label className="block mb-4 w-[100%]" >
-                                        <input
-                                            type="text"
-                                            name="answer"
-                                            disabled
-                                            value="javob"
-                                            className="mr-2 "
-                                        />
-                                        <input
-                                            type="radio"
-                                            name="answer"
-                                            disabled
-                                            value="javob"
-                                            className="mr-2"
-                                        />
-                                    </label>
+                                    <div className="mt-6">
+                                        <label className="flex items-center mb-4 border border-gray-300 rounded-lg p-2 bg-gray-100">
+                                            <input type="radio" name="answer" value="javob" className="mr-2" />
+                                            <span className="text-lg">
+                                                <span className="">javob</span>
+                                            </span>
+                                        </label>
+                                        <label className="flex items-center border border-gray-300 rounded-lg p-2 bg-gray-100">
+                                            <input type="radio" name="answer" value="javob" className="mr-2" />
+                                            <span className="text-lg">
+                                                <span className="">javob</span>
+                                            </span>
+                                        </label>
+                                    </div>
                                 ) : (
                                     <p>Ma'lumotlar mavjud emas.</p>
                                 )
