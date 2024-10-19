@@ -15,7 +15,7 @@ import { PiUsersThreeFill } from 'react-icons/pi';
 import { FaArrowsAlt } from 'react-icons/fa';
 import { FaCircleQuestion } from 'react-icons/fa6';
 import { MdOutlineCategory } from 'react-icons/md';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { getClientAll, getStaticAll, } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import { toast } from 'react-toastify';
@@ -42,7 +42,7 @@ ChartJS.register(
 
 const Dashboard = () => {
   CheckLogin
-
+  const queryClient = useQueryClient();
   // states
   const regions = ['Toshkent', 'Samarqand', "Farg'ona"];
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -72,6 +72,9 @@ const Dashboard = () => {
       toast.error(error.message);
     },
   });
+  useEffect(() => {
+    queryClient.refetchQueries('dashboardStatic');
+  }, []);
 
   // dashboard static data
   const staticData: GetStaticsAllResponse =
