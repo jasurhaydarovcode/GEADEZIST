@@ -9,13 +9,12 @@ import {
   Legend,
   ChartOptions,
 } from 'chart.js';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Layout from '@/components/Dashboard/Layout';
 import { PiUsersThreeFill } from 'react-icons/pi';
 import { FaArrowsAlt } from 'react-icons/fa';
 import { FaCircleQuestion } from 'react-icons/fa6';
 import { MdOutlineCategory } from 'react-icons/md';
-import checkLogin from '@/helpers/functions/checkLogin';
 import { useQuery } from 'react-query';
 import { getClientAll, getStaticAll, } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
@@ -53,7 +52,7 @@ const Dashboard = () => {
   const [pageSize, setPageSize] = useState(10);
   const [clientData, setClientData] = useState<GetClientAllResponse[] | null>(null);
   const [allClientData, setAllClientData] = useState<GetClientAllResponse[] | null>(null)
-    // dashboard statiastic
+  // dashboard statiastic
   const dashboardStatic = useQuery({
     queryKey: ['dashboardStatic', config],
     queryFn: async () => {
@@ -66,7 +65,7 @@ const Dashboard = () => {
         };
       }
       const res = await axios.get<GetStaticsAllResponse>(`${getStaticAll}`, config);
-      const data = res.data.body // Type assertion added
+      const data = res.data.body
       return data
     },
     onError: (error: any) => {
@@ -148,19 +147,19 @@ const Dashboard = () => {
       label: 'Jami Foydalanuvchilar',
     },
   ];
-  // Data for the scatter chart
+  // Data Scater
   const data = {
     datasets: [
       {
         label: 'Savdolar soni',
         data: [
-          { x: 1, y: 120 },
-          { x: 2, y: 150 },
-          { x: 3, y: 80 },
-          { x: 4, y: 70 },
-          { x: 5, y: 200 },
-          { x: 6, y: 160 },
-          { x: 7, y: 100 },
+          { x: 1, y: 0 },
+          { x: 2, y: 0 },
+          { x: 3, y: 0 },
+          { x: 4, y: 0 },
+          { x: 5, y: 0 },
+          { x: 6, y: 0 },
+          { x: 7, y: 0 },
         ],
         borderColor: 'rgba(54, 162, 235, 1)',
         backgroundColor: 'rgba(54, 162, 235, 0.2)',
@@ -190,7 +189,7 @@ const Dashboard = () => {
     },
   });
 
-  // Options for the scatter chart
+  // Chartjs Options
   const options: ChartOptions<'scatter'> = {
     responsive: true,
     maintainAspectRatio: false,
@@ -235,12 +234,13 @@ const Dashboard = () => {
   };
 
   const navigate = useNavigate();
-  function checkRoleClient() {
+  const checkRoleClient = useCallback(() => {
     const role = localStorage.getItem('role');
     if (role == 'ROLE_CLIENT') {
       navigate('/client/dashboard');
     }
-  }
+  }, [navigate]);
+
   useEffect(() => {
     checkRoleClient();
   }, [checkRoleClient]);

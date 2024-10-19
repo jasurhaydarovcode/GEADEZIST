@@ -19,7 +19,7 @@ const LogoutModal: React.FC<LogoutModalProps> = ({
       <div className="bg-white rounded-lg shadow-lg p-6 w-[450px]">
         <div className="flex justify-end items-center">
           <button onClick={onClose}>
-            <IoCloseOutline className="text-4xl" />
+            <IoCloseOutline className="text-3xl hover:bg-gray-300 rounded-md hover:text-gray-50 animatsiyaHover" />
           </button>
         </div>
         <div className="flex justify-center my-6">
@@ -39,7 +39,7 @@ const LogoutModal: React.FC<LogoutModalProps> = ({
             onClick={onLogout}
             className="bg-gray-400 text-white px-4 py-2 rounded-md hover:bg-gray-500 animatsiyaHover"
           >
-            Ha
+            Chiqish
           </button>
         </div>
       </div>
