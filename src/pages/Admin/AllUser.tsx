@@ -100,7 +100,7 @@ function AllUser() {
                   </div>
                 </header>
 
-                <div className="flex justify-end pt-5 gap-5">
+                <div className="flex justify-center pt-5 gap-5">
                   <div className="flex relative">
                     <FcSearch className="absolute mt-4 ml-3 text-[20px]" />
                     <input
@@ -126,7 +126,7 @@ function AllUser() {
                 </div>
 
                 <div className="py-5">
-                  <table className="mx-3 ml-[0px] w-full bg-white border border-gray-300">
+                  <table className="mx-3 ml-0 w-full bg-white border border-gray-300">
                     <thead>
                       <tr className="bg-gray-100">
                         <th className="text-left px-4 py-7">T/P</th>
