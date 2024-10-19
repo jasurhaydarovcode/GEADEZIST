@@ -13,6 +13,7 @@ import { MdDelete, MdEdit } from 'react-icons/md';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Link } from 'react-router-dom';
 import CheckLogin from '@/helpers/functions/checkLogin';
+import { showErrorMessage } from '@/helpers/functions/message';
 
 function Address() {
   CheckLogin
@@ -51,7 +52,7 @@ function Address() {
       }, 500);
     }else{
       setHasError(true);
-      message.error("Barcha maydonlarni to'ldiring");
+      showErrorMessage("Barcha maydonlarni to'ldiring");
     }
   };
 
@@ -162,7 +163,7 @@ function Address() {
       queryClient.invalidateQueries('getDistrict');
     },
     onError: (error: string) => {
-      message.error(error || 'Xatolik yuz berdi');
+      showErrorMessage(error || 'Xatolik yuz berdi');
       
     },
   });
@@ -177,7 +178,7 @@ function Address() {
       queryClient.invalidateQueries(['getAddress']);
     },
     onError: (error: string) => {
-      message.error(error || 'Xatolik yuz berdi');
+      showErrorMessage(error || 'Xatolik yuz berdi');
       
     },
   });
@@ -236,7 +237,7 @@ function Address() {
       }, 500);
     }else{
       setHasErrors(true);
-      message.error("Barcha maydonlarni to'ldiring");
+      showErrorMessage("Barcha maydonlarni to'ldiring");
     }
   };
   const tumanCancel = () => {
@@ -295,7 +296,7 @@ function Address() {
 
     },
     onError: (error: string) => {
-      message.error(error || 'Xatolik yuz berdi');
+      showErrorMessage(error || 'Xatolik yuz berdi');
     },
   }); 
   
@@ -334,7 +335,7 @@ function Address() {
       queryClient.invalidateQueries(['getDistrict']);
     },
     onError: (error: string) => {
-      message.error( error || 'Xatolik yuz berdi'); 
+      showErrorMessage( error || 'Xatolik yuz berdi'); 
     },
   });
 
