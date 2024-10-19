@@ -19,7 +19,7 @@ const Card: React.FC<CardProps> = ({
   status,
 }) => {
   return (
-    <div className="card glass w-[440px] mx-auto">
+    <div className="card glass w-full max-w-[440px] mx-auto">
       <figure>
         <img
           src={image}

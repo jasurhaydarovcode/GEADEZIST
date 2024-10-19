@@ -9,6 +9,8 @@ body {
   -ms-user-select: none;
   font-family: Lato, sans-serif;
   background: #dbdde2;
+  color: black;
+
 }
 
 .container {
