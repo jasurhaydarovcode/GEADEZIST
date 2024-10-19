@@ -9,7 +9,6 @@ import { AiOutlineEye } from 'react-icons/ai';
 import { FcSearch } from 'react-icons/fc';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import Modal from 'react-modal';
 import { IoMdCloseCircleOutline } from 'react-icons/io';
 import checkLogin from '@/helpers/functions/checkLogin';
@@ -34,7 +33,7 @@ function AllUser() {
   const [selectedUser, setSelectedUser] = useState<UserNatijasi | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const itemsPerPage = 5; // Har bir sahifada ko'rsatiladigan elementlar soni
+  const itemsPerPage = 8; // ! pagedagi datalar soni
 
   const { data: usersData, refetch } = useQuery({
     queryKey: ['User', config],
@@ -42,10 +41,7 @@ function AllUser() {
       const res = await axios.get(getUser, config);
       const data = res.data as { body: { body: UserNatijasi[] } };
       return data.body.body || [];
-    },
-    onError: (error) => {
-      toast.error('Xatolik yuz berdi');
-    },
+    }
   });
 
   useEffect(() => {
@@ -58,14 +54,13 @@ function AllUser() {
     `${user.firstName} ${user.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Sahifalash uchun ma'lumotlarni olish
   const indexOfLastUser = currentPage * itemsPerPage;
   const indexOfFirstUser = indexOfLastUser - itemsPerPage;
   const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
 
-  // Sahifalarni hisoblash
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
-
+  console.log(totalPages);
+  
 
   const handlePageChange = (page: number, pageSize: number) => {
     setCurrentPage(page);
