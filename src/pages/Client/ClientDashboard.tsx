@@ -1,11 +1,12 @@
 import React, { useEffect, useCallback } from 'react';
 import Layout from '../../components/clientDashboard/laytout';
 import { CardProps } from '../../helpers/types/CardProp';
-import PreviewOverlay from '@/components/PreviewOverlay';
+// import PreviewOverlay from '@/components/PreviewOverlay';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import CheckLogin from '@/helpers/functions/checkLogin';
+// import CheckLogin from '@/helpers/functions/checkLogin';
 
+// Updated Card Component
 const Card: React.FC<CardProps> = ({
   image,
   title,
@@ -17,48 +18,51 @@ const Card: React.FC<CardProps> = ({
   buttonText,
   status,
 }) => {
-  CheckLogin
   return (
-    <div className="container bg-white rounded-md max-w-[450px]">
-      <div className="border rounded-lg shadow-lg p-4">
-        <div className="relative group">
-          <img
-            src={image}
-            alt="Preview"
-            className="w-full h-64 object-cover rounded-md"
-          />
-          <PreviewOverlay />
-        </div>
-        <h3 className="text-center text-2xl font-bold text-red-500 mt-3">
-          {title}
-        </h3>
-        <div className="text-gray-600 mt-2">
-          <p>Tog'ri Javoblar: {answers}</p>
-          <p>Vaqt Davomiyligi: {time} (дақ.)</p>
-          <p>Tuplangan Ball: {score}</p>
-          <p>Test Topshirilgan vaqt: {date}</p>
-        </div>
+    <div className="card glass w-[440px] mx-auto">
+      <figure>
+        <img
+          src={image}
+          alt={title}
+          className="w-full h-64 object-cover"
+        />
+      </figure>
+      <div className="card-body">
+        <h2 className="card-title text-center text-red-500">{title}</h2>
+        <p className="text-gray-600">
+          <strong>Tog'ri Javoblar:</strong> {answers}
+        </p>
+        <p className="text-gray-600">
+          <strong>Vaqt Davomiyligi:</strong> {time} (daq.)
+        </p>
+        <p className="text-gray-600">
+          <strong>Tuplangan Ball:</strong> {score}
+        </p>
+        <p className="text-gray-600">
+          <strong>Test Topshirilgan vaqt:</strong> {date}
+        </p>
         <h4 className="text-red-500 text-center text-lg font-semibold mt-2">
           Qushimcha Yo'nashlardan Ishlanganlar
         </h4>
         <div className="text-gray-600">
           {sections.map((section, index) => (
             <p key={index}>
-              {section.name}:{' '}
+              {section.name}:{" "}
               <span className="text-green-500">{section.completed}</span>/
               {section.total}
             </p>
           ))}
         </div>
-        <button
-          className={`w-full mt-3 py-2 rounded-lg ${
-            status === 'confirmed'
-              ? 'bg-green-500 text-white'
-              : 'bg-yellow-500 text-white'
-          }`}
-        >
-          {buttonText}
-        </button>
+        <div className="card-actions justify-end mt-4">
+          <button
+            className={`btn w-full ${status === 'confirmed'
+              ? 'btn-success'
+              : 'btn-warning'
+              }`}
+          >
+            {buttonText}
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -109,7 +113,7 @@ const ClientDashboard: React.FC = () => {
   const navigate = useNavigate();
   const checkRoleClient = useCallback(() => {
     const role = localStorage.getItem('role');
-    if (role == 'ROLE_SUPER_ADMIN' || role == 'ROLE_TESTER') {
+    if (role === 'ROLE_SUPER_ADMIN' || role === 'ROLE_TESTER') {
       navigate('/dashboard');
     }
   }, [navigate]);
@@ -117,6 +121,7 @@ const ClientDashboard: React.FC = () => {
   useEffect(() => {
     checkRoleClient();
   }, [checkRoleClient]);
+
   return (
     <div>
       <Helmet>
@@ -147,6 +152,7 @@ const ClientDashboard: React.FC = () => {
 };
 
 export default ClientDashboard;
+
 
 // User test data lari uchun!
 /* 
