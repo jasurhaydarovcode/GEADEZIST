@@ -199,18 +199,29 @@ function Address() {
       keepPreviousData: true, // Sahifa o'zgarganda eski ma'lumotlarni saqlab qoladi
     },
   );
-
+  
   const handlePageChanges = (page: number) => {
     setCurrentPages(page); // Hozirgi sahifani yangilash
     setPageSizes(pageSizes);
   };
+  // Viloyatlarni list qilib get qilish
+  const { data: region } = useQuery(
+    ['getRegion'],
+    async () => {
+      const res = await axios.get(
+        `${baseUrl}region`,
+        config,
+      );
+        return (res.data as { body: { body: string; }}).body;
+    },
+  );  
 
   const tumanModal = () => {
     setTumanModals(true);
   };
 
   const tumanOk = () => {
-    if (tumanName.current!.value && regionId.current!.value) {
+    if (tumanName && regionId) {
       postTuman.mutate();
       setConfirmLoading(true);
       setTimeout(() => {
@@ -229,32 +240,23 @@ function Address() {
   };
   
   const resetTumanForm = () => {
-    tumanName.current!.value = '';
-    regionId.current!.value = '';
+    setTumanName('');
+    setRegionId('');
     setHasErrors(false);
   };
 
 
-  // Viloyatlarni list qilib get qilish
-  const { data: region } = useQuery(
-    ['getRegion'],
-    async () => {
-      const res = await axios.get(
-        `${baseUrl}region`,
-        config,
-      );
-        return (res.data as { body: { body: string; }}).body;
-    },
-  );  
 
   // Tumanlarni post qilish
-  const tumanName = useRef<HTMLInputElement>(null);
-  const regionId = useRef<HTMLSelectElement>(null);
+  // const tumanName = useRef<HTMLInputElement>(null);
+  // const regionId = useRef<HTMLSelectElement>(null);
+  const [tumanName, setTumanName] = useState('');
+  const [regionId, setRegionId] = useState('');
 
 
   const postTuman = useMutation({
     mutationFn: async () => {
-      const res = await axios.post(`${baseUrl}district`, { name: tumanName.current?.value, regionId: regionId.current?.value },  config);
+      const res = await axios.post(`${baseUrl}district`, { name: tumanName, regionId: regionId },  config);
       return (res.data as { body: { body: string } }).body.body;
     },
     onSuccess: () => { 
@@ -295,9 +297,11 @@ function Address() {
   
   const handleTumanEdit = (item: any) => {
     setSelectedAddress(item.id);
+    setTumanName(item.name);
+    setRegionId(item.regionId);
     setTumanEdit(true);
-    tumanName.current!.value = item.name;
-    regionId.current!.value = item.regionId;
+    // tumanName.current!.value = item.name;
+    // regionId.current!.value = item.regionId;
   };
 
   const handleTumanEditOk = () => {
@@ -318,7 +322,7 @@ function Address() {
     mutationFn: async () => {
       await axios.put(
         `${baseUrl}district`,
-        { name: tumanName.current?.value, regionId: regionId.current?.value },
+        { id: selectedAddress, name: tumanName, regionId: regionId },
         config,
       );
     },
@@ -534,7 +538,7 @@ function Address() {
                 cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white' },}}
               >
                 <div className="mb-4">
-                  <select className={`border w-full p-2 rounded  ${hasErrors ? 'border-red-500' : 'border-gray-300'}`} ref={regionId} >
+                  <select className={`border w-full p-2 rounded  ${hasErrors ? 'border-red-500' : 'border-gray-300'}`} onChange={(e) => setRegionId(e.target.value)} >
                     <option value="">Viloyatni tanlang</option>
                     {Array.isArray(region) &&
                       region.map((item) => (
@@ -550,8 +554,7 @@ function Address() {
                     type="text"
                     placeholder="Tuman nomini kiriting"
                     className={`border w-full p-2 rounded ${hasErrors ? 'border-red-500' : 'border-gray-300'}`}
-                    ref={tumanName}
-                    
+                    onChange={(e) => setTumanName(e.target.value)}                    
                   />
                 </div>
               </Modal>
@@ -581,7 +584,7 @@ function Address() {
               cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white' } }}
             >
               <div className="mb-4">
-                <select className={`border w-full p-2 rounded`} ref={regionId} >
+                <select className={`border w-full p-2 rounded`} onChange={(e) => setRegionId(e.target.value)} value={regionId} >
                   <option value="">Viloyatni tanlang</option>
                   {Array.isArray(region) &&
                     region.map((item) => (
@@ -594,11 +597,11 @@ function Address() {
               <div className="mb-4">
                 <input
                   type="text"
-                  // value={tumanName.current?.value}
+                  value={tumanName}
                   placeholder="Viloyat nomini O'zgartiring"
                   className="border w-full p-2 rounded"
-                  ref={tumanName}
-                  // onChange={(e) => setName(e.target.value)}
+                  // ref={tumanName}
+                  onChange={(e) => setTumanName(e.target.value)}
                 />
               </div>
             </Modal>
