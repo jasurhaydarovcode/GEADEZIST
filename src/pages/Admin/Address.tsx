@@ -29,13 +29,13 @@ function Address() {
   // Pagination holati
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [totalItems, setTotalItems] = useState(0); // Umumiy ma'lumotlar soni
+  const [totalItems, setTotalItems] = useState(0); 
   // Pagination tuman uchun
   const [currentPages, setCurrentPages] = useState(1);
   const [pageSizes, setPageSizes] = useState(10);
   const [totalItemss, setTotalItemss] = useState(0);
-  const [hasError, setHasError] = useState(false); // Xatolik holati uchun
-  const [hasErrors, setHasErrors] = useState(false); // Xatolik holati uchun
+  const [hasError, setHasError] = useState(false); 
+  const [hasErrors, setHasErrors] = useState(false); 
   
   const showModal = () => {
     setOpen(true);
@@ -74,7 +74,7 @@ function Address() {
   };
 
   const handleDeleteCancel = () => {
-    setDeleteModalVisible(false); // O'chirishni bekor qilish
+    setDeleteModalVisible(false); 
   };
 
   const handlePutOk = () => {
@@ -87,7 +87,7 @@ function Address() {
 
   const handlePutOpen = (item: any) => {
     setSelectedAddress(item.id);
-    setName(item.name); // Viloyat nomini oling va setName ga qo'ying
+    setName(item.name); 
     setPutOpen(true);
   };
 
@@ -109,16 +109,16 @@ function Address() {
           body: { body: string; totalElements: number; totalPage: number };
         }
       ).body;
-      setTotalItems(responseData.totalElements); // Umumiy ma'lumotlar sonini saqlaymiz
+      setTotalItems(responseData.totalElements); 
       return responseData.body;
     },
     {
-      keepPreviousData: true, // Sahifa o'zgarganda eski ma'lumotlarni saqlab qoladi
+      keepPreviousData: true, 
     },
   );
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page); // Hozirgi sahifani yangilash
+    setCurrentPage(page); 
     setPageSize(pageSize);
   };
 
@@ -126,7 +126,7 @@ function Address() {
 
   const resetForm = () => {
     setName('');
-    setHasError(false); // Reset qilishda xatolikni tozalaymiz
+    setHasError(false); 
   };
 
   const queryClient = useQueryClient();
@@ -198,16 +198,16 @@ function Address() {
           body: { body: string; totalElements: number; totalPage: number };
         }
       ).body;
-      setTotalItemss(responseData.totalElements); // Umumiy ma'lumotlar sonini saqlaymiz
+      setTotalItemss(responseData.totalElements); 
       return responseData.body;
     },
     {
-      keepPreviousData: true, // Sahifa o'zgarganda eski ma'lumotlarni saqlab qoladi
+      keepPreviousData: true, 
     },
   );
   
   const handlePageChanges = (page: number) => {
-    setCurrentPages(page); // Hozirgi sahifani yangilash
+    setCurrentPages(page); 
     setPageSizes(pageSizes);
   };
   // Viloyatlarni list qilib get qilish
@@ -391,7 +391,7 @@ function Address() {
                     className={`border w-full p-2 rounded ${hasError ? 'border-red-500' : 'border-gray-300'}`}
                     onChange={(e) => {setName(e.target.value)
                       if (hasError) {
-                        setHasError(false); // Xato to'g'irlangan bo'lsa qizil rangni olib tashlaymiz
+                        setHasError(false); 
                       }}
                     }
                   />
@@ -441,7 +441,6 @@ function Address() {
 
             {/* O'chirish modalini qo'shish */}
             <Modal
-              // title="Viloyatni o'chirmoqchimisiz?"
               open={deleteModalVisible}
               onOk={handleDelete}
               onCancel={handleDeleteCancel}
@@ -604,7 +603,6 @@ function Address() {
                   value={tumanName}
                   placeholder="Viloyat nomini O'zgartiring"
                   className="border w-full p-2 rounded"
-                  // ref={tumanName}
                   onChange={(e) => setTumanName(e.target.value)}
                 />
               </div>
