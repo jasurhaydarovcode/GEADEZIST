@@ -6,7 +6,7 @@ import { useQuery } from 'react-query';
 import { baseUrl } from '@/helpers/api/baseUrl';
 import { ClientQuizType } from '@/helpers/types/clientQuizType';
 import { toast } from 'react-toastify';
-import axios from 'axios';
+import CheckLogin from '@/helpers/functions/checkLogin';
 
 const TOTAL_TIME = 60 * 60; // 60 minutes (in seconds)
 const STORAGE_KEY = 'savedRemainingTime';
@@ -16,6 +16,9 @@ interface AxiosError extends Error {
 }
 
 const QuestionPage: React.FC = () => {
+  CheckLogin
+
+  const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
   const [remainingTime, setRemainingTime] = useState(TOTAL_TIME); // In seconds
 
 
@@ -81,7 +84,7 @@ const QuestionPage: React.FC = () => {
 
   // useQuery to fetch data from server
 
-  
+
 
   return (
     <div className="px-9 space-y-12">
@@ -101,6 +104,9 @@ const QuestionPage: React.FC = () => {
         </div>
         <div className="mt-4">
 
+          <div className="mt-4 space-y-3">
+
+          </div>
 
           {/* Progress Bar */}
 

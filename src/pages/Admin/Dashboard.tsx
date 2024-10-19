@@ -9,13 +9,12 @@ import {
   Legend,
   ChartOptions,
 } from 'chart.js';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Layout from '@/components/Dashboard/Layout';
 import { PiUsersThreeFill } from 'react-icons/pi';
 import { FaArrowsAlt } from 'react-icons/fa';
 import { FaCircleQuestion } from 'react-icons/fa6';
 import { MdOutlineCategory } from 'react-icons/md';
-import checkLogin from '@/helpers/functions/checkLogin';
 import { useQuery } from 'react-query';
 import { getClientAll, getStaticAll, } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
@@ -29,6 +28,7 @@ import { Helmet } from 'react-helmet';
 import TableLoading from '@/components/spinner/TableLoading';
 import { Pagination } from 'antd';
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 'flowbite-react';
+import CheckLogin from '@/helpers/functions/checkLogin';
 
 
 ChartJS.register(
@@ -41,8 +41,9 @@ ChartJS.register(
 );
 
 const Dashboard = () => {
+  CheckLogin
+
   // states
-  const categories = ['Топография', 'Маркшейдерлик', 'Умумий Геодезия'];
   const regions = ['Toshkent', 'Samarqand', "Farg'ona"];
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedRegion, setSelectedRegion] = useState('');
@@ -51,14 +52,21 @@ const Dashboard = () => {
   const [pageSize, setPageSize] = useState(10);
   const [clientData, setClientData] = useState<GetClientAllResponse[] | null>(null);
   const [allClientData, setAllClientData] = useState<GetClientAllResponse[] | null>(null)
-  checkLogin();
   // dashboard statiastic
   const dashboardStatic = useQuery({
     queryKey: ['dashboardStatic', config],
     queryFn: async () => {
-      const res = await axios.get(`${getStaticAll}`, config);
-      const data = res.data as { body: any }; // Type assertion added
-      return data.body;
+      interface GetStaticsAllResponse {
+        body: {
+          categoryCount: number;
+          questionCount: number;
+          resultCount: number;
+          userCount: number;
+        };
+      }
+      const res = await axios.get<GetStaticsAllResponse>(`${getStaticAll}`, config);
+      const data = res.data.body
+      return data
     },
     onError: (error: any) => {
       toast.error(error.message);
@@ -139,19 +147,19 @@ const Dashboard = () => {
       label: 'Jami Foydalanuvchilar',
     },
   ];
-  // Data for the scatter chart
+  // Data Scater
   const data = {
     datasets: [
       {
         label: 'Savdolar soni',
         data: [
-          { x: 1, y: 120 },
-          { x: 2, y: 150 },
-          { x: 3, y: 80 },
-          { x: 4, y: 70 },
-          { x: 5, y: 200 },
-          { x: 6, y: 160 },
-          { x: 7, y: 100 },
+          { x: 1, y: 0 },
+          { x: 2, y: 0 },
+          { x: 3, y: 0 },
+          { x: 4, y: 0 },
+          { x: 5, y: 0 },
+          { x: 6, y: 0 },
+          { x: 7, y: 0 },
         ],
         borderColor: 'rgba(54, 162, 235, 1)',
         backgroundColor: 'rgba(54, 162, 235, 0.2)',
@@ -165,8 +173,14 @@ const Dashboard = () => {
   const getClient = useQuery({
     queryKey: ['getClient', config],
     queryFn: async () => {
+      interface GetClientAllResponse {
+        id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+      }
       const res = await axios.get<GetClientAllResponse[]>(`${getClientAll}page=${currentPage - 1}&size=${pageSize}`, config);
-      const data = res.data.body.body as GetClientAllResponse[];
+      const data: GetClientAllResponse[] | null = res?.data?.body?.body as GetClientAllResponse[] | null;
       return data;
     },
     onSuccess: (data) => {
@@ -175,7 +189,7 @@ const Dashboard = () => {
     },
   });
 
-  // Options for the scatter chart
+  // Chartjs Options
   const options: ChartOptions<'scatter'> = {
     responsive: true,
     maintainAspectRatio: false,
@@ -220,12 +234,13 @@ const Dashboard = () => {
   };
 
   const navigate = useNavigate();
-  function checkRoleClient() {
+  const checkRoleClient = useCallback(() => {
     const role = localStorage.getItem('role');
     if (role == 'ROLE_CLIENT') {
       navigate('/client/dashboard');
     }
-  }
+  }, [navigate]);
+
   useEffect(() => {
     checkRoleClient();
   }, [checkRoleClient]);

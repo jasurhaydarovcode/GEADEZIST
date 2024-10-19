@@ -9,6 +9,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { ToastContainer } from 'react-toastify';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import 'aos/dist/aos.css';
+import CheckLogin from './helpers/functions/checkLogin.tsx';
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ createRoot(document.getElementById('root')!).render(
           draggable
           limit={1}
         />
+        <CheckLogin />
       </BrowserRouter>
     </QueryClientProvider>
   </StrictMode>,

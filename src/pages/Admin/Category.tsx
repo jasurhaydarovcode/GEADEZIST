@@ -14,7 +14,7 @@ import {
   TableRow,
 } from "flowbite-react";
 import { useQuery, useQueryClient } from "react-query";
-import defaultImage from "../assets/images/default.png";
+import defaultImage from "../../assets/images/default.png";
 import { MdEdit } from "react-icons/md";
 import CategoryAddModal from "@/components/Modal/CategoryAddModal";
 import CategoryEditModal from "@/components/Modal/CategoryEditModal";
@@ -25,8 +25,10 @@ import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { Modal } from "antd";
 import { Link } from "react-router-dom";
+import CheckLogin from "@/helpers/functions/checkLogin";
 
 function Category() {
+  CheckLogin
   const queryClient = useQueryClient();
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -86,21 +88,18 @@ function Category() {
 
   // Tahrirlash tugmasi
   const handleEditClick = (category: any) => {
-    console.log("Tahrirlanayotgan kategoriya:", category);
     setSelectedCategory(category);
     setEditModalVisible(true); // Modalni ochish
   };
 
   // Tahrirlash funksiyasi
   const handleEditCategory = async (updatedCategory: any) => {
-    console.log("Yangilangan kategoriya:", updatedCategory);
     try {
       const response = await axios.put(
         `${baseUrl}category/${updatedCategory.id}`,
         updatedCategory,
         config
       );
-      console.log("Tahrir javobi:", response);
       queryClient.invalidateQueries(["getCategories"]);
       setEditModalVisible(false); // Modalni yopish
     } catch (error) {
