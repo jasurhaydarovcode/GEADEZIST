@@ -130,7 +130,7 @@ function Category() {
 
             <CategoryAddModal onAddCategory={handleAddCategory} />
 
-            <div className="container mx-auto w-[1130px] overflow-x-auto">
+            <div className="container mx-auto w-full max-w-[1130px] md:overflow-x-auto sm:overflow-x-hidden">
               <Table hoverable className="border-collapse table-auto">
                 <TableHead className="hidden sm:table-header-group">
                   {/* Kichik ekranlar uchun sarlavhani yashirish */}
