@@ -60,7 +60,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
       },
       onError: (error: any) => {
         if (error.response?.status === 409) {
-          showErrorMessage('Bunday nomdagi kategoriya allaqachon mavjud!');
+          showErrorMessage('Asosiy kategoriya ochilgan!');
         } else {
           showErrorMessage('Xatolik yuz berdi, iltimos qaytadan urinib ko‘ring.');
         }
@@ -153,14 +153,14 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
           <div>
             <label className="block mb-2">Asosiy Turini Tanlang</label>
             <Select
-              value={formData.main ? 'asosiy-bolmagan' : 'asosiy'}
+              value={formData.main ? 'asosiy' : 'asosiy-bolmagan'}
               onChange={(value) =>
-                setFormData({ ...formData, main: value === 'asosiy-bolmagan' })
+                setFormData({ ...formData, main: value === 'asosiy' })
               }
               className="w-full"
-            >
-              <Option value="asosiy">Asosiy</Option>
+              >
               <Option value="asosiy-bolmagan">Asosiy bo'lmagan</Option>
+              <Option value="asosiy">Asosiy</Option>
             </Select>
           </div>
 
