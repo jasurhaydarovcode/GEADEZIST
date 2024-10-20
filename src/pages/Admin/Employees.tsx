@@ -105,21 +105,26 @@ function Employees() {
     const formattedPhoneNumber = formatForSwagger(phoneNumber.current!.value);
     phoneNumber.current!.value = formattedPhoneNumber;
     if ( firstname.current!.value && lastname.current!.value && email.current!.value && phoneNumber.current!.value && password.current!.value && confirmPassword.current!.value &&  role.current!.value) {
-      if (password.current!.value === confirmPassword.current!.value) {
-        postAdmin.mutate(); 
-        setConfirmLoading(true);
-        setTimeout(() => {
-          setOpen(false);
-          setConfirmLoading(false);
-          resetForm(); 
-        }, 1000);
+      if (phoneNumber.current!.value.length > 12) {
+        if (password.current!.value === confirmPassword.current!.value) {
+          postAdmin.mutate(); 
+          setConfirmLoading(true);
+          setTimeout(() => {
+            setOpen(false);
+            setConfirmLoading(false);
+            resetForm(); 
+          }, 1000);
+        } else {
+          showErrorMessage('Parollar mos kelmadi');
+        }
       } else {
-        showErrorMessage('Parollar mos kelmadi');
+        showErrorMessage('Telefon raqamini toliq kiriting');
       }
     } else {
       showErrorMessage("Barcha maydonlarni to'ldiring");
     }
   };
+
 
   // input maydonlarini tozalash
   const resetForm = () => {

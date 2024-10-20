@@ -8,6 +8,6 @@ export const showErrorMessage = (msg: string) => {
     message.error(msg, 1); 
     setTimeout(() => {
       messageDisplayed = false; 
-    }, 2000);
+    }, 1500);
   }
 };
