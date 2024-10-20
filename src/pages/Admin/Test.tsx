@@ -300,7 +300,7 @@ function Test() {
                 <div className="mb-4">
                   <input
                     placeholder="Savolni kiriting"
-                    className="border w-full p-2 rounded"
+                    className="border bg-white w-full p-2 rounded"
                   />
                 </div>
 
