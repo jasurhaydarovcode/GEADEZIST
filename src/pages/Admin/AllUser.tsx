@@ -11,11 +11,14 @@ import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import Modal from 'react-modal';
 import { IoMdCloseCircleOutline } from 'react-icons/io';
+// import checkLogin from '@/helpers/functions/checkLogin'; // Keraksiz import
+
 import type { PaginationProps } from 'antd';
 import { Pagination } from 'antd';
 
 // Accessibility setup
 Modal.setAppElement('#root');
+
 function AllUser() {
   const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, pageSize) => {
     console.log(current, pageSize);
@@ -69,7 +72,7 @@ function AllUser() {
   };
 
   return (
-    <div className='overflow-x-hidden'>
+    <div className=''>
       <Helmet>
         <title>Foydalanuvchilar</title>
       </Helmet>
@@ -81,7 +84,7 @@ function AllUser() {
               <div className="w-max">
                 <header className="flex items-center max-lg:flex-col justify-between">
                   <h3 className="font-bold text-[27px]">Foydalanuvchilar</h3>
-                  <div className="flex gap-2 xl:translate-x-[-10px] text-[18px]">
+                  <div className="flex gap-2 lg:translate-x-[-20px] text-[18px]">
                     <Link to={'/dashboard'}>
                       <h4>Boshqaruv paneli </h4>
                     </Link>
@@ -91,7 +94,7 @@ function AllUser() {
                 </header>
 
                 <div className="flex max-lg:ml-5 xl:ml-[-12px] max-lg:grid max-md:ml-7 max-lg:mx-auto justify-center max-xl:w-[400px] pt-5 gap-5">
-                  <div className="flex max-xl:mr-7 max-lg:ml-0 max-lg:w-[350px] max-xl:ml-[345px] max-xl:w-[240px]">
+                  <div className="flex max-xl:mr-7 max-lg:ml-0 max-lg:w-[350px] max-xl:ml-[350px] max-xl:w-[240px]">
                     <FcSearch className="absolute mt-4 ml-3  text-[20px]" />
                     <input
                       type="text"
