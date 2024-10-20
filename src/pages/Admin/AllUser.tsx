@@ -100,13 +100,13 @@ function AllUser() {
                   </div>
                 </header>
 
-                <div className="flex justify-center pt-5 gap-5">
-                  <div className="flex relative">
-                    <FcSearch className="absolute mt-4 ml-3 text-[20px]" />
+                <div className="flex max-lg:grid max-lg:mx-auto justify-center max-xl:w-[400px] pt-5 gap-5">
+                  <div className="flex max-xl:mr-7 max-lg:ml-0 max-lg:w-[350px] max-xl:ml-72 max-xl:w-[240px]">
+                    <FcSearch className="absolute mt-4 ml-3  text-[20px]" />
                     <input
                       type="text"
                       id="inp1"
-                      className="pl-10 w-[375px] border-gray-300 rounded-md h-[50px]"
+                      className="pl-10 w-[375px] border-gray-300 placeholder:max-xl:text-[12px] rounded-md h-[50px]"
                       placeholder="Ism yoki familya bo'yicha qidirish"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
