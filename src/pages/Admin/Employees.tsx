@@ -13,12 +13,10 @@ import TableLoading from '@/components/spinner/TableLoading';
 import axios from 'axios';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import CheckLogin from '@/helpers/functions/checkLogin';
+import { showErrorMessage } from '@/helpers/functions/message';
 
 function Employees() {
   CheckLogin
-
-    // Yangi funksiyalar
-
 
   const formatPhoneNumber = (value: string) => {
     let digits = value.replace(/\D/g, '');
@@ -41,7 +39,7 @@ function Employees() {
   };
 
   const formatForSwagger = (value: string) => {
-    return value.replace(/\s/g, '');  // Bo'sh joylarni olib tashlash
+    return value.replace(/\s/g, ''); 
 };
 
   const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,28 +76,26 @@ function Employees() {
       );
       const responseData = (
         res.data as {
-          body: { body: string; totalElements: number; totalPage: number }; // Type berish
+          body: { body: string; totalElements: number; totalPage: number }; 
         }
       ).body;
-      setTotalItems(responseData.totalElements); // Umumiy ma'lumotlar sonini saqlaymiz
-      return responseData.body; // Umumiy ma'lumotlarni saqlaymiz
+      setTotalItems(responseData.totalElements); 
+      return responseData.body; 
     },
     {
-      keepPreviousData: true, // Sahifa o'zgarganda eski ma'lumotlarni saqlab qoladi
+      keepPreviousData: true, 
     },
   );
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page); // Hozirgi sahifani yangilash
+    setCurrentPage(page); 
     setPageSize(pageSize);
   };
 
-  // Modal ochilishi
   const showModal = () => {
     setOpen(true);
   };
 
-  // Modal yopilishi
   const handleCancel = () => {
     resetForm();
     setOpen(false);
@@ -109,21 +105,26 @@ function Employees() {
     const formattedPhoneNumber = formatForSwagger(phoneNumber.current!.value);
     phoneNumber.current!.value = formattedPhoneNumber;
     if ( firstname.current!.value && lastname.current!.value && email.current!.value && phoneNumber.current!.value && password.current!.value && confirmPassword.current!.value &&  role.current!.value) {
-      if (password.current!.value === confirmPassword.current!.value) {
-        postAdmin.mutate(); // POST so'rovini yuborish
-        setConfirmLoading(true);
-        setTimeout(() => {
-          setOpen(false);
-          setConfirmLoading(false);
-          resetForm(); // Forma maydonlarini tozalash
-        }, 2000);
+      if (phoneNumber.current!.value.length > 12) {
+        if (password.current!.value === confirmPassword.current!.value) {
+          postAdmin.mutate(); 
+          setConfirmLoading(true);
+          setTimeout(() => {
+            setOpen(false);
+            setConfirmLoading(false);
+            resetForm(); 
+          }, 1000);
+        } else {
+          showErrorMessage('Parollar mos kelmadi');
+        }
       } else {
-        message.error('Parollar mos kelmadi');
+        showErrorMessage('Telefon raqamini toliq kiriting');
       }
     } else {
-      message.error("Barcha maydonlarni to'ldiring");
+      showErrorMessage("Barcha maydonlarni to'ldiring");
     }
   };
+
 
   // input maydonlarini tozalash
   const resetForm = () => {
@@ -142,11 +143,10 @@ function Employees() {
       return axios.put(`${activeEmployee}${id}`, { enabled }, config);
     },
     {
-      // Mutatsiya muvaffaqiyatli bo'lganda, hodimlar ro'yxatini toastga chiqarish
       onSuccess: (data, variables) => {
         const { enabled } = variables;
-        console.log(data);
-        // queryClient.invalidateQueries('getADmin'); // Adminlar ma'lumotini qayta yuklash
+        // console.log(data);
+        // queryClient.invalidateQueries('getADmin'); 
         if (enabled === true) {
           message.success('Hodim muvaffaqiyatli ishga tushirildi');
         } else {
@@ -181,7 +181,7 @@ function Employees() {
       return axios.post(
         `${addEmployee}`,
         {
-          firstname: firstname.current?.value, // Ref'dan qiymat olish
+          firstname: firstname.current?.value, 
           lastname: lastname.current?.value,
           email: email.current?.value,
           phoneNumber: formattedPhoneNumber.replace('+', ''),
@@ -201,15 +201,15 @@ function Employees() {
       },
       onError: (error) => {
         console.error('Xatolik:', error);
-        message.error("Hodim qo'shishda xatolik yuz berdi");
+        showErrorMessage("Hodim qo'shishda xatolik yuz berdi");
       },
     },
   );
 
-  const [showPassword, setShowPassword] = useState(false); // Parolni ko'rsatish/yashirish holati
-  const [showPasswords, setShowPasswords] = useState(false); // Parolni ko'rsatish/yashirish holati
-
+  
   // Parol ko'rsatish/yashirish funksiyasi
+  const [showPassword, setShowPassword] = useState(false); 
+  const [showPasswords, setShowPasswords] = useState(false); 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -262,7 +262,6 @@ function Employees() {
               >
                 {/* Modal mazmuni */}
                 <div className="mb-4">
-                  {/* <label className="block mb-2">Admin toifasini tanlang</label> */}
                   <select className="border w-full p-2 rounded" ref={role}>
                     <option value="">Admin toifasini tanlang</option>
                     <option value="ROLE_TESTER">Tester admin</option>
@@ -310,15 +309,15 @@ function Employees() {
                 <div className="mb-4">
                   <label className="block mb-2">Parolni kiriting</label>
                   <input
-                    type={showPassword ? 'text' : 'password'} // Parol ko'rsatish/yashirish holatiga qarab o'zgaradi
+                    type={showPassword ? 'text' : 'password'} 
                     placeholder="Parolni kiriting"
                     className="border w-full p-2 rounded"
                     ref={password}
                   />
                    {/* Iconka qo'shish */}
                     <span
-                      className="absolute cursor-pointer right-10 top-[495px] text-lg" // Iconkani input ichiga joylash
-                      onClick={togglePasswordVisibility} // Iconkani bosganda parol ko'rinadi/yashirinadi
+                      className="absolute cursor-pointer right-10 top-[495px] text-lg" 
+                      onClick={togglePasswordVisibility} 
                     >
                       {showPassword ? <EyeInvisibleOutlined /> : <EyeOutlined />}
                     </span>
@@ -332,8 +331,8 @@ function Employees() {
                     ref={confirmPassword}
                   />
                     <span
-                      className="absolute cursor-pointer right-10 top-[585px] text-lg" // Iconkani input ichiga joylash
-                      onClick={togglePasswordVisibilitys} // Iconkani bosganda parol ko'rinadi/yashirinadi
+                      className="absolute cursor-pointer right-10 top-[585px] text-lg" 
+                      onClick={togglePasswordVisibilitys} 
                     >
                       {showPasswords ? <EyeInvisibleOutlined /> : <EyeOutlined />}
                     </span>

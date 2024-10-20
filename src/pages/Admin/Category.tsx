@@ -34,9 +34,9 @@ function Category() {
   const [pageSize, setPageSize] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
 
-  const [selectedCategory, setSelectedCategory] = useState(null); // Tanlangan kategoriya
-  const [editModalVisible, setEditModalVisible] = useState(false); // Tahrirlash modalining holati
-  const [imageModal, setImageModal] = useState({ open: false, imageUrl: "" }); // Rasm modalining holati
+  const [selectedCategory, setSelectedCategory] = useState(null); 
+  const [editModalVisible, setEditModalVisible] = useState(false); 
+  const [imageModal, setImageModal] = useState({ open: false, imageUrl: "" }); 
 
   // Kategoriyalarni olish
   const { data, refetch, isLoading } = useQuery(
@@ -62,12 +62,12 @@ function Category() {
 
   // Rasm modalini ochish
   const handleImageClick = (imageUrl: string) => {
-    setImageModal({ open: true, imageUrl }); // Rasm modalini ochish
+    setImageModal({ open: true, imageUrl }); 
   };
 
   // Rasm modalini yopish
   const handleImageModalClose = () => {
-    setImageModal({ open: false, imageUrl: "" }); // Modalni yopish
+    setImageModal({ open: false, imageUrl: "" }); 
   };
 
   // Kategoriya o'chirish funksiyasi
@@ -129,11 +129,9 @@ function Category() {
             </div>
 
             <CategoryAddModal onAddCategory={handleAddCategory} />
-
-            <div className="container mx-auto w-[1200px] px-[20px] overflow-x-auto">
+            <div className="container mx-auto w-full max-w-[1130px] md:overflow-x-auto sm:overflow-x-hidden">
               <Table hoverable className="border-collapse table-auto">
                 <TableHead className="hidden sm:table-header-group">
-                  {/* Kichik ekranlar uchun sarlavhani yashirish */}
                   <TableHeadCell>T/P</TableHeadCell>
                   {[
                     { title: "Kategoriya rasmi", tooltip: "Kategoriya rasmi" },
@@ -165,7 +163,6 @@ function Category() {
                     </TableHeadCell>
                   ))}
                 </TableHead>
-
                 <TableBody className="block sm:table-row-group divide-y">
                   {Array.isArray(data) &&
                     data.map((item, index) => (
@@ -179,7 +176,6 @@ function Category() {
                             {(currentPage - 1) * pageSize + index + 1}
                           </span>
                         </TableCell>
-
                         <TableCell className="flex justify-between py-2 sm:table-cell">
                           <span className="font-bold sm:hidden">
                             Kategoriya rasmi
@@ -201,7 +197,6 @@ function Category() {
                             className="border-[1px] border-gray-300 w-10 h-10 rounded-full object-cover hover:cursor-pointer sm:w-[43px] sm:h-[43px]"
                           />
                         </TableCell>
-
                         <TableCell className="flex justify-between py-2 sm:table-cell">
                           <span className="font-bold sm:hidden">
                             Kategoriya nomi
@@ -212,7 +207,6 @@ function Category() {
                             </span>
                           </Tooltip>
                         </TableCell>
-
                         <TableCell className="flex justify-between py-2 sm:table-cell">
                           <span className="font-bold sm:hidden">Tavsifi</span>
                           <Tooltip title={item.description}>
@@ -221,35 +215,30 @@ function Category() {
                             </span>
                           </Tooltip>
                         </TableCell>
-
                         <TableCell className="flex justify-between py-2 sm:table-cell">
                           <span className="font-bold sm:hidden">
                             Umumiy savollar
                           </span>
                           <span>{item.questionCount}</span>
                         </TableCell>
-
                         <TableCell className="flex justify-between py-2 sm:table-cell">
                           <span className="font-bold sm:hidden">
                             Qo'shimcha savollar
                           </span>
                           <span>{item.extraQuestionCount}</span>
                         </TableCell>
-
                         <TableCell className="flex justify-between py-2 sm:table-cell">
                           <span className="font-bold sm:hidden">
                             Davomiylik vaqti (daqiqa)
                           </span>
                           <span>{item.durationTime}</span>
                         </TableCell>
-
                         <TableCell className="flex justify-between py-2 sm:table-cell">
                           <span className="font-bold sm:hidden">
                             Qayta qabul qilish sanasi
                           </span>
                           <span>{item.retakeDate}</span>
                         </TableCell>
-
                         <TableCell className="flex justify-between py-2 sm:table-cell">
                           <span className="font-bold sm:hidden">Yaratgan</span>
                           <Tooltip title={item.createdBy}>
@@ -258,22 +247,17 @@ function Category() {
                             </span>
                           </Tooltip>
                         </TableCell>
-
                         <TableCell className="flex justify-between py-2 sm:table-cell">
                           <span className="font-bold sm:hidden">
                             Kategoriya holati
                           </span>
                           <span>{item.deleted && "O'chirilgan"}</span>
                         </TableCell>
-
                         <TableCell className="flex justify-between py-2 sm:table-cell">
                           <span className="font-bold sm:hidden">O'chirgan</span>
                           <span>{item.deletedBy}</span>
                         </TableCell>
-
-                        {/* Xarakatlar */}
                         <TableCell className="flex gap-4 text-xl">
-                          {/* Tahrirlash tugmasi */}
                           <button className="hover:text-yellow-500">
                             <MdEdit
                               className="text-[24px] duration-300"
@@ -288,8 +272,6 @@ function Category() {
                               }}
                             />
                           </button>
-
-                          {/* O'chirish tugmasi */}
                           <CategoryDeleteModal
                             item={item}
                             handleDeleteCategory={handleDeleteCategory}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, ChangeEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Select } from 'antd';
 import { config } from '@/helpers/functions/token';
 import { useQuery } from 'react-query';
@@ -7,6 +7,7 @@ import { baseUrl } from '@/helpers/api/baseUrl';
 import { ClientQuizType } from '@/helpers/types/clientQuizType';
 import { toast } from 'react-toastify';
 import CheckLogin from '@/helpers/functions/checkLogin';
+import axios from 'axios';
 
 const TOTAL_TIME = 60 * 60; // 60 minutes (in seconds)
 const STORAGE_KEY = 'savedRemainingTime';
@@ -21,6 +22,32 @@ const QuestionPage: React.FC = () => {
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
   const [remainingTime, setRemainingTime] = useState(TOTAL_TIME); // In seconds
 
+  const { data: questions, isLoading, error } = useQuery({
+    queryKey: ['questions'],
+
+    queryFn: async () => {
+      const response = await axios.get(`${baseUrl}quiz/start/55`, config);
+      const responseData = response.data as { body: ClientQuizType };
+      return responseData.body;
+    },
+    onError: (error: AxiosError) => {
+      toast.error(error.message);
+    },
+  })
+
+  if (error) {
+    toast.error('Xatolik yuz berdi');
+  }
+
+  const data = useCallback(() => {
+    if (questions) console.log(questions.
+      questionDtoList
+      );
+  }, [questions]);
+
+  useEffect(() => {
+    data();
+  }, [data]);
 
   const checkRoleClient = useCallback(() => {
     const role = localStorage.getItem('role');
@@ -104,9 +131,15 @@ const QuestionPage: React.FC = () => {
         </div>
         <div className="mt-4">
 
-          <div className="mt-4 space-y-3">
-
-          </div>
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : (
+            <div className="mt-4 space-y-3">
+              {/* {questions && Array.isArray(questions) && questions.map((question: ClientQuizType, index: number) => (
+                <div key={index}>{question.countAnswers}</div>
+              ))} */}
+            </div>
+          )}
 
           {/* Progress Bar */}
 
@@ -123,16 +156,16 @@ const QuestionPage: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 
 // Sample answers data (you can change it to be dynamic)
-const answers = [
-  'Ҳа биламан. Топография ва қурилиш маҳоратили фойдалана оламан.',
-  'Ҳа биламан. Ўқув жараёнида яхши фойдаланганман.',
-  'Дастурни ишлата олмайман.',
-  'Дастурни ишлай оламан лекин ўқув ёки иш жараёнида аниқ бир иш битирмаганман.',
-];
+// const answers = [
+//   'Ҳа биламан. Топография ва қурилиш маҳоратили фойдалана оламан.',
+//   'Ҳа биламан. Ўқув жараёнида яхши фойдаланганман.',
+//   'Дастурни ишлата олмайман.',
+//   'Дастурни ишлай оламан лекин ўқув ёки иш жараёнида аниқ бир иш битирмаганман.',
+// ];
 
 export default QuestionPage;

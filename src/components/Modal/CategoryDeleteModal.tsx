@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Modal, message } from 'antd';
 import { MdDelete } from 'react-icons/md';
+import { showErrorMessage } from '@/helpers/functions/message';
 
 interface DeleteButtonProps {
   item: {
@@ -11,23 +12,23 @@ interface DeleteButtonProps {
 }
 
 const DeleteButton = ({ item, handleDeleteCategory }: DeleteButtonProps) => {
-  const [isModalOpen, setIsModalOpen] = useState(false); // Modalni boshqarish uchun state
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showDeleteModal = () => {
     if (!item.deleted) {
-      setIsModalOpen(true); // Modalni ochish
+      setIsModalOpen(true);
     } else {
-      message.error("Bu kategoriya o'chirilgan, uni o'chirish mumkin emas.");
+      showErrorMessage("Bu kategoriya o'chirilgan, uni o'chirish mumkin emas.");
     }
   };
 
   const handleOk = () => {
-    handleDeleteCategory(item.id); // Kategoriya o'chirish
-    setIsModalOpen(false); // Modalni yopish
-    message.success("Kategoriya muvaffaqiyatli o'chirildi!"); // Muvaffaqiyatli xabar
+    handleDeleteCategory(item.id);
+    setIsModalOpen(false);
+    message.success("Kategoriya muvaffaqiyatli o'chirildi!");
   };
 
-  const handleCancel = () => setIsModalOpen(false); // Modalni yopish
+  const handleCancel = () => setIsModalOpen(false);
 
   return (
     <>
@@ -37,15 +38,15 @@ const DeleteButton = ({ item, handleDeleteCategory }: DeleteButtonProps) => {
 
       <Modal
         title="Kategoriya o'chirish"
-        open={isModalOpen} // Modal holati
-        onOk={handleOk} // O'chirish tasdiqlanganda
-        onCancel={handleCancel} // Bekor qilinsa
+        open={isModalOpen} 
+        onOk={handleOk}
+        onCancel={handleCancel} 
         okText="O'chirish"
         cancelText="Bekor qilish"
         centered
         okButtonProps={{ danger: true }}
       >
-        <p>Kategoriyani o'chirib tashlamoqchimisiz?</p>
+        <p>Kategoriyani o'chirish nima foyda beradi senga ?</p>
       </Modal>
     </>
   );

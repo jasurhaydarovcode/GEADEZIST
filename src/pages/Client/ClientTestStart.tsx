@@ -21,17 +21,14 @@ interface AxiosError {
 }
 
 const ClientTestStart: React.FC = () => {
-  CheckLogin();
+  CheckLogin
 
+  const [id, setId] = useState<number[]>([]);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const showModal = () => {
     setIsModalVisible(true);
-  };
-
-  const handleOk = () => {
-    navigate('/client/quiz/:id');
   };
 
   const checkRoleClient = useCallback(() => {
@@ -57,6 +54,10 @@ const ClientTestStart: React.FC = () => {
     setIsModalVisible(false);
   };
 
+  const handleOk = () => {
+    navigate(`/client/quiz/:id`);
+  };
+
   const { isLoading, error, data } = useQuery({
     queryKey: ['getClientCategory'],
     queryFn: async () => {
@@ -69,6 +70,7 @@ const ClientTestStart: React.FC = () => {
   });
 
   if (error) return toast.error(error.message);
+
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
@@ -195,8 +197,9 @@ const ClientTestStart: React.FC = () => {
               </div>
             ))}
         </>
-      )}
-    </Layout>
+      )
+      }
+    </Layout >
   );
 };
 
