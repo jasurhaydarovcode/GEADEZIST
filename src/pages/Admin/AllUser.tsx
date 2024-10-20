@@ -11,7 +11,6 @@ import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import Modal from 'react-modal';
 import { IoMdCloseCircleOutline } from 'react-icons/io';
-// import checkLogin from '@/helpers/functions/checkLogin'; // Keraksiz import
 
 import type { PaginationProps } from 'antd';
 import { Pagination } from 'antd';
@@ -127,7 +126,7 @@ function AllUser() {
                           <th className="text-left xl:px-12 py-2">Ism</th>
                           <th className="text-left xl:px-12 py-2">Familya</th>
                           <th className="text-left max-lg:hidden xl:px-12 py-2">Email</th>
-                          <th className="text-left px-10 bg-transparent py-4">Harakat</th>
+                          <th className="text-left px-10 bg-transparent py-4">Ko'rish</th>
                         </tr>
                       </thead>
                       <tbody>

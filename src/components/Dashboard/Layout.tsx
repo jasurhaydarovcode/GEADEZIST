@@ -8,7 +8,6 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       {role !== 'ROLE_ADMIN' && <Sidebar />}
       <div className="flex-1">
         <Navbar />
-        {/* <main>{children}</main> */}
         <main className="py-4">{children}</main>
       </div>
     </div>
