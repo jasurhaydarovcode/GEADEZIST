@@ -11,23 +11,15 @@ import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import Modal from 'react-modal';
 import { IoMdCloseCircleOutline } from 'react-icons/io';
-import checkLogin from '@/helpers/functions/checkLogin';
-
-
 import type { PaginationProps } from 'antd';
 import { Pagination } from 'antd';
 
-
-
 // Accessibility setup
 Modal.setAppElement('#root');
-checkLogin
 function AllUser() {
-
   const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, pageSize) => {
     console.log(current, pageSize);
   };
-
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUser, setSelectedUser] = useState<UserNatijasi | null>(null);
@@ -61,12 +53,10 @@ function AllUser() {
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
   console.log(totalPages);
 
-
   const handlePageChange = (page: number, pageSize: number) => {
     setCurrentPage(page);
     console.log(`Current page: ${page}, Page size: ${pageSize}`);
   };
-
 
   const handleUserClick = (user: UserNatijasi) => {
     setSelectedUser(user);
@@ -79,13 +69,13 @@ function AllUser() {
   };
 
   return (
-    <div className=''>
+    <div className='overflow-x-hidden'>
       <Helmet>
         <title>Foydalanuvchilar</title>
       </Helmet>
 
       <Layout>
-        <div >
+        <div>
           <div className="flex justify-center pt-7">
             <div className="px-8">
               <div className="w-max">
