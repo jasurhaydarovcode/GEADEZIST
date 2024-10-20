@@ -72,7 +72,7 @@ function AllUser() {
   };
 
   return (
-    <div className=''>
+    <div className='overflow-x-hidden'>
       <Helmet>
         <title>Foydalanuvchilar</title>
       </Helmet>
@@ -127,7 +127,7 @@ function AllUser() {
                           <th className="text-left xl:px-12 py-2">Ism</th>
                           <th className="text-left xl:px-12 py-2">Familya</th>
                           <th className="text-left max-lg:hidden xl:px-12 py-2">Email</th>
-                          <th className="text-left px-10 bg-transparent py-4">Harakat</th>
+                          <th className="text-left px-10 bg-transparent py-4">Qo'shimcha</th>
                         </tr>
                       </thead>
                       <tbody>
