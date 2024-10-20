@@ -94,10 +94,10 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
     const errors = {
       name: !formData.name.trim(),
       description: !formData.description.trim(),
-      questionCount: formData.main && formData.questionCount <= 0,
-      extraQuestionCount: formData.main && formData.extraQuestionCount <= 0,
-      durationTime: formData.main && formData.durationTime <= 0,
-      retakeDate: formData.main && formData.retakeDate <= 0,
+      questionCount: !formData.main && formData.questionCount <= 0, // Changed logic
+      extraQuestionCount: !formData.main && formData.extraQuestionCount <= 0, // Changed logic
+      durationTime: !formData.main && formData.durationTime <= 0, // Changed logic
+      retakeDate: !formData.main && formData.retakeDate <= 0, // Changed logic
     };
 
     setInputErrors(errors);
@@ -190,7 +190,7 @@ const CategoryAddModal: React.FC<CategoryAddModalProps> = ({ onAddCategory }) =>
             )}
           </div>
 
-          {formData.main && (
+          {!formData.main && ( // Changed: Show for non-main only
             <>
               <div>
                 <label className="block mb-2">Umumiy Savollar</label>
