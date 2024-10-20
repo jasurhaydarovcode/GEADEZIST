@@ -19,16 +19,19 @@ import { Pagination } from 'antd';
 Modal.setAppElement('#root');
 
 function AllUser() {
+  // Pagination codelari
   const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, pageSize) => {
     console.log(current, pageSize);
   };
 
+  // Statelar
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUser, setSelectedUser] = useState<UserNatijasi | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const itemsPerPage = 8; // ! pagedagi datalar soni
+  const itemsPerPage = 8; // pagedagi userlar soni
 
+  // Foydalanuvchilar malumotlarini olish
   const { data: usersData, refetch } = useQuery({
     queryKey: ['User', config],
     queryFn: async () => {
@@ -38,33 +41,41 @@ function AllUser() {
     }
   });
 
+  // Komponent yuklanganda foydalanuvchilar malumotlarini update qilish
   useEffect(() => {
     refetch();
   }, [refetch]);
 
+  // Foydalanuvchilar ruyxati
   const GetUser: UserNatijasi[] = usersData ?? [];
 
+  // Search filteri
   const filteredUsers = GetUser.filter((user) =>
     `${user.firstName} ${user.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Pagination assets
   const indexOfLastUser = currentPage * itemsPerPage;
   const indexOfFirstUser = indexOfLastUser - itemsPerPage;
   const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
 
+  // Umumiy page soni
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
   console.log(totalPages);
 
+  // Sahifa uzgarganda chaqiriladigan funksiya
   const handlePageChange = (page: number, pageSize: number) => {
     setCurrentPage(page);
     console.log(`Current page: ${page}, Page size: ${pageSize}`);
   };
 
+  // Foydalanuvchi malumotlari
   const handleUserClick = (user: UserNatijasi) => {
     setSelectedUser(user);
     setIsModalOpen(true);
   };
 
+  // Modal yopish
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedUser(null);
