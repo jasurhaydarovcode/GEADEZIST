@@ -120,7 +120,7 @@ function Category() {
           </div>
         ) : (
           <>
-            <div className="flex justify-between px-[20px]">
+            <div className="flex justify-between px-[20px] pt-5">
               <h1 className="text-3xl font-bold font-sans">Kategoriya</h1>
               <p className="font-sans text-gray-700">
                 <Link to="/dashboard">Boshqaruv paneli /</Link>
