@@ -8,11 +8,11 @@ import '@fontsource/lato/400-italic.css';
 import SiteLoading from './components/SiteLoading';
 import Home from '@/pages/Admin/Home';
 import NotFound from '@/pages/Admin/NotFound';
-import SignIn from '@/pages/Auth/SignIn';
-import SignUp from '@/pages/Auth/SignUp';
-import Offer from './pages/Auth/Offer';
-import Confirm from './pages/Auth/Confirm';
-import ResetPassword from './pages/Auth/ResetPassword';
+import SignIn from '@/pages/Authentication/SignIn';
+import SignUp from '@/pages/Authentication/SignUp';
+import Offer from './pages/Authentication/Offer';
+import Confirm from './pages/Authentication/Confirm';
+import ResetPassword from './pages/Authentication/ResetPassword';
 import ClientDashboard from './pages/Client/ClientDashboard';
 import ClientProfile from './pages/Client/ClientProfile';
 import ClientTestStart from './pages/Client/ClientTestStart';
@@ -27,7 +27,7 @@ import Address from './pages/Admin/Address';
 import InspectorAdmin from './pages/Admin/InspectorAdmin';
 import Category from './pages/Admin/Category';
 import Profile from './pages/Admin/Profile';
-import ConfirmSignUp from './pages/Auth/ConfirmSignUp';
+import ConfirmSignUp from './pages/Authentication/ConfirmSignUp';
 import TestVisual from './components/test/testVisual';
 
 function App() {
