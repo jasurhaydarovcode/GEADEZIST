@@ -9,7 +9,7 @@ function Category() {
     CheckLogin
 
     const location = useLocation();
-    const { element } = location.state || {};
+    const { catygoria, savol } = location.state || {}
     const navigite = useNavigate()
     function getOut() {
         navigite('/test')
@@ -29,30 +29,25 @@ function Category() {
                             Admin savolni mijozlarga qanday kurinishi bilib olish uchun namuna
                         </p>
                         <p className="text-lg mt-7">
-                            <span className="text-3xl font-bold">{element?.catygoria || 'kategoriya nomalum'}</span>
+                            <span className="text-3xl font-bold">{catygoria || 'kategoriya nomalum'}</span>
                         </p>
-                        <h2 className="text-xl font-semibold mt-7">{element?.savol || 'savol topilmadi'}</h2>
+                        <h2 className="text-xl font-semibold mt-7">{savol || 'savol topilmadi'}</h2>
                         <div className="mt-6">
-                            {element ? (
-                                <div className="mt-6">
-                                    <p className="text-red-600 font-bold mt-4 text-left">Faqat bitta tugri javobni belgilang</p>
-                                    <label className="flex items-center mb-4 border border-gray-300 rounded-lg p-2 bg-gray-100">
-                                        <input type="radio" name="answer" value="javob" className="mr-2" />
-                                        <span className="text-lg">
-                                            <span className="">javob</span>
-                                        </span>
-                                    </label>
-                                    <label className="flex items-center border border-gray-300 rounded-lg p-2 bg-gray-100">
-                                        <input type="radio" name="answer" value="javob" className="mr-2" />
-                                        <span className="text-lg">
-                                            <span className="">javob</span>
-                                        </span>
-                                    </label>
-                                </div>
-                            ) : (
-                                <p>Ma'lumotlar mavjud emas.</p>
-                            )
-                            }
+                            <div className="mt-6">
+                                <p className="text-red-600 font-bold mt-4 text-left">Faqat bitta tugri javobni belgilang</p>
+                                <label className="flex items-center mb-4 border border-gray-300 rounded-lg p-2 bg-gray-100">
+                                    <input type="radio" name="answer" value="javob" className="mr-2" />
+                                    <span className="text-lg">
+                                        <span className="">javob</span>
+                                    </span>
+                                </label>
+                                <label className="flex items-center border border-gray-300 rounded-lg p-2 bg-gray-100">
+                                    <input type="radio" name="answer" value="javob" className="mr-2" />
+                                    <span className="text-lg">
+                                        <span className="">javob</span>
+                                    </span>
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </>

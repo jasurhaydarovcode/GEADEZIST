@@ -49,7 +49,7 @@ function Test() {
   ]); // Start with one input
   // test get
   const [datas, useDatas] = useState<FetchedTest[]>([]);
-  const [searchCateType,setSearchCateType]= useState<string | null>(null)
+  const [searchCateType, setSearchCateType] = useState<string | null>(null)
   // search
   const [turi, setTuri] = useState<string | null>(null);
   const [kategoriya, setKategoriya] = useState<string | null>(null);
@@ -63,9 +63,9 @@ function Test() {
       useDatas(datas);
     }
   }
- useEffect(() => {
-  
- },[searchCateType])  
+  useEffect(() => {
+
+  }, [searchCateType])
   // const searchTest = async (): Promise<void> => {
   //   if (nameSearch) {
   //     try {
@@ -78,9 +78,9 @@ function Test() {
   //         name: item.name,
   //         // Map any other properties you need from each item here
   //       }));
-  
+
   //       console.log("Fetched questions:", fetchedQuestions); // Log the data to the console
-  
+
   //       useDatas(fetchedQuestions); // Update your state
   //     } catch (error) {
   //       console.error("Error fetching search results:", error);
@@ -91,9 +91,9 @@ function Test() {
   //     useDatas([]);
   //   }
   // };
-  
- 
-  
+
+
+
   // search
 
   // delete
@@ -532,7 +532,7 @@ function Test() {
 
                 {/* kategory input search */}
                 <div className="flex">
-                  <select 
+                  <select
                     onChange={(e) => setKategoriya(e.target.value)}
                     className="w-[200px] text-gray-400 bg-white rounded-md h-[50px]"
                   >
@@ -540,7 +540,7 @@ function Test() {
                       Kategoriyani tanlang
                     </option>
                     {saveCates && saveCates.length > 0 && saveCates.map((cate) => (
-                      <option key={cate.id} value={cate.id}  className="text text-black">
+                      <option key={cate.id} value={cate.id} className="text text-black">
                         {cate.name}
                       </option>
                     ))}
@@ -596,7 +596,10 @@ function Test() {
                   <TableCell className="flex items-center gap-3">
                     <EditOutlined />
                     <DeleteOutlined />
-                    <EyeOutlined />
+                    <EyeOutlined onClick={() => {
+                      navigate('/tests', { state: { catygoria: item.categoryName, savol: item.name } })
+                    }
+                    } />
                   </TableCell>
                 </TableBody>
               ))}
