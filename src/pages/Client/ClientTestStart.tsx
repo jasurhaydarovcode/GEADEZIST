@@ -22,15 +22,8 @@ interface AxiosError {
 const ClientTestStart: React.FC = () => {
   CheckLogin();
 
-<<<<<<< HEAD
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
-  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [categoryId, setCategoryId] = useState<number | null>(null);
-=======
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
->>>>>>> dee9bc113c291a56b1e414c43979a0ba4031df0c
   const navigate = useNavigate();
   const [cateId, setSelectedCateId] = useState(null);
   const { isLoading, error, data } = useQuery({
@@ -70,51 +63,12 @@ const ClientTestStart: React.FC = () => {
     setIsModalVisible(false);
   };
 
-<<<<<<< HEAD
-
-  const { isLoading, error, data } = useQuery({
-    queryKey: ['getClientCategory'],
-=======
   const getTests = useQuery({
     queryKey: ['getTests', config],
->>>>>>> dee9bc113c291a56b1e414c43979a0ba4031df0c
     queryFn: async () => {
       const res = await axios.get(`${baseUrl}quiz/start/${cateId}`,config)
       return res.data
     },
-<<<<<<< HEAD
-    onError: (error: AxiosError) => {
-      toast.error(error.message);
-    },
-  });
-
-  if (error) return toast.error(error.message);
-
-
-
-  const handleStartClick = (category: { name: string, id: number }) => {
-    setSelectedCategory(category.name);
-    setCategoryId(category.id); // Kategoriyani state'ga o'rnatamiz
-    // Boshqa ma'lumotlarni ham ishlash mumkin
-  };
-
-
-  const handleCategorySelect = (categoryId: number) => {
-    setSelectedCategoryId(categoryId);
-  };
-
-  // const startTest = (categoryId: number) => {
-  //   // Navigate to the quiz page and pass the category ID as part of the URL
-  //   navigate(`/client/quiz/${categoryId}`);
-  // };
-
-  const handleNext = () => {
-    if (selectedCategoryId) {
-      // Navigate to next page with the selected category ID
-      navigate(`/client/quiz/${selectedCategoryId}`);
-    }
-  };
-=======
     onSuccess: () => {
       
     }
@@ -129,7 +83,6 @@ const ClientTestStart: React.FC = () => {
 
 
   if (error) return toast.error((error as AxiosError).message);
->>>>>>> dee9bc113c291a56b1e414c43979a0ba4031df0c
 
   return (
     <Layout className="p-8 space-y-6">
@@ -197,62 +150,14 @@ const ClientTestStart: React.FC = () => {
 
                     <button
                       onClick={() => {
-<<<<<<< HEAD
-                        showModal();
-                        handleStartClick(item);
-                        handleCategorySelect(item.id);
-=======
                         showModal(item.id);
                         setSelectedCateId(item.id); // Type assertion to number
->>>>>>> dee9bc113c291a56b1e414c43979a0ba4031df0c
                       }}
                       className="bg-gray-600 cursor-pointer absolute top-[78%] right-5 text-white p-1 px-4 rounded"
                     >
                       Boshlash
                     </button>
                   </div>
-<<<<<<< HEAD
-
-                  {selectedCategory && (
-                    <>
-                      <Modal
-                        title={
-                          <div>
-                            <span>
-                              <MdOutlineNotStarted
-                                size={90}
-                                color="red"
-                                className="mx-auto"
-                              />
-                            </span>
-                            <span>Haqiqatdan ham </span>
-                            <span className="text-red-600">
-                              {selectedCategory + ' ' + categoryId}
-                            </span>
-                            <span>
-                              {' '}
-                              yo'nalishi bo'yicha test boshlamoqchimisiz?
-                            </span>
-                          </div>
-                        }
-                        visible={isModalVisible}
-                        onOk={handleNext}
-                        onCancel={handleCancel}
-                        okText="Boshlash"
-                        cancelText="Orqaga"
-                        maskClosable={false}
-                        style={{
-                          top: '34%',
-                          left: '1%',
-                        }}
-                        maskStyle={{
-                          backgroundColor: 'rgba(0, 0, 0, 0.3)',
-                        }}
-                      ></Modal>
-                    </>
-                  )}
-=======
->>>>>>> dee9bc113c291a56b1e414c43979a0ba4031df0c
                 </div>
               </div>
             ))}
