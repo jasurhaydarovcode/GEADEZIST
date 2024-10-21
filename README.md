@@ -86,7 +86,7 @@
 
 <div align="left">
 <h3>Working Developers</h3>
-<p>Update date 21.10.2024</p>
+<p>Update date 22.10.2024</p>
 </div>
 
 |  №  |   Name    |               Work               |
@@ -94,14 +94,14 @@
 |  1  |   Jasur   |  client/profile/dashboard/quiz admin/dash tester/profile  |
 |  2  |   Temur   |  client/test-start client/quiz   |
 |  3  |  Javlon   |  auth/signIn/signUp Admin/all-user  |
-|  4  | Ulug'bek  |  admin/dashboard/profile/test auth/signin-logica |
+|  4  | Ulug'bek  |  admin/dashboard/profile auth/signin-logica |
 |  6  |   Nodir   |          Admin Category          |
 | 10  |  Asilbek  |  Admin/Employees, Admin Adress, oferta   |
 | 13  | Asil aka  |     Admin/Test Uktam bilan birga      |
 |  5  | Asliddin  | Admin Foydalanuvchilar |
 |  7  |   Uktam   |     Admin /Test      |
 | 14  |   Ozod    |`undefined`|
-|  8  | Shohjahon |`Not Working`:`undefined`|
+|  8  | Shohjahon |`undefined`|
 |  9  |  Alibek   |`Not Working`|
 | 11  |  Dilshod  |`Not Working`|
 | 12  |  Bexruz   |`Not Working`|
