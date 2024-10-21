@@ -16,6 +16,7 @@ import { Link, useNavigate } from "react-router-dom";
 import CheckLogin from "@/helpers/functions/checkLogin";
 import defaultImage from "../../assets/images/default.png";
 import { Category } from "@/helpers/types/Category";
+import { log } from "console";
 function Test() {
   const queryClient = useQueryClient()
   CheckLogin
@@ -47,7 +48,7 @@ function Test() {
   ]); // Start with one input
   // test get
   const [datas, useDatas] = useState<FetchedTest[]>([]);
-
+  const [searchCateType,setSearchCateType]= useState<string | null>(null)
   // search
   const [turi, setTuri] = useState<string | null>(null);
   const [kategoriya, setKategoriya] = useState<string | null>(null);
@@ -61,35 +62,37 @@ function Test() {
       useDatas(datas);
     }
   }
-  const searchTest = async (): Promise<void> => {
-    if (nameSearch) {
-      try {
-        const response = await axios.get<ApiResponse>(
-          `${baseUrl}question/filter?questionName=${nameSearch}&page=0&size=10`,
-          config
-        );
-
-        // Map the data to your table format
-        const fetchedQuestions = response.data.body.body.map((item, index) => ({
-          key: item.id.toString(),
-          numer: index + 1,
-          testRasm: item.optionDtos[0]?.file ? item.optionDtos[0]?.file : defaultImage, // Replace with actual image if available
-          savol: item.optionDtos[0]?.answer || "",
-          catygoria: item.categoryName || "No category",
-          savolTuri: item.type,
-          qiyinligi: item.difficulty,
-          yaratganOdam: item.createdByName,
-        }));
-
-        useDatas(fetchedQuestions); // Update your state
-      } catch (error) {
-        console.error("Error fetching search results:", error);
-      }
-    } else {
-      // Reset data if no search term is provided
-      useDatas([]);
-    }
-  };
+ useEffect(() => {
+  
+ },[searchCateType])  
+  // const searchTest = async (): Promise<void> => {
+  //   if (nameSearch) {
+  //     try {
+  //       const response = await axios.get<ApiResponse>(
+  //         `${baseUrl}question/filter?questionName=${nameSearch}&page=0&size=100`,
+  //         config
+  //       );
+  //       const fetchedQuestions = response.data.body.map((item) => ({
+  //         id: item.id,
+  //         name: item.name,
+  //         // Map any other properties you need from each item here
+  //       }));
+  
+  //       console.log("Fetched questions:", fetchedQuestions); // Log the data to the console
+  
+  //       useDatas(fetchedQuestions); // Update your state
+  //     } catch (error) {
+  //       console.error("Error fetching search results:", error);
+  //     }
+  //   } else {
+  //     // Reset data if no search term is provided
+  //     console.log("No search term provided, resetting data.");
+  //     useDatas([]);
+  //   }
+  // };
+  
+ 
+  
   // search
 
   // delete
@@ -532,7 +535,7 @@ function Test() {
 
                 {/* kategory input search */}
                 <div className="flex">
-                  <select
+                  <select 
                     onChange={(e) => setKategoriya(e.target.value)}
                     className="w-[200px] text-gray-400 bg-white rounded-md h-[50px]"
                   >
@@ -540,7 +543,7 @@ function Test() {
                       Kategoriyani tanlang
                     </option>
                     {saveCates && saveCates.length > 0 && saveCates.map((cate) => (
-                      <option key={cate.id} value={cate.id} className="text text-black">
+                      <option key={cate.id} value={cate.id}  className="text text-black">
                         {cate.name}
                       </option>
                     ))}
