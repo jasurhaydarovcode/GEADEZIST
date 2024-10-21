@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Logo } from '@/helpers/imports/images';
 import { Link, useLocation } from 'react-router-dom';
 import { IoMenu, IoCloseOutline } from 'react-icons/io5'; // Icons for burger menu
-import path from 'path';
 
 const Sidebar: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
