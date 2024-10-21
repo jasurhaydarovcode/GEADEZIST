@@ -35,7 +35,6 @@ function Confirm() {
         if (data.status === 'OK') {
           message.success('Emailga code yuborildi');
           navigate('/auth/reset-password');
-          console.log(data.message);
         }
       })
       .catch((err) => {
@@ -48,6 +47,11 @@ function Confirm() {
       })
      
   }
+  const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      forgetPassword()
+    }
+  };
 
   return (
     <div className="h-screen flex items-center justify-center bg-gray-100">
@@ -75,6 +79,7 @@ function Confirm() {
                   Elektron pochtangizni kiriting
                 </label>
                 <input
+                  onKeyDown={handleEnter}
                   ref={email}
                   type="email"
                   id="email"

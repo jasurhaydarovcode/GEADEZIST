@@ -88,7 +88,6 @@ function SignUp() {
           navigate('/auth/confirm-signup');
         }
         message.success("Ro'yxatdan o'tdingiz");
-        console.log(res);
       })
       .catch((err) => {
         if (err.response?.status === 404) {
@@ -103,6 +102,11 @@ function SignUp() {
         setIsSubmitting(false);
       });
   }
+  const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      signUpPost()
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -129,6 +133,7 @@ function SignUp() {
                 </label>
                 <input
                   ref={firstname}
+                  onKeyDown={handleEnter}
                   type="text"
                   id="firstName"
                   name="firstName"
@@ -147,6 +152,7 @@ function SignUp() {
                 </label>
                 <input
                   ref={lastname}
+                  onKeyDown={handleEnter}
                   type="text"
                   id="lastName"
                   name="lastName"
@@ -165,6 +171,7 @@ function SignUp() {
                 </label>
                 <input
                   ref={email}
+                  onKeyDown={handleEnter}
                   type="email"
                   id="email"
                   name="email"
@@ -185,6 +192,7 @@ function SignUp() {
                   ref={phone}
                   type="tel"
                   id="phoneNumber"
+                  onKeyDown={handleEnter}
                   name="phoneNumber"
                   placeholder="998 XX XXX XX XX"
                   required
@@ -206,6 +214,7 @@ function SignUp() {
                     type={showpassword ? 'text' : 'password'}
                     id="confirmPassword"
                     name="confirmPassword"
+                    onKeyDown={handleEnter}
                     placeholder="Parolni qayta kiriting"
                     required
                     className="w-full px-4 py-2 text-sm rounded-lg "
@@ -245,6 +254,7 @@ function SignUp() {
                     name="confirmPassword"
                     placeholder="Parolni qayta kiriting"
                     required
+                    onKeyDown={handleEnter}
                     className="w-full px-4 py-2 text-sm rounded-lg "
                   />
                   {/* Eye icon */}
