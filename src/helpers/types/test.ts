@@ -51,3 +51,4 @@ export type FetchedTest = {
   qiyinligi: string; // Difficulty level
   yaratganOdam: string; // Creator's name
 };
+// EditModal propslari uchun interfeys
