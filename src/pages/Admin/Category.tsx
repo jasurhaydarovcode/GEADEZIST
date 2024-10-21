@@ -1,10 +1,11 @@
 import Layout from "@/components/Dashboard/Layout";
 import { baseUrl, getImage } from "@/helpers/api/baseUrl";
 import { config } from "@/helpers/functions/token";
-import { message, Tooltip } from "antd";
+import { Tooltip } from "antd";
 import TooltipText from "@/components/TooltipText";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
+import { showErrorMessage } from '@/helpers/functions/message';
 import {
   Table,
   TableBody,
@@ -265,7 +266,7 @@ function Category() {
                                 if (!item.deleted) {
                                   handleEditClick(item);
                                 } else {
-                                  message.error(
+                                  showErrorMessage(
                                     "Bu kategoriya o'chirilgan, uni tahrirlash olmaysiz"
                                   );
                                 }

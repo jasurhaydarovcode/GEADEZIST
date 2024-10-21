@@ -18,7 +18,7 @@ const DeleteButton = ({ item, handleDeleteCategory }: DeleteButtonProps) => {
     if (!item.deleted) {
       setIsModalOpen(true);
     } else {
-      showErrorMessage("Bu kategoriya o'chirilgan, uni o'chirish mumkin emas.");
+      showErrorMessage("Bu kategoriya alaqachon o'chirilgan!");
     }
   };
 
