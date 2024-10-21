@@ -1,5 +1,5 @@
 import { getMeUser } from '@/helpers/api/baseUrl';
-import { geodeziyaLogo } from '@/helpers/imports/images';
+import { geodeziyaLogo, testerLogo } from '@/helpers/imports/images';
 import { GetMeResponse } from '@/helpers/types/GetMetype';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
@@ -125,7 +125,7 @@ const Navbar: React.FC = () => {
             </div>
             <div>
               <img
-                src={geodeziyaLogo}
+                src={role === 'ROLE_TESTER' ? testerLogo : geodeziyaLogo}
                 alt="Admin logo"
                 className="rounded-full w-10"
               />

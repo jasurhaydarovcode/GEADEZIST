@@ -1,7 +1,6 @@
 import Layout from '@/components/Dashboard/Layout';
 import { config } from '@/helpers/functions/token';
-import { geodeziyaLogo } from '@/helpers/imports/images';
-import { BiSolidPencil } from 'react-icons/bi';
+import { geodeziyaLogo, testerLogo } from '@/helpers/imports/images';
 import { getProfile } from '@/helpers/api/baseUrl';
 import { useQuery } from 'react-query';
 import { GetProfileType } from '@/helpers/types/GetProfileType';
@@ -42,6 +41,8 @@ function Profile() {
     getUserProfile.data as UserProfileData
   )?.body;
 
+  const role = localStorage.getItem('role'); // role ni local storage dan oldim okay?
+
   return (
     <div>
       <Helmet>
@@ -79,14 +80,21 @@ function Profile() {
                 <h4 className="text-2xl text-red-600 font-semibold pb-4">
                   Admin rasmi
                 </h4>
-                <img
+                {/* <img
                   className="w-40 relative h-40 rounded-full object-cover"
                   src={geodeziyaLogo}
                   alt="User Image"
+                /> */}
+                <img
+                  src={role === 'ROLE_TESTER' ? testerLogo : geodeziyaLogo}
+                  alt="Admin logo"
+                  className="w-40 relative h-40 rounded-full object-cover"
                 />
-                <button className="absolute ml-28 mt-40 bg-red-500 text-white p-2 rounded-full">
+                {/* ======= O'ylashim bo'yicha super admin va tester da rasm kerak emas ======= */}
+
+                {/* <button className="absolute ml-28 mt-40 bg-red-500 text-white p-2 rounded-full">
                   <BiSolidPencil />
-                </button>
+                </button> */}
               </div>
 
               {/* Profile Info Section */}
@@ -177,7 +185,7 @@ function Profile() {
                       getProfileData?.street == null
                         ? 'No data'
                         : getProfileData?.street ||
-                          "Admin MFY Exam Ko'chasi 21-uy"
+                        "Admin MFY Exam Ko'chasi 21-uy"
                     }
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-3"
                     readOnly
@@ -185,11 +193,13 @@ function Profile() {
                 </div>
               </div>
               <button
-                disabled={true}
-                className="cursor-not-allowed p-2 rounded-lg text-md mt-4 bg-gray-600 hover:bg-gray-800 transition duration-200 ease-in-out w-max font-semibold text-white"
+                disabled={role !== 'ROLE_TESTER'}
+                className={`p-2 rounded-lg text-md mt-4 bg-gray-600 hover:bg-gray-800 transition duration-200 ease-in-out w-max font-semibold text-white 
+               ${role === 'ROLE_TESTER' ? 'cursor-pointer' : 'cursor-not-allowed'}`}
               >
                 O'zgartirishlarni saqlang
               </button>
+
             </div>
           </div>
         )}

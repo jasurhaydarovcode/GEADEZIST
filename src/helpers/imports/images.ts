@@ -11,10 +11,14 @@ import noImageClientDefaultImage from '../../assets/images/client/client-default
 // Dashboard
 import loadingSpinner from '../../assets/images/dashboard/spinner-loading.svg';
 
+// Tester 
+import testerLogo from '../../assets/images/tester/tester.logo.png';
+
 export {
   Logo,
   geodeziyaLogo,
   registerRasm,
   noImageClientDefaultImage,
   loadingSpinner,
+  testerLogo
 };
