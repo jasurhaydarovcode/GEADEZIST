@@ -22,7 +22,7 @@ function Employees() {
     let digits = value.replace(/\D/g, '');
 
     if (!digits.startsWith('998')) {
-      digits = '998' + digits;
+      digits = '998';
     }
 
     if (digits.length <= 3) {
