@@ -98,8 +98,8 @@
 | 10  |  Asilbek  |  Admin/Employees, Admin Adress, oferta   |
 | 13  | Asil aka  |      Test Uktam bilan birga      |
 |  5  | Asliddin  | Admin Foydalanuvchilar |
-| 14  |   Ozod    |`undefined`|
 |  7  |   Uktam   |     Admin /Test      |
+| 14  |   Ozod    |`undefined`|
 |  8  | Shohjahon |`Not Working`:`undefined`|
 |  9  |  Alibek   |`Not Working`|
 | 11  |  Dilshod  |`Not Working`|

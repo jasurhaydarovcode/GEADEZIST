@@ -1,7 +1,5 @@
 // types.ts
 
-import { Id } from "react-toastify";
-
 // Type for the options of a question
 export type OptionDto = {
   id: number;
@@ -53,3 +51,4 @@ export type FetchedTest = {
   qiyinligi: string; // Difficulty level
   yaratganOdam: string; // Creator's name
 };
+// EditModal propslari uchun interfeys
