@@ -1,6 +1,6 @@
 import Layout from '@/components/clientDashboard/laytout';
 import { useNavigate } from 'react-router-dom';
-import { Modal } from 'antd';
+import { message, Modal } from 'antd';
 import { useEffect, useState, useCallback } from 'react';
 import { MdOutlineNotStarted } from 'react-icons/md';
 import { Helmet } from 'react-helmet';
@@ -20,12 +20,12 @@ interface AxiosError {
 }
 
 const ClientTestStart: React.FC = () => {
-  CheckLogin();
+  CheckLogin
 
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const navigate = useNavigate();
-  const [cateId, setSelectedCateId] = useState(null);
+  const [cateId, setSelectedCateId] = useState<number | null>(null);
   const { isLoading, error, data } = useQuery({
     queryKey: ['getClientCategory'],
     queryFn: async () => {
