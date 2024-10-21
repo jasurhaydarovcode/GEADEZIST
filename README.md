@@ -40,10 +40,11 @@
 
 ### Used UI libraries
 
-| **UI**     | **Description**                                                                                                                                                             |
-| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **UI**     | **Description** |
+| ------------- | ------------- |
 | ANT DESIGN | Ant Design 5.0 use CSS-in-JS technology to provide dynamic & mix theme ability. And which use component level CSS-in-JS solution get your application a better performance. |
-| FLOWBITE   | Flowbite React is an open-source UI component library built on top of Tailwind CSS with React components and based on the Flowbite Design System.                           |
+| FLOWBITE   | Flowbite React is an open-source UI component library built on top of Tailwind CSS with React components and based on the Flowbite Design System. |
+| Daisy UI | The most popular component library for Tailwind CSS daisyUI adds component class names to Tailwind CSS so you can make beautiful websites faster than ever. |
 
 ---
 
@@ -90,13 +91,13 @@
 
 |  №  |   Name    |               Work               |
 | :-: | :-------: | :------------------------------: |
-|  1  |   Jasur   |  client/profile-logica/dashboard admin/dash  |
+|  1  |   Jasur   |  client/profile-logica/dashboard/quiz admin/dash  |
 |  2  |   Temur   |  client/test-start client/quiz   |
-|  3  |  Javlon   |  auth/signIn/signUp Admin/all-user    |
-|  4  | Ulug'bek  |  admin/dashboard/profile/test auth/signin-logica  |
+|  3  |  Javlon   |  auth/signIn/signUp Admin/all-user  |
+|  4  | Ulug'bek  |  admin/dashboard/profile/test auth/signin-logica |
 |  6  |   Nodir   |          Admin Category          |
 | 10  |  Asilbek  |  Admin/Employees, Admin Adress, oferta   |
-| 13  | Asil aka  |      Test Uktam bilan birga      |
+| 13  | Asil aka  |     Admin/Test Uktam bilan birga      |
 |  5  | Asliddin  | Admin Foydalanuvchilar |
 |  7  |   Uktam   |     Admin /Test      |
 | 14  |   Ozod    |`undefined`|
