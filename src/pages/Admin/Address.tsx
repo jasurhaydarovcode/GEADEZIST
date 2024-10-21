@@ -542,7 +542,7 @@ function Address() {
               >
                 <div className="mb-4">
                   <select className={`border w-full p-2 rounded  ${hasErrors ? 'border-red-500' : 'border-gray-300'}`} onChange={(e) => setRegionId(e.target.value)} >
-                    <option value="">Viloyatni tanlang</option>
+                    <option disabled value="">Viloyatni tanlang</option>
                     {Array.isArray(region) &&
                       region.map((item) => (
                         <option key={item.id} value={item.id} >
@@ -588,7 +588,7 @@ function Address() {
             >
               <div className="mb-4">
                 <select className={`border w-full p-2 rounded`} onChange={(e) => setRegionId(e.target.value)} value={regionId} >
-                  <option value="">Viloyatni tanlang</option>
+                  <option disabled value="">Viloyatni tanlang</option>
                   {Array.isArray(region) &&
                     region.map((item) => (
                       <option key={item.id} value={item.id} >
