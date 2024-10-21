@@ -36,7 +36,7 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
     const updatedCategory = {
       ...category,
       ...values,
-      fileId: category?.fileId || '0', // Fayl ID bo'lmasa, 0 qiymat qo‘yiladi
+      fileId: category?.fileId || '0', // If no fileId, set to '0'
     };
     onEditCategory(updatedCategory);
     message.success('Kategoriya tahrirlandi!');
@@ -49,7 +49,7 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
 
   return (
     <Modal
-      title={`Kategoriyani tahrirlash - ${category?.main ? 'Asosiy' : 'Asosiy bo\'lmagan'}`}
+      title={`Kategoriyani tahrirlash - ${!category?.main ? 'Asosiy' : 'Asosiy bo\'lmagan'}`}
       centered
       visible={visible}
       onCancel={onClose}
@@ -74,7 +74,8 @@ const CategoryEditModal: React.FC<CategoryEditModalProps> = ({
           <Input.TextArea className={InputStyles.input} placeholder="Tavsifni kiriting" />
         </Form.Item>
 
-        {category?.main && (
+        {/* Reverse the condition to switch between main and non-main logic */}
+        {!category?.main && (
           <>
             <Form.Item
               label="Umumiy Savollar"
