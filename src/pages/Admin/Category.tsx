@@ -252,7 +252,7 @@ function Category() {
                           <span className="font-bold sm:hidden">
                             Kategoriya holati
                           </span>
-                          <span>{item.deleted && "O'chirilgan"}</span>
+                          <span>{item.deleted ? "O'chirilgan" : "——"}</span>
                         </TableCell>
                         <TableCell className="flex justify-between py-2 sm:table-cell">
                           <span className="font-bold sm:hidden">O'chirgan</span>

@@ -86,12 +86,12 @@
 
 <div align="left">
 <h3>Working Developers</h3>
-<p>Update date 18.10.2024</p>
+<p>Update date 21.10.2024</p>
 </div>
 
 |  №  |   Name    |               Work               |
 | :-: | :-------: | :------------------------------: |
-|  1  |   Jasur   |  client/profile-logica/dashboard/quiz admin/dash  |
+|  1  |   Jasur   |  client/profile/dashboard/quiz admin/dash tester/profile  |
 |  2  |   Temur   |  client/test-start client/quiz   |
 |  3  |  Javlon   |  auth/signIn/signUp Admin/all-user  |
 |  4  | Ulug'bek  |  admin/dashboard/profile/test auth/signin-logica |

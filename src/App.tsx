@@ -1,6 +1,5 @@
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-
 import '@fontsource/lato';
 import '@fontsource/lato/400.css';
 import '@fontsource/lato/400-italic.css';
@@ -23,12 +22,12 @@ import AllUser from './pages/Admin/AllUser';
 import User from './pages/Admin/User';
 import Archive from './pages/Admin/Archive';
 import Employees from './pages/Admin/Employees';
-// import Address from './pages/Admin/Address';
 import InspectorAdmin from './pages/Admin/InspectorAdmin';
 import Category from './pages/Admin/Category';
 import Profile from './pages/Admin/Profile';
 import ConfirmSignUp from './pages/Authentication/ConfirmSignUp';
 import TestVisual from './components/test/testVisual';
+import PrivateRoute from './components/security/PrivateRoute';
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -48,7 +47,12 @@ function App() {
     <>
       {loading && <SiteLoading />}
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={
+          <PrivateRoute>
+            <Home />
+          </PrivateRoute>
+        } />
+
         <Route path="*" element={<NotFound />} />
 
         {/* Authentication Routes */}
@@ -59,24 +63,121 @@ function App() {
         <Route path="/auth/reset-password" element={<ResetPassword />} />
         <Route path="/auth/offer" element={<Offer />} />
 
-        {/* Client Routes */}
-        <Route path="/client/dashboard" element={<ClientDashboard />} />
-        <Route path="/client/profile" element={<ClientProfile />} />
-        <Route path="/client/test/start" element={<ClientTestStart />} />
-        <Route path="/client/quiz/:id" element={<ClientQuiz />} />
+        {/* Protected Client Routes */}
+        <Route
+          path="/client/dashboard"
+          element={
+            <PrivateRoute>
+              <ClientDashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/client/profile"
+          element={
+            <PrivateRoute>
+              <ClientProfile />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/client/test/start"
+          element={
+            <PrivateRoute>
+              <ClientTestStart />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/client/quiz/:id"
+          element={
+            <PrivateRoute>
+              <ClientQuiz />
+            </PrivateRoute>
+          }
+        />
 
-        {/* Admin Routes */}
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/category" element={<Category />} />
-        <Route path="/test" element={<Test />} />
-        <Route path="/tests" element={<TestVisual />} />
-        <Route path="/all-user" element={<AllUser />} />
-        <Route path="/user" element={<User />} />
-        <Route path="/archive/:id" element={<Archive />} />
-        <Route path="/employees" element={<Employees />} />
-        {/* <Route path="/address" element={<Address />} /> */}
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/inspector-admin" element={<InspectorAdmin />} />
+        {/* Protected Admin Routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/category"
+          element={
+            <PrivateRoute>
+              <Category />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/test"
+          element={
+            <PrivateRoute>
+              <Test />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/tests"
+          element={
+            <PrivateRoute>
+              <TestVisual />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/all-user"
+          element={
+            <PrivateRoute>
+              <AllUser />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/user"
+          element={
+            <PrivateRoute>
+              <User />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/archive/:id"
+          element={
+            <PrivateRoute>
+              <Archive />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/employees"
+          element={
+            <PrivateRoute>
+              <Employees />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <Profile />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/inspector-admin"
+          element={
+            <PrivateRoute>
+              <InspectorAdmin />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </>
   );
