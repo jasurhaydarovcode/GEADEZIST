@@ -23,7 +23,7 @@ import AllUser from './pages/Admin/AllUser';
 import User from './pages/Admin/User';
 import Archive from './pages/Admin/Archive';
 import Employees from './pages/Admin/Employees';
-import Address from './pages/Admin/Address';
+// import Address from './pages/Admin/Address';
 import InspectorAdmin from './pages/Admin/InspectorAdmin';
 import Category from './pages/Admin/Category';
 import Profile from './pages/Admin/Profile';
@@ -74,7 +74,7 @@ function App() {
         <Route path="/user" element={<User />} />
         <Route path="/archive/:id" element={<Archive />} />
         <Route path="/employees" element={<Employees />} />
-        <Route path="/address" element={<Address />} />
+        {/* <Route path="/address" element={<Address />} /> */}
         <Route path="/profile" element={<Profile />} />
         <Route path="/inspector-admin" element={<InspectorAdmin />} />
       </Routes>
