@@ -49,9 +49,9 @@ function SignIn() {
     onSuccess: (res: AxiosResponse) => {
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('role', res.data.role);
-      if (res.data.role === 'ROLE_SUPER_ADMIN' ) {
+      if (res.data.role === 'ROLE_SUPER_ADMIN') {
         navigate('/dashboard');
-      }else if(res.data.role === 'ROLE_ADMIN'){
+      } else if (res.data.role === 'ROLE_ADMIN') {
         navigate('/user');
       } else if (res.data.role === 'ROLE_TESTER') {
         navigate('/category');
@@ -152,7 +152,7 @@ function SignIn() {
             </div>
           </div>
         </div>
-      </div>  
+      </div>
     </div>
   );
 }
