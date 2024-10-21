@@ -15,7 +15,13 @@ import { Answer } from "@/helpers/types/AddQuizType";
 import { Link, useNavigate } from "react-router-dom";
 import CheckLogin from "@/helpers/functions/checkLogin";
 import defaultImage from "../../assets/images/default.png";
+<<<<<<< HEAD
 import { Category } from "@/helpers/types/Category";
+=======
+import TestVisual from "@/components/test/testVisual";
+import { Category } from "@/helpers/types/Category";
+import { toast } from "react-toastify";
+>>>>>>> 715a2938e76111ccfb85d8d09bcfab99c7234763
 
 function Test() {
   const queryClient = useQueryClient()
