@@ -17,8 +17,7 @@ function ResetPassword() {
     useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);  
 
-  function resetPasswordPost(event: React.FormEvent) {
-    event.preventDefault(); // Sahifa yangilanmasligini ta'minlash
+  function resetPasswordPost() {
 
     const data: ResetPasswordType = {
       passwordToken: code.current?.value || '',
@@ -61,6 +60,11 @@ function ResetPassword() {
         setIsSubmitting(false);
       });
   }
+  const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      resetPasswordPost()
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -89,6 +93,7 @@ function ResetPassword() {
                   Tasdiqlash kodi
                 </label>
                 <input
+                  onKeyDown={handleEnter}
                   ref={code}
                   type="text"
                   id="code"
@@ -109,6 +114,7 @@ function ResetPassword() {
                 {/* Wrapper div to apply flexbox */}
                 <div className="flex items-center border rounded-lg mt-2">
                   <input
+                    onKeyDown={handleEnter}
                     ref={password}
                     type={showpassword ? 'text' : 'password'}
                     id="confirmPassword"
@@ -146,6 +152,7 @@ function ResetPassword() {
                 {/* Wrapper div to apply flexbox */}
                 <div className="flex items-center border rounded-lg mt-2">
                   <input
+                    onKeyDown={handleEnter}
                     ref={confirmPassword}
                     type={showconfirmPassword ? 'text' : 'password'}
                     id="confirmPassword"

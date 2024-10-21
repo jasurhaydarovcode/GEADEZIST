@@ -48,6 +48,11 @@ function Confirm() {
       })
      
   }
+  const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      forgetPassword()
+    }
+  };
 
   return (
     <div className="h-screen flex items-center justify-center bg-gray-100">
@@ -75,6 +80,7 @@ function Confirm() {
                   Elektron pochtangizni kiriting
                 </label>
                 <input
+                  onKeyDown={handleEnter}
                   ref={email}
                   type="email"
                   id="email"

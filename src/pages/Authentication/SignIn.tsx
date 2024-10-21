@@ -143,7 +143,7 @@ function SignIn() {
               </button>
             </form>
             <div className="flex justify-between items-center mt-6">
-              <Link to="/auth/signup" className="text-sm text-blue-500 hover:underline">
+              <Link to="/auth/SignUp" className="text-sm text-blue-500 hover:underline">
                 Ro'yhatdan o'tish
               </Link>
               <Link to="/auth/confirm" className="text-sm text-blue-500 hover:underline">
