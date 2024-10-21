@@ -16,7 +16,8 @@ import { Link, useNavigate } from "react-router-dom";
 import CheckLogin from "@/helpers/functions/checkLogin";
 import defaultImage from "../../assets/images/default.png";
 import { Category } from "@/helpers/types/Category";
-import { log } from "console";
+import { toast } from "react-toastify";
+
 function Test() {
   const queryClient = useQueryClient()
   CheckLogin
@@ -303,9 +304,6 @@ function Test() {
   };
 
 
-
-
-
   return (
     <div>
       <Helmet>
@@ -515,7 +513,6 @@ function Test() {
                   </h2>{" "}
                 </div>
               </Modal>
-
 
               {/* search  input*/}
               <div className="flex justify-end pt-5 gap-5">

@@ -7,32 +7,20 @@ import "react-toastify/dist/ReactToastify.css";
 // import TableLoading from "@/components/spinner/TableLoading";
 // import { Helmet } from "react-helmet";
 import CheckLogin from "@/helpers/functions/checkLogin";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from "react-helmet";
+import { IoArrowBackOutline } from "react-icons/io5";
 
 function Category() {
     CheckLogin
 
-    const location = useLocation();
-    const { element } = location.state || {};
-
-    // // Kategoriyalarni olish
-    // const { data, isLoading } = useQuery(
-    //     ["getCategories", 1],
-    //     async () => {
-    //         const res = await axios.get<{
-    //             body: { body: any[]; totalElements: number };
-    //         }>(
-    //             `${baseUrl}category/page?page=${1 - 1}&size=${10}`,
-    //             config
-    //         );
-    //         return res.data.body.body;
-    //     },
-    //     { keepPreviousData: true }
-    // );
-    // console.log(data);
-
-
+    // const location = useLocation();
+    // const { element } = location.state || {};
+    const element = true
+    const navigite = useNavigate()
+    function getOut(){
+        navigite('/test')
+    }
     return (
         <div>
             <Helmet>
@@ -47,18 +35,19 @@ function Category() {
                 ) : ( */}
                 <>
                     <div className="p-6 font-sans text-center">
-                        <h1 className="text-2xl font-bold">Битта савол</h1>
-                        <p className="italic mt-2">
+                        <h1 className="text-2xl font-bold text-left">Битта савол</h1>
+                        <div className="text-3xl mt-5"><IoArrowBackOutline className="cursor-pointer" onClick={getOut}/></div>
+                        <p className="text-2xl mt-2">
                             Admin savolni mijozlarga qanday kurinishi bilib olish uchun namuna
                         </p>
-                        <p className="text-lg mt-4">
-                            <span className="text-3xl">{element?.catygoria || 'kategoriya nomalum'}</span>
+                        <p className="text-lg mt-7">
+                            <span className="text-3xl font-bold">{element?.catygoria || 'kategoriya nomalum'}</span>
                         </p>
-                        <h2 className="text-xl font-semibold mt-4">{element?.savol || 'Категория номаълум'}</h2>
-                        <p className="text-red-600 font-bold mt-4">Faqat bitta tugri javobni belgilang</p>
+                        <h2 className="text-xl font-semibold mt-7">{element?.savol || 'savol topilmadi'}</h2>
                         <div className="mt-6">
                             {element ? (
                                 <div className="mt-6">
+                                    <p className="text-red-600 font-bold mt-4 text-left">Faqat bitta tugri javobni belgilang</p>
                                     <label className="flex items-center mb-4 border border-gray-300 rounded-lg p-2 bg-gray-100">
                                         <input type="radio" name="answer" value="javob" className="mr-2" />
                                         <span className="text-lg">
