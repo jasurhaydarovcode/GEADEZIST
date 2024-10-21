@@ -7,9 +7,10 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "format": "npx prettier src/ --write",
-    "geo": "node welcome.js",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "postinstall": "npm run geo",
+    "geo": "node welcome.js"
   },
   "dependencies": {
     "@ant-design/icons": "^5.5.1",
