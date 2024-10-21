@@ -13,7 +13,6 @@ import { config } from '@/helpers/functions/token';
 import TableLoading from '@/components/spinner/TableLoading';
 import defaultImage from '@/assets/images/default.png';
 export const getImage = `${baseUrl}api/videos/files`;
-import { message } from 'antd';
 import CheckLogin from '@/helpers/functions/checkLogin';
 
 interface AxiosError {
@@ -23,8 +22,10 @@ interface AxiosError {
 const ClientTestStart: React.FC = () => {
   CheckLogin
 
-  const [id, setId] = useState<number[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [categoryId, setCategoryId] = useState<number | null>(null);
   const navigate = useNavigate();
 
   const showModal = () => {
@@ -54,9 +55,6 @@ const ClientTestStart: React.FC = () => {
     setIsModalVisible(false);
   };
 
-  const handleOk = () => {
-    navigate(`/client/quiz/:id`);
-  };
 
   const { isLoading, error, data } = useQuery({
     queryKey: ['getClientCategory'],
@@ -65,18 +63,35 @@ const ClientTestStart: React.FC = () => {
       return (res.data as { body?: { body: ClientCategory[] } }).body?.body;
     },
     onError: (error: AxiosError) => {
-      message.error(error.message);
+      toast.error(error.message);
     },
   });
 
   if (error) return toast.error(error.message);
 
 
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const handleStartClick = (category: { name: string }) => {
-    setSelectedCategory(category.name); // Kategoriyani state'ga o'rnatamiz
+  const handleStartClick = (category: { name: string, id: number }) => {
+    setSelectedCategory(category.name);
+    setCategoryId(category.id); // Kategoriyani state'ga o'rnatamiz
     // Boshqa ma'lumotlarni ham ishlash mumkin
+  };
+
+
+  const handleCategorySelect = (categoryId: number) => {
+    setSelectedCategoryId(categoryId);
+  };
+
+  // const startTest = (categoryId: number) => {
+  //   // Navigate to the quiz page and pass the category ID as part of the URL
+  //   navigate(`/client/quiz/${categoryId}`);
+  // };
+
+  const handleNext = () => {
+    if (selectedCategoryId) {
+      // Navigate to next page with the selected category ID
+      navigate(`/client/quiz/${selectedCategoryId}`);
+    }
   };
 
   return (
@@ -111,7 +126,7 @@ const ClientTestStart: React.FC = () => {
                       <span className="text-gray-600 font-semibold">
                         Yo'nalish
                       </span>
-                      <span className="text-gray-700 font-medium">
+                      <span className="text-gray-700 font-semibold">
                         {item.name}
                       </span>
                     </div>
@@ -147,6 +162,7 @@ const ClientTestStart: React.FC = () => {
                       onClick={() => {
                         showModal();
                         handleStartClick(item);
+                        handleCategorySelect(item.id);
                       }}
                       className="bg-gray-600 cursor-pointer absolute top-[78%] right-5 text-white p-1 px-4 rounded"
                     >
@@ -168,7 +184,7 @@ const ClientTestStart: React.FC = () => {
                             </span>
                             <span>Haqiqatdan ham </span>
                             <span className="text-red-600">
-                              {selectedCategory}
+                              {selectedCategory + ' ' + categoryId}
                             </span>
                             <span>
                               {' '}
@@ -177,7 +193,7 @@ const ClientTestStart: React.FC = () => {
                           </div>
                         }
                         visible={isModalVisible}
-                        onOk={handleOk}
+                        onOk={handleNext}
                         onCancel={handleCancel}
                         okText="Boshlash"
                         cancelText="Orqaga"
@@ -185,10 +201,9 @@ const ClientTestStart: React.FC = () => {
                         style={{
                           top: '34%',
                           left: '1%',
-                          width: '300px',
                         }}
                         maskStyle={{
-                          backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                          backgroundColor: 'rgba(0, 0, 0, 0.3)',
                         }}
                       ></Modal>
                     </>

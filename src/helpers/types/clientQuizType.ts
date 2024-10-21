@@ -1,22 +1,23 @@
-interface dtos {
+interface optionDtos {
     "id": number,
     "answer": string,
     "questionId": number,
     "isCorrect": boolean,
-    "file": boolean
+    "file": number | null
 }
+
 
 export interface ClientQuizType {
     "id": number,
-    "countAnswers": number,
-    "name": string,
+    "name": number | string,
     "categoryName": string,
-    "duration": number,
     "categoryId": number,
     "finiteError": number,
     "type": string,
     "difficulty": string,
-    "attachmentIds": boolean,
-    "questionDtoList": dtos[],
+    "attachmentIds": number | null,
+    "optionDtos": [
+        optionDtos
+    ],
     "createdByName": string
 }
