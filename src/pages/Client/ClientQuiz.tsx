@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useCallback, ChangeEvent } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { Select } from 'antd';
+import React, { useEffect, useState, useCallback } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { config } from '@/helpers/functions/token';
 import { useQuery } from 'react-query';
 import { baseUrl } from '@/helpers/api/baseUrl';
@@ -8,6 +7,7 @@ import { ClientQuizType } from '@/helpers/types/clientQuizType';
 import { toast } from 'react-toastify';
 import CheckLogin from '@/helpers/functions/checkLogin';
 import axios from 'axios';
+import { ClientCategory } from '@/helpers/types/getClientCategory';
 
 const TOTAL_TIME = 60 * 60; // 60 minutes (in seconds)
 const STORAGE_KEY = 'savedRemainingTime';
@@ -16,38 +16,47 @@ interface AxiosError extends Error {
   message: string;
 }
 
+
 const QuestionPage: React.FC = () => {
   CheckLogin
-
-  const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
   const [remainingTime, setRemainingTime] = useState(TOTAL_TIME); // In seconds
+  const navigate = useNavigate();
+  const param = useParams<{ id: string }>();
+  // console.log(param.id); 
 
-  const { data: questions, isLoading, error } = useQuery({
-    queryKey: ['questions'],
+  const getQuestion = async () => {
+    const res = await axios.get(`${baseUrl}quiz/start/${param.id}`, config);
+    return (res.data as { body: { body: ClientQuizType[] } }).body?.body;
+  };
 
-    queryFn: async () => {
-      const response = await axios.get(`${baseUrl}quiz/start/55`, config);
-      const responseData = response.data as { body: ClientQuizType };
-      return responseData.body;
-    },
+  const { data: quizData, isLoading: quizLoading, error: quizError } = useQuery({
+    queryKey: ['getQuestion'],
+    queryFn: getQuestion,
     onError: (error: AxiosError) => {
       toast.error(error.message);
     },
   })
 
-  if (error) {
-    toast.error('Xatolik yuz berdi');
+  if (quizError) {
+    return toast.error(quizError.message);
   }
 
-  const data = useCallback(() => {
-    if (questions) console.log(questions.
-      questionDtoList
-      );
-  }, [questions]);
+  if (quizLoading) {
+    return <div>QuizLoading</div>
+  }
 
-  useEffect(() => {
-    data();
-  }, [data]);
+  const { isLoading, error, data } = useQuery({
+    queryKey: ['getClientCategory'],
+    queryFn: async () => {
+      const res = await axios.get(`${baseUrl}category`, config);
+      return (res.data as { body?: { body: ClientCategory[] } }).body?.body;
+    },
+    onError: (error: AxiosError) => {
+      toast.error(error.message);
+    },
+  });
+
+  if (error) return toast.error(error.message);
 
   const checkRoleClient = useCallback(() => {
     const role = localStorage.getItem('role');
@@ -57,7 +66,6 @@ const QuestionPage: React.FC = () => {
     } else if (role == 'ROLE_TESTER') {
       navigate('/category');
     }
-
     if (token == null) {
       navigate('/auth/Signin');
     }
@@ -74,8 +82,6 @@ const QuestionPage: React.FC = () => {
       setRemainingTime(parseInt(savedTime, 10));
     }
   }, []);
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     // Timer logic: decrement remaining time every second
@@ -103,16 +109,6 @@ const QuestionPage: React.FC = () => {
     return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   };
 
-
-  // useStates
-
-
-
-
-  // useQuery to fetch data from server
-
-
-
   return (
     <div className="px-9 space-y-12">
       <div className="mt-11 bg-white p-6 rounded-2xl">
@@ -125,21 +121,23 @@ const QuestionPage: React.FC = () => {
       </div>
       <div className="bg-white p-6 mx-auto shadow-lg rounded-2xl">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold text-red-500">
-            Умумий саволлар
-          </h2>
-        </div>
-        <div className="mt-4">
-
           {isLoading ? (
-            <p>Loading...</p>
-          ) : (
-            <div className="mt-4 space-y-3">
-              {/* {questions && Array.isArray(questions) && questions.map((question: ClientQuizType, index: number) => (
-                <div key={index}>{question.countAnswers}</div>
-              ))} */}
+            <div>
+              Loading...
             </div>
+          ) : (
+            <>
+              {data && data.map((item, index) => (
+                <div key={index}>
+                  <h2 className="text-2xl font-semibold text-red-500">
+                    {item.name}
+                  </h2>
+                </div>
+              ))}
+            </>
           )}
+        </div>
+        <div className="mt-4 justify-between flex items-center">
 
           {/* Progress Bar */}
 
@@ -149,9 +147,12 @@ const QuestionPage: React.FC = () => {
           </div>
 
           {/* Navigation Buttons */}
-          <div className="mt-6 flex justify-between items-center">
+          <div className="mt-6 flex space-x-4  justify-between items-center">
             <button className="px-4 py-2 bg-blue-500 text-white rounded-md">
-              Кейингиси
+              Orqaga
+            </button>
+            <button className="px-4 py-2 bg-blue-500 text-white rounded-md">
+              Keyingisi
             </button>
           </div>
         </div>
@@ -159,13 +160,5 @@ const QuestionPage: React.FC = () => {
     </div >
   );
 };
-
-// Sample answers data (you can change it to be dynamic)
-// const answers = [
-//   'Ҳа биламан. Топография ва қурилиш маҳоратили фойдалана оламан.',
-//   'Ҳа биламан. Ўқув жараёнида яхши фойдаланганман.',
-//   'Дастурни ишлата олмайман.',
-//   'Дастурни ишлай оламан лекин ўқув ёки иш жараёнида аниқ бир иш битирмаганман.',
-// ];
 
 export default QuestionPage;

@@ -1,6 +1,6 @@
 import Layout from '@/components/clientDashboard/laytout';
 import { useNavigate } from 'react-router-dom';
-import { Modal } from 'antd';
+import { message, Modal } from 'antd';
 import { useEffect, useState, useCallback } from 'react';
 import { MdOutlineNotStarted } from 'react-icons/md';
 import { Helmet } from 'react-helmet';
@@ -13,7 +13,6 @@ import { config } from '@/helpers/functions/token';
 import TableLoading from '@/components/spinner/TableLoading';
 import defaultImage from '@/assets/images/default.png';
 export const getImage = `${baseUrl}api/videos/files`;
-import { message } from 'antd';
 import CheckLogin from '@/helpers/functions/checkLogin';
 
 interface AxiosError {
@@ -21,12 +20,12 @@ interface AxiosError {
 }
 
 const ClientTestStart: React.FC = () => {
-  CheckLogin();
+  CheckLogin
 
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const navigate = useNavigate();
-  const [cateId, setSelectedCateId] = useState(null);
+  const [cateId, setSelectedCateId] = useState<number | null>(null);
   const { isLoading, error, data } = useQuery({
     queryKey: ['getClientCategory'],
     queryFn: async () => {
@@ -117,7 +116,7 @@ const ClientTestStart: React.FC = () => {
                       <span className="text-gray-600 font-semibold">
                         Yo'nalish
                       </span>
-                      <span className="text-gray-700 font-medium">
+                      <span className="text-gray-700 font-semibold">
                         {item.name}
                       </span>
                     </div>

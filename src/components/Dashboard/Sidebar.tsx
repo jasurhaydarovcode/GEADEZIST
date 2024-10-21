@@ -90,9 +90,9 @@ const Sidebar = () => {
               <Link to={`/${item.pathName}`} key={index}>
                 <li
                   className={
-                    pathname === item.pathName
-                      ? 'shadow-xl hover:shadow-2xl bg-gray-300 text-white transition duration-150 py-5 mb-5'
-                      : 'border shadow-xl hover:shadow-2xl transition duration-150 py-5 mb-5'
+                    pathname === `/${item.pathName}`
+                      ? 'shadow-xl bg-gray-300 text-white transition duration-150 py-5 mb-5'
+                      : 'border shadow-xl transition duration-150 py-5 mb-5 hover:bg-gray-200 '
                   }
                 >
                   <span className="p-4 text-xl text-gray-500">{item.name}</span>
