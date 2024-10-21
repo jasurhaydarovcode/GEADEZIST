@@ -16,11 +16,8 @@ import { Link, useNavigate } from "react-router-dom";
 import CheckLogin from "@/helpers/functions/checkLogin";
 import defaultImage from "../../assets/images/default.png";
 import TestVisual from "@/components/test/testVisual";
-<<<<<<< HEAD
 import { Category } from "@/helpers/types/Category";
-=======
 import { toast } from "react-toastify";
->>>>>>> 182899455f8608e3a2cc4146a52f7e01c304c967
 
 function Test() {
   CheckLogin
