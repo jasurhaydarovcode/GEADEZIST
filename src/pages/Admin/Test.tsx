@@ -49,49 +49,43 @@ function Test() {
   ]); // Start with one input
   // test get
   const [datas, useDatas] = useState<FetchedTest[]>([]);
-  const [searchCateType, setSearchCateType] = useState<string | null>(null)
+
   // search
   const [turi, setTuri] = useState<string | null>(null);
   const [kategoriya, setKategoriya] = useState<string | null>(null);
   const [nameSearch, setnameSearch] = useState<string | null>(null);
-  const [testlar, setTestlar] = useState(null)
+  const [testlar, setTestlar] = useState<any[] | null>(null); // testlar ma'lumotlari massiv ekanini aniqladik
+
   const searchTest2 = () => {
     if (nameSearch && nameSearch.trim() !== "") {
-      const newData = datas.filter((item) => item.savol.includes(nameSearch));
-      useDatas(newData);
-    } else if (nameSearch === "") {
-      useDatas(datas);
+      // testlar mavjud bo'lsa va testlar massiv bo'lsa, filter qilamiz
+      const newData = testlar?.filter((item) =>
+        item.name?.toLowerCase().includes(nameSearch.toLowerCase())
+      ) ?? []
+      setTestlar(newData);
+      console.log(testlar);
+
+    } else if (nameSearch == '') {
+      // Input bo'sh bo'lsa, ma'lumotlarni qayta yuklash
+      setTestlar(datas); // `useDatas` ma'lumotlarni yuklaydi
     }
-  }
+    if (kategoriya && kategoriya !== '') {
+      const kategoriyaData = testlar?.filter((item) =>
+        item.categoryName?.toLowerCase().includes(kategoriya.toLowerCase())
+      ) ?? [];
+      setTestlar(kategoriyaData);
+    }
+    if (turi && turi !== '') {
+      const turiData = testlar?.filter((item) =>
+        item.type?.toLowerCase().includes(turi.toLowerCase())
+      ) ?? [];
+      setTestlar(turiData);
+    }
+  };
+
   useEffect(() => {
 
-  }, [searchCateType])
-  // const searchTest = async (): Promise<void> => {
-  //   if (nameSearch) {
-  //     try {
-  //       const response = await axios.get<ApiResponse>(
-  //         `${baseUrl}question/filter?questionName=${nameSearch}&page=0&size=100`,
-  //         config
-  //       );
-  //       const fetchedQuestions = response.data.body.map((item) => ({
-  //         id: item.id,
-  //         name: item.name,
-  //         // Map any other properties you need from each item here
-  //       }));
-
-  //       console.log("Fetched questions:", fetchedQuestions); // Log the data to the console
-
-  //       useDatas(fetchedQuestions); // Update your state
-  //     } catch (error) {
-  //       console.error("Error fetching search results:", error);
-  //     }
-  //   } else {
-  //     // Reset data if no search term is provided
-  //     console.log("No search term provided, resetting data.");
-  //     useDatas([]);
-  //   }
-  // };
-
+  }, [nameSearch, kategoriya])
 
 
   // search
@@ -540,7 +534,7 @@ function Test() {
                       Kategoriyani tanlang
                     </option>
                     {saveCates && saveCates.length > 0 && saveCates.map((cate) => (
-                      <option key={cate.id} value={cate.id} className="text text-black">
+                      <option key={cate.id} value={cate.name} className="text text-black">
                         {cate.name}
                       </option>
                     ))}
