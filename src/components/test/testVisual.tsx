@@ -1,11 +1,5 @@
 import Layout from "@/components/Dashboard/Layout";
-// import { baseUrl } from "@/helpers/api/baseUrl";
-// import { config } from "@/helpers/functions/token";
-// import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
-// import { useQuery } from "react-query";
-// import TableLoading from "@/components/spinner/TableLoading";
-// import { Helmet } from "react-helmet";
 import CheckLogin from "@/helpers/functions/checkLogin";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from "react-helmet";
@@ -14,11 +8,10 @@ import { IoArrowBackOutline } from "react-icons/io5";
 function Category() {
     CheckLogin
 
-    // const location = useLocation();
-    // const { element } = location.state || {};
-    const element = true
+    const location = useLocation();
+    const { element } = location.state || {};
     const navigite = useNavigate()
-    function getOut(){
+    function getOut() {
         navigite('/test')
     }
     return (
@@ -28,15 +21,10 @@ function Category() {
             </Helmet>
 
             <Layout>
-                {/* {isLoading ? (
-                    <div className="flex justify-center items-center h-[80vh]">
-                        {<TableLoading />}
-                    </div>
-                ) : ( */}
                 <>
                     <div className="p-6 font-sans text-center">
                         <h1 className="text-2xl font-bold text-left">Битта савол</h1>
-                        <div className="text-3xl mt-5"><IoArrowBackOutline className="cursor-pointer" onClick={getOut}/></div>
+                        <div className="text-3xl mt-5"><IoArrowBackOutline className="cursor-pointer" onClick={getOut} /></div>
                         <p className="text-2xl mt-2">
                             Admin savolni mijozlarga qanday kurinishi bilib olish uchun namuna
                         </p>
@@ -68,9 +56,6 @@ function Category() {
                         </div>
                     </div>
                 </>
-                {/* )
-                } */}
-
             </Layout>
         </div>
     );
