@@ -15,20 +15,7 @@ import { Answer } from "@/helpers/types/AddQuizType";
 import { Link, useNavigate } from "react-router-dom";
 import CheckLogin from "@/helpers/functions/checkLogin";
 import defaultImage from "../../assets/images/default.png";
-<<<<<<< HEAD
-import TestVisual from "@/components/test/testVisual";
 import { Category } from "@/helpers/types/Category";
-
-=======
-<<<<<<< HEAD
-import { Category } from "@/helpers/types/Category";
-=======
-import TestVisual from "@/components/test/testVisual";
-import { Category } from "@/helpers/types/Category";
-import { toast } from "react-toastify";
->>>>>>> 715a2938e76111ccfb85d8d09bcfab99c7234763
->>>>>>> 375feca098957ca2e56a915d30446f9bd70ddd50
-
 function Test() {
   const queryClient = useQueryClient()
   CheckLogin
@@ -145,7 +132,6 @@ function Test() {
     },
     onSuccess: (data: any) => {
       setTestlar(data)
-      console.log(testlar, "katta jalla ");
 
     }
   })
@@ -270,34 +256,6 @@ function Test() {
 
   // Post question mutation
   const postQuestion = useMutation({
-<<<<<<< HEAD
-  mutationFn: async () => {
-    const data = {
-      name: quiz.current?.value,
-      categoryId: categore.current?.value,
-      finiteError: 0,
-      type: type.current.value,
-      difficulty: difficulty.current.value, 
-      attachmentIds: [0],
-      optionDtos: [
-        {
-          answer: answer.current.value || "",
-          isCorrect: true,
-          file: 0,
-        },
-      ],
-    };
-    const res = await axios.post(PostQuestion, data, config);
-    return res.data;
-  },
-  onSuccess: () => {
-    message.success('Added successfully')
-  },
-  onError: (err) => {
-    message.error(err.message)
-  }
-});
-=======
     mutationFn: async () => {
       const data = {
         name: quiz.current?.value || "", // Ref orqali olish
@@ -314,7 +272,6 @@ function Test() {
           },
         ],
       };
->>>>>>> 375feca098957ca2e56a915d30446f9bd70ddd50
 
       try {
         const res = await axios.post(PostQuestion, data, config);

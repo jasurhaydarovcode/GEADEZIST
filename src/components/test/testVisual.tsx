@@ -77,15 +77,10 @@ function Category() {
                             )
                             }
                         </div>
-<<<<<<< HEAD
-                    </>
-                
-=======
                     </div>
                 </>
                 {/* )
                 } */}
->>>>>>> 375feca098957ca2e56a915d30446f9bd70ddd50
 
             </Layout>
         </div>
