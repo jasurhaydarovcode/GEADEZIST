@@ -88,7 +88,6 @@ function SignUp() {
           navigate('/auth/confirm-signup');
         }
         message.success("Ro'yxatdan o'tdingiz");
-        console.log(res);
       })
       .catch((err) => {
         if (err.response?.status === 404) {

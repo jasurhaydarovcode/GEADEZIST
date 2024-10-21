@@ -23,7 +23,7 @@ const ConfirmSignUp = () => {
       .put(`${baseUrl}auth/activate?code=${code.current?.value}`)
       .then((res) => {
         message.success('Yaxshi');
-        console.log(res.data);
+        console.log(res.data);  
         navigate('/auth/SignIn');
       })
       .catch((err) => {
