@@ -16,11 +16,8 @@ import { Link, useNavigate } from "react-router-dom";
 import CheckLogin from "@/helpers/functions/checkLogin";
 import defaultImage from "../../assets/images/default.png";
 import TestVisual from "@/components/test/testVisual";
-<<<<<<< HEAD
 import { Category } from "@/helpers/types/Category";
-=======
-import { toast } from "react-toastify";
->>>>>>> 182899455f8608e3a2cc4146a52f7e01c304c967
+
 
 function Test() {
   CheckLogin
@@ -258,8 +255,8 @@ function Test() {
       name: quiz.current?.value,
       categoryId: categore.current?.value,
       finiteError: 0,
-      type: type.current.value, // Change to appropriate type
-      difficulty: difficulty.current.value, // Change to appropriate difficulty
+      type: type.current.value,
+      difficulty: difficulty.current.value, 
       attachmentIds: [0],
       optionDtos: [
         {

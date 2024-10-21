@@ -34,12 +34,9 @@ function Category() {
 
     return (
         <div>
-<<<<<<< HEAD
             <Helmet>
                 <title>Testlar</title>
             </Helmet>
-=======
->>>>>>> 182899455f8608e3a2cc4146a52f7e01c304c967
 
             <Layout>
                 {/* {isLoading ? (
@@ -81,8 +78,7 @@ function Category() {
                             </div>
                         </div>
                     </>
-                {/* )
-                } */}
+                
 
             </Layout>
         </div>
