@@ -16,7 +16,7 @@ export interface ClientQuizType {
     "type": string,
     "difficulty": string,
     "attachmentIds": number | null,
-    "optionDtos": [
+    "questionDtoList": [
         optionDtos
     ],
     "createdByName": string

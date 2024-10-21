@@ -66,11 +66,11 @@ const ClientTestStart: React.FC = () => {
   const getTests = useQuery({
     queryKey: ['getTests', config],
     queryFn: async () => {
-      const res = await axios.get(`${baseUrl}quiz/start/${cateId}`,config)
+      const res = await axios.get(`${baseUrl}quiz/start/${cateId}`, config)
       return res.data
     },
     onSuccess: () => {
-      
+
     }
   })
 
