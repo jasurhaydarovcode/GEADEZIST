@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 // import { Helmet } from "react-helmet";
 import CheckLogin from "@/helpers/functions/checkLogin";
 import { useLocation } from 'react-router-dom';
+import { Helmet } from "react-helmet";
 
 function Category() {
     CheckLogin
@@ -34,12 +35,9 @@ function Category() {
 
     return (
         <div>
-<<<<<<< HEAD
             <Helmet>
                 <title>Testlar</title>
             </Helmet>
-=======
->>>>>>> 182899455f8608e3a2cc4146a52f7e01c304c967
 
             <Layout>
                 {/* {isLoading ? (

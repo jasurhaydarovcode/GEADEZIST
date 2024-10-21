@@ -1,5 +1,7 @@
 // types.ts
 
+import { string } from "prop-types";
+
 // Type for the options of a question
 export type OptionDto = {
   id: number;
@@ -40,15 +42,26 @@ export type ApiResponse = {
   body: BodyResponse;
 };
 
+interface OptDtos   {
+  "id": number
+  "answer": string
+  "questionId": number
+  "isCorrect": boolean
+  "file": null | number
+}
 // Type for the mapped test data used in your application
 export type FetchedTest = {
-  key: string; // Unique identifier for the test
-  numer: number; // Serial number or index
-  testRasm: string; // Placeholder for the image (string or URL)
-  savol: string; // Question text
-  catygoria: string; // Category name (or "No category")
-  savolTuri: string; // Type of question
-  qiyinligi: string; // Difficulty level
-  yaratganOdam: string; // Creator's name
-};
+  "id": number
+  "name": string
+  "categoryName":string
+  "categoryId": number
+  "finiteError": number
+  "type": string
+  "difficulty": string
+  "attachmentIds": null | number
+  "optionDtos": [
+    OptDtos
+  ],
+  "createdByName": string
+}
 // EditModal propslari uchun interfeys
