@@ -230,10 +230,10 @@ function Employees() {
             {<TableLoading />}
           </div>
         ) : (
-          <div className="p-5">
-            <div className="flex justify-between">
+          <div className="p-8">
+            <div className="flex justify-between items-center">
               <h1 className="text-3xl font-bold font-sans">Hodimlar</h1>
-              <p className="font-sans text-gray-700">
+              <p className="font-sans text-gray-700 text-lg">
                <Link to={'/'}>Boshqaruv paneli / </Link> 
                 <span className="text-blue-700">Hodimlar</span>
               </p>
