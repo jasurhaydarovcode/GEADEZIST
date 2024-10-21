@@ -35,7 +35,7 @@ function Category() {
     return (
         <div>
             <Helmet>
-                <title>Kategoriyalar</title>
+                <title>Testlar</title>
             </Helmet>
 
             <Layout>
