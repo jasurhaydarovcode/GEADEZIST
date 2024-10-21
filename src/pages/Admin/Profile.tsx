@@ -46,8 +46,13 @@ function Profile() {
   return (
     <div>
       <Helmet>
-        <title>{getProfileData?.lastName || 'Admin Profile'}</title>
+        <title>
+          {role === 'ROLE_TESTER'
+            ? 'Tester Profile'
+            : getProfileData?.lastName || 'Admin Profile'}
+        </title>
       </Helmet>
+
       <Layout>
         {getUserProfile.isLoading ? (
           <div
@@ -78,8 +83,9 @@ function Profile() {
               {/* Profile Picture Section */}
               <div className="flex flex-col items-center mb-6">
                 <h4 className="text-2xl text-red-600 font-semibold pb-4">
-                  Admin rasmi
+                  {role === 'ROLE_TESTER' ? 'Tester' : 'Super Admin'}
                 </h4>
+
                 {/* <img
                   className="w-40 relative h-40 rounded-full object-cover"
                   src={geodeziyaLogo}
