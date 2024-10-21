@@ -263,7 +263,7 @@ function Employees() {
                 {/* Modal mazmuni */}
                 <div className="mb-4">
                   <select className="border w-full p-2 rounded" ref={role}>
-                    <option disabled value="">Admin toifasini tanlang</option>
+                    <option disabled selected value="">Admin toifasini tanlang</option>
                     <option value="ROLE_TESTER">Tester admin</option>
                     <option value="ROLE_ADMIN">Tekshiruvchi admin</option>
                   </select>
