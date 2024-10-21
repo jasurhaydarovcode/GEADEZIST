@@ -15,7 +15,7 @@ import { PiUsersThreeFill } from 'react-icons/pi';
 import { FaArrowsAlt } from 'react-icons/fa';
 import { FaCircleQuestion } from 'react-icons/fa6';
 import { MdOutlineCategory } from 'react-icons/md';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { getClientAll, getStaticAll, } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import { toast } from 'react-toastify';
@@ -26,7 +26,7 @@ import { useNavigate } from 'react-router-dom';
 import Spinner from '@/components/spinner/Spinner';
 import { Helmet } from 'react-helmet';
 import TableLoading from '@/components/spinner/TableLoading';
-import { Pagination } from 'antd';
+import { message, Pagination } from 'antd';
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 'flowbite-react';
 import CheckLogin from '@/helpers/functions/checkLogin';
 
@@ -42,7 +42,7 @@ ChartJS.register(
 
 const Dashboard = () => {
   CheckLogin
-
+  const queryClient = useQueryClient();
   // states
   const regions = ['Toshkent', 'Samarqand', "Farg'ona"];
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -72,6 +72,9 @@ const Dashboard = () => {
       toast.error(error.message);
     },
   });
+  useEffect(() => {
+    queryClient.refetchQueries('dashboardStatic');
+  }, []);
 
   // dashboard static data
   const staticData: GetStaticsAllResponse =
@@ -173,12 +176,7 @@ const Dashboard = () => {
   const getClient = useQuery({
     queryKey: ['getClient', config],
     queryFn: async () => {
-      interface GetClientAllResponse {
-        id: string;
-        firstName: string;
-        lastName: string;
-        email: string;
-      }
+     
       const res = await axios.get<GetClientAllResponse[]>(`${getClientAll}page=${currentPage - 1}&size=${pageSize}`, config);
       const data: GetClientAllResponse[] | null = res?.data?.body?.body as GetClientAllResponse[] | null;
       return data;
@@ -246,18 +244,22 @@ const Dashboard = () => {
   }, [checkRoleClient]);
 
   const handleSearchUser = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const searchValue = e.target.value.toLowerCase();
-    if (searchValue === '') {
-      setClientData(allClientData)
-    } else {
+    const searchValue = e.target.value.toLowerCase().trim(); // Matndagi bo'shliqlarni olib tashlash
+  
+    // Agar qidiruv so'zi mavjud bo'lsa
+    if (searchValue !== '') {
       const filteredData = allClientData?.filter((event) =>
-        event.email.toLowerCase().includes(searchValue) ||
-        event.firstName.toLowerCase().includes(searchValue) ||
-        event.lastName.toLowerCase().includes(searchValue)
-      )
-      setClientData(filteredData || [])
+        (event.email && event.email.toLowerCase().includes(searchValue)) || 
+        (event.firstName && event.firstName.toLowerCase().includes(searchValue)) || 
+        (event.lastName && event.lastName.toLowerCase().includes(searchValue))
+      );
+      setClientData(filteredData || []);
+    } else {
+      // Qidiruv matni bo'sh bo'lsa, jadvalni asl holatiga qaytarmasdan saqlaymiz
+      setClientData(allClientData);
     }
-  }
+  };
+ 
 
   return (
     <div>

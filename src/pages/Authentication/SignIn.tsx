@@ -6,7 +6,6 @@ import { useEffect, useRef, useCallback } from 'react';
 import { useMutation } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import { message } from 'antd';
-
 function SignIn() {
   const email = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
@@ -18,11 +17,13 @@ function SignIn() {
       (role === 'ROLE_SUPER_ADMIN' && localStorage.getItem('token')) ||
       (role === 'ROLE_TESTER' && localStorage.getItem('token'))
     ) {
-      navigate('/dashboard');
+      // navigate('/dashboard');
     } else if (role === 'ROLE_CLIENT' && localStorage.getItem('token')) {
       navigate('/client/dashboard');
+    } else if (role === 'ROLE_ADMIN' && localStorage.getItem('token')) {
+      navigate('/all-user');
     } else {
-      navigate('/auth/Signin');
+      navigate('/auth/SignIn'); 
     }
   }, [navigate]);
 
@@ -48,8 +49,10 @@ function SignIn() {
     onSuccess: (res: AxiosResponse) => {
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('role', res.data.role);
-      if (res.data.role === 'ROLE_SUPER_ADMIN' || res.data.role === 'ROLE_ADMIN') {
+      if (res.data.role === 'ROLE_SUPER_ADMIN' ) {
         navigate('/dashboard');
+      }else if(res.data.role === 'ROLE_ADMIN'){
+        navigate('/user');
       } else if (res.data.role === 'ROLE_TESTER') {
         navigate('/category');
       } else if (res.data.role === 'ROLE_CLIENT') {
@@ -140,7 +143,7 @@ function SignIn() {
               </button>
             </form>
             <div className="flex justify-between items-center mt-6">
-              <Link to="/auth/signup" className="text-sm text-blue-500 hover:underline">
+              <Link to="/auth/SignUp" className="text-sm text-blue-500 hover:underline">
                 Ro'yhatdan o'tish
               </Link>
               <Link to="/auth/confirm" className="text-sm text-blue-500 hover:underline">
@@ -149,7 +152,7 @@ function SignIn() {
             </div>
           </div>
         </div>
-      </div>
+      </div>  
     </div>
   );
 }

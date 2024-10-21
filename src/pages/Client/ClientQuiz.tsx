@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState, useCallback, ChangeEvent } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Select } from 'antd';
 import { config } from '@/helpers/functions/token';
 import { useQuery } from 'react-query';
@@ -7,6 +7,7 @@ import { baseUrl } from '@/helpers/api/baseUrl';
 import { ClientQuizType } from '@/helpers/types/clientQuizType';
 import { toast } from 'react-toastify';
 import CheckLogin from '@/helpers/functions/checkLogin';
+import axios from 'axios';
 
 const TOTAL_TIME = 60 * 60; // 60 minutes (in seconds)
 const STORAGE_KEY = 'savedRemainingTime';
@@ -21,11 +22,32 @@ const QuestionPage: React.FC = () => {
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
   const [remainingTime, setRemainingTime] = useState(TOTAL_TIME); // In seconds
 
-  const { Option } = Select;
+  const { data: questions, isLoading, error } = useQuery({
+    queryKey: ['questions'],
 
-  const handleChange = (value: string) => {
-    console.log(`Selected: ${value}`);
-  };
+    queryFn: async () => {
+      const response = await axios.get(`${baseUrl}quiz/start/55`, config);
+      const responseData = response.data as { body: ClientQuizType };
+      return responseData.body;
+    },
+    onError: (error: AxiosError) => {
+      toast.error(error.message);
+    },
+  })
+
+  if (error) {
+    toast.error('Xatolik yuz berdi');
+  }
+
+  const data = useCallback(() => {
+    if (questions) console.log(questions.
+      questionDtoList
+      );
+  }, [questions]);
+
+  useEffect(() => {
+    data();
+  }, [data]);
 
   const checkRoleClient = useCallback(() => {
     const role = localStorage.getItem('role');
@@ -47,7 +69,7 @@ const QuestionPage: React.FC = () => {
 
   useEffect(() => {
     // Retrieve saved time from localStorage if available
-    const savedTime = localStorage.getItem(STORAGE_KEY);
+    const savedTime = sessionStorage.getItem(STORAGE_KEY);
     if (savedTime) {
       setRemainingTime(parseInt(savedTime, 10));
     }
@@ -55,17 +77,13 @@ const QuestionPage: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const handleBack = () => {
-    navigate(-1); // Goes to the previous page in the history stack
-  };
-
   useEffect(() => {
     // Timer logic: decrement remaining time every second
     const interval = setInterval(() => {
       setRemainingTime((prevTime) => {
         if (prevTime > 0) {
           const newTime = prevTime - 1;
-          localStorage.setItem(STORAGE_KEY, newTime.toString()); // Save the new remaining time
+          sessionStorage.setItem(STORAGE_KEY, newTime.toString()); // Save the new remaining time
           return newTime;
         }
         return 0; // Timer reaches zero
@@ -85,22 +103,14 @@ const QuestionPage: React.FC = () => {
     return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   };
 
-  const toggleAnswer = (index: number) => {
-    if (selectedAnswers.includes(index)) {
-      setSelectedAnswers(selectedAnswers.filter((answer) => answer !== index));
-    } else {
-      setSelectedAnswers([...selectedAnswers, index]);
-    }
-  };
+
+  // useStates
+
 
 
 
   // useQuery to fetch data from server
 
-  const fetchQuestion = async (questionId: number) => {
-    const response = await axios.get(`${baseUrl}quiz/start/${questionId}`); // Replace with your actual API
-    return response.data;
-  };
 
 
   return (
@@ -120,34 +130,16 @@ const QuestionPage: React.FC = () => {
           </h2>
         </div>
         <div className="mt-4">
-          <p className="text-lg font-medium">
-            1. AutoCAD дастурида геодезик ўлчаш ишлари билан ишлашни биласизми?
-            Қандай даражада?
-          </p>
-          <p className="text-red-600 mt-2">
-            Бир неча тўғри жавобларни белгиланг
-          </p>
 
-          <div className="mt-4 space-y-3">
-            {answers.map((answer, index) => (
-              <label
-                key={index}
-                className={`block p-4 border rounded-lg cursor-pointer ${selectedAnswers.includes(index)
-                    ? 'bg-blue-100 border-blue-500'
-                    : 'border-gray-300'
-                  }`}
-                onClick={() => toggleAnswer(index)}
-              >
-                <input
-                  type="checkbox"
-                  className="mr-2"
-                  checked={selectedAnswers.includes(index)}
-                  readOnly
-                />
-                {answer}
-              </label>
-            ))}
-          </div>
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : (
+            <div className="mt-4 space-y-3">
+              {/* {questions && Array.isArray(questions) && questions.map((question: ClientQuizType, index: number) => (
+                <div key={index}>{question.countAnswers}</div>
+              ))} */}
+            </div>
+          )}
 
           {/* Progress Bar */}
 
@@ -158,44 +150,22 @@ const QuestionPage: React.FC = () => {
 
           {/* Navigation Buttons */}
           <div className="mt-6 flex justify-between items-center">
-            <button
-              onClick={handleBack}
-              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md"
-            >
-              Орқага
-            </button>
-            <Select
-              defaultValue="Savollar"
-              style={{ width: 150 }}
-              onChange={handleChange}
-            >
-              {number.map((item: number) => (
-                <Option classname="p-3" key={item}>
-                  {item}/{number.length}
-                </Option>
-              ))}
-            </Select>
             <button className="px-4 py-2 bg-blue-500 text-white rounded-md">
               Кейингиси
             </button>
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 
 // Sample answers data (you can change it to be dynamic)
-const answers = [
-  'Ҳа биламан. Топография ва қурилиш маҳоратили фойдалана оламан.',
-  'Ҳа биламан. Ўқув жараёнида яхши фойдаланганман.',
-  'Дастурни ишлата олмайман.',
-  'Дастурни ишлай оламан лекин ўқув ёки иш жараёнида аниқ бир иш битирмаганман.',
-];
-
-const number = [
-  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
-  23, 24, 25, 26, 27, 28, 29, 30,
-];
+// const answers = [
+//   'Ҳа биламан. Топография ва қурилиш маҳоратили фойдалана оламан.',
+//   'Ҳа биламан. Ўқув жараёнида яхши фойдаланганман.',
+//   'Дастурни ишлата олмайман.',
+//   'Дастурни ишлай оламан лекин ўқув ёки иш жараёнида аниқ бир иш битирмаганман.',
+// ];
 
 export default QuestionPage;

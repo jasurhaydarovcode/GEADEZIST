@@ -97,10 +97,10 @@
 |  6  |   Nodir   |          Admin Category          |
 | 10  |  Asilbek  |  Admin/Employees, Admin Adress, oferta   |
 | 13  | Asil aka  |      Test Uktam bilan birga      |
+|  5  | Asliddin  | Admin Foydalanuvchilar |
+|  7  |   Uktam   |     Admin /Test      |
 | 14  |   Ozod    |`undefined`|
-|  7  |   Uktam   |     Admin /Test :`Not Working`     |
 |  8  | Shohjahon |`Not Working`:`undefined`|
-|  5  | Asliddin  |`Not Working`|
 |  9  |  Alibek   |`Not Working`|
 | 11  |  Dilshod  |`Not Working`|
 | 12  |  Bexruz   |`Not Working`|

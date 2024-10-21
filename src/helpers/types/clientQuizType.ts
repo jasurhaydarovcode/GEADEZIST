@@ -8,13 +8,15 @@ interface dtos {
 
 export interface ClientQuizType {
     "id": number,
+    "countAnswers": number,
     "name": string,
     "categoryName": string,
+    "duration": number,
     "categoryId": number,
     "finiteError": number,
     "type": string,
     "difficulty": string,
     "attachmentIds": boolean,
-    "optionDtos": dtos[],
+    "questionDtoList": dtos[],
     "createdByName": string
 }

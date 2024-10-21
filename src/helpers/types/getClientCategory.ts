@@ -1,6 +1,6 @@
 export interface ClientCategory {
-  name: string;
   id: number;
+  name: string;
   description: string;
   duration: number;
   questionCount: number;

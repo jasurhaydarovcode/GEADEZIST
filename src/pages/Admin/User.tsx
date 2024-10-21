@@ -40,7 +40,7 @@ function User() {
   );
 
   return (
-    <div>
+    <div className='overflow-x-hidden'>
       <Helmet>
         <title>Foydalanuvchilar Natijasi</title>
       </Helmet>

@@ -24,14 +24,22 @@ const ClientTestStart: React.FC = () => {
   CheckLogin();
 
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const navigate = useNavigate();
-
-  const showModal = () => {
+  const [cateId, setSelectedCateId] = useState(null);
+  const { isLoading, error, data } = useQuery({
+    queryKey: ['getClientCategory'],
+    queryFn: async () => {
+      const res = await axios.get(`${baseUrl}category`, config);
+      return (res.data as { body?: { body: ClientCategory[] } }).body?.body;
+    },
+    onError: (error: AxiosError) => {
+      message.error(error.message);
+    },
+  });
+  const showModal = (categoryId: number) => {
+    setSelectedCategoryId(categoryId);
     setIsModalVisible(true);
-  };
-
-  const handleOk = () => {
-    navigate('/client/quiz/:id');
   };
 
   const checkRoleClient = useCallback(() => {
@@ -52,30 +60,30 @@ const ClientTestStart: React.FC = () => {
     checkRoleClient();
   }, [checkRoleClient]);
 
-  // Function to handle modal close
   const handleCancel = () => {
     setIsModalVisible(false);
   };
 
-  const { isLoading, error, data } = useQuery({
-    queryKey: ['getClientCategory'],
+  const getTests = useQuery({
+    queryKey: ['getTests', config],
     queryFn: async () => {
-      const res = await axios.get(`${baseUrl}category`, config);
-      return (res.data as { body?: { body: ClientCategory[] } }).body?.body;
+      const res = await axios.get(`${baseUrl}quiz/start/${cateId}`,config)
+      return res.data
     },
-    onError: (error: AxiosError) => {
-      message.error(error.message);
-    },
-  });
+    onSuccess: () => {
+      
+    }
+  })
 
-  if (error) return toast.error(error.message);
-
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-
-  const handleStartClick = (category: { name: string }) => {
-    setSelectedCategory(category.name); // Kategoriyani state'ga o'rnatamiz
-    // Boshqa ma'lumotlarni ham ishlash mumkin
+  const handleOk = () => {
+    getTests.refetch()
+    if (selectedCategoryId !== null) {
+      navigate(`/client/quiz/${selectedCategoryId}`);
+    }
   };
+
+
+  if (error) return toast.error((error as AxiosError).message);
 
   return (
     <Layout className="p-8 space-y-6">
@@ -93,7 +101,7 @@ const ClientTestStart: React.FC = () => {
           </div>
           {Array.isArray(data) &&
             data.map((item: ClientCategory, index: number) => (
-              <div className="border-[0.5px] items-center shadow-xl relative border-black bg-white rounded-md py-6 px-4 w-full">
+              <div key={index} className="border-[0.5px] items-center shadow-xl relative border-black bg-white rounded-md py-6 px-4 w-full">
                 <div className="px-3 flex items-center space-x-12">
                   <div>
                     <img
@@ -105,7 +113,7 @@ const ClientTestStart: React.FC = () => {
                     />
                   </div>
                   <div className="flex-1 mb-4">
-                    <div key={index} className="flex justify-between mb-2">
+                    <div className="flex justify-between mb-2">
                       <span className="text-gray-600 font-semibold">
                         Yo'nalish
                       </span>
@@ -114,16 +122,16 @@ const ClientTestStart: React.FC = () => {
                       </span>
                     </div>
 
-                    <div key={index} className="flex justify-between mb-2">
+                    <div className="flex justify-between mb-2">
                       <span className="text-gray-600 font-semibold">
                         Test ishlashga ajratilgan vaqt
                       </span>
                       <span className="text-gray-700 font-medium">
-                        {item.duration} (дақ.)
+                        {item.duration} (daq.)
                       </span>
                     </div>
 
-                    <div key={index} className="flex justify-between mb-2">
+                    <div className="flex justify-between mb-2">
                       <span className="text-gray-600 font-semibold">
                         Savollar soni
                       </span>
@@ -132,7 +140,7 @@ const ClientTestStart: React.FC = () => {
                       </span>
                     </div>
 
-                    <div key={index} className="flex justify-between mb-2">
+                    <div className="flex justify-between mb-2">
                       <span className="text-gray-600 font-semibold">
                         Qayta topshirish vaqti
                       </span>
@@ -143,59 +151,54 @@ const ClientTestStart: React.FC = () => {
 
                     <button
                       onClick={() => {
-                        showModal();
-                        handleStartClick(item);
+                        showModal(item.id);
+                        setSelectedCateId(item.id); // Type assertion to number
                       }}
                       className="bg-gray-600 cursor-pointer absolute top-[78%] right-5 text-white p-1 px-4 rounded"
                     >
-                      Бошлаш
+                      Boshlash
                     </button>
                   </div>
-
-                  {selectedCategory && (
-                    <>
-                      <Modal
-                        title={
-                          <div>
-                            <span>
-                              <MdOutlineNotStarted
-                                size={90}
-                                color="red"
-                                className="mx-auto"
-                              />
-                            </span>
-                            <span>Haqiqatdan ham </span>
-                            <span className="text-red-600">
-                              {selectedCategory}
-                            </span>
-                            <span>
-                              {' '}
-                              yo'nalishi bo'yicha test boshlamoqchimisiz?
-                            </span>
-                          </div>
-                        }
-                        visible={isModalVisible}
-                        onOk={handleOk}
-                        onCancel={handleCancel}
-                        okText="Boshlash"
-                        cancelText="Orqaga"
-                        maskClosable={false}
-                        style={{
-                          top: '34%',
-                          left: '1%',
-                          width: '300px',
-                        }}
-                        maskStyle={{
-                          backgroundColor: 'rgba(0, 0, 0, 0.1)',
-                        }}
-                      ></Modal>
-                    </>
-                  )}
                 </div>
               </div>
             ))}
         </>
       )}
+      <Modal
+        title={
+          <div>
+            <span>
+              <MdOutlineNotStarted
+                size={90}
+                color="red"
+                className="mx-auto"
+              />
+            </span>
+            <span>Haqiqatdan ham </span>
+            <span className="text-red-600">
+              {data?.find((item) => item.id === selectedCategoryId)?.name}
+            </span>
+            <span>
+              {' '}
+              yo'nalishi bo'yicha test boshlamoqchimisiz?
+            </span>
+          </div>
+        }
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        okText="Boshlash"
+        cancelText="Orqaga"
+        maskClosable={false}
+        style={{
+          top: '34%',
+          left: '1%',
+          width: '300px',
+        }}
+        maskStyle={{
+          backgroundColor: 'rgba(0, 0, 0, 0.1)',
+        }}
+      />
     </Layout>
   );
 };

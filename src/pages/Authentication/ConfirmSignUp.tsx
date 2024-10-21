@@ -23,7 +23,7 @@ const ConfirmSignUp = () => {
       .put(`${baseUrl}auth/activate?code=${code.current?.value}`)
       .then((res) => {
         message.success('Yaxshi');
-        console.log(res.data);
+        console.log(res.data);  
         navigate('/auth/SignIn');
       })
       .catch((err) => {
@@ -35,6 +35,11 @@ const ConfirmSignUp = () => {
         setIsSubmitting(false);
       });
   }
+  const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      forgetPassword()
+    }
+  };
   return (
     <div>
       <div className="h-screen flex items-center justify-center bg-gray-100">
@@ -60,6 +65,7 @@ const ConfirmSignUp = () => {
                   </label>
                   <input
                     ref={code}
+                    onKeyPress={handleEnter}
                     type="text"
                     placeholder="Elektron pochtaga yuborilgan codeni kiriting"
                     className="w-full px-4 py-2 mt-4 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
