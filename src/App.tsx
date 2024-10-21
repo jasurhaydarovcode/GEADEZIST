@@ -27,7 +27,8 @@ import Category from './pages/Admin/Category';
 import Profile from './pages/Admin/Profile';
 import ConfirmSignUp from './pages/Authentication/ConfirmSignUp';
 import TestVisual from './components/test/testVisual';
-import PrivateRoute from './components/security/PrivateRoute';
+import PrivateRoute from './components/security/route/PrivateRoute';
+import PublicRoute from './components/security/route/PublicRoute'
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -47,21 +48,45 @@ function App() {
     <>
       {loading && <SiteLoading />}
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={
           <PrivateRoute>
             <Home />
           </PrivateRoute>
         } />
-
         <Route path="*" element={<NotFound />} />
 
         {/* Authentication Routes */}
-        <Route path="/auth/SignIn" element={<SignIn />} />
-        <Route path="/auth/SignUp" element={<SignUp />} />
-        <Route path="/auth/confirm" element={<Confirm />} />
-        <Route path="/auth/confirm-signup" element={<ConfirmSignUp />} />
-        <Route path="/auth/reset-password" element={<ResetPassword />} />
-        <Route path="/auth/offer" element={<Offer />} />
+        <Route path="/auth/SignIn" element={
+          <PublicRoute>
+            <SignIn />
+          </PublicRoute>
+        } />
+        <Route path="/auth/SignUp" element={
+          <PublicRoute>
+            <SignUp />
+          </PublicRoute>
+        } />
+        <Route path="/auth/confirm" element={
+          <PublicRoute>
+            <Confirm />
+          </PublicRoute>
+        } />
+        <Route path="/auth/confirm-signup" element={
+          <PublicRoute>
+            <ConfirmSignUp />
+          </PublicRoute>
+        } />
+        <Route path="/auth/reset-password" element={
+          <PublicRoute>
+            <ResetPassword />
+          </PublicRoute>
+        } />
+        <Route path="/auth/offer" element={
+          <PublicRoute>
+            <Offer />
+          </PublicRoute>
+        } />
 
         {/* Protected Client Routes */}
         <Route
