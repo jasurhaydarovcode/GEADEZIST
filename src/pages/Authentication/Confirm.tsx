@@ -35,7 +35,6 @@ function Confirm() {
         if (data.status === 'OK') {
           message.success('Emailga code yuborildi');
           navigate('/auth/reset-password');
-          console.log(data.message);
         }
       })
       .catch((err) => {

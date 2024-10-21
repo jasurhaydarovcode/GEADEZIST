@@ -49,7 +49,6 @@ function ResetPassword() {
           message.success('Parolingiz muvaffaqiyatli o`zgartirildi!');
           navigate('/auth/SignIn');
         }
-        console.log(res.status);
       })
       .catch((err) => {
         if (err.response?.status === 404) {
