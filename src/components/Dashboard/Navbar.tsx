@@ -10,6 +10,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import LogoutModal from '@/components/Modal/LogoutModal';
 import AOS from 'aos';
 import EmailTooltip from '../Tooltip/EmailTooltip';
+import { Button, Tooltip } from 'flowbite-react';
 
 // Token va config olishni asinxron qilish
 async function getToken() {
@@ -110,15 +111,16 @@ const Navbar: React.FC = () => {
           <div className="flex gap-4 items-center cursor-pointer">
             <div>
               <h1 className="text-gray-500 mr-2 text-md font-semibold">
-                {getUser?.fullName}
+                {getUser?.fullName && getUser.fullName.length > 20 ? getUser.fullName.substring(0, 15) + "..." : getUser?.fullName || 'Noma'}
               </h1>
+
               <span>
                 {getMe.isLoading
                   ? 'Loading...'
                   : (role === 'ROLE_SUPER_ADMIN' && 'super admin') ||
-                    (role === 'ROLE_TESTER' && 'tester') ||
-                    (role === 'ROLE_USER' && 'client') ||
-                    (role === 'ROLE_ADMIN' && 'admin (tekshiruvchi)')}
+                  (role === 'ROLE_TESTER' && 'tester') ||
+                  (role === 'ROLE_USER' && 'client') ||
+                  (role === 'ROLE_ADMIN' && 'admin (tekshiruvchi)')}
               </span>
             </div>
             <div>
@@ -132,20 +134,26 @@ const Navbar: React.FC = () => {
 
           {isDropdownOpen && (
             <div className="absolute z-50 right-0 mt-2 w-56 bg-white border rounded-lg shadow-lg">
-              <div className="p-4">
-                <div className="font-bold">{getUser?.fullName}</div>
+              <div className="px-4">
+                <div className="font-bold">
+                  {/* <Tooltip content={getUser?.fullName} style="light">
+                    {getUser?.fullName && getUser.fullName.length > 20 ? getUser.fullName.substring(0, 20) + "..." : getUser?.fullName || 'Noma'}
+                  </Tooltip> */}
+                  <EmailTooltip email={getUser?.fullName || ''} />
+                </div>
 
-                {/* START TOOLTIP */}
-                <EmailTooltip email={getUser?.email || ''} />
-                {/* END TOOLTIP */}
+                <div className='mb-2'>
+                  {/* START TOOLTIP */}
+                  <EmailTooltip email={getUser?.email || ''} />
+                  {/* END TOOLTIP */}
+                </div>
               </div>
               <hr />
               <div>
                 <Link to={'/profile'}>
                   <button
-                    className={`flex items-center gap-2 w-full text-left hover:bg-gray-100 px-3 py-5 rounded ${
-                      getMe.isLoading ? 'pointer-events-none opacity-50' : ''
-                    }`}
+                    className={`flex items-center gap-2 w-full text-left hover:bg-gray-100 px-3 py-5 rounded ${getMe.isLoading ? 'pointer-events-none opacity-50' : ''
+                      }`}
                     disabled={getMe.isLoading}
                   >
                     <FaRegUser />
@@ -153,9 +161,8 @@ const Navbar: React.FC = () => {
                   </button>
                 </Link>
                 <button
-                  className={`flex items-center gap-2 w-full text-left hover:bg-gray-100 px-3 py-5 rounded ${
-                    getMe.isLoading ? 'pointer-events-none opacity-50' : ''
-                  }`}
+                  className={`flex items-center gap-2 w-full text-left hover:bg-gray-100 px-3 py-5 rounded ${getMe.isLoading ? 'pointer-events-none opacity-50' : ''
+                    }`}
                   onClick={openLogoutModal}
                   disabled={getMe.isLoading}
                 >
