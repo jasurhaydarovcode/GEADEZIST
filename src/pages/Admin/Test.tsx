@@ -3,7 +3,7 @@ import { baseUrl, PostQuestion } from "@/helpers/api/baseUrl";
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow, } from 'flowbite-react';
 import { config } from "@/helpers/functions/token";
 import { PlusCircleOutlined, EditOutlined, DeleteOutlined, EyeOutlined, } from "@ant-design/icons";
-import { Button, Modal, } from "antd";
+import { Button, message, Modal, } from "antd";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
@@ -16,10 +16,29 @@ import { Link, useNavigate } from "react-router-dom";
 import CheckLogin from "@/helpers/functions/checkLogin";
 import defaultImage from "../../assets/images/default.png";
 import TestVisual from "@/components/test/testVisual";
+<<<<<<< HEAD
+import { Category } from "@/helpers/types/Category";
+=======
 import { toast } from "react-toastify";
+>>>>>>> 182899455f8608e3a2cc4146a52f7e01c304c967
 
 function Test() {
   CheckLogin
+ const [saveCates,setSaveCates] = useState<Category[]>([]);
+  const getCategory = useQuery({
+    queryKey: ["getCategory",config],
+    queryFn: async () => {
+      const res = await axios.get(`${baseUrl}category/page`, config)
+      const response: Category = res.data?.body.body
+      return response
+    },
+    onSuccess: (data) => {
+      setSaveCates(data)
+    }
+  })
+  useEffect(() => {
+    getCategory.refetch()
+  }, [])
 
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -118,11 +137,13 @@ function Test() {
   };
 
   // edit 
+  const difficulty = useRef<string>('');
   const [editTestID, setEditTestID] = useState<string>('');
-  const [categore, setCategory] = useState<string>('');
-  const [difficulty, setDifficulty] = useState<string>('');
-  const [type, setType] = useState<string>('');
-  const [answer, setanswer] = useState<string | null>(null);
+  const categore = useRef<string>('');
+  const answer= useRef<string | null>(null);
+  const type = useRef<string>('');
+  const checkbox = useRef<boolean>(false)
+  const answerData = useRef<string>('')
   const updatedData = {
     name: answer,
     categoryName: categore,
@@ -229,36 +250,47 @@ function Test() {
     setOpen(false);
   };
 
-  const handleOk = () => {
-    setConfirmLoading(true);
-    setTimeout(() => {
-      setOpen(false);
-      setConfirmLoading(false);
-    }, 2000);
-  };
 
   // Post question
   const postQuestion = useMutation({
-    mutationFn: async () => {
-      const data = {
-        name: quiz.current?.value,
-        categoryId: category.current?.value,
-        finiteError: 0,
-        type: "string",
-        difficulty: "string",
-        attachmentIds: [0],
-        optionDtos: [
-          {
-            answer: "string",
-            isCorrect: true,
-            file: 0,
-          },
-        ],
-      };
-      const res = await axios.post(PostQuestion, data, config);
-      return res.data;
-    },
-  });
+  mutationFn: async () => {
+    const data = {
+      name: quiz.current?.value,
+      categoryId: categore.current?.value,
+      finiteError: 0,
+      type: type.current.value, // Change to appropriate type
+      difficulty: difficulty.current.value, // Change to appropriate difficulty
+      attachmentIds: [0],
+      optionDtos: [
+        {
+          answer: answer.current.value || "",
+          isCorrect: true,
+          file: 0,
+        },
+      ],
+    };
+    const res = await axios.post(PostQuestion, data, config);
+    return res.data;
+  },
+  onSuccess: () => {
+    message.success('Added successfully')
+  },
+  onError: (err) => {
+    message.error(err.message)
+  }
+});
+
+const handleOk = () => {
+  postQuestion.mutate();
+  setConfirmLoading(true);
+  setTimeout(() => {
+    setOpen(false);
+    setConfirmLoading(false);
+  }, 2000);
+};
+
+
+
 
 
   return (
@@ -288,7 +320,7 @@ function Test() {
               >
                 <PlusCircleOutlined className="text-xl" /> Qo'shish
               </Button>
-
+            {/* add modal */}
               <Modal
                 title="Savol qo'shish"
                 open={open}
@@ -299,36 +331,27 @@ function Test() {
               >
                 <div className="mb-4">
                   <input
+                    ref={quiz}
                     placeholder="Savolni kiriting"
                     className="border bg-white w-full p-2 rounded"
                   />
                 </div>
 
                 <div className="mb-4">
-                  <select className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
+                  <select ref={categore} className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
                     <option disabled selected value="">
                       Kategoriyani tanlang
                     </option>
-                    <option value="" className="text text-black">
-                      Umumiy savollar
-                    </option>
-                    <option value="" className="text text-black">
-                      Umumiy geodeziya
-                    </option>
-                    <option value="" className="text text-black">
-                      Topografiya
-                    </option>
-                    <option value="" className="text text-black">
-                      Oliy geodeziya
-                    </option>
-                    <option value="" className="text text-black">
-                      Har qanday to'g'ri
-                    </option>
+                    {saveCates && saveCates.length > 0 && saveCates.map((item: Category) => (
+                      <option value={item?.id} className="text text-black">
+                        {item?.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
                 <div className="mb-4">
-                  <select className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
+                  <select ref={difficulty} className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
                     <option disabled selected>
                       Qiyinchilik darajasini tanlang
                     </option>
@@ -345,7 +368,7 @@ function Test() {
                 </div>
 
                 <div className="mb-4">
-                  <select
+                  <select ref={type}
                     onChange={(e) => setTestType(e.target.value)}
                     className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]"
                   >
@@ -376,6 +399,7 @@ function Test() {
                         className="flex items-center mb-4 gap-2"
                       >
                         <input
+                          ref={checkbox}
                           type="checkbox"
                           checked={
                             testType === "Hisoblangan natija" || answer.checked
@@ -394,6 +418,7 @@ function Test() {
                           className="mr-3 accent-blue-500"
                         />
                         <input
+                          ref={answerData}
                           placeholder="Savolning javoblarini kiriting"
                           className="border w-full p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
@@ -430,11 +455,13 @@ function Test() {
                         className="flex items-center mb-4 gap-1"
                       >
                         <input
+                          ref={checkbox}
                           type="radio"
                           name="single-choice"
                           className="mr-3 accent-blue-500"
                         />
                         <input
+                          ref={answerData}
                           placeholder="Savolning javoblarini kiriting"
                           className="border w-full p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
@@ -502,21 +529,12 @@ function Test() {
                     <option disabled selected>
                       Kategoriyani tanlang
                     </option>
-                    <option value="7" className="text text-black">
-                      Umumiy savollar
-                    </option>
-                    <option value="8" className="text text-black">
-                      Umumiy geodeziya
-                    </option>
-                    <option value="9" className="text text-black">
-                      Topografiya
-                    </option>
-                    <option value="19" className="text text-black">
-                      Oliy geodeziya
-                    </option>
-                    <option value="11" className="text text-black">
-                      Har qanday to'g'ri
-                    </option>
+                    {saveCates && saveCates.length > 0 && saveCates.map((cate) => (
+                      <option key={cate.id} value={cate.id} className="text text-black">
+                        {cate.name}
+                      </option>
+                    ))}
+                    
                   </select>
                 </div>
 
@@ -567,7 +585,7 @@ function Test() {
                       <TableCell>{item.qiyinligi}</TableCell>
                       <TableCell>{item.savolTuri}</TableCell>
                       <TableCell>{item.yaratganOdam}</TableCell>
-                      <TableCell>
+                      <TableCell className="flex">
                         <EditOutlined onClick={() => {
                           seteditModal(true);
                           setEditTestID(item.key)
