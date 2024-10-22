@@ -9,7 +9,7 @@ import { FcSearch } from 'react-icons/fc';
 import { SlArrowDown } from 'react-icons/sl';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
-import { Button, Dropdown, Menu, message, Modal, Input } from 'antd';
+import { Button, Dropdown, Menu, message, Modal, Input, Spin } from 'antd';
 import CheckLogin from '@/helpers/functions/checkLogin';
 import { EllipsisOutlined } from '@ant-design/icons';
 
@@ -18,11 +18,12 @@ const User: React.FC = () => {
 
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [selectedUser, setSelectedUser] = useState<UserNatijasi | null>(null);
-  const [rating, setRating] = useState<string>(''); // Reyting uchun state
-  const [errorMessage, setErrorMessage] = useState<string>(''); // Xatolik uchun state
-  const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState<boolean>(true); // Saqlash tugmasini boshqarish
+  const [selectedUser, setSelectedUser] = useState<UserNatijasi | null>(null); // Tanlangan foydalanuvchi
+  const [loadingDetails, setLoadingDetails] = useState<boolean>(false); // Yuklanayotganini ko'rsatish
   const [selectedStatus, setSelectedStatus] = useState<string>(''); // Status uchun state
+  const [isRatingModalVisible, setIsRatingModalVisible] = useState<boolean>(false); // Tasdiqlash modalining holati
+  const [rating, setRating] = useState<string>(''); // Baholash input qiymati
+  const [isRatingValid, setIsRatingValid] = useState<boolean>(false); // Baholash uchun validatsiya
 
   const { data: usersData, refetch } = useQuery({
     queryKey: ['User', config],
@@ -49,59 +50,70 @@ const User: React.FC = () => {
       (selectedStatus === '' || user.status === selectedStatus) // Status bo'yicha filtr
   );
 
-  const showUserDetails = (user: UserNatijasi) => {
+  // Natijalarni ko'rish uchun modal ochish
+  const showUserDetails = async (user: UserNatijasi) => {
+    setLoadingDetails(true);
     setSelectedUser(user);
     setIsModalVisible(true);
+    try {
+      const res = await axios.get(`/result/get-one/${user.resultId}`, config);
+      setSelectedUser({ ...user, result: res.data.body });
+    } catch (error) {
+      message.error('Natijalarni olishda xatolik yuz berdi.');
+    } finally {
+      setLoadingDetails(false);
+    }
   };
 
-  const handleCancel = () => {
-    setIsModalVisible(false);
-    setSelectedUser(null);
-    setRating('');
-    setErrorMessage('');
-    setIsSaveButtonDisabled(true);
+  // Tasdiqlash modalini ochish
+  const showRatingModal = (user: UserNatijasi) => {
+    setSelectedUser(user);
+    setIsRatingModalVisible(true);
   };
 
-  // Inputni boshqarish va tekshirish
+  // Baho kiritilishi
   const handleRatingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    const numericValue = parseInt(value, 10);
+    const numericValue = parseInt(value);
+    setRating(value);
 
-    if (isNaN(numericValue) || numericValue < 1 || numericValue > 10) {
-      setRating('');
-      setErrorMessage('1 dan 10 gacha son kiriting');
-      setIsSaveButtonDisabled(true); // Noto'g'ri son kiritsa, tugma o'chiriladi
+    // 1 dan 10 gacha son kiritishni validatsiya qilish
+    if (numericValue >= 1 && numericValue <= 10) {
+      setIsRatingValid(true);
     } else {
-      setRating(value);
-      setErrorMessage('');
-      setIsSaveButtonDisabled(false); // To'g'ri son kiritsa, tugma faollashadi
+      setIsRatingValid(false);
+      message.error('Iltimos, 1dan 10gacha baho kiriting.');
     }
   };
 
-  const handleConfirm = async () => {
-    if (errorMessage) {
-      message.error('Iltimos, 1 dan 10 gacha son kiriting.');
-      return;
-    }
+  // Tasdiqlash funksiyasi (API orqali baholashni jo'natish)
+  const handleRatingConfirm = async () => {
+    if (!isRatingValid || !selectedUser) return;
 
     try {
       const response = await axios.put(
-        `/result/update-status/${selectedUser?.resultId}`,
+        `/result/update-status/${selectedUser.resultId}`,
         {
+          status: 'CONFIRMED', // Statusni tasdiqlash
           practicalScore: rating,
-          status: 'APPROVED',
         },
         config
       );
 
       if (response.status === 200) {
-        message.success('Natija muvaffaqiyatli tasdiqlandi');
-        refetch();
-        handleCancel();
+        message.success('Natija muvaffaqiyatli tasdiqlandi!');
+        setIsRatingModalVisible(false); // Modalni yopish
+        setRating(''); // Baho inputini tozalash
+        refetch(); // Ma'lumotlarni yangilash
       }
     } catch (error) {
       message.error('Natijani tasdiqlashda xatolik yuz berdi.');
     }
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    setSelectedUser(null);
   };
 
   const menu = (user: UserNatijasi) => (
@@ -113,7 +125,7 @@ const User: React.FC = () => {
         <button onClick={() => showUserDetails(user)}>Natijani ko'rish</button>
       </Menu.Item>
       <Menu.Item key="3">
-        <button onClick={() => setIsModalVisible(true)}>Tasdiqlash</button>
+        <button onClick={() => showRatingModal(user)}>Tasdiqlash</button>
       </Menu.Item>
       <Menu.Item key="4">
         <button>Bekor qilish</button>
@@ -133,7 +145,7 @@ const User: React.FC = () => {
       <Layout>
         <div>
           <div className="flex justify-center pt-7">
-            <div>
+            <div className="px-8">
               <div className="w-max">
                 <header className="flex items-center justify-between">
                   <h3 className="font-bold text-[27px]">Foydalanuvchilar natijasi</h3>
@@ -173,7 +185,7 @@ const User: React.FC = () => {
                   <select
                     className="max-w-[350px] w-[375px] text-gray-40 rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]"
                     value={selectedStatus}
-                    onChange={(e) => setSelectedStatus(e.target.value)} // Statusni o'zgartirish
+                    onChange={(e) => setSelectedStatus(e.target.value)}
                   >
                     <option value="">Statusni tanlang</option>
                     <option value="waiting">Kutilmoqda</option>
@@ -218,19 +230,29 @@ const User: React.FC = () => {
             </div>
           </div>
 
-          {/* Modal for confirming result */}
+          {/* Modal for displaying user details */}
+          <Modal title="Natijalarni ko'rish" visible={isModalVisible} onCancel={handleCancel} footer={null}>
+            {loadingDetails ? (
+              <Spin />
+            ) : selectedUser ? (
+              <div>
+                <p><strong>Tuliq ismi:</strong> {selectedUser.fullName}</p>
+                <p><strong>Category:</strong> {selectedUser.categoryName}</p>
+                <p><strong>Telefon:</strong> {selectedUser.phoneNumber}</p>
+                <p><strong>Qayta test topshirish:</strong> {selectedUser.expiredDate}</p>
+                <p><strong>Status:</strong> {selectedUser.status}</p>
+              </div>
+            ) : (
+              <p>Natijalar topilmadi</p>
+            )}
+          </Modal>
+
+          {/* Modal for confirming the rating */}
           <Modal
             title="Natijani tasdiqlash"
-            visible={isModalVisible}
-            onCancel={handleCancel}
-            footer={[
-              <Button key="cancel" onClick={handleCancel}>
-                Yopish
-              </Button>,
-              <Button key="confirm" type="primary" onClick={handleConfirm} disabled={isSaveButtonDisabled}>
-                Saqlash
-              </Button>,
-            ]}
+            visible={isRatingModalVisible}
+            onCancel={() => setIsRatingModalVisible(false)}
+            footer={null}
           >
             <div>
               <label htmlFor="rating">Baholash:</label>
@@ -241,7 +263,14 @@ const User: React.FC = () => {
                 onChange={handleRatingChange}
                 className="border rounded-md w-full p-2"
               />
-              {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+              <div className="flex justify-end mt-4">
+                <Button onClick={() => setIsRatingModalVisible(false)} style={{ marginRight: '8px' }}>
+                  Yopish
+                </Button>
+                <Button type="primary" onClick={handleRatingConfirm} disabled={!isRatingValid}>
+                  Tasdiqlash
+                </Button>
+              </div>
             </div>
           </Modal>
         </div>
