@@ -24,6 +24,7 @@
     "axios": "^1.7.7",
     "bootstrap-icons": "^1.11.3",
     "chart.js": "^4.4.4",
+    "date-fns": "^4.1.0",
     "flowbite-react": "^0.10.2",
     "lucide-react": "^0.451.0",
     "npm": "^10.9.0",
