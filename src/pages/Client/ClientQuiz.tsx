@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { toast } from 'react-toastify';
@@ -15,6 +15,34 @@ const STORAGE_KEY = 'savedRemainingTime';
 // Define AxiosError interface
 interface AxiosError extends Error {
   message: string;
+}
+
+interface QuestionDto {
+  id: number;
+  name: string;
+  categoryName: string;
+  type: string;
+  optionDtos: OptionDto[];
+  finiteError: number;
+  attachmentIds: number[];
+}
+
+interface OptionDto {
+  id: number;
+  answer: string;
+  isCorrect: boolean;
+  file: string | null;
+}
+
+interface QuizData {
+  questionDtolist: QuestionDto[];
+  success: boolean;
+  message: string;
+  status: string;
+  body: {
+    countAnswers: number;
+    durations: number[];
+  };
 }
 
 const QuestionPage: React.FC = () => {
@@ -133,6 +161,8 @@ const QuestionPage: React.FC = () => {
     setCurrentIndex(selectedIndex);
   };
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
   return (
     <div className="px-9 space-y-12">
       {/* Timer Bar */}
@@ -150,10 +180,21 @@ const QuestionPage: React.FC = () => {
 
         {/* Savolni birma-bir chiqarish */}
         {quizData && quizData[currentIndex] && (
-          <div>
-            <div className="text-lg">{quizData[currentIndex].name}</div>
+          <div className='flex items-center space-x-2 mb-7'>
+            <div className='text-lg text-gray-400'>{currentIndex + 1}.</div>
+            <div className="text-lg text-gray-500">{quizData[currentIndex].name}</div>
           </div>
         )}
+
+        {quizData && quizData[currentIndex].type === "SUM" && (
+          <div>
+            <input ref={inputRef}
+              placeholder='Javobni Kiriting'
+              className='w-full rounded-xl text-medium' type="number" />
+          </div>
+        )}
+
+        {/* Savolni birma-bir chiqarish */}
 
         {/* Select orqali savollarni tanlash */}
 
