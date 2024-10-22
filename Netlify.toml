@@ -1,8 +1,0 @@
-[build]
-  publish = "build" # O'zingizning build katalogingizni (masalan, "dist" yoki "public") belgilang
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-  force = true
