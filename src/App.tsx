@@ -8,7 +8,7 @@ import SiteLoading from './components/SiteLoading';
 import PrivateRoute from './components/security/route/PrivateRoute';
 import PublicRoute from './components/security/route/PublicRoute';
 
-// Import all components
+// Pages
 import {
   Home, NotFound, SignIn, SignUp, Offer, Confirm, ResetPassword,
   ClientDashboard, ClientProfile, ClientTestStart, ClientQuiz,
