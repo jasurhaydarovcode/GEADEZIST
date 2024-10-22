@@ -44,6 +44,7 @@ function App() {
     <>
       {loading && <SiteLoading />}
       <Routes>
+        {/* ========= PUBLIC ROUTES ========= */}
         {renderRoute("/", Home)}
         <Route path="*" element={<NotFound />} />
 
@@ -54,6 +55,11 @@ function App() {
         {renderRoute("/auth/confirm-signup", ConfirmSignUp, false)}
         {renderRoute("/auth/reset-password", ResetPassword, false)}
         {renderRoute("/auth/offer", Offer, false)}
+
+
+
+
+        {/* ========= PRIVATE ROUTES ========= */}
 
         {/* Protected Client Routes */}
         {renderRoute("/client/dashboard", ClientDashboard)}
