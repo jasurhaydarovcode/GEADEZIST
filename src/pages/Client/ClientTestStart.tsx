@@ -100,7 +100,7 @@ const ClientTestStart: React.FC = () => {
           </div>
           {Array.isArray(data) &&
             data.map((item: ClientCategory, index: number) => (
-              <div key={index} className="border-[0.5px] items-center shadow-xl relative border-black bg-white rounded-md py-6 px-4 w-full">
+              <div key={index} className="border-[0.5px] items-center mb-5 shadow-xl relative border-black bg-white rounded-md py-6 px-4 w-full">
                 <div className="px-3 flex items-center space-x-12">
                   <div>
                     <img
