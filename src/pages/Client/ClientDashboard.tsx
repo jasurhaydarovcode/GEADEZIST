@@ -98,7 +98,7 @@ const ClientDashboard: React.FC = () => {
                   <div className="card-body flex flex-col leading-6 justify-between">
                     <div>
                       <h2 className="card-title text-red-500 pb-5 font-bold text-center flex justify-center">
-                        {card.categoryName || "Undefined"}
+                        {card.categoryName || <del className='text-black'>No Title Data</del>}
                       </h2>
 
                       <p className="text-gray-600">
