@@ -12,16 +12,24 @@ const NotFound: React.FC = () => {
   };
 
   return (
-    <div className="w-[100%] h-[100vh] flex justify-center items-center bg-[#848485]">
+    <div className="w-full h-screen flex justify-center items-center bg-[#848485]">
       <Helmet>
         <title>404 - Page Not Found</title>
       </Helmet>
-      <div className="text-6xl font-mono font-bold">
-        <h1 className="text-white">404</h1>
-        <h2 className="text-white">Not Found</h2>
-        <Button onClick={goBack} className="flex space-x-1 items-center mt-7">
-          <ChevronsLeft className="h-4 w-4" />
-          <h1 className="text-xl">Go Back</h1>
+      <div className="text-center">
+        <h1 className="text-white text-5xl md:text-6xl lg:text-8xl font-mono font-bold">
+          404
+        </h1>
+        <h2 className="text-white text-2xl md:text-3xl lg:text-4xl">
+          Not Found
+        </h2>
+
+        <Button
+          onClick={goBack}
+          className="flex space-x-2 items-center mt-5 md:mt-7 lg:mt-10"
+        >
+          <ChevronsLeft className="h-5 w-5 md:h-6 md:w-6" />
+          <span className="text-lg md:text-xl">Go Back</span>
         </Button>
       </div>
     </div>
