@@ -1,14 +1,23 @@
+// components/clientDashboard/Layout.tsx
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
+import React from 'react';
 
-const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const role = localStorage.getItem('role');
-   return (
-    <div className="flex">
-      {role !== 'ROLE_ADMIN' && <Sidebar />}
-      <div className="flex-1">
+const Layout: React.FC<{ children: React.ReactNode; className?: string }> = ({
+  children,
+  className,
+}) => {
+  return (
+    <div className="flex h-screen">
+      {/* Sidebar */}
+      <Sidebar />
+
+      <div className="flex-1 flex flex-col">
+        {/* Navbar */}
         <Navbar />
-        <main className="py-4">{children}</main>
+
+        {/* Main Content */}
+        <main className={className}>{children}</main>
       </div>
     </div>
   );

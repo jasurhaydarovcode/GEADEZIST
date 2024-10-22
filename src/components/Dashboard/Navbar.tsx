@@ -1,5 +1,5 @@
 import { getMeUser } from '@/helpers/api/baseUrl';
-import { geodeziyaLogo, testerLogo } from '@/helpers/imports/images';
+import { geodeziyaLogo, noImageClientDefaultImage, testerLogo } from '@/helpers/imports/images';
 import { GetMeResponse } from '@/helpers/types/GetMetype';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
@@ -114,13 +114,13 @@ const Navbar: React.FC = () => {
                   ? 'Loading...'
                   : (role === 'ROLE_SUPER_ADMIN' && 'super admin') ||
                   (role === 'ROLE_TESTER' && 'tester') ||
-                  (role === 'ROLE_USER' && 'client') ||
+                  (role === 'ROLE_CLIENT' && 'client') ||
                   (role === 'ROLE_ADMIN' && 'admin (tekshiruvchi)')}
               </span>
             </div>
             <div>
               <img
-                src={role === 'ROLE_TESTER' ? testerLogo : geodeziyaLogo}
+                src={(role === 'ROLE_TESTER' && testerLogo )||(role === 'ROLE_ADMIN' && geadziyaLogo )||( role === 'ROLE_SUPER_ADMIN' && geodeziyaLogo) || (role === 'ROLE_CLIENT' && noImageClientDefaultImage)}
                 alt="Admin logo"
                 className="rounded-full w-10"
               />
