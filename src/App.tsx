@@ -1,5 +1,7 @@
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+
+// lato font family
 import '@fontsource/lato';
 import '@fontsource/lato/400.css';
 import '@fontsource/lato/400-italic.css';
@@ -44,7 +46,6 @@ function App() {
     <>
       {loading && <SiteLoading />}
       <Routes>
-        {/* ========= PUBLIC ROUTES ========= */}
         {renderRoute("/", Home)}
         <Route path="*" element={<NotFound />} />
 
@@ -55,11 +56,6 @@ function App() {
         {renderRoute("/auth/confirm-signup", ConfirmSignUp, false)}
         {renderRoute("/auth/reset-password", ResetPassword, false)}
         {renderRoute("/auth/offer", Offer, false)}
-
-
-
-
-        {/* ========= PRIVATE ROUTES ========= */}
 
         {/* Protected Client Routes */}
         {renderRoute("/client/dashboard", ClientDashboard)}
