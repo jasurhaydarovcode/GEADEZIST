@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useState, useMemo } from 'react';
-import Layout from '@/components/clientDashboard/laytout';
+import Layout from '@/components/Dashboard/Layout';
 import { BiSolidPencil } from 'react-icons/bi';
 import axios from 'axios';
 import { noImageClientDefaultImage } from '@/helpers/imports/images';

@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import Layout from '../../components/clientDashboard/laytout';
+import Layout from '@/components/Dashboard/Layout';
 import { CardProps } from '../../helpers/types/CardProp';
 // import PreviewOverlay from '@/components/PreviewOverlay';
 import { useNavigate } from 'react-router-dom';

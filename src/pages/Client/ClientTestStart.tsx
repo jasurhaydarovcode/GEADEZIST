@@ -1,4 +1,4 @@
-import Layout from '@/components/clientDashboard/laytout';
+import Layout from '@/components/Dashboard/Layout';
 import { useNavigate } from 'react-router-dom';
 import { message, Modal } from 'antd';
 import { useEffect, useState, useCallback } from 'react';
@@ -85,7 +85,7 @@ const ClientTestStart: React.FC = () => {
   if (error) return toast.error((error as AxiosError).message);
 
   return (
-    <Layout className="p-8 space-y-6">
+    <Layout>
       {isLoading ? (
         <div className="flex justify-center absolute top-[42%] left-[57%]">
           <TableLoading />

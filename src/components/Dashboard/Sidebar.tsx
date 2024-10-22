@@ -10,6 +10,14 @@ const Sidebar = () => {
       name: 'Boshqaruv paneli',
       pathName: 'dashboard',
     },
+    role === 'ROLE_CLIENT' && {
+      name: 'Boshqaruv paneli',
+      pathName: 'client/dashboard',
+    },
+    role === 'ROLE_CLIENT' && {
+      name: 'Test',
+      pathName: 'client/test/start',
+    },
     (role === 'ROLE_SUPER_ADMIN' && {
       name: 'Kategoriya',
       pathName: 'category',
