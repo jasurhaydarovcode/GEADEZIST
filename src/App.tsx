@@ -1,34 +1,22 @@
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
+// lato font family
 import '@fontsource/lato';
 import '@fontsource/lato/400.css';
 import '@fontsource/lato/400-italic.css';
 
 import SiteLoading from './components/SiteLoading';
-import Home from '@/pages/Admin/Home';
-import NotFound from '@/pages/Admin/NotFound';
-import SignIn from '@/pages/Authentication/SignIn';
-import SignUp from '@/pages/Authentication/SignUp';
-import Offer from './pages/Authentication/Offer';
-import Confirm from './pages/Authentication/Confirm';
-import ResetPassword from './pages/Authentication/ResetPassword';
-import ClientDashboard from './pages/Client/ClientDashboard';
-import ClientProfile from './pages/Client/ClientProfile';
-import ClientTestStart from './pages/Client/ClientTestStart';
-import ClientQuiz from './pages/Client/ClientQuiz';
-import Dashboard from './pages/Admin/Dashboard';
-import Test from './pages/Admin/Test';
-import AllUser from './pages/Admin/AllUser';
-import User from './pages/Admin/User';
-import Archive from './pages/Admin/Archive';
-import Employees from './pages/Admin/Employees';
-import Address from './pages/Admin/Address';
-import InspectorAdmin from './pages/Admin/InspectorAdmin';
-import Category from './pages/Admin/Category';
-import Profile from './pages/Admin/Profile';
-import ConfirmSignUp from './pages/Authentication/ConfirmSignUp';
-import TestVisual from './components/test/testVisual';
+import PrivateRoute from './components/security/route/PrivateRoute';
+import PublicRoute from './components/security/route/PublicRoute';
+
+// Pages
+import {
+  Home, NotFound, SignIn, SignUp, Offer, Confirm, ResetPassword,
+  ClientDashboard, ClientProfile, ClientTestStart, ClientQuiz,
+  Dashboard, Test, AllUser, User, Archive, Employees, InspectorAdmin,
+  Category, Profile, ConfirmSignUp, TestVisual
+} from './pages';
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -36,47 +24,56 @@ function App() {
 
   useEffect(() => {
     setLoading(true);
-
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 200);
-
+    const timer = setTimeout(() => setLoading(false), 200);
     return () => clearTimeout(timer);
   }, [location]);
+
+  const renderRoute = (path: string, Component: React.FC, isPrivate: boolean = true) => {
+    const RouteWrapper = isPrivate ? PrivateRoute : PublicRoute;
+    return (
+      <Route
+        path={path}
+        element={
+          <RouteWrapper>
+            <Component />
+          </RouteWrapper>
+        }
+      />
+    );
+  };
 
   return (
     <>
       {loading && <SiteLoading />}
       <Routes>
-        <Route path="/" element={<Home />} />
+        {renderRoute("/", Home)}
         <Route path="*" element={<NotFound />} />
 
         {/* Authentication Routes */}
-        <Route path="/auth/SignIn" element={<SignIn />} />
-        <Route path="/auth/SignUp" element={<SignUp />} />
-        <Route path="/auth/confirm" element={<Confirm />} />
-        <Route path="/auth/confirm-signup" element={<ConfirmSignUp />} />
-        <Route path="/auth/reset-password" element={<ResetPassword />} />
-        <Route path="/auth/offer" element={<Offer />} />
+        {renderRoute("/auth/SignIn", SignIn, false)}
+        {renderRoute("/auth/SignUp", SignUp, false)}
+        {renderRoute("/auth/confirm", Confirm, false)}
+        {renderRoute("/auth/confirm-signup", ConfirmSignUp, false)}
+        {renderRoute("/auth/reset-password", ResetPassword, false)}
+        {renderRoute("/auth/offer", Offer, false)}
 
-        {/* Client Routes */}
-        <Route path="/client/dashboard" element={<ClientDashboard />} />
-        <Route path="/client/profile" element={<ClientProfile />} />
-        <Route path="/client/test/start" element={<ClientTestStart />} />
-        <Route path="/client/quiz/:id" element={<ClientQuiz />} />
+        {/* Protected Client Routes */}
+        {renderRoute("/client/dashboard", ClientDashboard)}
+        {renderRoute("/client/profile", ClientProfile)}
+        {renderRoute("/client/test/start", ClientTestStart)}
+        {renderRoute("/client/quiz/:id", ClientQuiz)}
 
-        {/* Admin Routes */}
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/category" element={<Category />} />
-        <Route path="/test" element={<Test />} />
-        <Route path="/tests" element={<TestVisual />} />
-        <Route path="/all-user" element={<AllUser />} />
-        <Route path="/user" element={<User />} />
-        <Route path="/archive/:id" element={<Archive />} />
-        <Route path="/employees" element={<Employees />} />
-        <Route path="/address" element={<Address />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/inspector-admin" element={<InspectorAdmin />} />
+        {/* Protected Admin Routes */}
+        {renderRoute("/dashboard", Dashboard)}
+        {renderRoute("/category", Category)}
+        {renderRoute("/test", Test)}
+        {renderRoute("/tests", TestVisual)}
+        {renderRoute("/all-user", AllUser)}
+        {renderRoute("/user", User)}
+        {renderRoute("/archive/:id", Archive)}
+        {renderRoute("/employees", Employees)}
+        {renderRoute("/profile", Profile)}
+        {renderRoute("/inspector-admin", InspectorAdmin)}
       </Routes>
     </>
   );

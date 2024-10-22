@@ -1,6 +1,6 @@
-import Layout from '@/components/clientDashboard/laytout';
+import Layout from '@/components/Dashboard/Layout';
 import { useNavigate } from 'react-router-dom';
-import { Modal } from 'antd';
+import { message, Modal } from 'antd';
 import { useEffect, useState, useCallback } from 'react';
 import { MdOutlineNotStarted } from 'react-icons/md';
 import { Helmet } from 'react-helmet';
@@ -13,7 +13,6 @@ import { config } from '@/helpers/functions/token';
 import TableLoading from '@/components/spinner/TableLoading';
 import defaultImage from '@/assets/images/default.png';
 export const getImage = `${baseUrl}api/videos/files`;
-import { message } from 'antd';
 import CheckLogin from '@/helpers/functions/checkLogin';
 
 interface AxiosError {
@@ -21,12 +20,12 @@ interface AxiosError {
 }
 
 const ClientTestStart: React.FC = () => {
-  CheckLogin();
+  CheckLogin
 
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const navigate = useNavigate();
-  const [cateId, setSelectedCateId] = useState(null);
+  const [cateId, setSelectedCateId] = useState<number | null>(null);
   const { isLoading, error, data } = useQuery({
     queryKey: ['getClientCategory'],
     queryFn: async () => {
@@ -67,11 +66,11 @@ const ClientTestStart: React.FC = () => {
   const getTests = useQuery({
     queryKey: ['getTests', config],
     queryFn: async () => {
-      const res = await axios.get(`${baseUrl}quiz/start/${cateId}`,config)
+      const res = await axios.get(`${baseUrl}quiz/start/${cateId}`, config)
       return res.data
     },
     onSuccess: () => {
-      
+
     }
   })
 
@@ -86,7 +85,7 @@ const ClientTestStart: React.FC = () => {
   if (error) return toast.error((error as AxiosError).message);
 
   return (
-    <Layout className="p-8 space-y-6">
+    <Layout>
       {isLoading ? (
         <div className="flex justify-center absolute top-[42%] left-[57%]">
           <TableLoading />
@@ -101,7 +100,7 @@ const ClientTestStart: React.FC = () => {
           </div>
           {Array.isArray(data) &&
             data.map((item: ClientCategory, index: number) => (
-              <div key={index} className="border-[0.5px] items-center shadow-xl relative border-black bg-white rounded-md py-6 px-4 w-full">
+              <div key={index} className="border-[0.5px] items-center mb-5 shadow-xl relative border-black bg-white rounded-md py-6 px-4 w-full">
                 <div className="px-3 flex items-center space-x-12">
                   <div>
                     <img
@@ -117,7 +116,7 @@ const ClientTestStart: React.FC = () => {
                       <span className="text-gray-600 font-semibold">
                         Yo'nalish
                       </span>
-                      <span className="text-gray-700 font-medium">
+                      <span className="text-gray-700 font-semibold">
                         {item.name}
                       </span>
                     </div>

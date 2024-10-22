@@ -14,25 +14,28 @@ import { IoMdCloseCircleOutline } from 'react-icons/io';
 
 import type { PaginationProps } from 'antd';
 import { Pagination } from 'antd';
+import { regionType, districtType } from '@/helpers/types/AddressType';
 
 // Accessibility setup
 Modal.setAppElement('#root');
 
 function AllUser() {
-  // Pagination codelari
+  // Pagination callback
   const onShowSizeChange: PaginationProps['onShowSizeChange'] = (current, pageSize) => {
     console.log(current, pageSize);
   };
 
-  // Statelar
+  // State variables
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUser, setSelectedUser] = useState<UserNatijasi | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const itemsPerPage = 8; // pagedagi userlar soni
+  const itemsPerPage = 10; // Number of users per page
+  const [selectedRegion, setSelectedRegion] = useState<string>(''); // For storing selected region ID
+  const [districts, setDistricts] = useState<districtType[]>([]); // For storing districts
 
-  // Foydalanuvchilar malumotlarini olish
-  const { data: usersData, refetch } = useQuery({
+  // Fetching users data
+  const { data: usersData, refetch: refetchUsers } = useQuery({
     queryKey: ['User', config],
     queryFn: async () => {
       const res = await axios.get(getUser, config);
@@ -41,41 +44,61 @@ function AllUser() {
     }
   });
 
-  // Komponent yuklanganda foydalanuvchilar malumotlarini update qilish
+  // Fetching region data
+  const { data: usersRegion, refetch: refetchRegions } = useQuery({
+    queryKey: ['region', config],
+    queryFn: async () => {
+      const res = await axios.get('http://164.92.165.18:8090/region/getAllRegionPage?page=0&size=10', config);
+      const data = res.data as { body: { body: regionType[] } };
+      return data.body.body || [];
+    }
+  });
+
+  // Fetching districts based on selected region
+  const fetchDistricts = async (regionId: string) => {
+    try {
+      const res = await axios.get(
+        `http://164.92.165.18:8090/district/getAllDistrictPage?regionId=${regionId}&page=0&size=10`,
+        config
+      );
+      const data = res.data as { body: { body: districtType[] } };
+      setDistricts(data.body.body || []);
+    } catch (error) {
+      console.error('Failed to fetch districts', error);
+    }
+  };
+
   useEffect(() => {
-    refetch();
-  }, [refetch]);
+    refetchUsers();
+    refetchRegions();
+  }, [refetchUsers, refetchRegions]);
 
-  // Foydalanuvchilar ruyxati
-  const GetUser: UserNatijasi[] = usersData ?? [];
+  // User list and filtering logic
+  const users = usersData ?? [];
+  const regions = usersRegion ?? [];
 
-  // Search filteri
-  const filteredUsers = GetUser.filter((user) =>
+  const filteredUsers = users.filter((user) =>
     `${user.firstName} ${user.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Pagination assets
+  // Pagination logic
   const indexOfLastUser = currentPage * itemsPerPage;
   const indexOfFirstUser = indexOfLastUser - itemsPerPage;
   const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
 
-  // Umumiy page soni
-  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
-  console.log(totalPages);
-
-  // Sahifa uzgarganda chaqiriladigan funksiya
+  // Page change handler
   const handlePageChange = (page: number, pageSize: number) => {
     setCurrentPage(page);
     console.log(`Current page: ${page}, Page size: ${pageSize}`);
   };
 
-  // Foydalanuvchi malumotlari
+  // User click handler
   const handleUserClick = (user: UserNatijasi) => {
     setSelectedUser(user);
     setIsModalOpen(true);
   };
 
-  // Modal yopish
+  // Modal close handler
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedUser(null);
@@ -90,7 +113,7 @@ function AllUser() {
       <Layout>
         <div>
           <div className="flex justify-center pt-7">
-            <div className="px-8">
+            <div>
               <div className="w-max">
                 <header className="flex items-center max-lg:flex-col justify-between">
                   <h3 className="font-bold text-[27px]">Foydalanuvchilar</h3>
@@ -115,16 +138,28 @@ function AllUser() {
                       onChange={(e) => setSearchQuery(e.target.value)}
                     />
                   </div>
-
-                  <select className="max-w-[350px] w-[375px] text-gray-400 rounded-md h-[50px] border-gray-400">
-                    <option value="">Tumanni tanlang</option>
-                    <option value="">example 1</option>
-                    <option value="">example 2</option>
+                  <select
+                    className="max-w-[350px] w-[375px]  rounded-md h-[50px] border-gray-400"
+                    onChange={(e) => {
+                      setSelectedRegion(e.target.value);  // Set selected region
+                      fetchDistricts(e.target.value);     // Fetch districts based on selected region
+                    }}
+                    value={selectedRegion}
+                  >
+                    <option value="">Viloyatni tanlash</option>
+                    {regions.map((region, index) => (
+                      <option key={index} value={region.id}>
+                        {region.name}
+                      </option>
+                    ))}
                   </select>
-                  <select className="max-w-[350px] w-[375px] text-gray-400 rounded-md h-[50px] border-gray-400">
-                    <option value="">Viloyatni tanlang</option>
-                    <option value="">example 1</option>
-                    <option value="">example 2</option>
+                  <select className="max-w-[350px] w-[375px]  rounded-md h-[50px] border-gray-400">
+                    <option value="">Tumanni tanlang</option>
+                    {districts.map((district, index) => (
+                      <option key={index} value={district.id}>
+                        {district.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -164,7 +199,7 @@ function AllUser() {
                   <Pagination
                     onShowSizeChange={onShowSizeChange}
                     defaultCurrent={1}
-                    total={20}
+                    total={filteredUsers.length}
                     onChange={handlePageChange}
                   />
                 </div>

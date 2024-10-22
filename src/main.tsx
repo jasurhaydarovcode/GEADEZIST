@@ -9,6 +9,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { ToastContainer } from 'react-toastify';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import 'aos/dist/aos.css';
+// import { CursorProtect, DevToolsBlocker } from 'react-mower';
 
 const queryClient = new QueryClient();
 
@@ -16,7 +17,11 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <App />
+        {/* <CursorProtect> */}
+          {/* <DevToolsBlocker> */}
+            <App />
+          {/* </DevToolsBlocker> */}
+        {/* </CursorProtect> */}
         <ToastContainer
           position="top-center"
           autoClose={2000}

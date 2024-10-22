@@ -26,7 +26,7 @@ import { useNavigate } from 'react-router-dom';
 import Spinner from '@/components/spinner/Spinner';
 import { Helmet } from 'react-helmet';
 import TableLoading from '@/components/spinner/TableLoading';
-import { message, Pagination } from 'antd';
+import { Pagination } from 'antd';
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 'flowbite-react';
 import CheckLogin from '@/helpers/functions/checkLogin';
 
@@ -68,23 +68,19 @@ const Dashboard = () => {
       const data = res.data.body
       return data
     },
-    onError: (error: any) => {
-      toast.error(error.message);
+    onError: (error: unknown) => { 
+      toast.error((error as Error).message);
     },
   });
   useEffect(() => {
     queryClient.refetchQueries('dashboardStatic');
-  }, []);
+  }, [queryClient]);
 
   // dashboard static data
   const staticData: GetStaticsAllResponse =
     dashboardStatic.data as GetStaticsAllResponse;
   console.log(staticData);
 
-  // dashboard category filter
-  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedCategory(e.target.value);
-  };
   // dashboard region filter
   const handleRegionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedRegion(e.target.value);
@@ -176,7 +172,7 @@ const Dashboard = () => {
   const getClient = useQuery({
     queryKey: ['getClient', config],
     queryFn: async () => {
-     
+
       const res = await axios.get<GetClientAllResponse[]>(`${getClientAll}page=${currentPage - 1}&size=${pageSize}`, config);
       const data: GetClientAllResponse[] | null = res?.data?.body?.body as GetClientAllResponse[] | null;
       return data;
@@ -244,22 +240,20 @@ const Dashboard = () => {
   }, [checkRoleClient]);
 
   const handleSearchUser = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const searchValue = e.target.value.toLowerCase().trim(); // Matndagi bo'shliqlarni olib tashlash
-  
-    // Agar qidiruv so'zi mavjud bo'lsa
+    const searchValue = e.target.value.toLowerCase().trim();
+
     if (searchValue !== '') {
       const filteredData = allClientData?.filter((event) =>
-        (event.email && event.email.toLowerCase().includes(searchValue)) || 
-        (event.firstName && event.firstName.toLowerCase().includes(searchValue)) || 
+        (event.email && event.email.toLowerCase().includes(searchValue)) ||
+        (event.firstName && event.firstName.toLowerCase().includes(searchValue)) ||
         (event.lastName && event.lastName.toLowerCase().includes(searchValue))
       );
       setClientData(filteredData || []);
     } else {
-      // Qidiruv matni bo'sh bo'lsa, jadvalni asl holatiga qaytarmasdan saqlaymiz
       setClientData(allClientData);
     }
   };
- 
+
 
   return (
     <div>

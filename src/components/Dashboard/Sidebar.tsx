@@ -10,22 +10,30 @@ const Sidebar = () => {
       name: 'Boshqaruv paneli',
       pathName: 'dashboard',
     },
+    role === 'ROLE_CLIENT' && {
+      name: 'Boshqaruv paneli',
+      pathName: 'client/dashboard',
+    },
+    role === 'ROLE_CLIENT' && {
+      name: 'Test',
+      pathName: 'client/test/start',
+    },
     (role === 'ROLE_SUPER_ADMIN' && {
       name: 'Kategoriya',
       pathName: 'category',
     }) ||
-      (role === 'ROLE_TESTER' && {
-        name: 'Kategoriya',
-        pathName: 'category',
-      }),
+    (role === 'ROLE_TESTER' && {
+      name: 'Kategoriya',
+      pathName: 'category',
+    }),
     (role === 'ROLE_SUPER_ADMIN' && {
       name: 'Test',
       pathName: 'test',
     }) ||
-      (role === 'ROLE_TESTER' && {
-        name: 'Test',
-        pathName: 'test',
-      }),
+    (role === 'ROLE_TESTER' && {
+      name: 'Test',
+      pathName: 'test',
+    }),
     role === 'ROLE_SUPER_ADMIN' && {
       name: 'Foydalanuvchilar',
       pathName: 'all-user',
@@ -56,7 +64,7 @@ const Sidebar = () => {
     <div className=''>
       {/* Burger Menu Button for mobile view */}
       <button
-        className="md:hidden p-4 fixed top-0 left-0 z-50"
+        className="md:hidden bg-gray-100 rounded-xl m-3 p-3 fixed top-0 left-0 z-40"
         onClick={toggleSidebar}
       >
         {isSidebarOpen ? (
@@ -71,7 +79,6 @@ const Sidebar = () => {
         className={`fixed top-0 left-0 w-80 h-full bg-gray-100 px-4 py-8 transition-transform duration-300 ease-in-out max-md:z-40
                 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:static`}
       >
-        {/* Close Button (only visible on mobile) */}
         <button
           className="absolute top-4 right-4 text-3xl md:hidden"
           onClick={toggleSidebar}
@@ -83,16 +90,15 @@ const Sidebar = () => {
           <img src={Logo} className="w-52" alt="Geodeziya Logo" />
         </Link>
 
-        {/* Client Sidebar content */}
-        <ul className="mt-20 ">
+        <ul className="mt-10 ">
           {sidebarItems.map((item, index) => (
             item && (
               <Link to={`/${item.pathName}`} key={index}>
                 <li
                   className={
-                    pathname === item.pathName
-                      ? 'shadow-xl hover:shadow-2xl bg-gray-300 text-white transition duration-150 py-5 mb-5'
-                      : 'border shadow-xl hover:shadow-2xl transition duration-150 py-5 mb-5'
+                    pathname === `/${item.pathName}`
+                      ? 'shadow-xl bg-gray-300 text-white transition duration-150 py-5 mb-5'
+                      : 'border shadow-xl transition duration-150 py-5 mb-5 hover:bg-gray-200 '
                   }
                 >
                   <span className="p-4 text-xl text-gray-500">{item.name}</span>
@@ -103,7 +109,6 @@ const Sidebar = () => {
         </ul>
       </div>
 
-      {/* Overlay for mobile when sidebar is open */}
       {isSidebarOpen && (
         <div
           className="fixed inset-0 bg-black opacity-50 z-30 md:hidden"

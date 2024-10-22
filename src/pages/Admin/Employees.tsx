@@ -22,7 +22,7 @@ function Employees() {
     let digits = value.replace(/\D/g, '');
 
     if (!digits.startsWith('998')) {
-      digits = '998' + digits;
+      digits = '998';
     }
 
     if (digits.length <= 3) {
@@ -230,10 +230,10 @@ function Employees() {
             {<TableLoading />}
           </div>
         ) : (
-          <div className="p-5">
-            <div className="flex justify-between">
+          <div className="p-8">
+            <div className="flex justify-between items-center">
               <h1 className="text-3xl font-bold font-sans">Hodimlar</h1>
-              <p className="font-sans text-gray-700">
+              <p className="font-sans text-gray-700 text-lg">
                <Link to={'/'}>Boshqaruv paneli / </Link> 
                 <span className="text-blue-700">Hodimlar</span>
               </p>
@@ -263,7 +263,7 @@ function Employees() {
                 {/* Modal mazmuni */}
                 <div className="mb-4">
                   <select className="border w-full p-2 rounded" ref={role}>
-                    <option disabled value="">Admin toifasini tanlang</option>
+                    <option disabled selected value="">Admin toifasini tanlang</option>
                     <option value="ROLE_TESTER">Tester admin</option>
                     <option value="ROLE_ADMIN">Tekshiruvchi admin</option>
                   </select>
