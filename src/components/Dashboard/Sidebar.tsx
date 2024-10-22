@@ -90,7 +90,7 @@ const Sidebar = () => {
           <img src={Logo} className="w-52" alt="Geodeziya Logo" />
         </Link>
 
-        <ul className="mt-20 ">
+        <ul className="mt-10 ">
           {sidebarItems.map((item, index) => (
             item && (
               <Link to={`/${item.pathName}`} key={index}>
