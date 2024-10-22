@@ -18,7 +18,7 @@ const Card: React.FC<CardProps> = ({
   buttonText,
   status,
 }) => {
-  
+
   return (
     <div className="card glass w-full max-w-[440px] mx-auto">
       <figure>
@@ -70,10 +70,6 @@ const Card: React.FC<CardProps> = ({
 };
 
 const ClientDashboard: React.FC = () => {
-  const role = localStorage.getItem('role')
-  useEffect(() => {
-    confirm("Ma'lumotlar saqlansinmi ?")
-  }, [role])
   const cards: CardProps[] = [
     {
       image: 'https://via.placeholder.com/150',
