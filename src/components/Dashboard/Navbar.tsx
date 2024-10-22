@@ -41,8 +41,8 @@ const Navbar: React.FC = () => {
       const res = await axios.get<GetMeResponse>(getMeUser, config);
       return res.data?.body;
     },
-    staleTime: 0, // har doim yangi ma'lumot olish
-    cacheTime: 0, // cache saqlanmaydi
+    staleTime: 0,
+    cacheTime: 0,
     enabled: !!localStorage.getItem('token'),
     onSuccess: (data) => {
       setGetUser(data);
@@ -107,7 +107,7 @@ const Navbar: React.FC = () => {
           <div className="flex gap-4 items-center cursor-pointer">
             <div>
               <h1 className="text-gray-500 mr-2 text-md font-semibold">
-                {getUser?.fullName && getUser.fullName.length > 20 ? getUser.fullName.substring(0, 15) + "..." : getUser?.fullName || 'Noma'}
+                {getUser?.fullName && getUser.fullName.length > 20 ? getUser.fullName.substring(0, 15) + "..." : getUser?.fullName || 'Loading Name'}
               </h1>
               <span>
                 {getMe.isLoading
