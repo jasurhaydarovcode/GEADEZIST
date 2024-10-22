@@ -42,11 +42,10 @@ const User: React.FC = () => {
 
   const GetResult: UserNatijasi[] = usersData ?? [];
 
-  // Foydalanuvchilarni searchQuery va selectedStatus bo'yicha filtrlaymiz
   const filteredUsers = GetResult.filter(
     (user) =>
       `${user.fullName} ${user.phoneNumber}`.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (selectedStatus === '' || user.status === selectedStatus) // Status bo'yicha filtr
+      (selectedStatus === '' || user.status === selectedStatus)
   );
 
   const showUserDetails = (user: UserNatijasi) => {
@@ -62,7 +61,6 @@ const User: React.FC = () => {
     setIsSaveButtonDisabled(true);
   };
 
-  // Inputni boshqarish va tekshirish
   const handleRatingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     const numericValue = parseInt(value, 10);
@@ -70,11 +68,11 @@ const User: React.FC = () => {
     if (isNaN(numericValue) || numericValue < 1 || numericValue > 10) {
       setRating('');
       setErrorMessage('1 dan 10 gacha son kiriting');
-      setIsSaveButtonDisabled(true); // Noto'g'ri son kiritsa, tugma o'chiriladi
+      setIsSaveButtonDisabled(true);
     } else {
       setRating(value);
       setErrorMessage('');
-      setIsSaveButtonDisabled(false); // To'g'ri son kiritsa, tugma faollashadi
+      setIsSaveButtonDisabled(false);
     }
   };
 
@@ -146,7 +144,7 @@ const User: React.FC = () => {
                   </div>
                 </header>
 
-                <div className="flex justify-end pt-5 gap-5">
+                <div className="flex justify-between pt-5 gap-5">
                   <div className="flex">
                     <label htmlFor="inp1">
                       <FcSearch className="absolute mt-4 ml-3 text-[20px]" />
@@ -160,20 +158,12 @@ const User: React.FC = () => {
                       onChange={(e) => setSearchQuery(e.target.value)}
                     />
                   </div>
-                  <div className="flex">
-                    <input
-                      type="text"
-                      className="min-w-[260px] w-[360px] rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]"
-                      placeholder="Tumanni tanlang"
-                    />
-                    <SlArrowDown className="absolute ml-[320px] mt-4" />
-                  </div>
 
                   {/* Status Select */}
                   <select
                     className="max-w-[350px] w-[375px] text-gray-40 rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]"
                     value={selectedStatus}
-                    onChange={(e) => setSelectedStatus(e.target.value)} // Statusni o'zgartirish
+                    onChange={(e) => setSelectedStatus(e.target.value)}
                   >
                     <option value="">Statusni tanlang</option>
                     <option value="waiting">Kutilmoqda</option>
@@ -183,10 +173,10 @@ const User: React.FC = () => {
                 </div>
 
                 <div className="py-5">
-                  <table className="mx-3 ml-[0px] w-[100%] bg-white border border-gray-300">
+                  <table className="mx-3 ml-[0px] w-[100%] bg-white border border-gray-300 border-separate border-spacing-2">
                     <thead>
                       <tr className="bg-gray-100">
-                        <th className="text-left px-4 py-7">T/P</th>
+                        <th className="text-left px-4 py-2">T/P</th>
                         <th className="text-left px-4 py-2">Tuliq ismi</th>
                         <th className="text-left px-4 py-2">Category</th>
                         <th className="text-left px-4 py-2">Telefon</th>
@@ -203,8 +193,23 @@ const User: React.FC = () => {
                           <td className="px-4 py-2">{item.categoryName}</td>
                           <td className="px-4 py-2">{item.phoneNumber}</td>
                           <td className="px-4 py-2">{item.expiredDate}</td>
-                          <td className="px-4 py-2 bg-yellow-400 rounded-[15px]">{item.status}</td>
-                          <td className="px-4 py-2">
+
+                          <td
+                            className={`px-4 py-2 rounded-[10px] ${item.status === "WAITING"
+                              ? "bg-yellow-400"
+                              : item.status === "APPROVED"
+                                ? "bg-green-400"
+                                : ""
+                              }`}
+                          >
+                            {item.status === "WAITING"
+                              ? "Kutilmoqda"
+                              : item.status === "APPROVED"
+                                ? "Tasdiqlangan"
+                                : item.status}
+                          </td>
+
+                          <td className="px-4">
                             <Dropdown overlay={menu(item)} trigger={['click']} placement="bottomRight">
                               <Button icon={<EllipsisOutlined />} />
                             </Dropdown>
@@ -218,7 +223,6 @@ const User: React.FC = () => {
             </div>
           </div>
 
-          {/* Modal for confirming result */}
           <Modal
             title="Natijani tasdiqlash"
             visible={isModalVisible}
