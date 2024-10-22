@@ -14,12 +14,11 @@ import TableLoading from "@/components/spinner/TableLoading";
 import { Answer } from "@/helpers/types/AddQuizType";
 import { Link, useNavigate } from "react-router-dom";
 import CheckLogin from "@/helpers/functions/checkLogin";
-import defaultImage from "../../assets/images/default.png";
 import { Category } from "@/helpers/types/Category";
 import { toast } from "react-toastify";
 
 function Test() {
-  const queryClient = useQueryClient()
+  const queryGet = useQueryClient()
   CheckLogin
   const [saveCates, setSaveCates] = useState<Category[]>([]);
   const getCategory = useQuery({
@@ -46,7 +45,7 @@ function Test() {
   // bu kod qoshish btn uchun + -funck
   const [answers, setAnswers] = useState<Answer[]>([
     { id: Date.now(), value: "" },
-  ]); // Start with one input
+  ]); 
   // test get
   const [datas, useDatas] = useState<FetchedTest[]>([]);
 
@@ -55,19 +54,17 @@ function Test() {
   const [kategoriya, setKategoriya] = useState<string | null>(null);
   const [nameSearch, setnameSearch] = useState<string | null>(null);
   const [testlar, setTestlar] = useState<any[] | null>(null); // testlar ma'lumotlari massiv ekanini aniqladik
-
+  useEffect(() => {
+  },[nameSearch])
   const searchTest2 = () => {
-    if (nameSearch && nameSearch.trim() !== "") {
-      // testlar mavjud bo'lsa va testlar massiv bo'lsa, filter qilamiz
+    if (nameSearch) {
       const newData = testlar?.filter((item) =>
         item.name?.toLowerCase().includes(nameSearch.toLowerCase())
       ) ?? []
-      setTestlar(newData);
+      useDatas(newData);
       console.log(testlar);
-
     } else if (nameSearch == '') {
-      // Input bo'sh bo'lsa, ma'lumotlarni qayta yuklash
-      setTestlar(datas); // `useDatas` ma'lumotlarni yuklaydi
+      setTestlar(datas); 
     }
     if (kategoriya && kategoriya !== '') {
       const kategoriyaData = testlar?.filter((item) =>
@@ -82,46 +79,14 @@ function Test() {
       setTestlar(turiData);
     }
   };
-
   useEffect(() => {
-
-  }, [nameSearch, kategoriya])
-
-
+    searchTest2();
+  }, [nameSearch, kategoriya,])
   // search
 
   // delete
-  const [testID, setTestID] = useState<number | string>('')
-  function isdelete(testID: number | string) {
-    axios.delete(baseUrl + 'question/' + testID, config)
-      .then(res => {
-        console.log(res);
-      }).catch(err => {
-        console.error(err);
-
-      })
-  }
-  // delete
-
-  const handleAddAnswer = () => {
-    setAnswers([...answers, { id: Date.now(), value: "" }]); // Add a new input
-  };
-  const handleRemoveAnswer = () => {
-    if (answers.length > 1) {
-      // Ensure there's at least one input
-      setAnswers(answers.slice(0, -1));
-    }
-  };
-  function removeInp() {
-    if (testType === "Hisoblangan natija") {
-      setAnswers(answers.slice(0, 1));
-    }
-  }
-  useEffect(() => {
-    removeInp();
-    searchTest2();
-  }, [testType, turi, kategoriya, nameSearch, datas]);
-
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+  const [testID, setTestID] = useState<number | string>(''); // State to hold the test ID to be deleted
   const testData = useQuery({
     queryKey: ['testData', config],
     queryFn: async () => {
@@ -136,6 +101,45 @@ function Test() {
   useEffect(() => {
     testData.refetch()
   }, [testData.data])
+  const isDelete = useMutation({
+    mutationFn: async () => {
+      const res = axios.delete(`${baseUrl}question/${testID}`, config)
+      return res.data
+    },
+    onSuccess() {
+      toast.success("Test o'chirildi")
+      setIsModalOpen(false)
+    },
+    onError(error: any) {
+      toast.error(error.response.data.message)
+    }
+  })
+  
+  useEffect(() => {
+    queryGet.refetchQueries('testData')
+  },[queryGet, isDelete, isModalOpen])
+  function showDeleteModal(id: number | string) {
+    setTestID(id); 
+    setIsModalOpen(true); 
+  }
+  // delete
+    const handleAddAnswer = () => {
+    setAnswers([...answers, { id: Date.now(), value: "" }]); // Add a new input
+  };
+  const handleRemoveAnswer = () => {
+    if (answers.length > 1) {
+      setAnswers(answers.slice(0, -1));
+    }
+  };
+  function removeInp() {
+    if (testType === "Hisoblangan natija") {
+      setAnswers(answers.slice(0, 1));
+    }
+  }
+  useEffect(() => {
+    removeInp();
+  }, [testType, turi, kategoriya, nameSearch, datas]);
+
 
   // edit 
   const difficulty = useRef<string>('');
@@ -158,9 +162,6 @@ function Test() {
       },
     ],
   };
-
-  // updateQuestion(1, updatedData);
-
   function isEdit(ID: string) {
     const updateQuestion = async (ID: string | number) => {
       try {
@@ -184,7 +185,6 @@ function Test() {
     queryFn: testData,
     onSuccess: (response) => {
       console.log(response);
-
       const fetchedTests = response.body.body.map((item, index) => ({
         name: item.name,
         key: item.id.toString(),
@@ -202,18 +202,9 @@ function Test() {
   });
 
   const categoryNames = [
-    {
-      value: "SUM",
-      name: "Hisoblangan natija",
-    },
-    {
-      value: "ONE_CHOICE",
-      name: "Bir to'g'ri javobli test",
-    },
-    {
-      value: "ANY_CORECT",
-      name: "Ko'p to'g'ri javobli test",
-    },
+    { value: "SUM", name: "Hisoblangan natija", },
+    { value: "ONE_CHOICE", name: "Bir to'g'ri javobli test", },
+    { value: "ANY_CORECT", name: "Ko'p to'g'ri javobli test", },
   ];
 
   // edit modal
@@ -222,11 +213,9 @@ function Test() {
 
   const editMod = () => {
     setConfirmLoad(true);
-    // Malumotlarni yuborish yoki boshqa amallar
     setTimeout(() => {
       setConfirmLoad(false);
       isEdit(editTestID)
-      // ha(false);
     }, 2000);
   };
   const closeditmod = () => seteditModal(!editModal);
@@ -236,18 +225,18 @@ function Test() {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const handleDelete = () => {
     setDeleteModalVisible(false);
-    isdelete(testID)
+    isDelete.mutate(testID)
   };
 
   const handleDeleteCancel = () => {
     setDeleteModalVisible(false);
   };
 
-  const showModal = () => {
+  function showModal  () {
     setOpen(true);
   };
 
-  const handleCancel = () => {
+  function handleCancel () {
     setOpen(false);
   };
 
@@ -300,10 +289,7 @@ function Test() {
 
   return (
     <div>
-      <Helmet>
-        <title>Testlar</title>
-      </Helmet>
-
+      <Helmet><title>Testlar</title></Helmet>
       <Layout>
         {isLoading ? (
           <div className="flex justify-center items-center h-screen">
@@ -366,7 +352,7 @@ function Test() {
                     <option value="EASY" className="text text-black">
                       Oson
                     </option>
-                    <option value="NEDIUM" className="text text-black">
+                    <option value="MEDIUM" className="text text-black">
                       O'rta
                     </option>
                   </select>
@@ -395,7 +381,7 @@ function Test() {
                 </div>
 
                 <div>
-                  {testType !== null && // Show inputs only when testType is not null
+                  {testType !== null && 
                     (testType === "SUM" ||
                       testType === "ANY_CORRECT") &&
                     answers.map((answer: Answer, index) => (
@@ -408,7 +394,7 @@ function Test() {
                           type="checkbox"
                           checked={
                             testType === "SUM" || answer.checked
-                          } // Automatically checked for "Hisoblangan natija", manually for multiple answers
+                          } 
                           onChange={(e) => {
                             if (testType === "ANY_CORRECT") {
                               const updatedAnswers = answers.map((ans, i) =>
@@ -419,7 +405,7 @@ function Test() {
                               setAnswers(updatedAnswers);
                             }
                           }}
-                          disabled={testType === "SUM"} // Disable for "Hisoblangan natija"
+                          disabled={testType === "SUM"} 
                           className="mr-3 accent-blue-500"
                         />
                         <input
@@ -433,18 +419,8 @@ function Test() {
                         </label>
                         {testType === "ANY_CORRECT" && (
                           <>
-                            <button
-                              onClick={handleRemoveAnswer}
-                              className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300 ml-2"
-                            >
-                              -
-                            </button>
-                            <button
-                              onClick={handleAddAnswer}
-                              className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300"
-                            >
-                              +
-                            </button>
+                            <button onClick={handleRemoveAnswer} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300 ml-2" > - </button>
+                            <button onClick={handleAddAnswer} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300"  >  +</button>
                           </>
                         )}
                       </div>
@@ -452,7 +428,7 @@ function Test() {
                 </div>
 
                 <div>
-                  {testType !== null && // Show inputs only when testType is not null
+                  {testType !== null && 
                     testType === "ONE_CHOICE" &&
                     answers.map((answer) => (
                       <div
@@ -475,18 +451,8 @@ function Test() {
                           Choose file
                         </label>
                         <>
-                          <button
-                            onClick={handleRemoveAnswer}
-                            className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300 ml-2"
-                          >
-                            -
-                          </button>
-                          <button
-                            onClick={handleAddAnswer}
-                            className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300"
-                          >
-                            +
-                          </button>
+                          <button onClick={handleRemoveAnswer} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300 ml-2" > - </button>
+                          <button onClick={handleAddAnswer} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300"  >  +</button>
                         </>
                       </div>
                     ))}
@@ -565,8 +531,6 @@ function Test() {
               </div>
             </div>
             {/* table  */}
-
-
             <Table hoverable>
               <TableHead>
                 <TableHeadCell>T/P</TableHeadCell>
@@ -589,7 +553,7 @@ function Test() {
                   <TableCell>{item.createdByName}</TableCell>
                   <TableCell className="flex items-center gap-3">
                     <EditOutlined />
-                    <DeleteOutlined />
+                    <DeleteOutlined onClick={() => showDeleteModal(item.id)} />
                     <EyeOutlined onClick={() => {
                       navigate('/tests', { state: { catygoria: item.categoryName, savol: item.name } })
                     }
@@ -788,20 +752,15 @@ function Test() {
         {/* Qolgan kontentni modal ichiga joylang */}
       </Modal>
 
-      <Modal
-        open={deleteModalVisible}
-        onOk={handleDelete}
-        onCancel={handleDeleteCancel}
-        okText="O'chirish"
-        cancelText="Yopish"
-        maskClosable={false}
-        okButtonProps={{ style: { backgroundColor: 'black', color: 'white' }, }}
-        cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white' }, }}
-      >
-        <p className="text-center text-xl my-5 font-semibold">
-          Tumanni o'chirmoqchimisiz?
-        </p>
-      </Modal>
+      {/* Delete modal */}
+      <Modal 
+          title="Delete Confirmation" 
+          visible={isModalOpen} 
+          onOk={() => isDelete.mutate()} // Calls the delete function when confirmed
+          onCancel={() => setIsModalOpen(false)} // Close modal on cancel
+        >
+          <p>Testni o'chirmoqchimisiz?</p>
+        </Modal>
     </div>
   );
 }
