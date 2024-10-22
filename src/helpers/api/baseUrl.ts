@@ -43,8 +43,9 @@ export const deleteImage = `${baseUrl}image/delete`;
 export const updateImage = `${baseUrl}image/update`;
 
 // ==================== Statistics-Controller ====================
-// User dashboard reultlari
+// User dashboard resultlari
 export const getUserDashboard = `${baseUrl}statistic/user-dashboard`;
+export const getResultsClient = `${baseUrl}statistic/user-dashboard/?page=0&size=10`
 
 // SUPTER ADMIN dashboard userlarni resutlari filter bo'yicha
 export const superAdminDashboardUsersResultFilter = `${baseUrl}statistic/filter`;

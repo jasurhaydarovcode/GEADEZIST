@@ -1,75 +1,43 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import Layout from '@/components/Dashboard/Layout';
-import { CardProps } from '../../helpers/types/CardProp';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { baseUrl } from '@/helpers/api/baseUrl';
+import { getResultsClient, getMeUser } from '@/helpers/api/baseUrl';
+import { useQuery } from 'react-query';
+import { config } from '@/helpers/functions/token';
+import axios from 'axios';
+import { ClientRezType } from '@/helpers/types/ClientRezultType';
+import { defaultImageDash } from '@/helpers/imports/images';
+import { GetMeResponse } from '@/helpers/types/GetMetype';
 
-const Card: React.FC<CardProps> = ({
-  image,
-  title,
-  answers,
-  time,
-  score,
-  date,
-  sections,
-  buttonText,
-  status,
-}) => {
-
-  return (
-    <div className="card glass bg-white w-full max-w-[440px] mx-auto">
-      <figure>
-        <img
-          src={image}
-          alt={title}
-          className="w-full h-64 object-cover"
-        />
-      </figure>
-      <div className="card-body">
-        <h2 className="card-title text-center text-red-500">{title}</h2>
-        <p className="text-gray-600">
-          <strong>Tog'ri Javoblar:</strong> {answers}
-        </p>
-        <p className="text-gray-600">
-          <strong>Vaqt Davomiyligi:</strong> {time} (daq.)
-        </p>
-        <p className="text-gray-600">
-          <strong>Tuplangan Ball:</strong> {score}
-        </p>
-        <p className="text-gray-600">
-          <strong>Test Topshirilgan vaqt:</strong> {date}
-        </p>
-        <h4 className="text-red-500 text-center text-lg font-semibold mt-2">
-          Qushimcha Yo'nashlardan Ishlanganlar
-        </h4>
-        <div className="text-gray-600">
-          {sections.map((section, index) => (
-            <p key={index}>
-              {section.name}:{" "}
-              <span className="text-green-500">{section.completed}</span>/
-              {section.total}
-            </p>
-          ))}
-        </div>
-        <div className="card-actions justify-end mt-4">
-          <button
-            className={`btn w-full ${status === 'confirmed'
-              ? 'btn-success'
-              : 'btn-warning'
-              }`}
-          >
-            {buttonText}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
+async function getConfig() {
+  const token = await localStorage.getItem('token');
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+}
 
 const ClientDashboard: React.FC = () => {
-  const [cards, setCards] = useState<CardProps[]>([]);
+  const [cards, setCards] = useState<ClientRezType[]>([]);
+  const [getUser, setGetUser] = useState<GetMeResponse | null>(null);
   const navigate = useNavigate();
+
+  const getMe = useQuery({
+    queryKey: ['getMe'],
+    queryFn: async () => {
+      const config = await getConfig();
+      const res = await axios.get<GetMeResponse>(getMeUser, config);
+      return res.data?.body;
+    },
+    onSuccess: (data) => {
+      setGetUser(data);
+    },
+    onError: (error) => {
+      console.error('Failed to fetch user data:', error.message);
+    },
+  });
 
   const checkRoleClient = useCallback(() => {
     const role = localStorage.getItem('role');
@@ -82,21 +50,22 @@ const ClientDashboard: React.FC = () => {
     checkRoleClient();
   }, [checkRoleClient]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`${baseUrl}/statistic/user-dashboard/`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json() as CardProps[];
-        setCards(data);
-      } catch (error) {
-        console.error('Error fetching dashboard data:', error);
-      }
-    };
+  const fetchCards = useQuery({
+    queryKey: ['getResults', config],
+    queryFn: async () => {
+      const res = await axios.get(getResultsClient, config) as { data: { body: { body: ClientRezType[] } } };
+      return res.data.body.body;
+    },
+    onSuccess: (data) => {
+      setCards(data);
+    },
+    onError: (error) => {
+      console.error(error.message);
+    },
+  });
 
-    fetchData();
+  useEffect(() => {
+    fetchCards.refetch();
   }, []);
 
   return (
@@ -113,12 +82,56 @@ const ClientDashboard: React.FC = () => {
           <div>
             <div className="px-16">
               <h4 className="font-semibold text-xl text-gray-600">
-                Foydalan Foydalaniyev
+                {getUser?.fullName || 'Foydalanuvchi nomi yuklanmoqda...'}
               </h4>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-              {cards.map((card, index) => (
-                <Card key={index} {...card} />
+              {cards && cards.length > 0 && cards.map((card: ClientRezType, index) => (
+                <div key={index} className="card bg-white glass w-96 mx-auto">
+                  <figure>
+                    <img
+                      src={card.categoryImage || defaultImageDash}
+                      alt="Category Image!"
+                      className="w-full h-64 object-cover"
+                    />
+                  </figure>
+                  <div className="card-body flex flex-col leading-6 justify-between">
+                    <div>
+                      <h2 className="card-title text-red-500 pb-5 font-bold text-center flex justify-center">
+                        {card.categoryName || "Undefined"}
+                      </h2>
+
+                      <p className="text-gray-600">
+                        <strong>Tog'ri Javoblar:</strong>
+                        <span className="float-right">{card.countAnswers}</span>
+                      </p>
+                      <p className="text-gray-600">
+                        <strong>Vaqt Davomiyligi:</strong>
+                        <span className="float-right">{card.durationTime} (daq.)</span>
+                      </p>
+                      <p className="text-gray-600">
+                        <strong>Tuplangan Ball:</strong>
+                        <span className="float-right">{card.testScore}</span>
+                      </p>
+                      <p className="text-gray-600">
+                        <strong>Test Topshirilgan vaqt:</strong>
+                        <span className="float-right">{card.createdAt}</span>
+                      </p>
+
+                      <h2 className="card-title text-red-500 pt-5 text-lg font-bold text-center flex justify-center">
+                        Qo'shimcha yo'nalishlardan ishlanganlar
+                      </h2>
+                    </div>
+
+                    <div className="card-actions mt-4">
+                      <button
+                        className={`btn text-lg w-full ${card.status === 'APPROVED' ? 'btn-success' : card.status === 'WAITING' ? 'btn-warning' : 'btn-primary'}`}
+                      >
+                        {card.status === 'APPROVED' ? 'Tasdiqlandi' : card.status === 'WAITING' ? 'Kutilmoqda' : card.status}
+                      </button>
+                    </div>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
