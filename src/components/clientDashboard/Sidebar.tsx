@@ -27,7 +27,7 @@ const Sidebar: React.FC = () => {
     <>
       {/* Burger Menu Button for mobile view */}
       <button
-        className="md:hidden p-4 fixed top-0 left-0 z-50"
+        className="md:hidden bg-white rounded-xl m-3 p-3 fixed top-0 left-0 z-50"
         onClick={toggleSidebar}
       >
         {isSidebarOpen ? (

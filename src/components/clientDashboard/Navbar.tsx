@@ -38,7 +38,7 @@ const Navbar: React.FC = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
     navigate('/auth/SignIn');
-    queryClient.invalidateQueries('getMe'); // Keshlangan ma'lumotlarni o'chirish
+    queryClient.invalidateQueries('getMe');
   };
 
   // Dropdown toggle
@@ -60,21 +60,20 @@ const Navbar: React.FC = () => {
 
   // GetMe ma'lumotlarini olish
   const getMe = useQuery({
-    queryKey: ['getMe'], // configni queryKey-dan olib tashladik, token dinamik ishlatiladi
+    queryKey: ['getMe'],
     queryFn: async () => {
-      const config = await getConfig(); // Yangilangan config bilan so'rov yuborish
+      const config = await getConfig();
       const res = await axios.get(getMeUser, config);
       return res.data.body;
     },
-    staleTime: 0, // Ma'lumotni doim yangilash
-    cacheTime: 0, // Cache-ni saqlamaslik
-    enabled: !!localStorage.getItem('token'), // Token mavjud bo'lganda faqat so'rovni ishga tushiradi
+    staleTime: 0, 
+    cacheTime: 0,
+    enabled: !!localStorage.getItem('token'),
   });
 
   const getMeData: GetMeResponse = getMe.data;
   console.log(getMeData);
 
-  // Keyboard hodisasi bilan dropdownni yopish
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
       if (event.key) {
