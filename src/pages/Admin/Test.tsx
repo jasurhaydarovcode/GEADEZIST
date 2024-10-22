@@ -1,6 +1,6 @@
 import Layout from "@/components/Dashboard/Layout";
 import { baseUrl, PostQuestion } from "@/helpers/api/baseUrl";
-import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow, } from 'flowbite-react';
+import { Table, TableBody, TableCell, TableHead, TableHeadCell, } from 'flowbite-react';
 import { config } from "@/helpers/functions/token";
 import { PlusCircleOutlined, EditOutlined, DeleteOutlined, EyeOutlined, } from "@ant-design/icons";
 import { Button, message, Modal, } from "antd";
@@ -45,7 +45,7 @@ function Test() {
   // bu kod qoshish btn uchun + -funck
   const [answers, setAnswers] = useState<Answer[]>([
     { id: Date.now(), value: "" },
-  ]); 
+  ]);
   // test get
   const [datas, useDatas] = useState<FetchedTest[]>([]);
 
@@ -54,17 +54,21 @@ function Test() {
   const [kategoriya, setKategoriya] = useState<string | null>(null);
   const [nameSearch, setnameSearch] = useState<string | null>(null);
   const [testlar, setTestlar] = useState<any[] | null>(null); // testlar ma'lumotlari massiv ekanini aniqladik
-  useEffect(() => {
-  },[nameSearch])
+  // useEffect(() => {
+  // }, [nameSearch])
+
   const searchTest2 = () => {
-    if (nameSearch) {
+    if (nameSearch && nameSearch.trim() !== "") {
+      // testlar mavjud bo'lsa va testlar massiv bo'lsa, filter qilamiz
       const newData = testlar?.filter((item) =>
         item.name?.toLowerCase().includes(nameSearch.toLowerCase())
       ) ?? []
-      useDatas(newData);
-      console.log(testlar);
+      setTestlar(newData);
+      console.log(newData);
+
     } else if (nameSearch == '') {
-      setTestlar(datas); 
+      // Input bo'sh bo'lsa, ma'lumotlarni qayta yuklash
+      setTestlar(datas); // `useDatas` ma'lumotlarni yuklaydi
     }
     if (kategoriya && kategoriya !== '') {
       const kategoriyaData = testlar?.filter((item) =>
@@ -81,7 +85,7 @@ function Test() {
   };
   useEffect(() => {
     searchTest2();
-  }, [nameSearch, kategoriya,])
+  }, [nameSearch, kategoriya, turi])
   // search
 
   // delete
@@ -95,7 +99,6 @@ function Test() {
     },
     onSuccess: (data: any) => {
       setTestlar(data)
-
     }
   })
   useEffect(() => {
@@ -114,16 +117,17 @@ function Test() {
       toast.error(error.response.data.message)
     }
   })
-  
-  useEffect(() => {
-    queryGet.refetchQueries('testData')
-  },[queryGet, isDelete, isModalOpen])
+
+  // useEffect(() => {
+  //   queryGet.refetchQueries('testData')
+  // }, [queryGet, isDelete, isModalOpen])
+
   function showDeleteModal(id: number | string) {
-    setTestID(id); 
-    setIsModalOpen(true); 
+    setTestID(id);
+    setIsModalOpen(true);
   }
   // delete
-    const handleAddAnswer = () => {
+  const handleAddAnswer = () => {
     setAnswers([...answers, { id: Date.now(), value: "" }]); // Add a new input
   };
   const handleRemoveAnswer = () => {
@@ -232,11 +236,11 @@ function Test() {
     setDeleteModalVisible(false);
   };
 
-  function showModal  () {
+  function showModal() {
     setOpen(true);
   };
 
-  function handleCancel () {
+  function handleCancel() {
     setOpen(false);
   };
 
@@ -381,7 +385,7 @@ function Test() {
                 </div>
 
                 <div>
-                  {testType !== null && 
+                  {testType !== null &&
                     (testType === "SUM" ||
                       testType === "ANY_CORRECT") &&
                     answers.map((answer: Answer, index) => (
@@ -394,7 +398,7 @@ function Test() {
                           type="checkbox"
                           checked={
                             testType === "SUM" || answer.checked
-                          } 
+                          }
                           onChange={(e) => {
                             if (testType === "ANY_CORRECT") {
                               const updatedAnswers = answers.map((ans, i) =>
@@ -405,7 +409,7 @@ function Test() {
                               setAnswers(updatedAnswers);
                             }
                           }}
-                          disabled={testType === "SUM"} 
+                          disabled={testType === "SUM"}
                           className="mr-3 accent-blue-500"
                         />
                         <input
@@ -428,7 +432,7 @@ function Test() {
                 </div>
 
                 <div>
-                  {testType !== null && 
+                  {testType !== null &&
                     testType === "ONE_CHOICE" &&
                     answers.map((answer) => (
                       <div
@@ -753,14 +757,14 @@ function Test() {
       </Modal>
 
       {/* Delete modal */}
-      <Modal 
-          title="Delete Confirmation" 
-          visible={isModalOpen} 
-          onOk={() => isDelete.mutate()} // Calls the delete function when confirmed
-          onCancel={() => setIsModalOpen(false)} // Close modal on cancel
-        >
-          <p>Testni o'chirmoqchimisiz?</p>
-        </Modal>
+      <Modal
+        title="Delete Confirmation"
+        visible={isModalOpen}
+        onOk={() => isDelete.mutate()} // Calls the delete function when confirmed
+        onCancel={() => setIsModalOpen(false)} // Close modal on cancel
+      >
+        <p>Testni o'chirmoqchimisiz?</p>
+      </Modal>
     </div>
   );
 }
