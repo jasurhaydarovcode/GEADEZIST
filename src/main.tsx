@@ -9,8 +9,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { ToastContainer } from 'react-toastify';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import 'aos/dist/aos.css';
-// import CursorProtect from './components/security/CursorProtect.tsx';
-// import DevToolsBlocker from './components/security/DevToolsBlocker.tsx';
+// import { CursorProtect, DevToolsBlocker } from 'react-mower';
 
 const queryClient = new QueryClient();
 
