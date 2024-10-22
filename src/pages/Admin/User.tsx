@@ -48,7 +48,7 @@ function User() {
       <Layout>
         <div>
           <div className="flex justify-center pt-7">
-            <div className="px-8">
+            <div>
               <div className="w-max">
                 <header className="flex items-center justify-between">
                   <h3 className="font-bold text-[27px]">

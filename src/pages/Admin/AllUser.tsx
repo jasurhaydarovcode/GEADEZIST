@@ -113,7 +113,7 @@ function AllUser() {
       <Layout>
         <div>
           <div className="flex justify-center pt-7">
-            <div className="px-8">
+            <div>
               <div className="w-max">
                 <header className="flex items-center max-lg:flex-col justify-between">
                   <h3 className="font-bold text-[27px]">Foydalanuvchilar</h3>
