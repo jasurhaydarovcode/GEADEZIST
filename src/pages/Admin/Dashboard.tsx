@@ -41,6 +41,10 @@ ChartJS.register(
 );
 
 const Dashboard = () => {
+  const role = localStorage.getItem('role')
+  useEffect(() => {
+    confirm("Ma'lumotlar saqlansinmi ?")
+  },[role])
   CheckLogin
   const queryClient = useQueryClient();
   // states

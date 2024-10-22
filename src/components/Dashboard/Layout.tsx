@@ -17,7 +17,7 @@ const Layout: React.FC<{ children: React.ReactNode; className?: string }> = ({
         <Navbar />
 
         {/* Main Content */}
-        <main className={className}>{children}</main>
+        <main className={"py-4"}>{children}</main>
       </div>
     </div>
   );
