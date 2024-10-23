@@ -5110,3 +5110,11 @@ printf("Result: %d
 ", c239);
 // End of block 239
 
+// Code block 240
+int a240 = 240;
+int b240 = 480;
+int c240 = a240 + b240;
+printf("Result: %d
+", c240);
+// End of block 240
+
