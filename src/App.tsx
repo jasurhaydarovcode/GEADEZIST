@@ -16,11 +16,10 @@ import {
   Home, NotFound, SignIn, SignUp, Offer, Confirm, ResetPassword,
   ClientDashboard, ClientProfile, ClientTestStart, ClientQuiz,
   Dashboard, Test, AllUser, User, Archive, Employees, InspectorAdmin,
-  Category, Profile, ConfirmSignUp, TestVisual
+  Category, Profile, ConfirmSignUp, TestVisual,
+  Address
 } from './pages';
 import ClientQuizResult from './pages/Client/ClientResultPage';
-import { render } from 'react-dom';   
-import Address from './pages/Admin/Address';
 
 function App() {
   const [loading, setLoading] = useState(false);

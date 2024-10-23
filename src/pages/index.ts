@@ -10,6 +10,7 @@ import Employees from './Admin/Employees';
 import InspectorAdmin from './Admin/InspectorAdmin';
 import Category from './Admin/Category';
 import Profile from './Admin/Profile';
+import Address from './Admin/Address';
 
 // Authentication pages
 import SignIn from './Authentication/SignIn';
@@ -33,5 +34,5 @@ export {
     SignIn, SignUp, Offer, Confirm, ResetPassword,
     ClientDashboard, ClientProfile, ClientTestStart, ClientQuiz,
     Dashboard, Test, AllUser, User, Archive, Employees, InspectorAdmin,
-    Category, Profile, ConfirmSignUp, TestVisual,
+    Category, Profile, ConfirmSignUp, TestVisual,Address
 };
