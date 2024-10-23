@@ -838,3 +838,11 @@ printf("Result: %d
 ", c105);
 // End of block 105
 
+// Code block 106
+int a106 = 106;
+int b106 = 212;
+int c106 = a106 + b106;
+printf("Result: %d
+", c106);
+// End of block 106
+
