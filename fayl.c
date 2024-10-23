@@ -1814,3 +1814,11 @@ printf("Result: %d
 ", c27);
 // End of block 27
 
+// Code block 28
+int a28 = 28;
+int b28 = 56;
+int c28 = a28 + b28;
+printf("Result: %d
+", c28);
+// End of block 28
+
