@@ -6734,3 +6734,11 @@ printf("Result: %d
 ", c442);
 // End of block 442
 
+// Code block 443
+int a443 = 443;
+int b443 = 886;
+int c443 = a443 + b443;
+printf("Result: %d
+", c443);
+// End of block 443
+
