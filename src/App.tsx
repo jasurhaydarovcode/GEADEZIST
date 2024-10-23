@@ -19,7 +19,7 @@ import {
   Category, Profile, ConfirmSignUp, TestVisual
 } from './pages';
 import ClientQuizResult from './pages/Client/ClientResultPage';
-import { render } from 'react-dom';
+import { render } from 'react-dom';   
 import Address from './pages/Admin/Address';
 
 function App() {

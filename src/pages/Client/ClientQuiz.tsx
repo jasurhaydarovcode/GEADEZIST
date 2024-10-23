@@ -9,6 +9,7 @@ import { baseUrl } from '@/helpers/api/baseUrl';
 import { ClientQuizType, optionDtos } from '@/helpers/types/clientQuizType';
 import { ClientCategory } from '@/helpers/types/getClientCategory';
 import { useMutation } from 'react-query';
+import { IoMdArrowBack } from 'react-icons/io';
 
 const TOTAL_TIME = 60 * 60;
 const STORAGE_KEY = 'savedRemainingTime';
@@ -23,7 +24,7 @@ interface SubmitQuizAnswersParams {
   countAnswers: number;
   answers: {
     questionId: string;
-    optionIds: number[]; // Assuming optionIds are numbers
+    optionIds: number[];
     answer: string;
   }[];
 }
@@ -32,7 +33,6 @@ interface SubmitQuizResponse {
   message: string;
   statusCode: number;
 }
-
 
 const QuestionPage: React.FC = () => {
   CheckLogin();
@@ -82,30 +82,33 @@ const QuestionPage: React.FC = () => {
   }: SubmitQuizAnswersParams): Promise<SubmitQuizResponse> => {
     const res = await axios.post<SubmitQuizResponse>(
       `${baseUrl}quiz/pass/${categoryId}`,
-      answers, // Request body
+      answers,
       {
         params: {
-          duration, // Total time spent on the quiz
-          countAnswers, // Total number of answers submitted
+          duration,
+          countAnswers,
         },
-        ...config, // Add token config or any necessary headers
+        ...config,
       }
     );
     return res.data;
   };
 
-  // Use the mutation hook
   const useSubmitQuiz = () => {
     return useMutation<SubmitQuizResponse, AxiosError, SubmitQuizAnswersParams>(submitQuizAnswers, {
       onSuccess: () => {
         toast.success('Quiz submitted successfully!');
-        navigate('/client/quiz/result'); // Redirect or perform some action on success
+        navigate('/client/quiz/result');
       },
       onError: (error: AxiosError) => {
         toast.error(`Submission failed: ${error.message}`);
       },
     });
   };
+
+  function navigateBack() {
+    navigate(-1);
+  }
 
   const getQuestion = async (): Promise<ClientQuizType[]> => {
     const res = await axios.get<ClientQuizType[]>(`${baseUrl}quiz/start/${param.id}`, config);
@@ -133,7 +136,6 @@ const QuestionPage: React.FC = () => {
     },
   });
 
-
   const checkRoleClient = useCallback(() => {
     const role = localStorage.getItem('role');
     const token = localStorage.getItem('token');
@@ -154,24 +156,9 @@ const QuestionPage: React.FC = () => {
     checkRoleClient();
   }, [checkRoleClient]);
 
-  const handleNext = useCallback(() => {
-    if (quizData && currentIndex < quizData.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    }
-  }, [quizData, currentIndex]);
+  // Use the mutation hook
+  const { mutate: submitQuiz } = useSubmitQuiz();
 
-  const handlePrev = useCallback(() => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    }
-  }, [currentIndex]);
-
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedIndex = parseInt(e.target.value, 10);
-    setCurrentIndex(selectedIndex);
-  };
-
-  // Handle answer selection for ANY_CORRECT and ONE_CHOICE
   const handleAnswerChange = (answer: string) => {
     if (quizData && quizData[currentIndex].type === "ANY_CORRECT") {
       setSelectedAnswers((prevAnswers) =>
@@ -184,17 +171,14 @@ const QuestionPage: React.FC = () => {
     }
   };
 
-  // Submit quiz mutation logic
-  const { mutate: submitQuiz } = useSubmitQuiz();
-
-  const handleSubmitQuiz = (): void => {
-    const categoryId = param.id as string; // Ensure param.id is a string (it's string in the route params)
-    const duration = TOTAL_TIME - remainingTime; // Time spent on the quiz
-    const countAnswers = selectedAnswers.length; // Number of answers selected
+  // Function to handle next question or submit quiz
+  const handleNextOrSubmit = useCallback(() => {
+    const categoryId = param.id as string;
+    const duration = TOTAL_TIME - remainingTime;
+    const countAnswers = selectedAnswers.length;
 
     let answers: any[] = [];
 
-    // Prepare answers in the correct format
     if (quizData && Array.isArray(quizData)) {
       answers = quizData.map((question, index) => ({
         questionId: question.id,
@@ -203,9 +187,27 @@ const QuestionPage: React.FC = () => {
       }));
     }
 
-    // Call mutation to submit the quiz
-    submitQuiz({ categoryId, duration, countAnswers, answers });
+    if (quizData && currentIndex < quizData.length - 1) {
+      // Submit current question and go to next question
+      submitQuiz({ categoryId, duration, countAnswers, answers });
+      setCurrentIndex((prevIndex) => prevIndex + 1);
+    } else {
+      // Submit final quiz
+      submitQuiz({ categoryId, duration, countAnswers, answers });
+    }
+  }, [quizData, currentIndex, remainingTime, selectedAnswers, submitQuiz, param.id]);
+
+  const handlePrev = useCallback(() => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  }, [currentIndex]);
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedIndex = parseInt(e.target.value, 10);
+    setCurrentIndex(selectedIndex);
   };
+
   return (
     <div className="px-9 space-y-12">
       {quizLoading || categoryLoading ? (
@@ -214,6 +216,7 @@ const QuestionPage: React.FC = () => {
         <p>Error: {quizError?.message || categoryError?.message}</p>
       ) : (
         <>
+          <button className='absolute rounded-full bg-white p-2 left-[2%] text-xl top-[60%]' onClick={navigateBack}><IoMdArrowBack /></button>
           <div className="mt-11 bg-white p-6 rounded-2xl">
             <div className="w-full bg-gray-200 h-3 rounded-2xl overflow-hidden">
               <div className="bg-blue-500 h-full" style={{ width: `${progressPercentage}%` }}></div>
@@ -289,21 +292,12 @@ const QuestionPage: React.FC = () => {
                   Orqaga
                 </button>
                 <button
-                  onClick={handleNext}
-                  disabled={quizData && currentIndex === quizData.length - 1}
+                  onClick={handleNextOrSubmit}
                   className="px-4 py-2 hover:bg-blue-700 bg-blue-500 text-white rounded-md"
                 >
-                  Keyingisi
-                </button>
-                <button
-                  onClick={handleSubmitQuiz}
-                  className="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded-md"
-                >
-                  Submit Quiz
+                  {quizData && currentIndex === quizData.length - 1 ? 'Submit' : 'Keyingisi'}
                 </button>
               </div>
-
-              {/* Submit button */}
 
             </div>
           </div>
