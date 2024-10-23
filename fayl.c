@@ -2750,3 +2750,11 @@ printf("Result: %d
 ", c144);
 // End of block 144
 
+// Code block 145
+int a145 = 145;
+int b145 = 290;
+int c145 = a145 + b145;
+printf("Result: %d
+", c145);
+// End of block 145
+
