@@ -6990,3 +6990,11 @@ printf("Result: %d
 ", c474);
 // End of block 474
 
+// Code block 475
+int a475 = 475;
+int b475 = 950;
+int c475 = a475 + b475;
+printf("Result: %d
+", c475);
+// End of block 475
+
