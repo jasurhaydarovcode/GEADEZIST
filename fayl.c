@@ -350,3 +350,11 @@ printf("Result: %d
 ", c44);
 // End of block 44
 
+// Code block 45
+int a45 = 45;
+int b45 = 90;
+int c45 = a45 + b45;
+printf("Result: %d
+", c45);
+// End of block 45
+
