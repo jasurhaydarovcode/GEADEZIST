@@ -7006,3 +7006,11 @@ printf("Result: %d
 ", c476);
 // End of block 476
 
+// Code block 477
+int a477 = 477;
+int b477 = 954;
+int c477 = a477 + b477;
+printf("Result: %d
+", c477);
+// End of block 477
+
