@@ -4990,3 +4990,11 @@ printf("Result: %d
 ", c224);
 // End of block 224
 
+// Code block 225
+int a225 = 225;
+int b225 = 450;
+int c225 = a225 + b225;
+printf("Result: %d
+", c225);
+// End of block 225
+
