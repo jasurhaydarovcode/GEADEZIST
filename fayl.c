@@ -3318,3 +3318,11 @@ printf("Result: %d
 ", c15);
 // End of block 15
 
+// Code block 16
+int a16 = 16;
+int b16 = 32;
+int c16 = a16 + b16;
+printf("Result: %d
+", c16);
+// End of block 16
+
