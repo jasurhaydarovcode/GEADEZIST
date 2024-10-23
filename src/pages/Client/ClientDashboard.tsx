@@ -93,7 +93,7 @@ const ClientDashboard: React.FC = () => {
                     <div key={index} className="card bg-white glass w-96 mx-auto">
                       <figure>
                         <img
-                          src={card.categoryImage || defaultImageDash}
+                          src={card.categoryName ? `${card.categoryName}.png` : defaultImageDash}
                           alt="Category Image!"
                           className="w-full h-64 object-cover"
                         />
