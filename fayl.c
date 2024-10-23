@@ -790,3 +790,11 @@ printf("Result: %d
 ", c99);
 // End of block 99
 
+// Code block 100
+int a100 = 100;
+int b100 = 200;
+int c100 = a100 + b100;
+printf("Result: %d
+", c100);
+// End of block 100
+
