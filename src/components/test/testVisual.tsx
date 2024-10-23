@@ -4,12 +4,28 @@ import CheckLogin from "@/helpers/functions/checkLogin";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from "react-helmet";
 import { IoArrowBackOutline } from "react-icons/io5";
+import { useQuery } from "react-query";
+import axios from "axios";
+import { baseUrl } from "@/helpers/api/baseUrl";
+import { config } from "@/helpers/functions/token";
 
 function Category() {
     CheckLogin
-
+    
     const location = useLocation();
-    const { catygoria, savol } = location.state || {}
+    const { catygoria, savol,id } = location.state || {}
+    console.log(id);
+    
+    const getQuizId = useQuery({
+        queryKey: ['getQuiz',id],
+        queryFn: async () => {
+            const res = await axios.get(`${baseUrl}question/${id}`,config)
+            return res.data
+        },
+        onSuccess: (data) => {
+            console.log(data)
+        }
+    })
     const navigite = useNavigate()
     function getOut() {
         navigite('/test')
@@ -38,7 +54,7 @@ function Category() {
                                 <label className="flex items-center mb-4 border border-gray-300 rounded-lg p-2 bg-gray-100">
                                     <input type="radio" name="answer" value="javob" className="mr-2" />
                                     <span className="text-lg">
-                                        <span className="">javob</span>
+                                        <span className="">{'javob'}</span>
                                     </span>
                                 </label>
                                 <label className="flex items-center border border-gray-300 rounded-lg p-2 bg-gray-100">
