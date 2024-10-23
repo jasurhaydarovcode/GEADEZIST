@@ -14,3 +14,11 @@ printf("Result: %d
 ", c2);
 // End of block 2
 
+// Code block 3
+int a3 = 3;
+int b3 = 6;
+int c3 = a3 + b3;
+printf("Result: %d
+", c3);
+// End of block 3
+
