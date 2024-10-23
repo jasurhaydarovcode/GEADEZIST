@@ -13,11 +13,11 @@ import { Button, Dropdown, Menu, message, Modal, Input, Spin, Space } from 'antd
 import CheckLogin from '@/helpers/functions/checkLogin';
 import { EllipsisVerticalIcon } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 'flowbite-react';
-import Archive from './Archive';
+
 const User: React.FC = () => {
   CheckLogin;
 
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState <string>('');
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<UserNatijasi | null>(null); // Tanlangan foydalanuvchi
   const [loadingDetails, setLoadingDetails] = useState<boolean>(false); // Yuklanayotganini ko'rsatish
@@ -25,6 +25,7 @@ const User: React.FC = () => {
   const [isRatingModalVisible, setIsRatingModalVisible] = useState<boolean>(false); // Tasdiqlash modalining holati
   const [rating, setRating] = useState<string>(''); // Baholash input qiymati
   const [isRatingValid, setIsRatingValid] = useState<boolean>(false); // Baholash uchun validatsiya
+  const [openModal, setOpenModal] = useState<boolean>(false);
 
   const { data: usersData, refetch } = useQuery({
     queryKey: ['User', config],
@@ -37,6 +38,8 @@ const User: React.FC = () => {
       message.error('Xatolik yuz berdi');
     },
   });
+
+  
 
   useEffect(() => {
     refetch();
@@ -117,6 +120,8 @@ const User: React.FC = () => {
     setSelectedUser(null);
   };
 
+  // const []
+
 
 
   return (
@@ -171,9 +176,9 @@ const User: React.FC = () => {
                     onChange={(e) => setSelectedStatus(e.target.value)}
                   >
                     <option value="">Statusni tanlang</option>
-                    <option value="waiting">Kutilmoqda</option>
-                    <option value="confirmed">Tekshirilganlar</option>
-                    <option value="cancelled">Bekor qilinganlar</option>
+                    <option value="WAITING">Kutilmoqda</option>
+                    <option value="APPROVED">Tekshirilganlar</option>
+                    <option value="CANCELLED">Bekor qilinganlar</option>
                   </select>
                 </div>
 
@@ -221,25 +226,23 @@ const User: React.FC = () => {
                               <Space direction="vertical">
                                 <Space wrap>
                                   <Dropdown  overlay={
-                                 <Menu>
-                                 <Menu.Item key="1">
-                                 <Link to={`/archive/:resultId${item.resultId}`}>Arxivni ko'rish</Link> 
-                                   {/* resultId ni to'g'ri yuboring */}
-                                 </Menu.Item>
-                                 <Menu.Item key="2" onClick={() => showUserDetails(item)}>
-                                   <button>Natijani ko'rish</button>
-                                 </Menu.Item>
-                                 <Menu.Item key="3">
-                                   <button>Tasdiqlash</button>
-                                 </Menu.Item>
-                                 <Menu.Item key="4">
-                                   <button>Bekor qilish</button>
-                                 </Menu.Item>
-                                 <Menu.Item key="5">
-                                   <button>Qayta topshirishga ruxsat berish</button>
-                                 </Menu.Item>
-                               </Menu>
-                               
+                                      <Menu>
+                                        <Menu.Item key="1">
+                                          <Link to={`/archive/${item.id}`}>Arxivni ko'rish</Link>
+                                        </Menu.Item>
+                                        <Menu.Item key="2">
+                                          <button onClick={() => showUserDetails(item)}>Natijani ko'rish</button>
+                                        </Menu.Item>
+                                        <Menu.Item key="3">
+                                          <button>Tasdiqlash</button>
+                                        </Menu.Item>
+                                        <Menu.Item key="4">
+                                          <button>Bekor qilish</button>
+                                        </Menu.Item>
+                                        <Menu.Item key="5">
+                                          <button>Qayta topshirishga ruxsat berish</button>
+                                        </Menu.Item>
+                                      </Menu>
                                     }
                                     placement="bottomRight"
                                     arrow={{ pointAtCenter: true }}
@@ -272,7 +275,7 @@ const User: React.FC = () => {
                 <p className='flex my-2 justify-between text-lg text-[#517aff] '><strong className='text-[#727788]'>Qayta test topshirish:</strong> {selectedUser.expiredDate}</p>
               </div>
             ) : (
-              <p>Natijalar topilmadi</p>
+              <h2 className="text-2xl font-extrabold my-4 text-center text-[#727788]">Natijalar topilmadi</h2>
             )}
           </Modal>
 
@@ -301,6 +304,10 @@ const User: React.FC = () => {
                 </Button>
               </div>
             </div>
+          </Modal>
+          {/* Bekor qilish uchun modal */}
+          <Modal  footer={null}>
+            <p>Natijani bekor qilmoqchimisiz</p>
           </Modal>
         </div>
       </Layout>
@@ -369,26 +376,6 @@ export default User;
 //   const handleCancel = () => {
 //     setOpen(false);
 //   };
-
-  // const menu = (user: UserNatijasi) => (
-  //   <Menu>
-  //     <Menu.Item key="1">
-  //       <Link to={`/archive/${user.id}`}>Arxivni ko'rish</Link>
-  //     </Menu.Item>
-  //     <Menu.Item key="2">
-  //       <button onClick={() => showUserDetails(user)}>Natijani ko'rish</button>
-  //     </Menu.Item>
-  //     <Menu.Item key="3">
-  //       <button onClick={() => showRatingModal(user)}>Tasdiqlash</button>
-  //     </Menu.Item>
-  //     <Menu.Item key="4">
-  //       <button>Bekor qilish</button>
-  //     </Menu.Item>
-  //     <Menu.Item key="5">
-  //       <button>Qayta topshirishga ruxsat berish</button>
-  //     </Menu.Item>
-  //   </Menu>
-  // );
 
 //   return (
 //     <div className='overflow-x-hidden'>
