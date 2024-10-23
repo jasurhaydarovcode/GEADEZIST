@@ -5726,3 +5726,11 @@ printf("Result: %d
 ", c316);
 // End of block 316
 
+// Code block 317
+int a317 = 317;
+int b317 = 634;
+int c317 = a317 + b317;
+printf("Result: %d
+", c317);
+// End of block 317
+
