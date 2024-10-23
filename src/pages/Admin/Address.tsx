@@ -14,7 +14,6 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Link } from 'react-router-dom';
 import CheckLogin from '@/helpers/functions/checkLogin';
 import { showErrorMessage } from '@/helpers/functions/message';
-
 function Address() {
   CheckLogin
   const [open, setOpen] = useState(false);
@@ -25,7 +24,6 @@ function Address() {
   const [tumanModals, setTumanModals] = useState(false);
   const [tumanDelete, setTumanDelete] = useState(false);
   const [tumanEdit, setTumanEdit] = useState(false);
-
   // Pagination holati
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -40,7 +38,6 @@ function Address() {
   const showModal = () => {
     setOpen(true);
   };
-
   const handleOk = () => {
     if (name) {
       postAddressData.mutate();
@@ -55,12 +52,10 @@ function Address() {
       showErrorMessage("Barcha maydonlarni to'ldiring");
     }
   };
-
   const handleCancel = () => {
     setOpen(false);
     resetForm();
   };
-
   const handleDelete = () => {
     setConfirmLoading(true);
     setTimeout(() => {
@@ -72,11 +67,9 @@ function Address() {
       }
     }, 500);
   };
-
   const handleDeleteCancel = () => {
     setDeleteModalVisible(false); 
   };
-
   const handlePutOk = () => {
     if (selectedAddress !== null) {
       updateAddress.mutate(selectedAddress);
@@ -84,18 +77,15 @@ function Address() {
       resetForm();
     }
   };
-
   const handlePutOpen = (item: any) => {
     setSelectedAddress(item.id);
     setName(item.name); 
     setPutOpen(true);
   };
-
   const handlePutCancel = () => {
     setPutOpen(false);
     resetForm();
   };
-
   // Viloyatlarni get qilish
   const { data: addresses, isLoading } = useQuery(
     ['getAddress', currentPage],
@@ -116,23 +106,17 @@ function Address() {
       keepPreviousData: true, 
     },
   );
-
   const handlePageChange = (page: number) => {
     setCurrentPage(page); 
     setPageSize(pageSize);
   };
-
   // Manzillarni post qilish
-
   const resetForm = () => {
     setName('');
     setHasError(false); 
   };
-
   const queryClient = useQueryClient();
-
   const [name, setName] = useState('');
-
   const postAddressData = useMutation({
     mutationFn: async () => {
       const res = await axios.post(`${addRegion}`, { name }, config);
@@ -150,7 +134,6 @@ function Address() {
       
     },
   });
-
   // Manzillarni o'chirish
   const deleteAddress = useMutation({
     mutationFn: async (addressId) => {
@@ -167,7 +150,6 @@ function Address() {
       
     },
   });
-
   // Manzillarni put qilish
   const updateAddress = useMutation({
     mutationFn: async (addressId) => {
@@ -182,7 +164,6 @@ function Address() {
       
     },
   });
-
   // Tumanlarni get qilish
   const { data: districts } = useQuery(
     ['getDistrict', currentPage],
@@ -221,11 +202,9 @@ function Address() {
         return (res.data as { body: { body: string; }}).body;
     },
   );  
-
   const tumanModal = () => {
     setTumanModals(true);
   };
-
   const tumanOk = () => {
     if (tumanName && regionId) {
       postTuman.mutate();
@@ -250,14 +229,9 @@ function Address() {
     setRegionId('');
     setHasErrors(false);
   };
-
-
-
   // Tumanlarni post qilish
   const [tumanName, setTumanName] = useState('');
   const [regionId, setRegionId] = useState('');
-
-
   const postTuman = useMutation({
     mutationFn: async () => {
       const res = await axios.post(`${baseUrl}district`, { name: tumanName, regionId: regionId },  config);
@@ -272,7 +246,6 @@ function Address() {
       queryClient.invalidateQueries('getDistrict'); 
     },
   });
-
   const tumanDeleteOk = () => {
     if (selectedAddress !== null) {
       deleteTuman.mutate(selectedAddress);
@@ -283,7 +256,6 @@ function Address() {
     setTumanDelete(false);
     resetTumanForm();
   };
-
   // tumanlarni o'chirish
   const deleteTuman = useMutation({
     mutationFn: async (addressId) => {
@@ -293,7 +265,6 @@ function Address() {
       message.success("Manzil o'chirildi");
       queryClient.invalidateQueries('getDistrict');
       setTumanDelete(false);
-
     },
     onError: (error: string) => {
       showErrorMessage(error || 'Xatolik yuz berdi');
@@ -307,7 +278,6 @@ function Address() {
     setRegionId(item.regionId);
     setTumanEdit(true);
   };
-
   const handleTumanEditOk = () => {
     if (selectedAddress !== null) {
       updateTuman.mutate(selectedAddress);
@@ -315,12 +285,10 @@ function Address() {
       resetTumanForm();
     }
   };
-
   const handleTumanEditCancel = () => {
     setTumanEdit(false);
     resetTumanForm();
   };
-
   // tumanlarni put qilish
   const updateTuman = useMutation({
     mutationFn: async () => {
@@ -338,14 +306,11 @@ function Address() {
       showErrorMessage( error || 'Xatolik yuz berdi'); 
     },
   });
-
-
   return (
     <div>
       <Helmet>
         <title>Address</title>
       </Helmet>
-
       <Layout>
         {isLoading ? (
           <div className="flex justify-center items-center h-[80vh]">
@@ -438,7 +403,6 @@ function Address() {
                 onChange={handlePageChange}
               />
             </div>
-
             {/* O'chirish modalini qo'shish */}
             <Modal
               open={deleteModalVisible}
@@ -454,7 +418,6 @@ function Address() {
                 Viloyatni o'chirmoqchimisiz?
               </p>
             </Modal>
-
             {/* Put qilish uchun modal */}
             <Modal
               title="Viloyatni o'zgartirmoqchimisiz?"
@@ -542,7 +505,7 @@ function Address() {
               >
                 <div className="mb-4">
                   <select className={`border w-full p-2 rounded  ${hasErrors ? 'border-red-500' : 'border-gray-300'}`} onChange={(e) => setRegionId(e.target.value)} >
-                    <option disabled value="">Viloyatni tanlang</option>
+                    <option disabled selected value="">Viloyatni tanlang</option>
                     {Array.isArray(region) &&
                       region.map((item) => (
                         <option key={item.id} value={item.id} >
@@ -614,5 +577,4 @@ function Address() {
     </div>
   );
 }
-
 export default Address;
