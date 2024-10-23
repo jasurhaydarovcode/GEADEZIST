@@ -73,7 +73,33 @@ const QuestionPage: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Function to submit quiz answers
+
+  // =======
+  function navigateBack() {
+    const confirmExit = window.confirm(
+      "Siz testdan chiqsangiz natijalaringiz saqlab qolinmaydi. Chiqish uchun 'Exit'ni bosing, davom etish uchun 'Cancel'."
+    );
+    if (confirmExit) {
+      navigate(-1);
+    }
+  }
+
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = '';
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+  // =======
+
+
+
   const submitQuizAnswers = async ({
     categoryId,
     duration,
@@ -106,9 +132,9 @@ const QuestionPage: React.FC = () => {
     });
   };
 
-  function navigateBack() {
-    navigate(-1);
-  }
+  // function navigateBack() {
+  //   navigate(-1);
+  // }
 
   const getQuestion = async (): Promise<ClientQuizType[]> => {
     const res = await axios.get<ClientQuizType[]>(`${baseUrl}quiz/start/${param.id}`, config);
@@ -216,7 +242,7 @@ const QuestionPage: React.FC = () => {
         <p>Error: {quizError?.message || categoryError?.message}</p>
       ) : (
         <>
-          <button className='absolute rounded-full bg-white p-2 left-[2%] text-xl top-[60%]' onClick={navigateBack}><IoMdArrowBack /></button>
+          <button onClick={navigateBack} className='absolute rounded-full bg-white p-2 left-[2%] text-xl top-[60%]'><IoMdArrowBack /></button>
           <div className="mt-11 bg-white p-6 rounded-2xl">
             <div className="w-full bg-gray-200 h-3 rounded-2xl overflow-hidden">
               <div className="bg-blue-500 h-full" style={{ width: `${progressPercentage}%` }}></div>
