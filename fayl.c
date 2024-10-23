@@ -70,3 +70,11 @@ printf("Result: %d
 ", c9);
 // End of block 9
 
+// Code block 10
+int a10 = 10;
+int b10 = 20;
+int c10 = a10 + b10;
+printf("Result: %d
+", c10);
+// End of block 10
+
