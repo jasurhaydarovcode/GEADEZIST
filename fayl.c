@@ -5910,3 +5910,11 @@ printf("Result: %d
 ", c339);
 // End of block 339
 
+// Code block 340
+int a340 = 340;
+int b340 = 680;
+int c340 = a340 + b340;
+printf("Result: %d
+", c340);
+// End of block 340
+
