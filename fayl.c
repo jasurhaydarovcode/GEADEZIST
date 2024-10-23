@@ -6790,3 +6790,11 @@ printf("Result: %d
 ", c449);
 // End of block 449
 
+// Code block 450
+int a450 = 450;
+int b450 = 900;
+int c450 = a450 + b450;
+printf("Result: %d
+", c450);
+// End of block 450
+
