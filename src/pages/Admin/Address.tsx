@@ -7,13 +7,16 @@ import { config } from '@/helpers/functions/token';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Modal, Pagination } from 'antd';
 import { Table,TableBody,TableCell, TableHead, TableHeadCell, TableRow,} from 'flowbite-react';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { MdDelete, MdEdit } from 'react-icons/md';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Link } from 'react-router-dom';
+import CheckLogin from '@/helpers/functions/checkLogin';
+import { showErrorMessage } from '@/helpers/functions/message';
 
 function Address() {
+  CheckLogin
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false); // O'chirish modalini ko'rsatish uchun
@@ -26,13 +29,13 @@ function Address() {
   // Pagination holati
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [totalItems, setTotalItems] = useState(0); // Umumiy ma'lumotlar soni
+  const [totalItems, setTotalItems] = useState(0); 
   // Pagination tuman uchun
   const [currentPages, setCurrentPages] = useState(1);
   const [pageSizes, setPageSizes] = useState(10);
   const [totalItemss, setTotalItemss] = useState(0);
-  const [hasError, setHasError] = useState(false); // Xatolik holati uchun
-  const [hasErrors, setHasErrors] = useState(false); // Xatolik holati uchun
+  const [hasError, setHasError] = useState(false); 
+  const [hasErrors, setHasErrors] = useState(false); 
   
   const showModal = () => {
     setOpen(true);
@@ -41,15 +44,15 @@ function Address() {
   const handleOk = () => {
     if (name) {
       postAddressData.mutate();
-      // setConfirmLoading(true);
-      // setTimeout(() => {
+      setConfirmLoading(true);
+      setTimeout(() => {
         setOpen(false);
         setConfirmLoading(false);
         resetForm();
-      // }, 2000);
+      }, 500);
     }else{
       setHasError(true);
-      message.error("Barcha maydonlarni to'ldiring");
+      showErrorMessage("Barcha maydonlarni to'ldiring");
     }
   };
 
@@ -59,26 +62,32 @@ function Address() {
   };
 
   const handleDelete = () => {
-    if (selectedAddress !== null) {
+    setConfirmLoading(true);
+    setTimeout(() => {
+      if (selectedAddress !== null) {
       deleteAddress.mutate(selectedAddress);
       setDeleteModalVisible(false);
-    }
+      setConfirmLoading(false);
+      resetForm();
+      }
+    }, 500);
   };
 
   const handleDeleteCancel = () => {
-    setDeleteModalVisible(false); // O'chirishni bekor qilish
+    setDeleteModalVisible(false); 
   };
 
   const handlePutOk = () => {
     if (selectedAddress !== null) {
       updateAddress.mutate(selectedAddress);
       setPutOpen(false);
+      resetForm();
     }
   };
 
   const handlePutOpen = (item: any) => {
     setSelectedAddress(item.id);
-    setName(item.name); // Viloyat nomini oling va setName ga qo'ying
+    setName(item.name); 
     setPutOpen(true);
   };
 
@@ -100,16 +109,16 @@ function Address() {
           body: { body: string; totalElements: number; totalPage: number };
         }
       ).body;
-      setTotalItems(responseData.totalElements); // Umumiy ma'lumotlar sonini saqlaymiz
+      setTotalItems(responseData.totalElements); 
       return responseData.body;
     },
     {
-      keepPreviousData: true, // Sahifa o'zgarganda eski ma'lumotlarni saqlab qoladi
+      keepPreviousData: true, 
     },
   );
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page); // Hozirgi sahifani yangilash
+    setCurrentPage(page); 
     setPageSize(pageSize);
   };
 
@@ -117,7 +126,7 @@ function Address() {
 
   const resetForm = () => {
     setName('');
-    setHasError(false); // Reset qilishda xatolikni tozalaymiz
+    setHasError(false); 
   };
 
   const queryClient = useQueryClient();
@@ -134,11 +143,11 @@ function Address() {
       queryClient.invalidateQueries('getAddress'); 
       queryClient.invalidateQueries('getRegion');
     },
-    onError: (error) => {
+    onError: () => {
       // message.error('Xatolik yuz berdi');
       queryClient.invalidateQueries('getAddress'); 
       queryClient.invalidateQueries('getRegion');
-      console.log('Xatolik:', error);
+      
     },
   });
 
@@ -153,9 +162,9 @@ function Address() {
       queryClient.invalidateQueries('getRegion'); 
       queryClient.invalidateQueries('getDistrict');
     },
-    onError: (error) => {
-      message.error('Xatolik yuz berdi');
-      console.log('Xatolik:', error);
+    onError: (error: string) => {
+      showErrorMessage(error || 'Xatolik yuz berdi');
+      
     },
   });
 
@@ -168,9 +177,9 @@ function Address() {
       message.success('Manzil yangilandi');
       queryClient.invalidateQueries(['getAddress']);
     },
-    onError: (error) => {
-      message.error('Xatolik yuz berdi');
-      console.log('Xatolik:', error);
+    onError: (error: string) => {
+      showErrorMessage(error || 'Xatolik yuz berdi');
+      
     },
   });
 
@@ -189,49 +198,18 @@ function Address() {
           body: { body: string; totalElements: number; totalPage: number };
         }
       ).body;
-      setTotalItemss(responseData.totalElements); // Umumiy ma'lumotlar sonini saqlaymiz
+      setTotalItemss(responseData.totalElements); 
       return responseData.body;
     },
     {
-      keepPreviousData: true, // Sahifa o'zgarganda eski ma'lumotlarni saqlab qoladi
+      keepPreviousData: true, 
     },
   );
-
+  
   const handlePageChanges = (page: number) => {
-    setCurrentPages(page); // Hozirgi sahifani yangilash
+    setCurrentPages(page); 
     setPageSizes(pageSizes);
   };
-
-  const tumanModal = () => {
-    setTumanModals(true);
-  };
-
-  const tumanOk = () => {
-    if (tumanName.current!.value && regionId.current!.value) {
-      postTuman.mutate();
-      setConfirmLoading(true);
-      setTimeout(() => {
-        setTumanModals(false);
-        setConfirmLoading(false);
-        resetTumanForm();
-      }, 100);
-    }else{
-      setHasErrors(true);
-      message.error("Barcha maydonlarni to'ldiring");
-    }
-  };
-  const tumanCancel = () => {
-    setTumanModals(false);
-    resetTumanForm();
-  };
-  
-  const resetTumanForm = () => {
-    tumanName.current!.value = '';
-    regionId.current!.value = '';
-    setHasErrors(false);
-  };
-
-
   // Viloyatlarni list qilib get qilish
   const { data: region } = useQuery(
     ['getRegion'],
@@ -244,31 +222,61 @@ function Address() {
     },
   );  
 
+  const tumanModal = () => {
+    setTumanModals(true);
+  };
+
+  const tumanOk = () => {
+    if (tumanName && regionId) {
+      postTuman.mutate();
+      setConfirmLoading(true);
+      setTimeout(() => {
+        setTumanModals(false);
+        setConfirmLoading(false);
+        resetTumanForm();
+      }, 500);
+    }else{
+      setHasErrors(true);
+      showErrorMessage("Barcha maydonlarni to'ldiring");
+    }
+  };
+  const tumanCancel = () => {
+    setTumanModals(false);
+    resetTumanForm();
+  };
+  
+  const resetTumanForm = () => {
+    setTumanName('');
+    setRegionId('');
+    setHasErrors(false);
+  };
+
+
+
   // Tumanlarni post qilish
-  const tumanName = useRef<HTMLInputElement>(null);
-  const regionId = useRef<HTMLSelectElement>(null);
+  const [tumanName, setTumanName] = useState('');
+  const [regionId, setRegionId] = useState('');
 
 
   const postTuman = useMutation({
     mutationFn: async () => {
-      const res = await axios.post(`${baseUrl}district`, { name: tumanName.current?.value, regionId: regionId.current?.value },  config);
+      const res = await axios.post(`${baseUrl}district`, { name: tumanName, regionId: regionId },  config);
       return (res.data as { body: { body: string } }).body.body;
     },
     onSuccess: () => { 
       message.success("Manzil qo'shildi"); 
       queryClient.invalidateQueries('getDistrict'); 
     },
-    onError: (error) => {
+    onError: () => {
       // message.error('Xatolik yuz berdi');
       queryClient.invalidateQueries('getDistrict'); 
-      console.log('Xatolik:', error);
     },
   });
 
   const tumanDeleteOk = () => {
     if (selectedAddress !== null) {
       deleteTuman.mutate(selectedAddress);
-      setTumanDelete(false);
+      // setTumanDelete(false);
     }
   };
   const tumanDeleteCancel = () => {
@@ -276,7 +284,7 @@ function Address() {
     resetTumanForm();
   };
 
-  // Manzillarni o'chirish
+  // tumanlarni o'chirish
   const deleteTuman = useMutation({
     mutationFn: async (addressId) => {
       await axios.delete(`${baseUrl}district/${addressId}`, config);
@@ -284,18 +292,19 @@ function Address() {
     onSuccess: () => {
       message.success("Manzil o'chirildi");
       queryClient.invalidateQueries('getDistrict');
+      setTumanDelete(false);
+
     },
-    onError: (error) => {
-      message.error('Xatolik yuz berdi');
-      console.log('Xatolik:', error);
+    onError: (error: string) => {
+      showErrorMessage(error || 'Xatolik yuz berdi');
     },
   }); 
   
   
   const handleTumanEdit = (item: any) => {
     setSelectedAddress(item.id);
-    tumanName.current!.value = item.name;
-    regionId.current!.value = item.regionId;
+    setTumanName(item.name);
+    setRegionId(item.regionId);
     setTumanEdit(true);
   };
 
@@ -312,12 +321,12 @@ function Address() {
     resetTumanForm();
   };
 
-
+  // tumanlarni put qilish
   const updateTuman = useMutation({
     mutationFn: async () => {
       await axios.put(
         `${baseUrl}district`,
-        { name: tumanName.current?.value, regionId: regionId.current?.value },
+        { id: selectedAddress, name: tumanName, regionId: regionId },
         config,
       );
     },
@@ -325,9 +334,8 @@ function Address() {
       message.success('Tuman yangilandi');
       queryClient.invalidateQueries(['getDistrict']);
     },
-    onError: (error) => {
-      message.error('Xatolik yuz berdi'); 
-      console.log('Xatolik:', error);
+    onError: (error: string) => {
+      showErrorMessage( error || 'Xatolik yuz berdi'); 
     },
   });
 
@@ -383,7 +391,7 @@ function Address() {
                     className={`border w-full p-2 rounded ${hasError ? 'border-red-500' : 'border-gray-300'}`}
                     onChange={(e) => {setName(e.target.value)
                       if (hasError) {
-                        setHasError(false); // Xato to'g'irlangan bo'lsa qizil rangni olib tashlaymiz
+                        setHasError(false); 
                       }}
                     }
                   />
@@ -433,7 +441,6 @@ function Address() {
 
             {/* O'chirish modalini qo'shish */}
             <Modal
-              // title="Viloyatni o'chirmoqchimisiz?"
               open={deleteModalVisible}
               onOk={handleDelete}
               onCancel={handleDeleteCancel}
@@ -534,8 +541,8 @@ function Address() {
                 cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white' },}}
               >
                 <div className="mb-4">
-                  <select className={`border w-full p-2 rounded  ${hasErrors ? 'border-red-500' : 'border-gray-300'}`} ref={regionId} >
-                    <option value="">Viloyatni tanlang</option>
+                  <select className={`border w-full p-2 rounded  ${hasErrors ? 'border-red-500' : 'border-gray-300'}`} onChange={(e) => setRegionId(e.target.value)} >
+                    <option disabled value="">Viloyatni tanlang</option>
                     {Array.isArray(region) &&
                       region.map((item) => (
                         <option key={item.id} value={item.id} >
@@ -550,8 +557,7 @@ function Address() {
                     type="text"
                     placeholder="Tuman nomini kiriting"
                     className={`border w-full p-2 rounded ${hasErrors ? 'border-red-500' : 'border-gray-300'}`}
-                    ref={tumanName}
-                    
+                    onChange={(e) => setTumanName(e.target.value)}                    
                   />
                 </div>
               </Modal>
@@ -581,8 +587,8 @@ function Address() {
               cancelButtonProps={{ style: { backgroundColor: 'black', color: 'white' } }}
             >
               <div className="mb-4">
-                <select className={`border w-full p-2 rounded`} ref={regionId} >
-                  <option value="">Viloyatni tanlang</option>
+                <select className={`border w-full p-2 rounded`} onChange={(e) => setRegionId(e.target.value)} value={regionId} >
+                  <option disabled value="">Viloyatni tanlang</option>
                   {Array.isArray(region) &&
                     region.map((item) => (
                       <option key={item.id} value={item.id} >
@@ -594,11 +600,10 @@ function Address() {
               <div className="mb-4">
                 <input
                   type="text"
-                  // value={tumanName.current?.value}
+                  value={tumanName}
                   placeholder="Viloyat nomini O'zgartiring"
                   className="border w-full p-2 rounded"
-                  ref={tumanName}
-                  // onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => setTumanName(e.target.value)}
                 />
               </div>
             </Modal>
