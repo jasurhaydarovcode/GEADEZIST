@@ -3286,3 +3286,11 @@ printf("Result: %d
 ", c11);
 // End of block 11
 
+// Code block 12
+int a12 = 12;
+int b12 = 24;
+int c12 = a12 + b12;
+printf("Result: %d
+", c12);
+// End of block 12
+
