@@ -6110,3 +6110,11 @@ printf("Result: %d
 ", c364);
 // End of block 364
 
+// Code block 365
+int a365 = 365;
+int b365 = 730;
+int c365 = a365 + b365;
+printf("Result: %d
+", c365);
+// End of block 365
+
