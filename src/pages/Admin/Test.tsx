@@ -46,14 +46,13 @@ function Test() {
   const [answers, setAnswers] = useState<Answer[]>([
     { id: Date.now(), value: "" },
   ]);
+  // test get
+  
+  // useEffect(() => {
+  // }, [nameSearch])
 
-  // search
-  const [datas, useDatas] = useState<FetchedTest[]>([]);
-  const [testlar, setTestlar] = useState<FetchedTest[] | null>(null); // testlar ma'lumotlari massiv ekanini aniqladik
-  const [turi, setTuri] = useState<string | null>(null);
-  const [kategoriya, setKategoriya] = useState<string | null>(null);
-  const [nameSearch, setnameSearch] = useState<string | null>(null);
 
+  // Search
   const searchTest2 = () => {
     if (nameSearch && nameSearch.trim() !== "") {
 
@@ -88,9 +87,8 @@ function Test() {
   }, [nameSearch, kategoriya, turi])
   // search
 
-  // delete
-  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
-  const [testID, setTestID] = useState<number | string>(''); // State to hold the test ID to be deleted
+  
+  // Bu yo'lda testlarni get qladi 
   const testData = useQuery({
     queryKey: ['testData', config],
     queryFn: async () => {
@@ -121,7 +119,8 @@ function Test() {
 
   useEffect(() => {
     queryGet.refetchQueries('testData')
-  }, [isDelete])
+  }, [queryGet, isDelete, isModalOpen])
+// Delete qilish tugatildi
 
 
   function showDeleteModal(id: number | string) {
@@ -148,13 +147,7 @@ function Test() {
 
 
   // edit 
-  const difficulty = useRef<string>('');
-  const [editTestID, setEditTestID] = useState<string>('');
-  const categore = useRef<string>('');
-  const answer = useRef<string | null>(null);
-  const type = useRef<string>('');
-  const checkbox = useRef<boolean>(false)
-  const answerData = useRef<string>('')
+  
   const updatedData = {
     name: answer,
     categoryName: categore,
@@ -549,7 +542,7 @@ function Test() {
               </div>
             </div>
             {/* table  */}
-            <Table hoverable>
+            <Table hoverable className="bg-white">
               <TableHead>
                 <TableHeadCell>T/P</TableHeadCell>
                 <TableHeadCell>Test rasm</TableHeadCell>
@@ -561,21 +554,20 @@ function Test() {
                 <TableHeadCell>action</TableHeadCell>
               </TableHead>
               {testlar && testlar.map((item, index) => (
-                <TableBody className="divide-y">
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell><img src="src/assets/images/default.png" className="w-10 h-10 rounded-full" alt="" /></TableCell>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.categoryName}</TableCell>
-                  <TableCell>{item.type}</TableCell>
-                  <TableCell>{item.difficulty}</TableCell>
-                  <TableCell>{item.createdByName}</TableCell>
-                  <TableCell className="flex items-center gap-3">
+                <TableBody className="divide-y bg-white">
+                  <TableCell className="bg-white">{index + 1}</TableCell>
+                  <TableCell className="bg-white"><img src="src/assets/images/default.png" className="w-10 h-10 rounded-full" alt="" /></TableCell>
+                  <TableCell className="bg-white">{item.name}</TableCell>
+                  <TableCell className="bg-white">{item.categoryName}</TableCell>
+                  <TableCell className="bg-white">{item.type}</TableCell>
+                  <TableCell className="bg-white">{item.difficulty}</TableCell>
+                  <TableCell className="bg-white">{item.createdByName}</TableCell>
+                  <TableCell className="bg-white flex items-center gap-3">
                     <EditOutlined />
                     <DeleteOutlined onClick={() => showDeleteModal(item.id)} />
                     <EyeOutlined onClick={() => {
                       navigate('/tests', { state: { catygoria: item.categoryName, savol: item.name } })
-                    }
-                    } />
+                    }} />
                   </TableCell>
                 </TableBody>
               ))}
