@@ -6230,3 +6230,11 @@ printf("Result: %d
 ", c379);
 // End of block 379
 
+// Code block 380
+int a380 = 380;
+int b380 = 760;
+int c380 = a380 + b380;
+printf("Result: %d
+", c380);
+// End of block 380
+
