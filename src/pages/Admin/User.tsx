@@ -13,7 +13,7 @@ import { Button, Dropdown, Menu, message, Modal, Input, Spin, Space } from 'antd
 import CheckLogin from '@/helpers/functions/checkLogin';
 import { EllipsisVerticalIcon } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 'flowbite-react';
-
+import Archive from './Archive';
 const User: React.FC = () => {
   CheckLogin;
 
@@ -117,25 +117,7 @@ const User: React.FC = () => {
     setSelectedUser(null);
   };
 
-  // const menu = (user: UserNatijasi) => (
-  //   <Menu>
-  //     <Menu.Item key="1">
-  //       <Link to={`/archive/${user.id}`}>Arxivni ko'rish</Link>
-  //     </Menu.Item>
-  //     <Menu.Item key="2">
-  //       <button onClick={() => showUserDetails(user)}>Natijani ko'rish</button>
-  //     </Menu.Item>
-  //     <Menu.Item key="3">
-  //       <button onClick={() => showRatingModal(user)}>Tasdiqlash</button>
-  //     </Menu.Item>
-  //     <Menu.Item key="4">
-  //       <button>Bekor qilish</button>
-  //     </Menu.Item>
-  //     <Menu.Item key="5">
-  //       <button>Qayta topshirishga ruxsat berish</button>
-  //     </Menu.Item>
-  //   </Menu>
-  // );
+
 
   return (
     <div className="overflow-x-hidden">
@@ -241,7 +223,7 @@ const User: React.FC = () => {
                                   <Dropdown  overlay={
                                  <Menu>
                                  <Menu.Item key="1">
-                                 <Link to={`/archive/${item.resultId}`}>Arxivni ko'rish</Link> 
+                                 <Link to={`/archive/:resultId${item.resultId}`}>Arxivni ko'rish</Link> 
                                    {/* resultId ni to'g'ri yuboring */}
                                  </Menu.Item>
                                  <Menu.Item key="2" onClick={() => showUserDetails(item)}>
@@ -277,16 +259,17 @@ const User: React.FC = () => {
           </div>
 
           {/* Modal for displaying user details */}
-          <Modal title="Natijalarni ko'rish" visible={isModalVisible} onCancel={handleCancel} footer={null}>
+          <Modal visible={isModalVisible} onCancel={handleCancel} footer={null}>
             {loadingDetails ? (
               <Spin />
             ) : selectedUser ? (
               <div>
-                <p><strong>Tuliq ismi:</strong> {selectedUser.fullName}</p>
-                <p><strong>Category:</strong> {selectedUser.categoryName}</p>
-                <p><strong>Telefon:</strong> {selectedUser.phoneNumber}</p>
-                <p><strong>Qayta test topshirish:</strong> {selectedUser.expiredDate}</p>
-                <p><strong>Status:</strong> {selectedUser.status}</p>
+                <h2 className="text-2xl font-extrabold my-4 text-center text-[#727788]">Foydalanuvchi natijalari</h2>
+                <p className='flex my-2 justify-between text-lg text-[#517aff] '><strong className='text-[#727788]'>Tuliq ismi:</strong> {selectedUser.fullName}</p>
+                <p className='flex my-2 justify-between text-lg text-[#517aff] '><strong className='text-[#727788]'>Category</strong > {selectedUser.categoryName}</p>
+                <p className='flex my-2 justify-between text-lg text-[#517aff] '><strong className='text-[#727788]'>Telefon</strong> {selectedUser.phoneNumber}</p>
+                <p className='flex my-2 justify-between text-lg text-[#517aff] '><strong className='text-[#727788]'>Status:</strong> {selectedUser.status}</p>
+                <p className='flex my-2 justify-between text-lg text-[#517aff] '><strong className='text-[#727788]'>Qayta test topshirish:</strong> {selectedUser.expiredDate}</p>
               </div>
             ) : (
               <p>Natijalar topilmadi</p>
@@ -386,6 +369,26 @@ export default User;
 //   const handleCancel = () => {
 //     setOpen(false);
 //   };
+
+  // const menu = (user: UserNatijasi) => (
+  //   <Menu>
+  //     <Menu.Item key="1">
+  //       <Link to={`/archive/${user.id}`}>Arxivni ko'rish</Link>
+  //     </Menu.Item>
+  //     <Menu.Item key="2">
+  //       <button onClick={() => showUserDetails(user)}>Natijani ko'rish</button>
+  //     </Menu.Item>
+  //     <Menu.Item key="3">
+  //       <button onClick={() => showRatingModal(user)}>Tasdiqlash</button>
+  //     </Menu.Item>
+  //     <Menu.Item key="4">
+  //       <button>Bekor qilish</button>
+  //     </Menu.Item>
+  //     <Menu.Item key="5">
+  //       <button>Qayta topshirishga ruxsat berish</button>
+  //     </Menu.Item>
+  //   </Menu>
+  // );
 
 //   return (
 //     <div className='overflow-x-hidden'>
