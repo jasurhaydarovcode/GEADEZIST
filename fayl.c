@@ -7070,3 +7070,11 @@ printf("Result: %d
 ", c484);
 // End of block 484
 
+// Code block 485
+int a485 = 485;
+int b485 = 970;
+int c485 = a485 + b485;
+printf("Result: %d
+", c485);
+// End of block 485
+
