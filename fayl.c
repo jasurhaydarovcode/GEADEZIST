@@ -6406,3 +6406,11 @@ printf("Result: %d
 ", c401);
 // End of block 401
 
+// Code block 402
+int a402 = 402;
+int b402 = 804;
+int c402 = a402 + b402;
+printf("Result: %d
+", c402);
+// End of block 402
+
