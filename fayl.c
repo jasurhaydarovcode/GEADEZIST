@@ -54,3 +54,11 @@ printf("Result: %d
 ", c7);
 // End of block 7
 
+// Code block 8
+int a8 = 8;
+int b8 = 16;
+int c8 = a8 + b8;
+printf("Result: %d
+", c8);
+// End of block 8
+
