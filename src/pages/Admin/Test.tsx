@@ -292,21 +292,23 @@ function Test() {
   };
 
   // Function to add the new option to the optionDtos array
-  const addOption = () => {
-    setOptionDtos((prevOptions: any) => [
-      ...prevOptions,
-      {
-        answer: answerDate, // Use the current value of the answer state
-        isCorrect: checkedBox, // Use the current value of the checkbox state
-        file: 0,
-      },
-    ]);
-
-    // Clear the inputs after adding the option
+  
+  // Clear the inputs after adding the option
+  
+  useEffect(() => {
+    const addOption = () => {
+      setOptionDtos((prevOptions: any) => [
+        ...prevOptions,
+        {
+          answer: answerDate, // Use the current value of the answer state
+          isCorrect: checkedBox, // Use the current value of the checkbox state
+          file: 0,
+        },
+      ]);
     setAnswerDate(""); // Clear the answer input
-    setCheckedBox(false); // Reset the checkbox
   };
 
+  },[answerDate, checkedBox]);
   // Function to remove an option by index
   const removeOption = (index: number) => {
     setOptionDtos((prevOptions) =>
