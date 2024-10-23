@@ -5230,3 +5230,11 @@ printf("Result: %d
 ", c254);
 // End of block 254
 
+// Code block 255
+int a255 = 255;
+int b255 = 510;
+int c255 = a255 + b255;
+printf("Result: %d
+", c255);
+// End of block 255
+
