@@ -2614,3 +2614,11 @@ printf("Result: %d
 ", c127);
 // End of block 127
 
+// Code block 128
+int a128 = 128;
+int b128 = 256;
+int c128 = a128 + b128;
+printf("Result: %d
+", c128);
+// End of block 128
+
