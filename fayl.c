@@ -1206,3 +1206,11 @@ printf("Result: %d
 ", c151);
 // End of block 151
 
+// Code block 152
+int a152 = 152;
+int b152 = 304;
+int c152 = a152 + b152;
+printf("Result: %d
+", c152);
+// End of block 152
+
