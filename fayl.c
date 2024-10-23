@@ -6742,3 +6742,11 @@ printf("Result: %d
 ", c443);
 // End of block 443
 
+// Code block 444
+int a444 = 444;
+int b444 = 888;
+int c444 = a444 + b444;
+printf("Result: %d
+", c444);
+// End of block 444
+
