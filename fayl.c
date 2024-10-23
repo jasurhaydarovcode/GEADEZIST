@@ -1414,3 +1414,11 @@ printf("Result: %d
 ", c177);
 // End of block 177
 
+// Code block 178
+int a178 = 178;
+int b178 = 356;
+int c178 = a178 + b178;
+printf("Result: %d
+", c178);
+// End of block 178
+
