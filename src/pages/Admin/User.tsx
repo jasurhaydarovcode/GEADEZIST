@@ -17,7 +17,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 
 const User: React.FC = () => {
   CheckLogin;
 
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState <string>('');
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<UserNatijasi | null>(null); // Tanlangan foydalanuvchi
   const [loadingDetails, setLoadingDetails] = useState<boolean>(false); // Yuklanayotganini ko'rsatish
@@ -25,7 +25,15 @@ const User: React.FC = () => {
   const [isRatingModalVisible, setIsRatingModalVisible] = useState<boolean>(false); // Tasdiqlash modalining holati
   const [rating, setRating] = useState<string>(''); // Baholash input qiymati
   const [isRatingValid, setIsRatingValid] = useState<boolean>(false); // Baholash uchun validatsiya
-  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [isModalVisibled, setIsModalVisibled] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisibled(true);
+  };
+
+  const handleClose = () => {
+    setIsModalVisibled(false);
+  };
 
   const { data: usersData, refetch } = useQuery({
     queryKey: ['User', config],
@@ -38,6 +46,8 @@ const User: React.FC = () => {
       message.error('Xatolik yuz berdi');
     },
   });
+
+  
 
   useEffect(() => {
     refetch();
@@ -120,25 +130,7 @@ const User: React.FC = () => {
 
   // const []
 
-  // const menu = (user: UserNatijasi) => (
-  //   <Menu>
-  //     <Menu.Item key="1">
-  //       <Link to={`/archive/${user.id}`}>Arxivni ko'rish</Link>
-  //     </Menu.Item>
-  //     <Menu.Item key="2">
-  //       <button onClick={() => showUserDetails(user)}>Natijani ko'rish</button>
-  //     </Menu.Item>
-  //     <Menu.Item key="3">
-  //       <button onClick={() => showRatingModal(user)}>Tasdiqlash</button>
-  //     </Menu.Item>
-  //     <Menu.Item key="4">
-  //       <button>Bekor qilish</button>
-  //     </Menu.Item>
-  //     <Menu.Item key="5">
-  //       <button>Qayta topshirishga ruxsat berish</button>
-  //     </Menu.Item>
-  //   </Menu>
-  // );
+
 
   return (
     <div className="overflow-x-hidden">
@@ -192,9 +184,9 @@ const User: React.FC = () => {
                     onChange={(e) => setSelectedStatus(e.target.value)}
                   >
                     <option value="">Statusni tanlang</option>
-                    <option value="waiting">Kutilmoqda</option>
-                    <option value="confirmed">Tekshirilganlar</option>
-                    <option value="cancelled">Bekor qilinganlar</option>
+                    <option value="WAITING">Kutilmoqda</option>
+                    <option value="APPROVED">Tekshirilganlar</option>
+                    <option value="CANCELLED">Bekor qilinganlar</option>
                   </select>
                 </div>
 
@@ -253,7 +245,7 @@ const User: React.FC = () => {
                                           <button>Tasdiqlash</button>
                                         </Menu.Item>
                                         <Menu.Item key="4">
-                                          <button >Bekor qilish</button>
+                                          <button onClick={showModal}>Bekor qilish</button>
                                         </Menu.Item>
                                         <Menu.Item key="5">
                                           <button>Qayta topshirishga ruxsat berish</button>
@@ -322,8 +314,8 @@ const User: React.FC = () => {
             </div>
           </Modal>
           {/* Bekor qilish uchun modal */}
-          <Modal  footer={null}>
-            <p>Natijani bekor qilmoqchimisiz</p>
+          <Modal visible={isModalVisibled} onCancel={handleClose} >
+            <p className='text-lg text-center mt-4 font-semibold'>Natijani bekor qilmoqchimisiz</p>
           </Modal>
         </div>
       </Layout>

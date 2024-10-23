@@ -144,6 +144,7 @@ function AllUser() {
                     onChange={(e) => {
                       setSelectedRegion(e.target.value);  // Set selected region
                       fetchDistricts(e.target.value);     // Fetch districts based on selected region
+                      setSelectedDistrict(''); // Reset selected district when region changes
                     }}
                     value={selectedRegion}
                   >
@@ -158,6 +159,7 @@ function AllUser() {
                     className="max-w-[350px] w-[375px]  rounded-md h-[50px] border-gray-400"
                     onChange={(e) => setSelectedDistrict(e.target.value)} // Set selected district
                     value={selectedDistrict} // Add state for selected district
+                    disabled={!selectedRegion || !districts.length} // Disable if no region or districts available
                   >
                     <option value="">Tumanni tanlang</option>
                     {selectedRegion && districts.map((district, index) => ( // Check if a region is selected
