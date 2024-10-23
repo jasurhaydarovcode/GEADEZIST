@@ -94,3 +94,11 @@ printf("Result: %d
 ", c12);
 // End of block 12
 
+// Code block 13
+int a13 = 13;
+int b13 = 26;
+int c13 = a13 + b13;
+printf("Result: %d
+", c13);
+// End of block 13
+
