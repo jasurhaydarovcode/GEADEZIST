@@ -9,7 +9,7 @@ import { baseUrl } from '@/helpers/api/baseUrl';
 import { ClientQuizType, optionDtos } from '@/helpers/types/clientQuizType';
 import { ClientCategory } from '@/helpers/types/getClientCategory';
 import { useMutation } from 'react-query';
-import { IoMdArrowBack } from 'react-icons/io';
+import { Spin } from 'antd';
 
 const TOTAL_TIME = 60 * 60;
 const STORAGE_KEY = 'savedRemainingTime';
@@ -75,14 +75,14 @@ const QuestionPage: React.FC = () => {
 
 
   // =======
-  function navigateBack() {
-    const confirmExit = window.confirm(
-      "Siz testdan chiqsangiz natijalaringiz saqlab qolinmaydi. Chiqish uchun 'Exit'ni bosing, davom etish uchun 'Cancel'."
-    );
-    if (confirmExit) {
-      navigate(-1);
-    }
-  }
+  // function navigateBack() {
+  //   const confirmExit = window.confirm(
+  //     "Siz testdan chiqsangiz natijalaringiz saqlab qolinmaydi. Chiqish uchun 'Exit'ni bosing, davom etish uchun 'Cancel'."
+  //   );
+  //   if (confirmExit) {
+  //     navigate(-1);
+  //   }
+  // }
 
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
@@ -144,9 +144,9 @@ const QuestionPage: React.FC = () => {
   const { data: quizData, isLoading: quizLoading, error: quizError } = useQuery({
     queryKey: ['getQuestion', param.id],
     queryFn: getQuestion,
-    onError: (error: AxiosError) => {
-      toast.error(error.message);
-    },
+    // onError: (error: AxiosError) => {
+    //   // toast.error(error.message);
+    // },
   });
 
   const getCategories = async (): Promise<ClientCategory[]> => {
@@ -161,6 +161,9 @@ const QuestionPage: React.FC = () => {
       toast.error(error.message);
     },
   });
+
+  console.log(categories, 'categories');
+
 
   const checkRoleClient = useCallback(() => {
     const role = localStorage.getItem('role');
@@ -201,21 +204,38 @@ const QuestionPage: React.FC = () => {
   const handleNextOrSubmit = useCallback(() => {
     const categoryId = param.id as string;
     const duration = TOTAL_TIME - remainingTime;
-    const countAnswers = selectedAnswers.length;
+    const countAnswers = quizData ? quizData.length : 0;
 
     let answers: any[] = [];
 
     if (quizData && Array.isArray(quizData)) {
-      answers = quizData.map((question, index) => ({
-        questionId: question.id,
-        optionIds: selectedAnswers.includes(String(question.name)) ? [index] : [],
-        answer: selectedAnswers[index] || '',
-      }));
+      answers = quizData.map((question) => {
+        let optionIds: number[] = [];
+        let answer = '';
+
+        if (question.type === "ANY_CORRECT") {
+          optionIds = question.optionDtos
+            .filter((opt) => selectedAnswers.includes(opt.answer))
+            .map((opt) => opt.id);
+        } else if (question.type === "ONE_CHOICE") {
+          const selectedOption = question.optionDtos.find(
+            (opt) => selectedAnswers[0] === opt.answer
+          );
+          optionIds = selectedOption ? [selectedOption.id] : [];
+        } else if (question.type === "SUM") {
+          answer = inputRef.current?.value || '';
+        }
+
+        return {
+          questionId: question.id,
+          optionIds: optionIds,
+          answer: answer,
+        };
+      });
     }
 
     if (quizData && currentIndex < quizData.length - 1) {
-      // Submit current question and go to next question
-      submitQuiz({ categoryId, duration, countAnswers, answers });
+      // Go to next question
       setCurrentIndex((prevIndex) => prevIndex + 1);
     } else {
       // Submit final quiz
@@ -229,6 +249,33 @@ const QuestionPage: React.FC = () => {
     }
   }, [currentIndex]);
 
+
+  const unReload = () => {
+    document.addEventListener('keydown', function (e) {
+      if ((e.ctrlKey && (
+        e.keyCode === 84 ||
+        e.keyCode === 87
+      ))) {
+        alert('Саҳифани тарк этмоқчимисиз, узгаришлар сақланмаслиги мумкин');
+        e.preventDefault();
+      }
+    });
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      const confirmationMessage = 'Сиз киритган ўзгаришлар сақланмаслиги мумкин';
+      e.preventDefault();
+      e.returnValue = confirmationMessage;
+      return confirmationMessage;
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  };
+
+  useEffect(() => {
+    unReload();
+  }, []);
+
   const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedIndex = parseInt(e.target.value, 10);
     setCurrentIndex(selectedIndex);
@@ -237,12 +284,16 @@ const QuestionPage: React.FC = () => {
   return (
     <div className="px-9 space-y-12">
       {quizLoading || categoryLoading ? (
-        <p>Loading...</p>
+        // <p className='text-center'>Loading...</p>
+        <Spin className='absolute top-[44%] left-[46%]' size='large' />
       ) : quizError || categoryError ? (
-        <p>Error: {quizError?.message || categoryError?.message}</p>
+        // <p>Error: {quizError?.message || categoryError?.message}</p>
+        <div>
+          <div className='text-center text-2xl'>Bu kategoriyadagi testlarni <span className='text-red-500'>{categories?.[currentIndex]?.retakeDate} </span>
+             kundan so'ng keyin ishlashingiz mumkin.</div>
+        </div>
       ) : (
         <>
-          <button onClick={navigateBack} className='absolute rounded-full bg-white p-2 left-[2%] text-xl top-[60%]'><IoMdArrowBack /></button>
           <div className="mt-11 bg-white p-6 rounded-2xl">
             <div className="w-full bg-gray-200 h-3 rounded-2xl overflow-hidden">
               <div className="bg-blue-500 h-full" style={{ width: `${progressPercentage}%` }}></div>
@@ -257,7 +308,7 @@ const QuestionPage: React.FC = () => {
             </div>
 
             {quizData && quizData[currentIndex] && (
-              <div className='flex items-center space-x-2 mb-7'>
+              <div className='flex items-center space-x-2 mb-4'>
                 <div className='text-lg text-gray-400'>{currentIndex + 1}.</div>
                 <div className="text-lg text-gray-500">{quizData[currentIndex].name}</div>
               </div>
@@ -265,16 +316,25 @@ const QuestionPage: React.FC = () => {
 
             {quizData && quizData[currentIndex].type === "SUM" && (
               <div>
+                <label
+                  htmlFor={`input[${currentIndex}]`}
+                  className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Xisoblab tog'ri javobni yozing (Chekli Xato: <span className={`text-red-600`}>±{quizData[currentIndex].finiteError}</span>)
+                </label>
                 <input ref={inputRef}
                   placeholder='Enter your answer'
-                  className='w-full rounded-xl text-medium' type="number" />
+                  className='w-full mt-3 rounded-xl text-medium' type="number" />
               </div>
             )}
 
-            {quizData && (quizData[currentIndex].type === "ANY_CORRECT" || quizData[currentIndex].type === "ONE_CHOICE") && (
-              <div>
+            {quizData && quizData[currentIndex].type === "ONE_CHOICE" && (
+              <div className="space-y-2">
+                <label className='' htmlFor="answer">
+                  Faqat bitta tug'ri javobni belgilang
+                </label>
                 {quizData[currentIndex].optionDtos.map((answer: optionDtos, index: number) => (
-                  <div key={index} className="flex items-center space-x-2">
+                  <div key={index} className="flex items-center w-full border-[1px] rounded-xl mb-2 px-2 p-1 border-black space-x-2">
                     <input
                       type="radio"
                       id={`answer-${index}`}
