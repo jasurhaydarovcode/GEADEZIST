@@ -17,9 +17,8 @@ import {
   ClientDashboard, ClientProfile, ClientTestStart, ClientQuiz,
   Dashboard, Test, AllUser, User, Archive, Employees, InspectorAdmin,
   Category, Profile, ConfirmSignUp, TestVisual,
-  Address
+  Address, ClientQuizResult
 } from './pages';
-import ClientQuizResult from './pages/Client/ClientResultPage';
 
 function App() {
   const [loading, setLoading] = useState(false);

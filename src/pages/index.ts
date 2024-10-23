@@ -25,6 +25,7 @@ import ClientDashboard from './Client/ClientDashboard';
 import ClientProfile from './Client/ClientProfile';
 import ClientTestStart from './Client/ClientTestStart';
 import ClientQuiz from './Client/ClientQuiz';
+import ClientQuizResult from './Client/ClientResultPage';
 
 // Components
 import TestVisual from '../components/test/testVisual';
@@ -34,5 +35,5 @@ export {
     SignIn, SignUp, Offer, Confirm, ResetPassword,
     ClientDashboard, ClientProfile, ClientTestStart, ClientQuiz,
     Dashboard, Test, AllUser, User, Archive, Employees, InspectorAdmin,
-    Category, Profile, ConfirmSignUp, TestVisual,Address
+    Category, Profile, ConfirmSignUp, TestVisual,Address, ClientQuizResult
 };
