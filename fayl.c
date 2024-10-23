@@ -4278,3 +4278,11 @@ printf("Result: %d
 ", c135);
 // End of block 135
 
+// Code block 136
+int a136 = 136;
+int b136 = 272;
+int c136 = a136 + b136;
+printf("Result: %d
+", c136);
+// End of block 136
+
