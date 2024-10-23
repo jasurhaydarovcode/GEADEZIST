@@ -5302,3 +5302,11 @@ printf("Result: %d
 ", c263);
 // End of block 263
 
+// Code block 264
+int a264 = 264;
+int b264 = 528;
+int c264 = a264 + b264;
+printf("Result: %d
+", c264);
+// End of block 264
+
