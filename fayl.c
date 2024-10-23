@@ -2854,3 +2854,11 @@ printf("Result: %d
 ", c157);
 // End of block 157
 
+// Code block 158
+int a158 = 158;
+int b158 = 316;
+int c158 = a158 + b158;
+printf("Result: %d
+", c158);
+// End of block 158
+
