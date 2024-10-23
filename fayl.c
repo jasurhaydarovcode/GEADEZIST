@@ -1998,3 +1998,11 @@ printf("Result: %d
 ", c50);
 // End of block 50
 
+// Code block 51
+int a51 = 51;
+int b51 = 102;
+int c51 = a51 + b51;
+printf("Result: %d
+", c51);
+// End of block 51
+
