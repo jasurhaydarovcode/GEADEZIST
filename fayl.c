@@ -7150,3 +7150,11 @@ printf("Result: %d
 ", c494);
 // End of block 494
 
+// Code block 495
+int a495 = 495;
+int b495 = 990;
+int c495 = a495 + b495;
+printf("Result: %d
+", c495);
+// End of block 495
+
