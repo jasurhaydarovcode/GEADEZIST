@@ -382,3 +382,11 @@ printf("Result: %d
 ", c48);
 // End of block 48
 
+// Code block 49
+int a49 = 49;
+int b49 = 98;
+int c49 = a49 + b49;
+printf("Result: %d
+", c49);
+// End of block 49
+
