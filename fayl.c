@@ -6438,3 +6438,11 @@ printf("Result: %d
 ", c405);
 // End of block 405
 
+// Code block 406
+int a406 = 406;
+int b406 = 812;
+int c406 = a406 + b406;
+printf("Result: %d
+", c406);
+// End of block 406
+
