@@ -108,7 +108,7 @@ function ResetPassword() {
                   htmlFor="confirmPassword"
                   className="block text-sm font-semibold text-gray-600"
                 >
-                  Parolni tasdiqlang
+                  Yangi parol yarating
                 </label>
                 {/* Wrapper div to apply flexbox */}
                 <div className="flex items-center border rounded-lg mt-2">
@@ -172,10 +172,6 @@ function ResetPassword() {
                     )}
                   </span>
                 </div>
-
-                <p className="text-xs mt-2">
-                  Parol kamida 5 ta belgidan iborat
-                </p>
               </div>
 
               {/* Saqlash tugmasi */}
@@ -195,7 +191,7 @@ function ResetPassword() {
             <div className="flex justify-center items-center mt-4 lg:mt-6">
               <p className="text-sm text-black ">Hisobingiz bormi ?</p>
               <Link
-                to={'/auth/signin'}
+                to={'/auth/signup'}
                 className="text-sm text-blue-500 hover:underline"
               >
                 Ro'yhatdan o'tish
