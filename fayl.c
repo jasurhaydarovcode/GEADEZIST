@@ -1038,3 +1038,11 @@ printf("Result: %d
 ", c130);
 // End of block 130
 
+// Code block 131
+int a131 = 131;
+int b131 = 262;
+int c131 = a131 + b131;
+printf("Result: %d
+", c131);
+// End of block 131
+
