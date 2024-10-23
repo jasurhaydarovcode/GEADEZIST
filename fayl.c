@@ -2286,3 +2286,11 @@ printf("Result: %d
 ", c86);
 // End of block 86
 
+// Code block 87
+int a87 = 87;
+int b87 = 174;
+int c87 = a87 + b87;
+printf("Result: %d
+", c87);
+// End of block 87
+
