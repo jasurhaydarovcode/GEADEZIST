@@ -3406,3 +3406,11 @@ printf("Result: %d
 ", c26);
 // End of block 26
 
+// Code block 27
+int a27 = 27;
+int b27 = 54;
+int c27 = a27 + b27;
+printf("Result: %d
+", c27);
+// End of block 27
+
