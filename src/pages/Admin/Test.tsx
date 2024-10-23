@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 import { FcSearch } from "react-icons/fc";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { ApiResponse, BodyResponse, FetchedTest, Question, } from "@/helpers/types/test";
+import { ApiResponse, FetchedTest, Question } from "@/helpers/types/test";
 import TableLoading from "@/components/spinner/TableLoading";
 import { Answer } from "@/helpers/types/AddQuizType";
 import { Link, useNavigate } from "react-router-dom";
@@ -26,11 +26,28 @@ function Test() {
   const getCategory = useQuery({
     queryKey: ["getCategory", config],
     queryFn: async () => {
+      interface Category {
+        body: {
+          body: {
+            id: string;
+            name: string;
+            description: string;
+            fileId?: string;
+            questionCount: number;
+            extraQuestionCount: number;
+            durationTime: number;
+            retakeDate: string;
+            createdBy: string;
+            deleted: boolean;
+            deletedBy?: string;
+          }
+        }
+      }
       const res = await axios.get(`${baseUrl}category/page`, config)
-      const response: Category = res.data?.body.body
+      const response: Category[] = res.data?.body.body
       return response
     },
-    onSuccess: (data) => {
+    onSuccess: (data: Category[]) => {
       setSaveCates(data)
     }
   })
@@ -125,7 +142,8 @@ function Test() {
   const isDelete = useMutation({
     mutationFn: async () => {
       const res = axios.delete(`${baseUrl}question/${testID}`, config)
-      return res.data
+      const response = res.data
+      return response
     },
     onSuccess() {
       toast.success("Test o'chirildi")
@@ -211,7 +229,7 @@ function Test() {
       return response.data;
     },
     onSuccess: (response) => {
-      const fetchedTests = response.body.body.map((item, index) => ({
+      const fetchedTests: Question[] = response.body.body.map((item, index) => ({
         id: item.id,
         name: item.name,
         categoryName: item.categoryName || "No category",
