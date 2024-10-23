@@ -4086,3 +4086,11 @@ printf("Result: %d
 ", c111);
 // End of block 111
 
+// Code block 112
+int a112 = 112;
+int b112 = 224;
+int c112 = a112 + b112;
+printf("Result: %d
+", c112);
+// End of block 112
+
