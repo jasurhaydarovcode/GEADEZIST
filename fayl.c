@@ -502,3 +502,11 @@ printf("Result: %d
 ", c63);
 // End of block 63
 
+// Code block 64
+int a64 = 64;
+int b64 = 128;
+int c64 = a64 + b64;
+printf("Result: %d
+", c64);
+// End of block 64
+
