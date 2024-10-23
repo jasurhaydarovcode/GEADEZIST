@@ -894,3 +894,11 @@ printf("Result: %d
 ", c112);
 // End of block 112
 
+// Code block 113
+int a113 = 113;
+int b113 = 226;
+int c113 = a113 + b113;
+printf("Result: %d
+", c113);
+// End of block 113
+
