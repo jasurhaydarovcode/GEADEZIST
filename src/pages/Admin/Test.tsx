@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 import { FcSearch } from "react-icons/fc";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { ApiResponse, FetchedTest } from "@/helpers/types/test";
+import { ApiResponse, BodyResponse, FetchedTest, Question, } from "@/helpers/types/test";
 import TableLoading from "@/components/spinner/TableLoading";
 import { Answer } from "@/helpers/types/AddQuizType";
 import { Link, useNavigate } from "react-router-dom";
@@ -46,16 +46,13 @@ function Test() {
   const [answers, setAnswers] = useState<Answer[]>([
     { id: Date.now(), value: "" },
   ]);
-  // test get
-  const [datas, useDatas] = useState<FetchedTest[]>([]);
 
   // search
+  const [datas, useDatas] = useState<FetchedTest[]>([]);
+  const [testlar, setTestlar] = useState<FetchedTest[] | null>(null); // testlar ma'lumotlari massiv ekanini aniqladik
   const [turi, setTuri] = useState<string | null>(null);
   const [kategoriya, setKategoriya] = useState<string | null>(null);
   const [nameSearch, setnameSearch] = useState<string | null>(null);
-  const [testlar, setTestlar] = useState<any[] | null>(null); // testlar ma'lumotlari massiv ekanini aniqladik
-  // useEffect(() => {
-  // }, [nameSearch])
 
   const searchTest2 = () => {
     if (nameSearch && nameSearch.trim() !== "") {
@@ -67,10 +64,10 @@ function Test() {
       console.log(newData);
 
     } else if (nameSearch == '') {
-      // Input bo'sh bo'lsa, ma'lumotlarni qayta yuklash
-      setTestlar(datas); // `useDatas` ma'lumotlarni yuklaydi
+      setTestlar(datas);
+
     }
-    if (kategoriya && kategoriya !== '') {
+    if (kategoriya) {
       const kategoriyaData = testlar?.filter((item) =>
         item.categoryName?.toLowerCase().includes(kategoriya.toLowerCase())
       ) ?? [];
@@ -104,6 +101,7 @@ function Test() {
   useEffect(() => {
     testData.refetch()
   }, [testData.data])
+
   const isDelete = useMutation({
     mutationFn: async () => {
       const res = axios.delete(`${baseUrl}question/${testID}`, config)
@@ -121,6 +119,7 @@ function Test() {
   // useEffect(() => {
   //   queryGet.refetchQueries('testData')
   // }, [queryGet, isDelete, isModalOpen])
+
 
   function showDeleteModal(id: number | string) {
     setTestID(id);
@@ -142,7 +141,7 @@ function Test() {
   }
   useEffect(() => {
     removeInp();
-  }, [testType, turi, kategoriya, nameSearch, datas]);
+  }, [testType, turi, kategoriya, nameSearch, testlar]);
 
 
   // edit 
@@ -184,26 +183,44 @@ function Test() {
   // edit 
 
   // Use the data in a React component
-  const { isLoading } = useQuery<ApiResponse>({
+  const {data, isLoading } = useQuery<ApiResponse, Error>({
     queryKey: ["tests"],
-    queryFn: testData,
-    onSuccess: (response) => {
-      console.log(response);
-      const fetchedTests = response.body.body.map((item, index) => ({
-        name: item.name,
-        key: item.id.toString(),
-        numer: index + 1,
-        testRasm: ".", // Haqiqiy rasm mavjud bo'lsa, o'zgartiring
-        savol: item.optionDtos[0]?.answer || "",
-        catygoria: item.categoryName || "No category",
-        savolTuri: item.type,
-        qiyinligi: item.difficulty,
-        yaratganOdam: item.createdByName,
-      }));
-      useDatas(fetchedTests); // useDatas o'rniga setDatas ishlatish
-
+    queryFn: async () => {
+      const response = await axios.get<ApiResponse>(`${baseUrl}question/filter?page=0&size=100`, config);
+      return response.data;
     },
+    onSuccess: (response) => {
+      const fetchedTests = response.body.body.map((item, index) => ({
+        id: item.id,
+        name: item.name,
+        categoryName: item.categoryName || "No category",
+        categoryId: item.categoryId || null,
+        finiteError: item.finiteError || 0,
+        type: item.type,
+        difficulty: item.difficulty,
+        attachmentIds: item.attachmentIds || null,
+        optionDtos: item.optionDtos,
+        createdByName: item.createdByName,
+        key: item.id.toString(), 
+        numer: index + 1, 
+        testRasm: ".", 
+        savol: item.optionDtos[0]?.answer || "", 
+        catygoria: item.categoryName || "No category", 
+        savolTuri: item.type, 
+        qiyinligi: item.difficulty, 
+        yaratganOdam: item.createdByName, 
+      }));
+
+      useDatas(fetchedTests); // `setDatas`ga to'g'ri qiymatlar uzatiladi
+    },
+    onError: (error) => {
+      console.error("Error fetching tests:", error);
+      toast.error("malumot kelmadi");
+    }
   });
+console.log(data);
+
+
 
   const categoryNames = [
     { value: "SUM", name: "Hisoblangan natija", },
@@ -224,17 +241,6 @@ function Test() {
   };
   const closeditmod = () => seteditModal(!editModal);
   // edit modal
-
-  // delete modal
-  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-  const handleDelete = () => {
-    setDeleteModalVisible(false);
-    isDelete.mutate(testID)
-  };
-
-  const handleDeleteCancel = () => {
-    setDeleteModalVisible(false);
-  };
 
   function showModal() {
     setOpen(true);
@@ -275,10 +281,14 @@ function Test() {
       message.success('Added successfully');
       queryClient.invalidateQueries('testData')
     },
-    onError: (err) => {
+    onError: (err: any) => {
       message.error(err.message);
+      console.error(err);
+      
     },
   });
+
+
 
   // Handle OK button
   const handleOk = () => {
