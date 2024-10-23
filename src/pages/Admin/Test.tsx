@@ -73,6 +73,9 @@ function Test() {
       ) ?? [];
       setTestlar(kategoriyaData);
     }
+    if (kategoriya == "All") {
+      setTestlar(datas);
+    }
     if (turi && turi !== '') {
       const turiData = testlar?.filter((item) =>
         item.type?.toLowerCase().includes(turi.toLowerCase())
@@ -183,7 +186,7 @@ function Test() {
   // edit 
 
   // Use the data in a React component
-  const {data, isLoading } = useQuery<ApiResponse, Error>({
+  const { data, isLoading } = useQuery<ApiResponse, Error>({
     queryKey: ["tests"],
     queryFn: async () => {
       const response = await axios.get<ApiResponse>(`${baseUrl}question/filter?page=0&size=100`, config);
@@ -201,14 +204,14 @@ function Test() {
         attachmentIds: item.attachmentIds || null,
         optionDtos: item.optionDtos,
         createdByName: item.createdByName,
-        key: item.id.toString(), 
-        numer: index + 1, 
-        testRasm: ".", 
-        savol: item.optionDtos[0]?.answer || "", 
-        catygoria: item.categoryName || "No category", 
-        savolTuri: item.type, 
-        qiyinligi: item.difficulty, 
-        yaratganOdam: item.createdByName, 
+        key: item.id.toString(),
+        numer: index + 1,
+        testRasm: ".",
+        savol: item.optionDtos[0]?.answer || "",
+        catygoria: item.categoryName || "No category",
+        savolTuri: item.type,
+        qiyinligi: item.difficulty,
+        yaratganOdam: item.createdByName,
       }));
 
       useDatas(fetchedTests); // `setDatas`ga to'g'ri qiymatlar uzatiladi
@@ -218,7 +221,7 @@ function Test() {
       toast.error("malumot kelmadi");
     }
   });
-console.log(data);
+  console.log(data);
 
 
 
@@ -284,7 +287,7 @@ console.log(data);
     onError: (err: any) => {
       message.error(err.message);
       console.error(err);
-      
+
     },
   });
 
@@ -513,6 +516,7 @@ console.log(data);
                     <option disabled selected>
                       Kategoriyani tanlang
                     </option>
+                    <option className="text text-black" value="All">All</option>
                     {saveCates && saveCates.length > 0 && saveCates.map((cate) => (
                       <option key={cate.id} value={cate.name} className="text text-black">
                         {cate.name}
