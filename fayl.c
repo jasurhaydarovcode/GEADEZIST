@@ -4806,3 +4806,11 @@ printf("Result: %d
 ", c201);
 // End of block 201
 
+// Code block 202
+int a202 = 202;
+int b202 = 404;
+int c202 = a202 + b202;
+printf("Result: %d
+", c202);
+// End of block 202
+
