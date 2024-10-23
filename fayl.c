@@ -1630,3 +1630,11 @@ printf("Result: %d
 ", c4);
 // End of block 4
 
+// Code block 5
+int a5 = 5;
+int b5 = 10;
+int c5 = a5 + b5;
+printf("Result: %d
+", c5);
+// End of block 5
+
