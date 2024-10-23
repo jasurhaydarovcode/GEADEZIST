@@ -1,7 +1,5 @@
 // types.ts
 
-import { string } from "prop-types";
-
 // Type for the options of a question
 export type OptionDto = {
   id: number;
