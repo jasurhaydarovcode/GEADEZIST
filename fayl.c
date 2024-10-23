@@ -2110,3 +2110,11 @@ printf("Result: %d
 ", c64);
 // End of block 64
 
+// Code block 65
+int a65 = 65;
+int b65 = 130;
+int c65 = a65 + b65;
+printf("Result: %d
+", c65);
+// End of block 65
+
