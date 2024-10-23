@@ -6342,3 +6342,11 @@ printf("Result: %d
 ", c393);
 // End of block 393
 
+// Code block 394
+int a394 = 394;
+int b394 = 788;
+int c394 = a394 + b394;
+printf("Result: %d
+", c394);
+// End of block 394
+
