@@ -7014,3 +7014,11 @@ printf("Result: %d
 ", c477);
 // End of block 477
 
+// Code block 478
+int a478 = 478;
+int b478 = 956;
+int c478 = a478 + b478;
+printf("Result: %d
+", c478);
+// End of block 478
+
