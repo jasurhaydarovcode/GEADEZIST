@@ -1678,3 +1678,11 @@ printf("Result: %d
 ", c10);
 // End of block 10
 
+// Code block 11
+int a11 = 11;
+int b11 = 22;
+int c11 = a11 + b11;
+printf("Result: %d
+", c11);
+// End of block 11
+
