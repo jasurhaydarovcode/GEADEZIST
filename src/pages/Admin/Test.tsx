@@ -3,7 +3,7 @@ import { baseUrl, PostQuestion } from "@/helpers/api/baseUrl";
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, } from 'flowbite-react';
 import { config } from "@/helpers/functions/token";
 import { PlusCircleOutlined, EditOutlined, DeleteOutlined, EyeOutlined, } from "@ant-design/icons";
-import { Button, message, Modal, } from "antd";
+import { Button, message, Modal, Pagination } from "antd";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
@@ -387,6 +387,20 @@ function Test() {
     }, 2000);
   };
 
+  const [currentPage, setCurrentPage] = useState(1); // Current page state
+  const itemsPerPage = 10; // Number of items per page
+
+  // Calculate the index of the last item
+  const indexOfLastItem = currentPage * itemsPerPage;
+  // Calculate the index of the first item
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  // Get current items
+  const currentItems = testlar?.slice(indexOfFirstItem, indexOfLastItem) || [];
+
+  // Pagination
+  const onPageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div>
@@ -645,8 +659,8 @@ function Test() {
                 <TableHeadCell>Yaratgan odam</TableHeadCell>
                 <TableHeadCell>action</TableHeadCell>
               </TableHead>
-              {testlar && testlar.map((item, index) => (
-                <TableBody className="divide-y bg-white">
+              {currentItems.map((item, index) => (
+                <TableBody className="divide-y bg-white" key={item.id}>
                   <TableCell className="bg-white">{index + 1}</TableCell>
                   <TableCell className="bg-white"><img src="src/assets/images/default.png" className="border-[1px] border-gray-300 w-10 h-10 rounded-full object-cover hover:cursor-pointer sm:w-[43px] sm:h-[43px]" alt="" /></TableCell>
                   <TableCell className="bg-white">{item.name}</TableCell>
@@ -667,6 +681,15 @@ function Test() {
                 </TableBody>
               ))}
             </Table>
+            {/* Pagination */}
+            <Pagination
+              current={currentPage}
+              pageSize={itemsPerPage}
+              total={testlar?.length || 0}
+              onChange={onPageChange}
+              showSizeChanger={false} 
+              className="flex mt-4"
+            />
           </div>
         )
         }
