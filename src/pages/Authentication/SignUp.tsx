@@ -23,8 +23,36 @@ function SignUp() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   
     
+  const formatPhoneNumber = (value: string) => {
+    let digits = value.replace(/\D/g, '');
 
+    if (!digits.startsWith('998')) {
+      digits = '998';
+    }
+
+    if (digits.length <= 3) {
+      return '' + digits;
+    } else if (digits.length <= 5) {
+      return `${digits.slice(0, 3)} ${digits.slice(3, 5)}`;
+    } else if (digits.length <= 8) {
+      return `${digits.slice(0, 3)} ${digits.slice(3, 5)} ${digits.slice(5, 8)}`;
+    } else if (digits.length <= 10) {
+      return `${digits.slice(0, 3)} ${digits.slice(3, 5)} ${digits.slice(5, 8)} ${digits.slice(8, 10)}`;
+    } else {
+      return `${digits.slice(0, 3)} ${digits.slice(3, 5)} ${digits.slice(5, 8)} ${digits.slice(8, 10)} ${digits.slice(10, 12)}`;
+    }
+  };
+
+  const formatForSwagger = (value: string) => {
+    return value.replace(/\s/g, ''); 
+};
+const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const formattedPhoneNumber = formatPhoneNumber(e.target.value);
+  phone.current!.value = formattedPhoneNumber;
+};
   function signUpPost() {
+    const formattedPhoneNumber = formatForSwagger(phone.current!.value);
+    phone.current!.value = formattedPhoneNumber;
     if (
       !firstname.current?.value ||
       !lastname.current?.value ||
@@ -193,8 +221,9 @@ function SignUp() {
                   type="tel"
                   id="phoneNumber"
                   onKeyDown={handleEnter}
+                  onChange={handlePhoneNumberChange}
                   name="phoneNumber"
-                  placeholder="998 XX XXX XX XX"
+                  defaultValue={'998'}
                   required
                   className="w-full px-4 mt-2 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                 />

@@ -1,6 +1,7 @@
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
+
 // lato font family
 import '@fontsource/lato';
 import '@fontsource/lato/400.css';
@@ -70,7 +71,7 @@ function App() {
         {renderRoute("/tests", TestVisual)}
         {renderRoute("/all-user", AllUser)}
         {renderRoute("/user", User)}
-        {renderRoute("/archive/:id", Archive)}
+        {renderRoute("/archive/:resultId", Archive)}
         {renderRoute("/employees", Employees)}
         {renderRoute("/profile", Profile)}
         {renderRoute("/inspector-admin", InspectorAdmin)}

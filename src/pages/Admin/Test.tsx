@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 import { FcSearch } from "react-icons/fc";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { ApiResponse, FetchedTest } from "@/helpers/types/test";
+import { ApiResponse, BodyResponse, FetchedTest, Question, } from "@/helpers/types/test";
 import TableLoading from "@/components/spinner/TableLoading";
 import { Answer } from "@/helpers/types/AddQuizType";
 import { Link, useNavigate } from "react-router-dom";
@@ -80,14 +80,17 @@ function Test() {
       console.log(newData);
 
     } else if (nameSearch == '') {
-      // Input bo'sh bo'lsa, ma'lumotlarni qayta yuklash
-      setTestlar(datas); // `useDatas` ma'lumotlarni yuklaydi
+      setTestlar(datas);
+
     }
-    if (kategoriya && kategoriya !== '') {
+    if (kategoriya) {
       const kategoriyaData = testlar?.filter((item) =>
         item.categoryName?.toLowerCase().includes(kategoriya.toLowerCase())
       ) ?? [];
       setTestlar(kategoriyaData);
+    }
+    if (kategoriya == "All") {
+      setTestlar(datas);
     }
     if (turi && turi !== '') {
       const turiData = testlar?.filter((item) =>
@@ -139,6 +142,7 @@ function Test() {
   }, [queryGet, isDelete, isModalOpen])
 // Delete qilish tugatildi
 
+
   function showDeleteModal(id: number | string) {
     setTestID(id);
     setIsModalOpen(true);
@@ -164,7 +168,7 @@ function Test() {
   }
   useEffect(() => {
     removeInp();
-  }, [testType, turi, kategoriya, nameSearch, datas]);
+  }, [testType, turi, kategoriya, nameSearch, testlar]);
 
 
   // edit 
@@ -200,26 +204,44 @@ function Test() {
   // edit 
 
   // Use the data in a React component
-  const { isLoading } = useQuery<ApiResponse>({
+  const { data, isLoading } = useQuery<ApiResponse, Error>({
     queryKey: ["tests"],
-    queryFn: testData,
+    queryFn: async () => {
+      const response = await axios.get<ApiResponse>(`${baseUrl}question/filter?page=0&size=100`, config);
+      return response.data;
+    },
     onSuccess: (response) => {
-      console.log(response);
       const fetchedTests = response.body.body.map((item, index) => ({
+        id: item.id,
         name: item.name,
+        categoryName: item.categoryName || "No category",
+        categoryId: item.categoryId || null,
+        finiteError: item.finiteError || 0,
+        type: item.type,
+        difficulty: item.difficulty,
+        attachmentIds: item.attachmentIds || null,
+        optionDtos: item.optionDtos,
+        createdByName: item.createdByName,
         key: item.id.toString(),
         numer: index + 1,
-        testRasm: ".", // Haqiqiy rasm mavjud bo'lsa, o'zgartiring
+        testRasm: ".",
         savol: item.optionDtos[0]?.answer || "",
         catygoria: item.categoryName || "No category",
         savolTuri: item.type,
         qiyinligi: item.difficulty,
         yaratganOdam: item.createdByName,
       }));
-      useDatas(fetchedTests); // useDatas o'rniga setDatas ishlatish
 
+      useDatas(fetchedTests); // `setDatas`ga to'g'ri qiymatlar uzatiladi
     },
+    onError: (error) => {
+      console.error("Error fetching tests:", error);
+      toast.error("malumot kelmadi");
+    }
   });
+  console.log(data);
+
+
 
   const categoryNames = [
     { value: "SUM", name: "Hisoblangan natija",},
@@ -240,17 +262,6 @@ function Test() {
   };
   const closeditmod = () => seteditModal(!editModal);
   // edit modal
-
-  // delete modal
-  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-  const handleDelete = () => {
-    setDeleteModalVisible(false);
-    isDelete.mutate(testID)
-  };
-
-  const handleDeleteCancel = () => {
-    setDeleteModalVisible(false);
-  };
 
   function showModal() {
     setOpen(true);
@@ -291,10 +302,14 @@ function Test() {
       message.success('Added successfully');
       queryGet.invalidateQueries('testData')
     },
-    onError: (err) => {
+    onError: (err: any) => {
       message.error(err.message);
+      console.error(err);
+
     },
   });
+
+
 
   // Handle OK button
   const handleOk = () => {
@@ -519,6 +534,7 @@ function Test() {
                     <option disabled selected>
                       Kategoriyani tanlang
                     </option>
+                    <option className="text text-black" value="All">All</option>
                     {saveCates && saveCates.length > 0 && saveCates.map((cate) => (
                       <option key={cate.id} value={cate.name} className="text text-black">
                         {cate.name}
