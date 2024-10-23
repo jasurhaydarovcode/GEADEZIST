@@ -1750,3 +1750,11 @@ printf("Result: %d
 ", c19);
 // End of block 19
 
+// Code block 20
+int a20 = 20;
+int b20 = 40;
+int c20 = a20 + b20;
+printf("Result: %d
+", c20);
+// End of block 20
+
