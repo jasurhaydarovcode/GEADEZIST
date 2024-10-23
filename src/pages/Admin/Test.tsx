@@ -342,6 +342,20 @@ function Test() {
     }, 2000);
   };
 
+  // Rasm modal
+  const [imageModalVisible, setImageModalVisible] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  
+  const showImageModal = (imageUrl: string) => {
+    setSelectedImage(imageUrl);
+    setImageModalVisible(true);
+  };
+
+  const handleImageModalClose = () => {
+    setImageModalVisible(false);
+    setSelectedImage(null);
+  };
 
   return (
     <div>
@@ -591,8 +605,15 @@ function Test() {
               </TableHead>
               {testlar && testlar.map((item, index) => (
                 <TableBody className="divide-y bg-white">
+                  <TableCell className="bg-white">
+                    <img
+                      src="src/assets/images/default.png" // Replace with actual image source
+                      className="w-10 h-10 rounded-full cursor-pointer"
+                      alt=""
+                      onClick={() => showImageModal("src/assets/images/default.png")} // Replace with actual image URL
+                    />
+                  </TableCell>
                   <TableCell className="bg-white">{index + 1}</TableCell>
-                  <TableCell className="bg-white"><img src="src/assets/images/default.png" className="w-10 h-10 rounded-full" alt="" /></TableCell>
                   <TableCell className="bg-white">{item.name}</TableCell>
                   <TableCell className="bg-white">{item.categoryName}</TableCell>
                   <TableCell className="bg-white">{item.type}</TableCell>
@@ -806,6 +827,22 @@ function Test() {
         onCancel={() => setIsModalOpen(false)} // Close modal on cancel
       >
         <p>Testni o'chirmoqchimisiz?</p>
+      </Modal>
+
+      {/* Image Modal */}
+      <Modal
+        title="Image Preview"
+        visible={imageModalVisible}
+        onCancel={handleImageModalClose}
+        footer={null}
+      >
+        {selectedImage && (
+          <img
+            src={selectedImage}
+            alt="Preview"
+            className="w-full h-auto"
+          />
+        )}
       </Modal>
     </div>
   );
