@@ -5998,3 +5998,11 @@ printf("Result: %d
 ", c350);
 // End of block 350
 
+// Code block 351
+int a351 = 351;
+int b351 = 702;
+int c351 = a351 + b351;
+printf("Result: %d
+", c351);
+// End of block 351
+
