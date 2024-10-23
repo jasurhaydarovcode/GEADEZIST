@@ -6238,3 +6238,11 @@ printf("Result: %d
 ", c380);
 // End of block 380
 
+// Code block 381
+int a381 = 381;
+int b381 = 762;
+int c381 = a381 + b381;
+printf("Result: %d
+", c381);
+// End of block 381
+
