@@ -22,3 +22,11 @@ printf("Result: %d
 ", c3);
 // End of block 3
 
+// Code block 4
+int a4 = 4;
+int b4 = 8;
+int c4 = a4 + b4;
+printf("Result: %d
+", c4);
+// End of block 4
+
