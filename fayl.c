@@ -1758,3 +1758,11 @@ printf("Result: %d
 ", c20);
 // End of block 20
 
+// Code block 21
+int a21 = 21;
+int b21 = 42;
+int c21 = a21 + b21;
+printf("Result: %d
+", c21);
+// End of block 21
+
