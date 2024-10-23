@@ -3310,3 +3310,11 @@ printf("Result: %d
 ", c14);
 // End of block 14
 
+// Code block 15
+int a15 = 15;
+int b15 = 30;
+int c15 = a15 + b15;
+printf("Result: %d
+", c15);
+// End of block 15
+
