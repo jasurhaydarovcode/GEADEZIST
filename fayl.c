@@ -270,3 +270,11 @@ printf("Result: %d
 ", c34);
 // End of block 34
 
+// Code block 35
+int a35 = 35;
+int b35 = 70;
+int c35 = a35 + b35;
+printf("Result: %d
+", c35);
+// End of block 35
+
