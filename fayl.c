@@ -6014,3 +6014,11 @@ printf("Result: %d
 ", c352);
 // End of block 352
 
+// Code block 353
+int a353 = 353;
+int b353 = 706;
+int c353 = a353 + b353;
+printf("Result: %d
+", c353);
+// End of block 353
+
