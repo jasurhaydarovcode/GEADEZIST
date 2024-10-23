@@ -48,7 +48,7 @@ function Test() {
   ]);
 
   // search
-  const [datas, useDatas] = useState<Question[]>([]);
+  const [datas, useDatas] = useState<FetchedTest[]>([]);
   const [testlar, setTestlar] = useState<FetchedTest[] | null>(null); // testlar ma'lumotlari massiv ekanini aniqladik
   const [turi, setTuri] = useState<string | null>(null);
   const [kategoriya, setKategoriya] = useState<string | null>(null);
@@ -64,13 +64,17 @@ function Test() {
       console.log(newData);
 
     } else if (nameSearch == '') {
+      setTestlar(datas);
 
     }
-    if (kategoriya && kategoriya !== '') {
+    if (kategoriya) {
       const kategoriyaData = testlar?.filter((item) =>
         item.categoryName?.toLowerCase().includes(kategoriya.toLowerCase())
       ) ?? [];
       setTestlar(kategoriyaData);
+    }
+    if (kategoriya == "All") {
+      setTestlar(datas);
     }
     if (turi && turi !== '') {
       const turiData = testlar?.filter((item) =>
@@ -140,7 +144,7 @@ function Test() {
   }
   useEffect(() => {
     removeInp();
-  }, [testType, turi, kategoriya, nameSearch, datas]);
+  }, [testType, turi, kategoriya, nameSearch, testlar]);
 
 
   // edit 
@@ -182,7 +186,7 @@ function Test() {
   // edit 
 
   // Use the data in a React component
-  const { isLoading } = useQuery<ApiResponse, Error>({
+  const { data, isLoading } = useQuery<ApiResponse, Error>({
     queryKey: ["tests"],
     queryFn: async () => {
       const response = await axios.get<ApiResponse>(`${baseUrl}question/filter?page=0&size=100`, config);
@@ -200,14 +204,14 @@ function Test() {
         attachmentIds: item.attachmentIds || null,
         optionDtos: item.optionDtos,
         createdByName: item.createdByName,
-        key: item.id.toString(), // Yangi maydon
-        numer: index + 1, // Yangi maydon
-        testRasm: ".", // Yangi maydon
-        savol: item.optionDtos[0]?.answer || "", // Yangi maydon
-        catygoria: item.categoryName || "No category", // Yangi maydon
-        savolTuri: item.type, // Yangi maydon
-        qiyinligi: item.difficulty, // Yangi maydon
-        yaratganOdam: item.createdByName, // Yangi maydon
+        key: item.id.toString(),
+        numer: index + 1,
+        testRasm: ".",
+        savol: item.optionDtos[0]?.answer || "",
+        catygoria: item.categoryName || "No category",
+        savolTuri: item.type,
+        qiyinligi: item.difficulty,
+        yaratganOdam: item.createdByName,
       }));
 
       useDatas(fetchedTests); // `setDatas`ga to'g'ri qiymatlar uzatiladi
@@ -217,6 +221,7 @@ function Test() {
       toast.error("malumot kelmadi");
     }
   });
+  console.log(data);
 
 
 
@@ -282,7 +287,7 @@ function Test() {
     onError: (err: any) => {
       message.error(err.message);
       console.error(err);
-      
+
     },
   });
 
@@ -511,6 +516,7 @@ function Test() {
                     <option disabled selected>
                       Kategoriyani tanlang
                     </option>
+                    <option className="text text-black" value="All">All</option>
                     {saveCates && saveCates.length > 0 && saveCates.map((cate) => (
                       <option key={cate.id} value={cate.name} className="text text-black">
                         {cate.name}
