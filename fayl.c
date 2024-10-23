@@ -4582,3 +4582,11 @@ printf("Result: %d
 ", c173);
 // End of block 173
 
+// Code block 174
+int a174 = 174;
+int b174 = 348;
+int c174 = a174 + b174;
+printf("Result: %d
+", c174);
+// End of block 174
+
