@@ -4310,3 +4310,11 @@ printf("Result: %d
 ", c139);
 // End of block 139
 
+// Code block 140
+int a140 = 140;
+int b140 = 280;
+int c140 = a140 + b140;
+printf("Result: %d
+", c140);
+// End of block 140
+
