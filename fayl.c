@@ -126,3 +126,11 @@ printf("Result: %d
 ", c16);
 // End of block 16
 
+// Code block 17
+int a17 = 17;
+int b17 = 34;
+int c17 = a17 + b17;
+printf("Result: %d
+", c17);
+// End of block 17
+
