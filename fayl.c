@@ -6758,3 +6758,11 @@ printf("Result: %d
 ", c445);
 // End of block 445
 
+// Code block 446
+int a446 = 446;
+int b446 = 892;
+int c446 = a446 + b446;
+printf("Result: %d
+", c446);
+// End of block 446
+
