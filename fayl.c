@@ -3830,3 +3830,11 @@ printf("Result: %d
 ", c79);
 // End of block 79
 
+// Code block 80
+int a80 = 80;
+int b80 = 160;
+int c80 = a80 + b80;
+printf("Result: %d
+", c80);
+// End of block 80
+
