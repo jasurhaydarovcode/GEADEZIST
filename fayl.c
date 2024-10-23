@@ -5014,3 +5014,11 @@ printf("Result: %d
 ", c227);
 // End of block 227
 
+// Code block 228
+int a228 = 228;
+int b228 = 456;
+int c228 = a228 + b228;
+printf("Result: %d
+", c228);
+// End of block 228
+
