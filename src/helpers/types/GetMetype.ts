@@ -26,4 +26,5 @@ export interface GetMetype {
   phoneNumber?: string;
   dateOfBirth?: string;
   profileImage?: string;
+  categoryImage?: string | undefined;
 }

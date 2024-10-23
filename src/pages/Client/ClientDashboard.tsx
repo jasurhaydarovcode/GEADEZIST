@@ -11,7 +11,7 @@ import { defaultImageDash } from '@/helpers/imports/images';
 import { GetMeResponse } from '@/helpers/types/GetMetype';
 
 async function getConfig() {
-  const token = await localStorage.getItem('token');
+  const token = localStorage.getItem('token');
   return {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -54,6 +54,7 @@ const ClientDashboard: React.FC = () => {
     queryKey: ['getResults', config],
     queryFn: async () => {
       const res = await axios.get(getResultsClient, config) as { data: { body: { body: ClientRezType[] } } };
+      console.log(res.data.body.body, "UserResultlar");
       return res.data.body.body;
     },
     onSuccess: (data) => {
@@ -120,9 +121,9 @@ const ClientDashboard: React.FC = () => {
                             <span className="float-right">{card.createdAt}</span>
                           </p>
 
-                          <h2 className="card-title text-red-500 pt-5 text-lg font-bold text-center flex justify-center">
+                          {/* <h2 className="card-title text-red-500 pt-5 text-lg font-bold text-center flex justify-center">
                             Qo'shimcha yo'nalishlardan ishlanganlar
-                          </h2>
+                          </h2> */}
                         </div>
 
                         <div className="card-actions mt-4">
