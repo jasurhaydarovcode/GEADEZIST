@@ -19,6 +19,8 @@ import {
   Category, Profile, ConfirmSignUp, TestVisual
 } from './pages';
 import ClientQuizResult from './pages/Client/ClientResultPage';
+import { render } from 'react-dom';
+import Address from './pages/Admin/Address';
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -76,6 +78,7 @@ function App() {
         {renderRoute("/archive/:resultId", Archive)}
         {renderRoute("/employees", Employees)}
         {renderRoute("/profile", Profile)}
+        {renderRoute("/address", Address)}
         {renderRoute("/inspector-admin", InspectorAdmin)}
       </Routes>
     </>
