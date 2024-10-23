@@ -38,3 +38,11 @@ printf("Result: %d
 ", c5);
 // End of block 5
 
+// Code block 6
+int a6 = 6;
+int b6 = 12;
+int c6 = a6 + b6;
+printf("Result: %d
+", c6);
+// End of block 6
+
