@@ -61,8 +61,7 @@ const Sidebar = () => {
 
 
   return (
-    <div className=''>
-      {/* Burger Menu Button for mobile view */}
+    <div>
       <button
         className="md:hidden bg-gray-100 rounded-xl m-3 p-3 fixed top-0 left-0 z-40"
         onClick={toggleSidebar}
@@ -76,7 +75,7 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 w-80 h-full  bg-gray-100 px-4 py-8 transition-transform duration-300 ease-in-out max-md:z-40
+        className={`fixed top-0 left-0 w-80 h-full bg-gray-100 px-4 py-8 transition-transform duration-300 ease-in-out max-md:z-40
                 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:static`}
       >
         <button

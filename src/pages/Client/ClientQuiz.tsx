@@ -200,15 +200,15 @@ const QuestionPage: React.FC = () => {
     }
   };
 
-  // Function to handle next question or submit quiz
   const handleNextOrSubmit = useCallback(() => {
     const categoryId = param.id as string;
     const duration = TOTAL_TIME - remainingTime;
     const countAnswers = quizData ? quizData.length : 0;
 
-    let answers: any[] = [];
+    let answers: { questionId: string; optionIds: number[]; answer: string }[] = [];
 
     if (quizData && Array.isArray(quizData)) {
+<<<<<<< HEAD
       answers = quizData.map((question) => {
         let optionIds: number[] = [];
         let answer = '';
@@ -236,9 +236,19 @@ const QuestionPage: React.FC = () => {
 
     if (quizData && currentIndex < quizData.length - 1) {
       // Go to next question
+=======
+      answers = quizData.map((question, index) => ({
+        questionId: String(question.id),
+        optionIds: selectedAnswers.includes(String(question.name)) ? [index] : [],
+        answer: selectedAnswers[index] || '',
+      }));
+    }
+
+    if (quizData && currentIndex < quizData.length - 1) {
+      submitQuiz({ categoryId, duration, countAnswers, answers });
+>>>>>>> 04cf091892fc4e181a7fcb60ce56e62dd3629313
       setCurrentIndex((prevIndex) => prevIndex + 1);
     } else {
-      // Submit final quiz
       submitQuiz({ categoryId, duration, countAnswers, answers });
     }
   }, [quizData, currentIndex, remainingTime, selectedAnswers, submitQuiz, param.id]);

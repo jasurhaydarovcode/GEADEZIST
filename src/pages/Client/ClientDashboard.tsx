@@ -67,7 +67,7 @@ const ClientDashboard: React.FC = () => {
 
   useEffect(() => {
     fetchCards.refetch();
-  }, []);
+  }, [fetchCards]);
 
   return (
     <div>
@@ -88,9 +88,9 @@ const ClientDashboard: React.FC = () => {
             </div>
             <div className="p-4">
               {cards && cards.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 mx-auto justify-center">
                   {cards.map((card: ClientRezType, index) => (
-                    <div key={index} className="card bg-white glass w-96 mx-auto">
+                    <div key={index} className="card bg-white glass mx-auto w-full sm:w-80 md:w-96">
                       <figure>
                         <img
                           src={card.categoryImage || defaultImageDash}
@@ -103,7 +103,6 @@ const ClientDashboard: React.FC = () => {
                           <h2 className="card-title text-red-500 pb-5 font-bold text-center flex justify-center">
                             {card.categoryName || <del className='text-black'>No Title Data</del>}
                           </h2>
-
                           <p className="text-gray-600">
                             <strong>Tog'ri Javoblar:</strong>
                             <span className="float-right">{card.countAnswers}</span>
@@ -120,12 +119,7 @@ const ClientDashboard: React.FC = () => {
                             <strong>Test Topshirilgan vaqt:</strong>
                             <span className="float-right">{card.createdAt}</span>
                           </p>
-
-                          {/* <h2 className="card-title text-red-500 pt-5 text-lg font-bold text-center flex justify-center">
-                            Qo'shimcha yo'nalishlardan ishlanganlar
-                          </h2> */}
                         </div>
-
                         <div className="card-actions mt-4">
                           <button
                             className={`btn text-lg w-full ${card.status === 'APPROVED' ? 'btn-success' : card.status === 'WAITING' ? 'btn-warning' : 'btn-primary'}`}
@@ -151,7 +145,6 @@ const ClientDashboard: React.FC = () => {
                 </div>
               )}
             </div>
-
           </div>
         </div>
       </Layout>

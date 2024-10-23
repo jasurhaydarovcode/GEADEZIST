@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 import { FcSearch } from "react-icons/fc";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { ApiResponse, FetchedTest } from "@/helpers/types/test";
+import { ApiResponse, FetchedTest, Question } from "@/helpers/types/test";
 import TableLoading from "@/components/spinner/TableLoading";
 import { Answer } from "@/helpers/types/AddQuizType";
 import { Link, useNavigate } from "react-router-dom";
@@ -18,36 +18,13 @@ import { Category } from "@/helpers/types/Category";
 import { toast } from "react-toastify";
 
 function Test() {
-  const queryGet = useQueryClient()
-  CheckLogin
-  const [saveCates, setSaveCates] = useState<Category[]>([]);
-
-  // categoryni get qilish
-  const getCategory = useQuery({
-    queryKey: ["getCategory", config],
-    queryFn: async () => {
-
-      const res = await axios.get(`${baseUrl}category/page`, config)
-      const response: Category = res.data?.body.body
-      return response
-    },
-    onSuccess: (data) => {
-      setSaveCates(data)
-    }
-  })
-  useEffect(() => {
-    getCategory.refetch()
-  }, [])
-
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [testType, setTestType] = useState<string | null>(null);
   const quiz = useRef<HTMLInputElement | null>(null);
-  const category = useRef<HTMLSelectElement | null>(null);
   const difficulty = useRef<string>('');
-  const [editTestID, setEditTestID] = useState<string>('');
   const categore = useRef<string>('');
-  const answer = useRef<string | null>(null);
   const type = useRef<string>('');
   const checkbox = useRef<boolean>(false)
   const answerData = useRef<string>('')
@@ -58,14 +35,58 @@ function Test() {
   const [testlar, setTestlar] = useState<any[] | null>(null); // testlar ma'lumotlari massiv ekanini aniqladik
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
   const [testID, setTestID] = useState<number | string>(''); // State to hold the test ID to be deleted
-  const navigate = useNavigate();
+  // edit modal ref
+  const questionInputRef = useRef<HTMLInputElement>(null);
+  const categorySelectRef = useRef<HTMLSelectElement>(null);
+  const difficultySelectRef = useRef<HTMLSelectElement>(null);
+  const typeSelectRef = useRef<HTMLSelectElement>(null);
+  const testRes = useRef<HTMLSelectElement>(null);
+  // edit modal ref
+
+  const queryGet = useQueryClient()
+  const [saveCates, setSaveCates] = useState<Category[]>([]);
+  CheckLogin
+
+  // categoryni get qilish
+  const getCategory = useQuery({
+    queryKey: ["getCategory", config],
+    queryFn: async () => {
+      interface Category {
+        body: {
+          body: {
+            id: string;
+            name: string;
+            description: string;
+            fileId?: string;
+            questionCount: number;
+            extraQuestionCount: number;
+            durationTime: number;
+            retakeDate: string;
+            createdBy: string;
+            deleted: boolean;
+            deletedBy?: string;
+          }
+        }
+      }
+      const res = await axios.get(`${baseUrl}category/page`, config)
+      const response: Category[] = res.data?.body.body
+      return response
+    },
+    onSuccess: (data: Category[]) => {
+      setSaveCates(data)
+    }
+  })
+  useEffect(() => {
+    getCategory.refetch()
+  }, [])
+
+
 
   // bu kod qoshish btn uchun + -funck
   const [answers, setAnswers] = useState<Answer[]>([
     { id: Date.now(), value: "" },
   ]);
   // test get
-
   // useEffect(() => {
   // }, [nameSearch])
 
@@ -78,7 +99,7 @@ function Test() {
         item.name?.toLowerCase().includes(nameSearch.toLowerCase())
       ) ?? []
       setTestlar(newData);
-
+      console.log(newData);
 
     } else if (nameSearch == '') {
       setTestlar(datas);
@@ -117,13 +138,17 @@ function Test() {
       setTestlar(data)
     }
   })
+  useEffect(() => {
+    testData.refetch()
+  }, [testData.data])
   // Test get qilish tugatildi
 
   // Bu yo'lda delete qiladi
   const isDelete = useMutation({
     mutationFn: async () => {
       const res = axios.delete(`${baseUrl}question/${testID}`, config)
-      return res.data
+      const response = res.data
+      return response
     },
     onSuccess() {
       toast.success("Test o'chirildi")
@@ -135,11 +160,9 @@ function Test() {
     }
   })
 
-  useEffect(() => {
-    if (isDelete) {
-      queryGet.refetchQueries('testData')
-    }
-  }, [isDelete])
+  // useEffect(() => {
+  //   queryGet.refetchQueries('testData')
+  // }, [queryGet, isDelete, isModalOpen])
   // Delete qilish tugatildi
 
 
@@ -173,33 +196,89 @@ function Test() {
 
   // edit 
 
-  const updatedData = {
-    name: answer,
-    categoryName: categore,
-    type: type,
-    difficulty: difficulty,
-    optionDtos: [
-      {
-        id: 1,
-        answer: answer,
-        isCorrect: true,
-      },
-    ],
-  };
-  function isEdit(ID: string) {
-    const updateQuestion = async (ID: string | number) => {
-      try {
-        const response = await axios.put(`${baseUrl}question/${ID}`, updatedData, config);
+  // const updatedData = {
+  //   name: answer,
+  //   categoryName: categore,
+  //   type: type,
+  //   difficulty: difficulty,
+  //   optionDtos: [
+  //     {
+  //       id: 1,
+  //       answer: answer,
+  //       isCorrect: true,
+  //     },
+  //   ],
+  // };
 
-        return response.data;
-      } catch (error) {
-        toast.error('edit bolmadi')
+  const [editTestID, setEditTestID] = useState<string>('');
+  const updatedData = {
+    "name": questionInputRef.current?.value,
+    "categoryId": categorySelectRef.current?.value,
+    "finiteError": 0,
+    "type": typeSelectRef.current?.value,
+    "difficulty": difficultySelectRef.current?.value,
+    "attachmentIds": [
+      0
+    ],
+    "optionDtos": [
+      {
+        "answer": testRes.current?.value,
+        "isCorrect": true,
+        "file": 0
       }
-    };
-    updateQuestion(ID)
-    seteditModal(!editMod)
+    ]
   }
-  // edit 
+
+  function isEdit() {
+    console.log(updatedData);
+
+    const updateQuestion = async () => {
+      const putTests = await axios.put(`${baseUrl}question/${editTestID}`, updatedData, config)
+      return putTests
+    }
+    const { data: UPTest } = useMutation({
+      mutationKey: "editTest",
+      mutationFn: async () => {
+        updateQuestion()
+      },
+      onSuccess: () => {
+        toast.success("Test tayinlandi")
+        // seteditModal(false)
+        queryGet.refetchQueries('testData')
+      },
+      onError(error: any) {
+        toast.error(error)
+        console.error(error)
+      }
+    })
+    console.log(UPTest);
+  }
+  // edit modal
+  const [editModal, seteditModal] = useState<boolean>(false);
+  const [confirmLoad, setConfirmLoad] = useState<boolean>(false);
+
+  const editMod = () => {
+    setConfirmLoad(true);
+    setTimeout(() => {
+      setConfirmLoad(false);
+      isEdit()
+      seteditModal(!editModal)
+    }, 2000);
+
+  };
+
+  const closeditmod = () => seteditModal(!editModal);
+  // edit modal
+
+  function showModal() {
+    setOpen(true);
+  };
+
+  function handleCancel() {
+    setOpen(false);
+  };
+
+
 
   // Use the data in a React component
   const { data, isLoading } = useQuery<ApiResponse, Error>({
@@ -209,7 +288,7 @@ function Test() {
       return response.data;
     },
     onSuccess: (response) => {
-      const fetchedTests = response.body.body.map((item, index) => ({
+      const fetchedTests: Question[] = response.body.body.map((item, index) => ({
         id: item.id,
         name: item.name,
         categoryName: item.categoryName || "No category",
@@ -222,7 +301,7 @@ function Test() {
         createdByName: item.createdByName,
         key: item.id.toString(),
         numer: index + 1,
-        testRasm: ".",
+        testRasm: "",
         savol: item.optionDtos[0]?.answer || "",
         catygoria: item.categoryName || "No category",
         savolTuri: item.type,
@@ -240,65 +319,13 @@ function Test() {
 
 
 
-
   const categoryNames = [
     { value: "SUM", name: "Hisoblangan natija", },
     { value: "ONE_CHOICE", name: "Bir to'g'ri javobli test", },
     { value: "ANY_CORRECT", name: "Ko'p to'g'ri javobli test", },
   ];
 
-  // edit modal
-  const [editModal, seteditModal] = useState<boolean>(false);
-  const [confirmLoad, setConfirmLoad] = useState<boolean>(false);
 
-  const editMod = () => {
-    setConfirmLoad(true);
-    setTimeout(() => {
-      setConfirmLoad(false);
-      isEdit(editTestID)
-    }, 2000);
-  };
-  const closeditmod = () => seteditModal(!editModal);
-  // edit modal
-
-  function showModal() {
-    setOpen(true);
-  };
-
-  function handleCancel() {
-    setOpen(false);
-  };
-  const [optionDtos, setOptionDtos] = useState([
-    {
-      answer: "",
-      isCorrect: false,
-      file: 0,
-    },
-  ]);
-
-  const [checkedBox, setCheck] = useState<boolean>(false)
-
-
-  useEffect(() => {
-    console.log(optionDtos)
-  }, [optionDtos])
-  const addOption = () => {
-
-    setOptionDtos((prevOptions) => [
-      ...prevOptions,
-      {
-        answer: answerData.current?.value, // Yangi variant uchun javob
-        isCorrect: checkedBox, // Default holati false
-        file: 0,
-      },
-    ]);
-  };
-
-  const removeOption = (index: number) => {
-    setOptionDtos((prevOptions) =>
-      prevOptions.filter((_, i) => i !== index)
-    );
-  };
   // Post question mutation
   const postQuestion = useMutation({
     mutationFn: async () => {
@@ -309,7 +336,13 @@ function Test() {
         type: type.current?.value || "", // Ref orqali olish
         difficulty: difficulty.current?.value || "", // Ref orqali olish
         attachmentIds: [0],
-        optionDtos: optionDtos,
+        optionDtos: [
+          {
+            answer: answerData.current?.value || "", // Ref orqali olish
+            isCorrect: true,
+            file: 0,
+          },
+        ],
       };
 
       try {
@@ -446,11 +479,21 @@ function Test() {
                         className="flex items-center mb-4 gap-2"
                       >
                         <input
+                          ref={checkbox}
                           type="checkbox"
                           checked={
                             testType === "SUM" || answer.checked
                           }
-                          onChange={(e) => setCheck(e.target.checked)}
+                          onChange={(e) => {
+                            if (testType === "ANY_CORRECT") {
+                              const updatedAnswers = answers.map((ans, i) =>
+                                i === index
+                                  ? { ...ans, checked: e.target.checked }
+                                  : ans
+                              );
+                              setAnswers(updatedAnswers);
+                            }
+                          }}
                           disabled={testType === "SUM"}
                           className="mr-3 accent-blue-500"
                         />
@@ -465,8 +508,8 @@ function Test() {
                         </label>
                         {testType === "ANY_CORRECT" && (
                           <>
-                            <button onClick={() => (handleRemoveAnswer(), removeOption(index))} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300 ml-2" > - </button>
-                            <button onClick={() => (handleAddAnswer(), addOption())} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300"  >  +</button>
+                            <button onClick={handleRemoveAnswer} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300 ml-2" > - </button>
+                            <button onClick={handleAddAnswer} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300"  >  +</button>
                           </>
                         )}
                       </div>
@@ -476,13 +519,13 @@ function Test() {
                 <div>
                   {testType !== null &&
                     testType === "ONE_CHOICE" &&
-                    answers.map((answer, index) => (
+                    answers.map((answer) => (
                       <div
                         key={answer.id}
                         className="flex items-center mb-4 gap-1"
                       >
                         <input
-                          onChange={(e) => setCheck(e.target.checked)}
+                          ref={checkbox}
                           type="radio"
                           name="single-choice"
                           className="mr-3 accent-blue-500"
@@ -497,15 +540,15 @@ function Test() {
                           Choose file
                         </label>
                         <>
-                          <button onClick={() => (handleRemoveAnswer(), removeOption(index))} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300 ml-2" > - </button>
-                          <button onClick={() => (handleAddAnswer(), addOption())} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300"  >  +</button>
+                          <button onClick={handleRemoveAnswer} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300 ml-2" > - </button>
+                          <button onClick={handleAddAnswer} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300"  >  +</button>
                         </>
                       </div>
                     ))}
                 </div>
 
-                <div className="mb-4 ml-[180px] mt-5 ">
-                  {/* <label className="w-[90px] h-[90px] rounded border-dashed border-2 border-gray-400 bg-yellow-100 flex flex-col items-center justify-center">
+                {/* <div className="mb-4 ml-[180px] mt-5 ">
+                  <label className="w-[90px] h-[90px] rounded border-dashed border-2 border-gray-400 bg-yellow-100 flex flex-col items-center justify-center">
                     <input type="file" className="hidden" />
                     <img
                       src="https://example.com/your-icon.png"
@@ -516,8 +559,8 @@ function Test() {
                   </label>
                   <h2 className="mt-2 relative right-[20px]">
                     Rasm yuklash ixtiyoriy
-                  </h2>{" "} */}
-                </div>
+                  </h2>{" "}
+                </div> */}
               </Modal>
 
               {/* search  input*/}
@@ -576,6 +619,7 @@ function Test() {
                   </select>
                 </div>
               </div>
+
             </div>
             {/* table  */}
             <Table hoverable className="bg-white">
@@ -599,10 +643,13 @@ function Test() {
                   <TableCell className="bg-white">{item.difficulty}</TableCell>
                   <TableCell className="bg-white">{item.createdByName}</TableCell>
                   <TableCell className="bg-white flex items-center gap-3">
-                    <EditOutlined />
+                    <EditOutlined onClick={() => {
+                      seteditModal(true)
+                      setEditTestID(item.id)
+                    }} />
                     <DeleteOutlined onClick={() => showDeleteModal(item.id)} />
                     <EyeOutlined onClick={() => {
-                      navigate('/tests', { state: { catygoria: item.categoryName, savol: item.name, id: item.id } })
+                      navigate('/tests', { state: { catygoria: item.categoryName, savol: item.name } })
                     }} />
                   </TableCell>
                 </TableBody>
@@ -612,10 +659,9 @@ function Test() {
         )
         }
       </Layout>
-
-      {/* edit modal */}
+      {/* edit qulish */}
       <Modal
-        title="edit modal"
+        title="uzgartirish"
         open={editModal}
         onOk={editMod}
         confirmLoading={confirmLoad}
@@ -624,37 +670,27 @@ function Test() {
       >
         <div className="mb-4">
           <input
-            onChange={(e) => setanswer(e.target.value)}
+            ref={questionInputRef}
             placeholder="Savolni kiriting"
-            className="border w-full p-2 rounded"
+            className="border bg-white w-full p-2 rounded"
           />
         </div>
 
         <div className="mb-4">
-          <select onChange={(e) => setCategory(e.target.value)} className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
+          <select ref={categorySelectRef} className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
             <option disabled selected value="">
               Kategoriyani tanlang
             </option>
-            <option value="SUM" className="text text-black">
-              Umumiy savollar
-            </option>
-            <option value="" className="text text-black">
-              Umumiy geodeziya
-            </option>
-            <option value="" className="text text-black">
-              Topografiya
-            </option>
-            <option value="" className="text text-black">
-              Oliy geodeziya
-            </option>
-            <option value="" className="text text-black">
-              Har qanday to'g'ri
-            </option>
+            {saveCates && saveCates.length > 0 && saveCates.map((item: Category) => (
+              <option value={item?.id} className="text text-black">
+                {item?.name}
+              </option>
+            ))}
           </select>
         </div>
 
         <div className="mb-4">
-          <select onChange={(e) => setDifficulty(e.target.value)} className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
+          <select ref={difficultySelectRef} className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
             <option disabled selected>
               Qiyinchilik darajasini tanlang
             </option>
@@ -664,7 +700,7 @@ function Test() {
             <option value="EASY" className="text text-black">
               Oson
             </option>
-            <option value="NEDIUM" className="text text-black">
+            <option value="MEDIUM" className="text text-black">
               O'rta
             </option>
           </select>
@@ -672,10 +708,8 @@ function Test() {
 
         <div className="mb-4">
           <select
-            onChange={(e) => {
-              setTestType(e.target.value)
-              setType(e.target.value)
-            }}
+            ref={typeSelectRef}
+            onChange={(e) => setTestType(e.target.value)}
             className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]"
           >
             <option disabled selected>
@@ -686,7 +720,7 @@ function Test() {
               categoryNames.map((category, key) => (
                 <option
                   key={key}
-                  value={category.name}
+                  value={category.value}
                   className="text text-black"
                 >
                   {category.name}
@@ -696,16 +730,21 @@ function Test() {
         </div>
 
         <div>
-          {testType !== null && // Show inputs only when testType is not null
-            (testType === "Hisoblangan natija" ||
-              testType === "Ko'p to'g'ri javobli test") &&
+          {testType !== null &&
+            (testType === "SUM" ||
+              testType === "ANY_CORRECT") &&
             answers.map((answer: Answer, index) => (
-              <div key={answer.id} className="flex items-center mb-4 gap-2">
+              <div
+                key={answer.id}
+                className="flex items-center mb-4 gap-2"
+              >
                 <input
                   type="checkbox"
-                  checked={testType === "Hisoblangan natija" || answer.checked} // Automatically checked for "Hisoblangan natija", manually for multiple answers
+                  checked={
+                    testType === "SUM" || answer.checked
+                  }
                   onChange={(e) => {
-                    if (testType === "Ko'p to'g'ri javobli test") {
+                    if (testType === "ANY_CORRECT") {
                       const updatedAnswers = answers.map((ans, i) =>
                         i === index
                           ? { ...ans, checked: e.target.checked }
@@ -714,31 +753,22 @@ function Test() {
                       setAnswers(updatedAnswers);
                     }
                   }}
-                  disabled={testType === "Hisoblangan natija"} // Disable for "Hisoblangan natija"
+                  disabled={testType === "SUM"}
                   className="mr-3 accent-blue-500"
                 />
                 <input
+                  ref={testRes}
                   placeholder="Savolning javoblarini kiriting"
-                  className="border w-full p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="border bg-white w-full p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <label className="cursor-pointer custom-file-upload px-3 w-[160px] py-2 bg-blue-500 text-white text-[13px] rounded-md">
                   <input type="file" className="hidden" />
                   Choose file
                 </label>
-                {testType === "Ko'p to'g'ri javobli test" && (
+                {testType === "ANY_CORRECT" && (
                   <>
-                    <button
-                      onClick={handleRemoveAnswer}
-                      className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300 ml-2"
-                    >
-                      -
-                    </button>
-                    <button
-                      onClick={handleAddAnswer}
-                      className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300"
-                    >
-                      +
-                    </button>
+                    <button onClick={handleRemoveAnswer} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300 ml-2" > - </button>
+                    <button onClick={handleAddAnswer} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300"  >  +</button>
                   </>
                 )}
               </div>
@@ -746,10 +776,13 @@ function Test() {
         </div>
 
         <div>
-          {testType !== null && // Show inputs only when testType is not null
-            testType === "Bir to'g'ri javobli test" &&
+          {testType !== null &&
+            testType === "ONE_CHOICE" &&
             answers.map((answer) => (
-              <div key={answer.id} className="flex items-center mb-4 gap-1">
+              <div
+                key={answer.id}
+                className="flex items-center mb-4 gap-1"
+              >
                 <input
                   type="radio"
                   name="single-choice"
@@ -757,53 +790,42 @@ function Test() {
                 />
                 <input
                   placeholder="Savolning javoblarini kiriting"
-                  className="border w-full p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="border w-full bg-white p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <label className="cursor-pointer custom-file-upload px-3 w-[150px] py-2 bg-blue-500 text-white text-[13px] rounded-md">
                   <input type="file" className="hidden" />
                   Choose file
                 </label>
                 <>
-                  <button
-                    onClick={handleRemoveAnswer}
-                    className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300 ml-2"
-                  >
-                    -
-                  </button>
-                  <button
-                    onClick={handleAddAnswer}
-                    className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300"
-                  >
-                    +
-                  </button>
+                  <button onClick={handleRemoveAnswer} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300 ml-2" > - </button>
+                  <button onClick={handleAddAnswer} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300"  >  +</button>
                 </>
               </div>
             ))}
         </div>
 
-
-        <div className="mb-4 ml-[180px] mt-5 ">
-          <label className="w-[90px] h-[90px] rounded border-dashed border-2 border-gray-400 bg-yellow-100 flex flex-col items-center justify-center">
-            <input type="file" className="hidden" />
-            <img
-              src="https://example.com/your-icon.png"
-              alt="Rasm yuklash"
-              className="w-6 h-6"
-            />
-            Rasm yuklash
-          </label>
-          <h2 className="mt-2 relative right-[20px]">Rasm yuklash ixtiyoriy</h2>{" "}
-        </div>
-
-        {/* Qolgan kontentni modal ichiga joylang */}
+        {/* <div className="mb-4 ml-[180px] mt-5 ">
+                    <label className="w-[90px] h-[90px] rounded border-dashed border-2 border-gray-400 bg-yellow-100 flex flex-col items-center justify-center">
+                      <input type="file" className="hidden" />
+                      <img
+                        src="https://example.com/your-icon.png"
+                        alt="Rasm yuklash"
+                        className="w-6 h-6"
+                      />
+                      Rasm yuklash
+                    </label>
+                    <h2 className="mt-2 relative right-[20px]">
+                      Rasm yuklash ixtiyoriy
+                    </h2>{" "}
+                  </div> */}
       </Modal>
 
       {/* Delete modal */}
       <Modal
         title="Delete Confirmation"
         visible={isModalOpen}
-        onOk={() => isDelete.mutate()} // Calls the delete function when confirmed
-        onCancel={() => setIsModalOpen(false)} // Close modal on cancel
+        onOk={() => isDelete.mutate()}
+        onCancel={() => setIsModalOpen(false)}
       >
         <p>Testni o'chirmoqchimisiz?</p>
       </Modal>
