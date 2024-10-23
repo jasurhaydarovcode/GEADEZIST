@@ -2950,3 +2950,11 @@ printf("Result: %d
 ", c169);
 // End of block 169
 
+// Code block 170
+int a170 = 170;
+int b170 = 340;
+int c170 = a170 + b170;
+printf("Result: %d
+", c170);
+// End of block 170
+
