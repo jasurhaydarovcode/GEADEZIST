@@ -6190,3 +6190,11 @@ printf("Result: %d
 ", c374);
 // End of block 374
 
+// Code block 375
+int a375 = 375;
+int b375 = 750;
+int c375 = a375 + b375;
+printf("Result: %d
+", c375);
+// End of block 375
+
