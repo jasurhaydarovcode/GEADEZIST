@@ -17,7 +17,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        {/* <CursorProtect> */}
+        {/* <CursorProtect message='❌ Websayt Ximoyalangan'> */}
           {/* <DevToolsBlocker> */}
             <App />
           {/* </DevToolsBlocker> */}
