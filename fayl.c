@@ -5038,3 +5038,11 @@ printf("Result: %d
 ", c230);
 // End of block 230
 
+// Code block 231
+int a231 = 231;
+int b231 = 462;
+int c231 = a231 + b231;
+printf("Result: %d
+", c231);
+// End of block 231
+
