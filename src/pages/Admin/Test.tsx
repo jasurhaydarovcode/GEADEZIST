@@ -56,7 +56,7 @@ function Test() {
 
   const searchTest2 = () => {
     if (nameSearch && nameSearch.trim() !== "") {
-      // testlar mavjud bo'lsa va testlar massiv bo'lsa, filter qilamiz
+
       const newData = testlar?.filter((item) =>
         item.name?.toLowerCase().includes(nameSearch.toLowerCase())
       ) ?? []
