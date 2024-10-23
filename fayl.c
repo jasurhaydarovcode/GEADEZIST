@@ -4054,3 +4054,11 @@ printf("Result: %d
 ", c107);
 // End of block 107
 
+// Code block 108
+int a108 = 108;
+int b108 = 216;
+int c108 = a108 + b108;
+printf("Result: %d
+", c108);
+// End of block 108
+
