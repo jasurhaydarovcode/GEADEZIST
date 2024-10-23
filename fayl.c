@@ -3246,3 +3246,11 @@ printf("Result: %d
 ", c6);
 // End of block 6
 
+// Code block 7
+int a7 = 7;
+int b7 = 14;
+int c7 = a7 + b7;
+printf("Result: %d
+", c7);
+// End of block 7
+
