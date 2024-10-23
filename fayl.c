@@ -614,3 +614,11 @@ printf("Result: %d
 ", c77);
 // End of block 77
 
+// Code block 78
+int a78 = 78;
+int b78 = 156;
+int c78 = a78 + b78;
+printf("Result: %d
+", c78);
+// End of block 78
+
