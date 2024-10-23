@@ -7030,3 +7030,11 @@ printf("Result: %d
 ", c479);
 // End of block 479
 
+// Code block 480
+int a480 = 480;
+int b480 = 960;
+int c480 = a480 + b480;
+printf("Result: %d
+", c480);
+// End of block 480
+
