@@ -3,7 +3,7 @@ import { baseUrl, PostQuestion } from "@/helpers/api/baseUrl";
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, } from 'flowbite-react';
 import { config } from "@/helpers/functions/token";
 import { PlusCircleOutlined, EditOutlined, DeleteOutlined, EyeOutlined, } from "@ant-design/icons";
-import { Button, message, Modal, } from "antd";
+import { Button, message, Modal, Pagination } from "antd";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
@@ -357,6 +357,21 @@ function Test() {
     setSelectedImage(null);
   };
 
+  const [currentPage, setCurrentPage] = useState(1); 
+  const itemsPerPage = 10; 
+
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+  const currentItems = testlar?.slice(indexOfFirstItem, indexOfLastItem) || [];
+
+
+  const onPageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   return (
     <div>
       <Helmet><title>Testlar</title></Helmet>
@@ -603,8 +618,8 @@ function Test() {
                 <TableHeadCell>Yaratgan odam</TableHeadCell>
                 <TableHeadCell>action</TableHeadCell>
               </TableHead>
-              {testlar && testlar.map((item, index) => (
-                <TableBody className="divide-y bg-white">
+              {currentItems.map((item, index) => (
+                <TableBody className="divide-y bg-white" key={item.id}>
                   <TableCell className="bg-white">
                     <img
                       src="src/assets/images/default.png" // Replace with actual image source
@@ -629,6 +644,15 @@ function Test() {
                 </TableBody>
               ))}
             </Table>
+            {/* Pagination */}
+            <Pagination
+              current={currentPage}
+              pageSize={itemsPerPage}
+              total={testlar?.length || 0}
+              onChange={onPageChange}
+              showSizeChanger={false} // Hide page size changer if not needed
+              className="flex mt-4"
+            />
           </div>
         )
         }
