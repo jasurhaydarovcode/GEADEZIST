@@ -230,3 +230,11 @@ printf("Result: %d
 ", c29);
 // End of block 29
 
+// Code block 30
+int a30 = 30;
+int b30 = 60;
+int c30 = a30 + b30;
+printf("Result: %d
+", c30);
+// End of block 30
+
