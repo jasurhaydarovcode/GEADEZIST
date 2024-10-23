@@ -5238,3 +5238,11 @@ printf("Result: %d
 ", c255);
 // End of block 255
 
+// Code block 256
+int a256 = 256;
+int b256 = 512;
+int c256 = a256 + b256;
+printf("Result: %d
+", c256);
+// End of block 256
+
