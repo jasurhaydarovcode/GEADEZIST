@@ -236,7 +236,6 @@ const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                 >
                   Yangi parol kiriting
                 </label>
-                {/* Wrapper div to apply flexbox */}
                 <div className="flex items-center border rounded-lg mt-2">
                   <input
                     ref={password}
@@ -248,7 +247,6 @@ const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                     required
                     className="w-full px-4 py-2 text-sm rounded-lg "
                   />
-                  {/* Eye icon */}
                   <span
                     onClick={() => setShowpassword(!showpassword)}
                     className="px-3 cursor-pointer text-gray-800"
@@ -274,7 +272,6 @@ const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                   Parolni tasdiqlang
                 </label>
 
-                {/* Wrapper div to apply flexbox */}
                 <div className="flex items-center border rounded-lg mt-2">
                   <input
                     ref={confirmPassword}
@@ -286,7 +283,6 @@ const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                     onKeyDown={handleEnter}
                     className="w-full px-4 py-2 text-sm rounded-lg "
                   />
-                  {/* Eye icon */}
                   <span
                     onClick={() => setShowconfirmPassword(!showconfirmPassword)}
                     className="px-3 cursor-pointer text-gray-800"
@@ -298,13 +294,8 @@ const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                     )}
                   </span>
                 </div>
-
-                <p className="text-xs mt-2">
-                  Parol kamida 5 ta belgidan iborat
-                </p>
               </div>
 
-              {/* Jins tanlash */}
               <div className="mb-4">
                 <label
                   htmlFor="gender"
