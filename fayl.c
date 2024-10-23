@@ -3766,3 +3766,11 @@ printf("Result: %d
 ", c71);
 // End of block 71
 
+// Code block 72
+int a72 = 72;
+int b72 = 144;
+int c72 = a72 + b72;
+printf("Result: %d
+", c72);
+// End of block 72
+
