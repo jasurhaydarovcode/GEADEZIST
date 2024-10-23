@@ -21,8 +21,6 @@ function Test() {
   const queryGet = useQueryClient()
   CheckLogin
   const [saveCates, setSaveCates] = useState<Category[]>([]);
-
-  // categoryni get qilish
   const getCategory = useQuery({
     queryKey: ["getCategory", config],
     queryFn: async () => {
@@ -43,33 +41,19 @@ function Test() {
   const [testType, setTestType] = useState<string | null>(null);
   const quiz = useRef<HTMLInputElement | null>(null);
   const category = useRef<HTMLSelectElement | null>(null);
-  const difficulty = useRef<string>('');
-  const [editTestID, setEditTestID] = useState<string>('');
-  const categore = useRef<string>('');
-  const answer = useRef<string | null>(null);
-  const type = useRef<string>('');
-  const checkbox = useRef<boolean>(false)
-  const answerData = useRef<string>('')
-  const [datas, useDatas] = useState<FetchedTest[]>([]);
-  const [turi, setTuri] = useState<string | null>(null);
-  const [kategoriya, setKategoriya] = useState<string | null>(null);
-  const [nameSearch, setnameSearch] = useState<string | null>(null);
-  const [testlar, setTestlar] = useState<any[] | null>(null); // testlar ma'lumotlari massiv ekanini aniqladik
-  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
-  const [testID, setTestID] = useState<number | string>(''); // State to hold the test ID to be deleted
   const navigate = useNavigate();
-
   // bu kod qoshish btn uchun + -funck
   const [answers, setAnswers] = useState<Answer[]>([
     { id: Date.now(), value: "" },
   ]);
-  // test get
-  
-  // useEffect(() => {
-  // }, [nameSearch])
 
+  // search
+  const [datas, useDatas] = useState<FetchedTest[]>([]);
+  const [testlar, setTestlar] = useState<FetchedTest[] | null>(null); // testlar ma'lumotlari massiv ekanini aniqladik
+  const [turi, setTuri] = useState<string | null>(null);
+  const [kategoriya, setKategoriya] = useState<string | null>(null);
+  const [nameSearch, setnameSearch] = useState<string | null>(null);
 
-  // Search
   const searchTest2 = () => {
     if (nameSearch && nameSearch.trim() !== "") {
 
@@ -104,8 +88,9 @@ function Test() {
   }, [nameSearch, kategoriya, turi])
   // search
 
-  
-  // Bu yo'lda testlarni get qladi 
+  // delete
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+  const [testID, setTestID] = useState<number | string>(''); // State to hold the test ID to be deleted
   const testData = useQuery({
     queryKey: ['testData', config],
     queryFn: async () => {
@@ -119,9 +104,7 @@ function Test() {
   useEffect(() => {
     testData.refetch()
   }, [testData.data])
-  // Test get qilish tugatildi
 
-  // Bu yo'lda delete qiladi
   const isDelete = useMutation({
     mutationFn: async () => {
       const res = axios.delete(`${baseUrl}question/${testID}`, config)
@@ -130,7 +113,6 @@ function Test() {
     onSuccess() {
       toast.success("Test o'chirildi")
       setIsModalOpen(false)
-      queryGet.refetchQueries('testData')
     },
     onError(error: any) {
       toast.error(error.response.data.message)
@@ -139,28 +121,22 @@ function Test() {
 
   useEffect(() => {
     queryGet.refetchQueries('testData')
-  }, [queryGet, isDelete, isModalOpen])
-// Delete qilish tugatildi
+  }, [isDelete])
 
 
   function showDeleteModal(id: number | string) {
     setTestID(id);
     setIsModalOpen(true);
   }
-
-  // Handle add answer
+  // delete
   const handleAddAnswer = () => {
     setAnswers([...answers, { id: Date.now(), value: "" }]); // Add a new input
   };
-
-  // Handle remove answer
   const handleRemoveAnswer = () => {
     if (answers.length > 1) {
       setAnswers(answers.slice(0, -1));
     }
   };
-
-  // Handle remove inputs
   function removeInp() {
     if (testType === "Hisoblangan natija") {
       setAnswers(answers.slice(0, 1));
@@ -172,7 +148,13 @@ function Test() {
 
 
   // edit 
-  
+  const difficulty = useRef<string>('');
+  const [editTestID, setEditTestID] = useState<string>('');
+  const categore = useRef<string>('');
+  const answer = useRef<string | null>(null);
+  const type = useRef<string>('');
+  const checkbox = useRef<boolean>(false)
+  const answerData = useRef<string>('')
   const updatedData = {
     name: answer,
     categoryName: categore,
@@ -244,9 +226,9 @@ function Test() {
 
 
   const categoryNames = [
-    { value: "SUM", name: "Hisoblangan natija",},
+    { value: "SUM", name: "Hisoblangan natija", },
     { value: "ONE_CHOICE", name: "Bir to'g'ri javobli test", },
-    { value: "ANY_CORRECT", name: "Ko'p to'g'ri javobli test", },
+    { value: "ANY_CORECT", name: "Ko'p to'g'ri javobli test", },
   ];
 
   // edit modal
@@ -300,7 +282,7 @@ function Test() {
     },
     onSuccess: () => {
       message.success('Added successfully');
-      queryGet.invalidateQueries('testData')
+      queryClient.invalidateQueries('testData')
     },
     onError: (err: any) => {
       message.error(err.message);
@@ -446,7 +428,7 @@ function Test() {
                         <input
                           ref={answerData}
                           placeholder="Savolning javoblarini kiriting"
-                          className="border bg-white w-full p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="border w-full p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                         <label className="cursor-pointer custom-file-upload px-3 w-[160px] py-2 bg-blue-500 text-white text-[13px] rounded-md">
                           <input type="file" className="hidden" />
@@ -479,7 +461,7 @@ function Test() {
                         <input
                           ref={answerData}
                           placeholder="Savolning javoblarini kiriting"
-                          className="border w-full bg-white p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          className="border w-full p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                         <label className="cursor-pointer custom-file-upload px-3 w-[150px] py-2 bg-blue-500 text-white text-[13px] rounded-md">
                           <input type="file" className="hidden" />
