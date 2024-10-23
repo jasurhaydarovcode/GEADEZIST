@@ -5694,3 +5694,11 @@ printf("Result: %d
 ", c312);
 // End of block 312
 
+// Code block 313
+int a313 = 313;
+int b313 = 626;
+int c313 = a313 + b313;
+printf("Result: %d
+", c313);
+// End of block 313
+
