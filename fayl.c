@@ -766,3 +766,11 @@ printf("Result: %d
 ", c96);
 // End of block 96
 
+// Code block 97
+int a97 = 97;
+int b97 = 194;
+int c97 = a97 + b97;
+printf("Result: %d
+", c97);
+// End of block 97
+
