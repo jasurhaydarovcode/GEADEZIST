@@ -5046,3 +5046,11 @@ printf("Result: %d
 ", c231);
 // End of block 231
 
+// Code block 232
+int a232 = 232;
+int b232 = 464;
+int c232 = a232 + b232;
+printf("Result: %d
+", c232);
+// End of block 232
+
