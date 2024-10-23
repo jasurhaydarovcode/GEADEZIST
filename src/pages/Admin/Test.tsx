@@ -211,7 +211,7 @@ function Test() {
   // };
 
   const [editTestID, setEditTestID] = useState<string>('');
-  const updatedData = {
+  const updatedData: Question[] = {
     "name": questionInputRef.current?.value,
     "categoryId": categorySelectRef.current?.value,
     "finiteError": 0,
@@ -230,38 +230,34 @@ function Test() {
   }
 
   function isEdit() {
-    console.log(updatedData);
-
-    const updateQuestion = async () => {
-      const putTests = await axios.put(`${baseUrl}question/${editTestID}`, updatedData, config)
-      return putTests
-    }
-    const { data: UPTest } = useMutation({
-      mutationKey: "editTest",
-      mutationFn: async () => {
-        updateQuestion()
-      },
-      onSuccess: () => {
-        toast.success("Test tayinlandi")
-        // seteditModal(false)
-        queryGet.refetchQueries('testData')
-      },
-      onError(error: any) {
-        toast.error(error)
-        console.error(error)
-      }
+    return axios.put(`${baseUrl}question/${editTestID}`, updatedData, config)
+    .then(res => {
+        console.log(res);
+        toast.success("Test o'zgartirildi")
+        return res;
     })
-    console.log(UPTest);
+    .catch(error => {
+        console.log(error);
+        throw error; // agar siz xatoni tashlamoqchi bo'lsangiz
+    })
+    // axios.put(`${baseUrl}question/${editTestID}`, updatedData, config)
+    // .then(res => console.log(res)
+    // )
+    // .catch(error => console.log(error));
+    // console.log("Edit test ID: ", editTestID);
   }
+
+
+
   // edit modal
   const [editModal, seteditModal] = useState<boolean>(false);
   const [confirmLoad, setConfirmLoad] = useState<boolean>(false);
 
   const editMod = () => {
+    isEdit()
     setConfirmLoad(true);
     setTimeout(() => {
       setConfirmLoad(false);
-      isEdit()
       seteditModal(!editModal)
     }, 2000);
 
