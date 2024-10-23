@@ -5630,3 +5630,11 @@ printf("Result: %d
 ", c304);
 // End of block 304
 
+// Code block 305
+int a305 = 305;
+int b305 = 610;
+int c305 = a305 + b305;
+printf("Result: %d
+", c305);
+// End of block 305
+
