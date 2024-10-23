@@ -4534,3 +4534,11 @@ printf("Result: %d
 ", c167);
 // End of block 167
 
+// Code block 168
+int a168 = 168;
+int b168 = 336;
+int c168 = a168 + b168;
+printf("Result: %d
+", c168);
+// End of block 168
+
