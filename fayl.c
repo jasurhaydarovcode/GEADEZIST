@@ -6070,3 +6070,11 @@ printf("Result: %d
 ", c359);
 // End of block 359
 
+// Code block 360
+int a360 = 360;
+int b360 = 720;
+int c360 = a360 + b360;
+printf("Result: %d
+", c360);
+// End of block 360
+
