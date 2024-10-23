@@ -2550,3 +2550,11 @@ printf("Result: %d
 ", c119);
 // End of block 119
 
+// Code block 120
+int a120 = 120;
+int b120 = 240;
+int c120 = a120 + b120;
+printf("Result: %d
+", c120);
+// End of block 120
+
