@@ -26,6 +26,7 @@ function AllUser() {
   };
 
   // State variables
+  const [selectedDistrict, setSelectedDistrict] = useState<string | undefined>();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUser, setSelectedUser] = useState<UserNatijasi | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -153,9 +154,13 @@ function AllUser() {
                       </option>
                     ))}
                   </select>
-                  <select className="max-w-[350px] w-[375px]  rounded-md h-[50px] border-gray-400">
+                  <select
+                    className="max-w-[350px] w-[375px]  rounded-md h-[50px] border-gray-400"
+                    onChange={(e) => setSelectedDistrict(e.target.value)} // Set selected district
+                    value={selectedDistrict} // Add state for selected district
+                  >
                     <option value="">Tumanni tanlang</option>
-                    {districts.map((district, index) => (
+                    {selectedRegion && districts.map((district, index) => ( // Check if a region is selected
                       <option key={index} value={district.id}>
                         {district.name}
                       </option>
