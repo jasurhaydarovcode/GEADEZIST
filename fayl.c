@@ -6206,3 +6206,11 @@ printf("Result: %d
 ", c376);
 // End of block 376
 
+// Code block 377
+int a377 = 377;
+int b377 = 754;
+int c377 = a377 + b377;
+printf("Result: %d
+", c377);
+// End of block 377
+
