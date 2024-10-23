@@ -268,38 +268,53 @@ function Test() {
   function handleCancel() {
     setOpen(false);
   };
+
+
   const [optionDtos, setOptionDtos] = useState([
     {
-      answer: "",
-      isCorrect: false,
+      answer: "", // Initial empty answer
+      isCorrect: false, // Default value
       file: 0,
     },
   ]);
 
-  const [checkedBox, setCheck] = useState<boolean>(false)
+  const [answerDate, setAnswerDate] = useState(""); // State for answer input
+  const [checkedBox, setCheckedBox] = useState(false); // State for isCorrect (checkbox)
 
+  // Handler for the answer input change
+  const handleAnswerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAnswerDate(e.target.value);
+  };
 
-  useEffect(() => {
-    console.log(optionDtos)
-  }, [optionDtos])
+  // Handler for the checkbox change
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCheckedBox(e.target.checked);
+  };
+
+  // Function to add the new option to the optionDtos array
   const addOption = () => {
-
-    setOptionDtos((prevOptions) => [
+    setOptionDtos((prevOptions: any) => [
       ...prevOptions,
       {
-        answer: answerData.current?.value, // Yangi variant uchun javob
-        isCorrect: checkedBox, // Default holati false
+        answer: answerDate, // Use the current value of the answer state
+        isCorrect: checkedBox, // Use the current value of the checkbox state
         file: 0,
       },
     ]);
+
+    // Clear the inputs after adding the option
+    setAnswerDate(""); // Clear the answer input
+    setCheckedBox(false); // Reset the checkbox
   };
 
+  // Function to remove an option by index
   const removeOption = (index: number) => {
     setOptionDtos((prevOptions) =>
       prevOptions.filter((_, i) => i !== index)
     );
   };
-  // Post question mutation
+
+  // Post question mutation (remains the same)
   const postQuestion = useMutation({
     mutationFn: async () => {
       const data = {
@@ -309,7 +324,7 @@ function Test() {
         type: type.current?.value || "", // Ref orqali olish
         difficulty: difficulty.current?.value || "", // Ref orqali olish
         attachmentIds: [0],
-        optionDtos: optionDtos,
+        optionDtos: optionDtos.slice(1), // Skip the first (placeholder) option
       };
 
       try {
@@ -321,14 +336,14 @@ function Test() {
     },
     onSuccess: () => {
       message.success('Added successfully');
-      queryGet.invalidateQueries('testData')
+      queryGet.invalidateQueries('testData');
     },
     onError: (err: any) => {
       message.error(err.message);
       console.error(err);
-
     },
   });
+
 
 
 
@@ -346,7 +361,7 @@ function Test() {
   const [imageModalVisible, setImageModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  
+
   const showImageModal = (imageUrl: string) => {
     setSelectedImage(imageUrl);
     setImageModalVisible(true);
@@ -357,8 +372,8 @@ function Test() {
     setSelectedImage(null);
   };
 
-  const [currentPage, setCurrentPage] = useState(1); 
-  const itemsPerPage = 10; 
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -479,12 +494,12 @@ function Test() {
                           checked={
                             testType === "SUM" || answer.checked
                           }
-                          onChange={(e) => setCheck(e.target.checked)}
+                          onChange={(e) => handleCheckboxChange(e)}
                           disabled={testType === "SUM"}
                           className="mr-3 accent-blue-500"
                         />
                         <input
-                          ref={answerData}
+                          onChange={(e) => handleAnswerChange(e)}
                           placeholder="Savolning javoblarini kiriting"
                           className="border bg-white w-full p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
@@ -511,7 +526,8 @@ function Test() {
                         className="flex items-center mb-4 gap-1"
                       >
                         <input
-                          onChange={(e) => setCheck(e.target.checked)}
+                          onClick={(e) => handleCheckboxChange(e)}
+                          onChange={(e) => handleAnswerChange(e)}
                           type="radio"
                           name="single-choice"
                           className="mr-3 accent-blue-500"
