@@ -18,6 +18,7 @@ import {
   Dashboard, Test, AllUser, User, Archive, Employees, InspectorAdmin,
   Category, Profile, ConfirmSignUp, TestVisual
 } from './pages';
+import ClientQuizResult from './pages/Client/ClientResultPage';
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -60,6 +61,7 @@ function App() {
 
         {/* Protected Client Routes */}
         {renderRoute("/client/dashboard", ClientDashboard)}
+        {renderRoute("/client/quiz/result", ClientQuizResult)}
         {renderRoute("/client/profile", ClientProfile)}
         {renderRoute("/client/test/start", ClientTestStart)}
         {renderRoute("/client/quiz/:id", ClientQuiz)}

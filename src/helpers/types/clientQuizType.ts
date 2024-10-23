@@ -1,4 +1,4 @@
-interface optionDtos {
+export interface optionDtos {
     "id": number,
     "answer": string,
     "questionId": number,

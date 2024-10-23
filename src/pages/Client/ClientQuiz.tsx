@@ -6,8 +6,9 @@ import axios from 'axios';
 import CheckLogin from '@/helpers/functions/checkLogin';
 import { config } from '@/helpers/functions/token';
 import { baseUrl } from '@/helpers/api/baseUrl';
-import { ClientQuizType } from '@/helpers/types/clientQuizType';
+import { ClientQuizType, optionDtos } from '@/helpers/types/clientQuizType';
 import { ClientCategory } from '@/helpers/types/getClientCategory';
+import { useMutation } from 'react-query';
 
 const TOTAL_TIME = 60 * 60;
 const STORAGE_KEY = 'savedRemainingTime';
@@ -16,18 +17,33 @@ interface AxiosError extends Error {
   message: string;
 }
 
+interface SubmitQuizAnswersParams {
+  categoryId: string;
+  duration: number;
+  countAnswers: number;
+  answers: {
+    questionId: string;
+    optionIds: number[]; // Assuming optionIds are numbers
+    answer: string;
+  }[];
+}
+
+interface SubmitQuizResponse {
+  message: string;
+  statusCode: number;
+}
+
+
 const QuestionPage: React.FC = () => {
   CheckLogin();
   const navigate = useNavigate();
   const param = useParams<{ id: string }>();
 
-  // State Hooks
   const [remainingTime, setRemainingTime] = useState(TOTAL_TIME);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-
+  const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Time-Related Logic
   const formatTime = useCallback((timeInSeconds: number) => {
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = timeInSeconds % 60;
@@ -57,7 +73,40 @@ const QuestionPage: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Quiz Data Fetching
+  // Function to submit quiz answers
+  const submitQuizAnswers = async ({
+    categoryId,
+    duration,
+    countAnswers,
+    answers,
+  }: SubmitQuizAnswersParams): Promise<SubmitQuizResponse> => {
+    const res = await axios.post<SubmitQuizResponse>(
+      `${baseUrl}quiz/pass/${categoryId}`,
+      answers, // Request body
+      {
+        params: {
+          duration, // Total time spent on the quiz
+          countAnswers, // Total number of answers submitted
+        },
+        ...config, // Add token config or any necessary headers
+      }
+    );
+    return res.data;
+  };
+
+  // Use the mutation hook
+  const useSubmitQuiz = () => {
+    return useMutation<SubmitQuizResponse, AxiosError, SubmitQuizAnswersParams>(submitQuizAnswers, {
+      onSuccess: () => {
+        toast.success('Quiz submitted successfully!');
+        navigate('/client/quiz/result'); // Redirect or perform some action on success
+      },
+      onError: (error: AxiosError) => {
+        toast.error(`Submission failed: ${error.message}`);
+      },
+    });
+  };
+
   const getQuestion = async (): Promise<ClientQuizType[]> => {
     const res = await axios.get<ClientQuizType[]>(`${baseUrl}quiz/start/${param.id}`, config);
     return res.data?.body.questionDtoList;
@@ -71,7 +120,6 @@ const QuestionPage: React.FC = () => {
     },
   });
 
-  // Categories Data Fetching
   const getCategories = async (): Promise<ClientCategory[]> => {
     const res = await axios.get<ClientCategory[]>(`${baseUrl}category`, config);
     return res.data.body?.body || [];
@@ -85,7 +133,7 @@ const QuestionPage: React.FC = () => {
     },
   });
 
-  // Role-based Navigation
+
   const checkRoleClient = useCallback(() => {
     const role = localStorage.getItem('role');
     const token = localStorage.getItem('token');
@@ -106,7 +154,6 @@ const QuestionPage: React.FC = () => {
     checkRoleClient();
   }, [checkRoleClient]);
 
-  // Navigation Between Questions
   const handleNext = useCallback(() => {
     if (quizData && currentIndex < quizData.length - 1) {
       setCurrentIndex(currentIndex + 1);
@@ -124,6 +171,41 @@ const QuestionPage: React.FC = () => {
     setCurrentIndex(selectedIndex);
   };
 
+  // Handle answer selection for ANY_CORRECT and ONE_CHOICE
+  const handleAnswerChange = (answer: string) => {
+    if (quizData && quizData[currentIndex].type === "ANY_CORRECT") {
+      setSelectedAnswers((prevAnswers) =>
+        prevAnswers.includes(answer)
+          ? prevAnswers.filter((a) => a !== answer)
+          : [...prevAnswers, answer]
+      );
+    } else if (quizData && quizData[currentIndex].type === "ONE_CHOICE") {
+      setSelectedAnswers([answer]);
+    }
+  };
+
+  // Submit quiz mutation logic
+  const { mutate: submitQuiz } = useSubmitQuiz();
+
+  const handleSubmitQuiz = (): void => {
+    const categoryId = param.id as string; // Ensure param.id is a string (it's string in the route params)
+    const duration = TOTAL_TIME - remainingTime; // Time spent on the quiz
+    const countAnswers = selectedAnswers.length; // Number of answers selected
+
+    let answers: any[] = [];
+
+    // Prepare answers in the correct format
+    if (quizData && Array.isArray(quizData)) {
+      answers = quizData.map((question, index) => ({
+        questionId: question.id,
+        optionIds: selectedAnswers.includes(String(question.name)) ? [index] : [],
+        answer: selectedAnswers[index] || '',
+      }));
+    }
+
+    // Call mutation to submit the quiz
+    submitQuiz({ categoryId, duration, countAnswers, answers });
+  };
   return (
     <div className="px-9 space-y-12">
       {quizLoading || categoryLoading ? (
@@ -155,8 +237,26 @@ const QuestionPage: React.FC = () => {
             {quizData && quizData[currentIndex].type === "SUM" && (
               <div>
                 <input ref={inputRef}
-                  placeholder='Javobni Kiriting'
+                  placeholder='Enter your answer'
                   className='w-full rounded-xl text-medium' type="number" />
+              </div>
+            )}
+
+            {quizData && (quizData[currentIndex].type === "ANY_CORRECT" || quizData[currentIndex].type === "ONE_CHOICE") && (
+              <div>
+                {quizData[currentIndex].optionDtos.map((answer: optionDtos, index: number) => (
+                  <div key={index} className="flex items-center space-x-2">
+                    <input
+                      type="radio"
+                      id={`answer-${index}`}
+                      name="answer"
+                      value={answer.answer}
+                      checked={selectedAnswers.includes(answer.answer)}
+                      onChange={() => handleAnswerChange(answer.answer)}
+                    />
+                    <label htmlFor={`answer-${index}`} className="text-lg text-gray-500">{answer.answer}</label>
+                  </div>
+                ))}
               </div>
             )}
 
@@ -184,18 +284,27 @@ const QuestionPage: React.FC = () => {
                 <button
                   onClick={handlePrev}
                   disabled={currentIndex === 0}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                  className={currentIndex === 0 ? 'bg-blue-700 px-4 py-2 text-white rounded-md' : `px-4 py-2 bg-blue-500 text-white rounded-md`}
                 >
                   Orqaga
                 </button>
                 <button
                   onClick={handleNext}
                   disabled={quizData && currentIndex === quizData.length - 1}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                  className="px-4 py-2 hover:bg-blue-700 bg-blue-500 text-white rounded-md"
                 >
                   Keyingisi
                 </button>
+                <button
+                  onClick={handleSubmitQuiz}
+                  className="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded-md"
+                >
+                  Submit Quiz
+                </button>
               </div>
+
+              {/* Submit button */}
+
             </div>
           </div>
         </>
