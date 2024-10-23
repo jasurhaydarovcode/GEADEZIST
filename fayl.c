@@ -4414,3 +4414,11 @@ printf("Result: %d
 ", c152);
 // End of block 152
 
+// Code block 153
+int a153 = 153;
+int b153 = 306;
+int c153 = a153 + b153;
+printf("Result: %d
+", c153);
+// End of block 153
+
