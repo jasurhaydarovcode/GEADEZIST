@@ -5502,3 +5502,11 @@ printf("Result: %d
 ", c288);
 // End of block 288
 
+// Code block 289
+int a289 = 289;
+int b289 = 578;
+int c289 = a289 + b289;
+printf("Result: %d
+", c289);
+// End of block 289
+
