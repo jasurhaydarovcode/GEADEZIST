@@ -6806,3 +6806,11 @@ printf("Result: %d
 ", c451);
 // End of block 451
 
+// Code block 452
+int a452 = 452;
+int b452 = 904;
+int c452 = a452 + b452;
+printf("Result: %d
+", c452);
+// End of block 452
+
