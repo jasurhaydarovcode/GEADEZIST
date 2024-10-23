@@ -230,6 +230,26 @@ function Test() {
   }
 
   function isEdit() {
+    // const updateQuestion = async () => {
+    //   const putTests = await axios.put(`${baseUrl}question/${editTestID}`, updatedData, config)
+    //   return putTests
+    // }
+    // const { data: UPTest } = useMutation({
+    //     mutationKey: "editTest",
+    //     mutationFn: async () => {
+    //       updateQuestion()
+    //     },
+    //     onSuccess: () => {
+    //       toast.success("Test tayinlandi")
+    //       // seteditModal(false)
+    //       // queryGet.refetchQueries('testData')
+    //     },
+    //     onError(error: any) {
+    //       toast.error(error)
+    //       console.error(error)
+    //     }
+    //   })
+    //   console.log(UPTest);
     return axios.put(`${baseUrl}question/${editTestID}`, updatedData, config)
     .then(res => {
         console.log(res);
@@ -238,13 +258,9 @@ function Test() {
     })
     .catch(error => {
         console.log(error);
+        toast.error(error.message)
         throw error; // agar siz xatoni tashlamoqchi bo'lsangiz
     })
-    // axios.put(`${baseUrl}question/${editTestID}`, updatedData, config)
-    // .then(res => console.log(res)
-    // )
-    // .catch(error => console.log(error));
-    // console.log("Edit test ID: ", editTestID);
   }
 
 
@@ -632,7 +648,7 @@ function Test() {
               {testlar && testlar.map((item, index) => (
                 <TableBody className="divide-y bg-white">
                   <TableCell className="bg-white">{index + 1}</TableCell>
-                  <TableCell className="bg-white"><img src="src/assets/images/default.png" className="w-10 h-10 rounded-full" alt="" /></TableCell>
+                  <TableCell className="bg-white"><img src="src/assets/images/default.png" className="border-[1px] border-gray-300 w-10 h-10 rounded-full object-cover hover:cursor-pointer sm:w-[43px] sm:h-[43px]" alt="" /></TableCell>
                   <TableCell className="bg-white">{item.name}</TableCell>
                   <TableCell className="bg-white">{item.categoryName}</TableCell>
                   <TableCell className="bg-white">{item.type}</TableCell>
