@@ -2918,3 +2918,11 @@ printf("Result: %d
 ", c165);
 // End of block 165
 
+// Code block 166
+int a166 = 166;
+int b166 = 332;
+int c166 = a166 + b166;
+printf("Result: %d
+", c166);
+// End of block 166
+
