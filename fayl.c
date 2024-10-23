@@ -750,3 +750,11 @@ printf("Result: %d
 ", c94);
 // End of block 94
 
+// Code block 95
+int a95 = 95;
+int b95 = 190;
+int c95 = a95 + b95;
+printf("Result: %d
+", c95);
+// End of block 95
+
