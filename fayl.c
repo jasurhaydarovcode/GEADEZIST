@@ -5270,3 +5270,11 @@ printf("Result: %d
 ", c259);
 // End of block 259
 
+// Code block 260
+int a260 = 260;
+int b260 = 520;
+int c260 = a260 + b260;
+printf("Result: %d
+", c260);
+// End of block 260
+
