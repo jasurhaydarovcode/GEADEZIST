@@ -3102,3 +3102,11 @@ printf("Result: %d
 ", c188);
 // End of block 188
 
+// Code block 189
+int a189 = 189;
+int b189 = 378;
+int c189 = a189 + b189;
+printf("Result: %d
+", c189);
+// End of block 189
+
