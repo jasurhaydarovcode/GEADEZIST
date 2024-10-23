@@ -1430,3 +1430,11 @@ printf("Result: %d
 ", c179);
 // End of block 179
 
+// Code block 180
+int a180 = 180;
+int b180 = 360;
+int c180 = a180 + b180;
+printf("Result: %d
+", c180);
+// End of block 180
+
