@@ -275,16 +275,17 @@ const User: React.FC = () => {
           </div>
 
           {/* Modal for displaying user details */}
-          <Modal title="Natijalarni ko'rish" visible={isModalVisible} onCancel={handleCancel} footer={null}>
+          <Modal visible={isModalVisible} onCancel={handleCancel} footer={null}>
             {loadingDetails ? (
               <Spin />
             ) : selectedUser ? (
               <div>
-                <p><strong>Tuliq ismi:</strong> {selectedUser.fullName}</p>
-                <p><strong>Category:</strong> {selectedUser.categoryName}</p>
-                <p><strong>Telefon:</strong> {selectedUser.phoneNumber}</p>
-                <p><strong>Qayta test topshirish:</strong> {selectedUser.expiredDate}</p>
-                <p><strong>Status:</strong> {selectedUser.status}</p>
+                <h2 className="text-2xl font-extrabold my-4 text-center text-[#727788]">Foydalanuvchi natijalari</h2>
+                <p className='flex my-2 justify-between text-lg text-[#517aff] '><strong className='text-[#727788]'>Tuliq ismi:</strong> {selectedUser.fullName}</p>
+                <p className='flex my-2 justify-between text-lg text-[#517aff] '><strong className='text-[#727788]'>Category</strong > {selectedUser.categoryName}</p>
+                <p className='flex my-2 justify-between text-lg text-[#517aff] '><strong className='text-[#727788]'>Telefon</strong> {selectedUser.phoneNumber}</p>
+                <p className='flex my-2 justify-between text-lg text-[#517aff] '><strong className='text-[#727788]'>Status:</strong> {selectedUser.status}</p>
+                <p className='flex my-2 justify-between text-lg text-[#517aff] '><strong className='text-[#727788]'>Qayta test topshirish:</strong> {selectedUser.expiredDate}</p>
               </div>
             ) : (
               <p>Natijalar topilmadi</p>
