@@ -505,7 +505,7 @@ function Test() {
                 </div>
 
                 <div className="mb-4 ml-[180px] mt-5 ">
-                  <label className="w-[90px] h-[90px] rounded border-dashed border-2 border-gray-400 bg-yellow-100 flex flex-col items-center justify-center">
+                  {/* <label className="w-[90px] h-[90px] rounded border-dashed border-2 border-gray-400 bg-yellow-100 flex flex-col items-center justify-center">
                     <input type="file" className="hidden" />
                     <img
                       src="https://example.com/your-icon.png"
@@ -516,7 +516,7 @@ function Test() {
                   </label>
                   <h2 className="mt-2 relative right-[20px]">
                     Rasm yuklash ixtiyoriy
-                  </h2>{" "}
+                  </h2>{" "} */}
                 </div>
               </Modal>
 
