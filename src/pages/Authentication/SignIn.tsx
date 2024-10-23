@@ -21,7 +21,7 @@ function SignIn() {
     } else if (role === 'ROLE_CLIENT' && localStorage.getItem('token')) {
       navigate('/client/dashboard');
     } else if (role === 'ROLE_ADMIN' && localStorage.getItem('token')) {
-      navigate('/all-user');
+      navigate('/inspector-admin');
     } else {
       navigate('/auth/SignIn'); 
     }
@@ -52,7 +52,7 @@ function SignIn() {
       if (res.data.role === 'ROLE_SUPER_ADMIN') {
         navigate('/dashboard');
       } else if (res.data.role === 'ROLE_ADMIN') {
-        navigate('/user');
+        navigate('/inspector-admin');
       } else if (res.data.role === 'ROLE_TESTER') {
         navigate('/category');
       } else if (res.data.role === 'ROLE_CLIENT') {
