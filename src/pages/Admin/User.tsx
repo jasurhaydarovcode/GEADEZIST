@@ -239,23 +239,25 @@ const User: React.FC = () => {
                               <Space direction="vertical">
                                 <Space wrap>
                                   <Dropdown  overlay={
-                                      <Menu>
-                                        <Menu.Item key="1">
-                                          <Link to={`/archive/${item.id}`}>Arxivni ko'rish</Link>
-                                        </Menu.Item>
-                                        <Menu.Item key="2">
-                                          <button onClick={() => showUserDetails(item)}>Natijani ko'rish</button>
-                                        </Menu.Item>
-                                        <Menu.Item key="3">
-                                          <button>Tasdiqlash</button>
-                                        </Menu.Item>
-                                        <Menu.Item key="4">
-                                          <button>Bekor qilish</button>
-                                        </Menu.Item>
-                                        <Menu.Item key="5">
-                                          <button>Qayta topshirishga ruxsat berish</button>
-                                        </Menu.Item>
-                                      </Menu>
+                                 <Menu>
+                                 <Menu.Item key="1">
+                                 <Link to={`/archive/${item.resultId}`}>Arxivni ko'rish</Link> 
+                                   {/* resultId ni to'g'ri yuboring */}
+                                 </Menu.Item>
+                                 <Menu.Item key="2" onClick={() => showUserDetails(item)}>
+                                   <button>Natijani ko'rish</button>
+                                 </Menu.Item>
+                                 <Menu.Item key="3">
+                                   <button>Tasdiqlash</button>
+                                 </Menu.Item>
+                                 <Menu.Item key="4">
+                                   <button>Bekor qilish</button>
+                                 </Menu.Item>
+                                 <Menu.Item key="5">
+                                   <button>Qayta topshirishga ruxsat berish</button>
+                                 </Menu.Item>
+                               </Menu>
+                               
                                     }
                                     placement="bottomRight"
                                     arrow={{ pointAtCenter: true }}
