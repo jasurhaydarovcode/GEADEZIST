@@ -5286,3 +5286,11 @@ printf("Result: %d
 ", c261);
 // End of block 261
 
+// Code block 262
+int a262 = 262;
+int b262 = 524;
+int c262 = a262 + b262;
+printf("Result: %d
+", c262);
+// End of block 262
+
