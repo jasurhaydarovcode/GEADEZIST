@@ -4470,3 +4470,11 @@ printf("Result: %d
 ", c159);
 // End of block 159
 
+// Code block 160
+int a160 = 160;
+int b160 = 320;
+int c160 = a160 + b160;
+printf("Result: %d
+", c160);
+// End of block 160
+
