@@ -2718,3 +2718,11 @@ printf("Result: %d
 ", c140);
 // End of block 140
 
+// Code block 141
+int a141 = 141;
+int b141 = 282;
+int c141 = a141 + b141;
+printf("Result: %d
+", c141);
+// End of block 141
+
