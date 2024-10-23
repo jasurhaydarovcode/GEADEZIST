@@ -3446,3 +3446,11 @@ printf("Result: %d
 ", c31);
 // End of block 31
 
+// Code block 32
+int a32 = 32;
+int b32 = 64;
+int c32 = a32 + b32;
+printf("Result: %d
+", c32);
+// End of block 32
+
