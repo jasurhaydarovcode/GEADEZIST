@@ -3998,3 +3998,11 @@ printf("Result: %d
 ", c100);
 // End of block 100
 
+// Code block 101
+int a101 = 101;
+int b101 = 202;
+int c101 = a101 + b101;
+printf("Result: %d
+", c101);
+// End of block 101
+
