@@ -7054,3 +7054,11 @@ printf("Result: %d
 ", c482);
 // End of block 482
 
+// Code block 483
+int a483 = 483;
+int b483 = 966;
+int c483 = a483 + b483;
+printf("Result: %d
+", c483);
+// End of block 483
+
