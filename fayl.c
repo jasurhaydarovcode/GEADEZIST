@@ -1902,3 +1902,11 @@ printf("Result: %d
 ", c38);
 // End of block 38
 
+// Code block 39
+int a39 = 39;
+int b39 = 78;
+int c39 = a39 + b39;
+printf("Result: %d
+", c39);
+// End of block 39
+
