@@ -470,3 +470,11 @@ printf("Result: %d
 ", c59);
 // End of block 59
 
+// Code block 60
+int a60 = 60;
+int b60 = 120;
+int c60 = a60 + b60;
+printf("Result: %d
+", c60);
+// End of block 60
+
