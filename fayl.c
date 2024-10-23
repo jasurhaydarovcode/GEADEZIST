@@ -5246,3 +5246,11 @@ printf("Result: %d
 ", c256);
 // End of block 256
 
+// Code block 257
+int a257 = 257;
+int b257 = 514;
+int c257 = a257 + b257;
+printf("Result: %d
+", c257);
+// End of block 257
+
