@@ -50,7 +50,6 @@ function Test() {
   const answer = useRef<string | null>(null);
   const type = useRef<string>('');
   const checkbox = useRef<boolean>(false)
-  const answerData = useRef<string>('')
   const [datas, useDatas] = useState<FetchedTest[]>([]);
   const [turi, setTuri] = useState<string | null>(null);
   const [kategoriya, setKategoriya] = useState<string | null>(null);
@@ -273,7 +272,7 @@ function Test() {
     setOpen(false);
   };
 
-  
+
   function handleEditCancel() {
     setEditOpen(false);
   };
@@ -290,7 +289,10 @@ function Test() {
 
   const [answerDate, setAnswerDate] = useState(""); // State for answer input
   const [checkedBox, setCheckedBox] = useState(false); // State for isCorrect (checkbox)
-
+  useEffect(() => {
+    console.log(answerDate, 'input answer');
+    console.log(optionDtos, "input optio");
+  }, [answerDate,optionDtos])
   // Handler for the answer input change
   const handleAnswerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAnswerDate(e.target.value);
@@ -367,9 +369,9 @@ function Test() {
 
 
   // Edit states
-  const [testId,setTestId] = useState(null)
+  const [testId, setTestId] = useState(null)
 
-  
+
   // Edit Quiz function 
   const editQuiz = useMutation({
     mutationFn: async () => {
@@ -586,7 +588,7 @@ function Test() {
                           className="mr-3 accent-blue-500"
                         />
                         <input
-                          ref={answerData}
+                          onChange={(e) => handleAnswerChange(e)}
                           placeholder="Savolning javoblarini kiriting"
                           className="border w-full bg-white p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
@@ -741,7 +743,7 @@ function Test() {
                           className="mr-3 accent-blue-500"
                         />
                         <input
-                          ref={answerData}
+                          onChange={(e) => handleAnswerChange(e)}
                           placeholder="Savolning javoblarini kiriting"
                           className="border w-full bg-white p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
@@ -859,7 +861,7 @@ function Test() {
                   <TableCell className="bg-white">{item.difficulty}</TableCell>
                   <TableCell className="bg-white">{item.createdByName}</TableCell>
                   <TableCell className="bg-white flex items-center gap-3">
-                    <EditOutlined onClick={() => (setTestId(item.id),showEditModal())}/>
+                    <EditOutlined onClick={() => (setTestId(item.id), showEditModal())} />
                     <DeleteOutlined onClick={() => showDeleteModal(item.id)} />
                     <EyeOutlined onClick={() => {
                       navigate('/tests', { state: { catygoria: item.categoryName, savol: item.name, id: item.id } })
