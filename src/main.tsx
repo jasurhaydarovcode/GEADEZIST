@@ -20,8 +20,8 @@ createRoot(document.getElementById('root')!).render(
         {/* <CursorProtect message='❌ Websayt Ximoyalangan'> */}
           {/* <DevToolsBlocker> */}
             <App />
-          {/* </DevToolsBlocker> */}
-        {/* </CursorProtect> */}
+          {/* </DevToolsBlocker>
+        </CursorProtect> */}
         <ToastContainer
           position="top-center"
           autoClose={2000}
