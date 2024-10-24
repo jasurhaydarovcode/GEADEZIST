@@ -384,7 +384,7 @@ function Test() {
       };
 
       try {
-        const res = await axios.post(`${PostQuestion}/${testId}`, data, config);
+        const res = await axios.put(`${PostQuestion}/${testId}`, data, config);
         return res.data;
       } catch (err) {
         throw new Error('Error posting question: ' + err.message);
