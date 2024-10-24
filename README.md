@@ -77,7 +77,7 @@
 |  7  |   Uktam   |           Admin /Test            | 
 |  8  | Shohjahon |       Admin Users Natijasi       | 
 |  9  |  Alibek   |           Client Edit            | 
-| 10  |  Asilbek  |  Admin/Employees, Admin Adress   | 
+| 10  |  Asilbek  |  Admin: Employees, Adress, User  | 
 | 11  |  Dilshod  |           Admin Adress           | 
 | 12  |  Bexruz   | Admin Adress Dilshod bilan birga | 
 | 13  | Asil aka  |      Test Uktam bilan birga      | 
@@ -96,7 +96,7 @@
 |  3  |  Javlon   |  auth/signIn/signUp Admin/all-user  |
 |  4  | Ulug'bek  |  admin/dashboard/profile/inspector-admin/test auth/signin-logica |
 |  6  |   Nodir   |          Admin Category          |
-| 10  |  Asilbek  |  Admin/Employees, Admin Adress, oferta   |
+| 10  |  Asilbek  |  Admin: Employees, Adress, User , oferta   |
 | 13  | Asil aka  |     Admin/Test Uktam bilan birga      |
 |  5  | Asliddin  | Admin Foydalanuvchilar |
 |  7  |   Uktam   |     Admin /Test      |
