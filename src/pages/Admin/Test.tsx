@@ -50,7 +50,6 @@ function Test() {
   const answer = useRef<string | null>(null);
   const type = useRef<string>('');
   const checkbox = useRef<boolean>(false)
-  const answerData = useRef<string>('')
   const [datas, useDatas] = useState<FetchedTest[]>([]);
   const [turi, setTuri] = useState<string | null>(null);
   const [kategoriya, setKategoriya] = useState<string | null>(null);
@@ -72,37 +71,38 @@ function Test() {
 
   // Search
   const searchTest2 = () => {
+    let filteredTests = [...datas]; // Start with all tests
+
+    // Filter by name search
     if (nameSearch && nameSearch.trim() !== "") {
-      // testlar mavjud bo'lsa va testlar massiv bo'lsa, filter qilamiz
-      const newData = testlar?.filter((item) =>
+      filteredTests = filteredTests.filter((item) =>
         item.name?.toLowerCase().includes(nameSearch.toLowerCase())
-      ) ?? []
-      setTestlar(newData);
+      );
+    }
 
+    // Filter by category
+    if (kategoriya && kategoriya !== "All") {
+      filteredTests = filteredTests.filter((item) =>
+        item.categoryName?.toLowerCase() === kategoriya.toLowerCase()
+      );
+    } else {
+      setTestlar(datas)
+    }
 
-    } else if (nameSearch == '') {
-      setTestlar(datas);
+    // Filter by type
+    if (turi && turi !== 'All') {
+      filteredTests = filteredTests.filter((item) =>
+        item.type?.toLowerCase() === turi.toLowerCase()
+      );
+    }else{
+      setTestlar(datas)
+    }
 
-    }
-    if (kategoriya) {
-      const kategoriyaData = testlar?.filter((item) =>
-        item.categoryName?.toLowerCase().includes(kategoriya.toLowerCase())
-      ) ?? [];
-      setTestlar(kategoriyaData);
-    }
-    if (kategoriya == "All") {
-      setTestlar(datas);
-    }
-    if (turi && turi !== '') {
-      const turiData = testlar?.filter((item) =>
-        item.type?.toLowerCase().includes(turi.toLowerCase())
-      ) ?? [];
-      setTestlar(turiData);
-    }
+    setTestlar(filteredTests);
   };
   useEffect(() => {
     searchTest2();
-  }, [nameSearch, kategoriya, turi])
+  }, [nameSearch, kategoriya, turi, datas]);
   // search
 
 
@@ -135,13 +135,12 @@ function Test() {
     }
   })
 
-  useEffect(() => {
-    if (isDelete) {
-      queryGet.refetchQueries('testData')
-    }
-  }, [isDelete])
+  // useEffect(() => {
+  //   if (isDelete) {
+  //     queryGet.refetchQueries('testData')
+  //   }
+  // }, [isDelete])
   // Delete qilish tugatildi
-
 
   function showDeleteModal(id: number | string) {
     setTestID(id);
@@ -160,15 +159,6 @@ function Test() {
     }
   };
 
-  // Handle remove inputs
-  function removeInp() {
-    if (testType === "Hisoblangan natija") {
-      setAnswers(answers.slice(0, 1));
-    }
-  }
-  useEffect(() => {
-    removeInp();
-  }, [testType, turi, kategoriya, nameSearch, testlar]);
 
 
   // edit 
@@ -264,58 +254,68 @@ function Test() {
   function showModal() {
     setOpen(true);
   };
+  const [editOpen, setEditOpen] = useState<boolean>(false)
+  function showEditModal() {
+    setEditOpen(!editOpen);
+  };
 
   function handleCancel() {
     setOpen(false);
   };
 
 
+  function handleEditCancel() {
+    setEditOpen(false);
+  };
+
+
   const [optionDtos, setOptionDtos] = useState([
     {
-      answer: "", // Initial empty answer
-      isCorrect: false, // Default value
+      answer: '', // Initial empty answer
+      isCorrect: true, // Default value for isCorrect
       file: 0,
     },
   ]);
 
-  const [answerDate, setAnswerDate] = useState(""); // State for answer input
-  const [checkedBox, setCheckedBox] = useState(false); // State for isCorrect (checkbox)
+  const [answerDate, setAnswerDate] = useState(''); // State for answer input
+
+  useEffect(() => {
+    console.log(answerDate, 'input answer');
+    console.log(optionDtos, 'input option');
+  }, [answerDate, optionDtos]);
 
   // Handler for the answer input change
   const handleAnswerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAnswerDate(e.target.value);
   };
 
-  // Handler for the checkbox change
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCheckedBox(e.target.checked);
-  };
-
-  // Function to add the new option to the optionDtos array
-  
-  // Clear the inputs after adding the option
-  
-  useEffect(() => {
-    const addOption = () => {
-      setOptionDtos((prevOptions: any) => [
-        ...prevOptions,
-        {
-          answer: answerDate, // Use the current value of the answer state
-          isCorrect: checkedBox, // Use the current value of the checkbox state
-          file: 0,
-        },
-      ]);
-    setAnswerDate(""); // Clear the answer input
-  };
-
-  },[answerDate, checkedBox]);
-  // Function to remove an option by index
-  const removeOption = (index: number) => {
+  // Handler for checkbox change by index
+  const handleCheckboxChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = e.target.checked;
     setOptionDtos((prevOptions) =>
-      prevOptions.filter((_, i) => i !== index)
+      prevOptions.map((option, i) =>
+        i === index ? { ...option, isCorrect: isChecked } : option
+      )
     );
   };
 
+  // Function to add the new option to the optionDtos array
+  const addOption = () => {
+    setOptionDtos((prevOptions) => [
+      ...prevOptions,
+      {
+        answer: answerDate, // Use the current value of the answer state
+        isCorrect: false, // New option starts with isCorrect as false
+        file: 0,
+      },
+    ]);
+    setAnswerDate(''); // Clear the answer input
+  };
+
+  // Function to remove an option by index
+  const removeOption = (index: number) => {
+    setOptionDtos((prevOptions) => prevOptions.filter((_, i) => i !== index));
+  };
   // Post question mutation (remains the same)
   const postQuestion = useMutation({
     mutationFn: async () => {
@@ -339,6 +339,7 @@ function Test() {
     onSuccess: () => {
       message.success('Added successfully');
       queryGet.invalidateQueries('testData');
+
     },
     onError: (err: any) => {
       message.error(err.message);
@@ -346,12 +347,78 @@ function Test() {
     },
   });
 
-
+  const handleRadioChange = (index: number) => {
+    // Update the isCorrect value for the selected option only
+    setOptionDtos((prevOptions) =>
+      prevOptions.map((option, i) => ({
+        ...option,
+        isCorrect: i === index, // Set isCorrect to true for the selected index, false for others
+      }))
+    );
+  };
 
 
   // Handle OK button
   const handleOk = () => {
     postQuestion.mutate();
+    setConfirmLoading(true);
+    setTimeout(() => {
+      setOpen(false);
+      setConfirmLoading(false);
+    }, 2000);
+  };
+
+
+  // Edit states
+  const [testId, setTestId] = useState(null)
+
+
+  // Edit Quiz function 
+  const editQuiz = useMutation({
+    mutationFn: async () => {
+      const data = {
+        name: quiz.current?.value || "", // Ref orqali olish
+        categoryId: Number(categore.current?.value) || "", // Ref orqali olish
+        finiteError: 0,
+        type: type.current?.value || "", // Ref orqali olish
+        difficulty: difficulty.current?.value || "", // Ref orqali olish
+        attachmentIds: [0],
+        optionDtos: optionDtos.slice(1), // Skip the first (placeholder) option
+      };
+
+      try {
+        const res = await axios.put(`${PostQuestion}/${testId}`, data, config);
+        return res.data;
+      } catch (err) {
+        throw new Error('Error posting question: ' + err.message);
+      }
+    },
+    onSuccess: () => {
+      message.success('Edited successfully');
+      queryGet.invalidateQueries('testData');
+    },
+    onError: (err: any) => {
+      message.error(err.message);
+      console.error(err);
+      console.log(testId);
+    },
+  });
+
+  // Handle remove inputs
+  function removeInp() {
+    if (testType === "SUM") {
+      setAnswers(answers.slice(0, 1));
+      setAnswerDate('')
+      setOptionDtos((prevOptions) => prevOptions.slice(0, 1));
+    }
+  }
+  useEffect(() => {
+    removeInp();
+  }, [testType, turi, kategoriya, nameSearch, testlar]);
+
+
+  const handleEditOk = () => {
+    editQuiz.mutate();
     setConfirmLoading(true);
     setTimeout(() => {
       setOpen(false);
@@ -496,6 +563,168 @@ function Test() {
                           checked={
                             testType === "SUM" || answer.checked
                           }
+                          onChange={(e) => handleCheckboxChange(index, e)}
+                          disabled={testType === "SUM"}
+                          className="mr-3 accent-blue-500"
+                        />
+                        <input
+                          onChange={(e) => setOptionDtos((prevOptions) =>
+                            prevOptions.map((opt, i) =>
+                              i === index ? { ...opt, answer: e.target.value } : opt
+                            )
+                          )}
+                          placeholder={`Option ${index + 1}`}
+                          className="border bg-white w-full p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                        <label className="cursor-pointer custom-file-upload px-3 w-[160px] py-2 bg-blue-500 text-white text-[13px] rounded-md">
+                          <input type="file" className="hidden" />
+                          Choose file
+                        </label>
+                        {testType === "ANY_CORRECT" && (
+                          <>
+                            <button onClick={() => (handleRemoveAnswer(), removeOption(index))} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300 ml-2" > - </button>
+                            <button onClick={() => (handleAddAnswer(), addOption())} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300"  >  +</button>
+                          </>
+                        )}
+                      </div>
+                    ))}
+                </div>
+
+                <div>
+                  {testType !== null &&
+                    testType === "ONE_CHOICE" &&
+                    answers.map((answer, index) => (
+                      <div
+                        key={answer.id}
+                        className="flex items-center mb-4 gap-1"
+                      >
+                        <input
+                          onChange={(e) => handleRadioChange(index)}
+                          type="radio"
+                          name="single-choice"
+                          className="mr-3 accent-blue-500"
+                        />
+                        <input
+                          onChange={(e) => setOptionDtos((prevOptions) =>
+                            prevOptions.map((opt, i) =>
+                              i === index ? { ...opt, answer: e.target.value } : opt
+                            )
+                          )}
+                          placeholder={`Option ${index + 1}`}
+                          className="border w-full bg-white p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                        <label className="cursor-pointer custom-file-upload px-3 w-[150px] py-2 bg-blue-500 text-white text-[13px] rounded-md">
+                          <input type="file" className="hidden" />
+                          Choose file
+                        </label>
+                        <>
+                          <button onClick={() => (handleRemoveAnswer(), removeOption(index))} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300 ml-2" > - </button>
+                          <button onClick={() => (handleAddAnswer(), addOption())} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300"  >  +</button>
+                        </>
+                      </div>
+                    ))}
+                </div>
+
+                <div className="mb-4 ml-[180px] mt-5 ">
+                  {/* <label className="w-[90px] h-[90px] rounded border-dashed border-2 border-gray-400 bg-yellow-100 flex flex-col items-center justify-center">
+                    <input type="file" className="hidden" />
+                    <img
+                      src="https://example.com/your-icon.png"
+                      alt="Rasm yuklash"
+                      className="w-6 h-6"
+                    />
+                    Rasm yuklash
+                  </label>
+                  <h2 className="mt-2 relative right-[20px]">
+                    Rasm yuklash ixtiyoriy
+                  </h2>{" "} */}
+                </div>
+              </Modal>
+
+
+              {/* Edit modal  */}
+              <Modal
+                title="Savol qo'shish"
+                open={editOpen}
+                onOk={handleEditOk}
+                confirmLoading={confirmLoading}
+                onCancel={handleEditCancel}
+                maskClosable={false}
+              >
+                <div className="mb-4">
+                  <input
+                    ref={quiz}
+                    placeholder="Savolni kiriting"
+                    className="border bg-white w-full p-2 rounded"
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <select ref={categore} className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
+                    <option disabled selected value="">
+                      Kategoriyani tanlang
+                    </option>
+                    {saveCates && saveCates.length > 0 && saveCates.map((item: Category) => (
+                      <option value={item?.id} className="text text-black">
+                        {item?.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="mb-4">
+                  <select ref={difficulty} className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
+                    <option disabled selected>
+                      Qiyinchilik darajasini tanlang
+                    </option>
+                    <option value="HARD" className="text text-black">
+                      Qiyin
+                    </option>
+                    <option value="EASY" className="text text-black">
+                      Oson
+                    </option>
+                    <option value="MEDIUM" className="text text-black">
+                      O'rta
+                    </option>
+                  </select>
+                </div>
+
+                <div className="mb-4">
+                  <select ref={type}
+                    onChange={(e) => setTestType(e.target.value)}
+                    className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]"
+                  >
+                    <option disabled selected>
+                      Turlarni tanlang
+                    </option>
+                    {categoryNames &&
+                      categoryNames.length > 0 &&
+                      categoryNames.map((category, key) => (
+                        <option
+                          key={key}
+                          value={category.value}
+                          className="text text-black"
+                        >
+                          {category.name}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+
+                <div>
+                  {testType !== null &&
+                    (testType === "SUM" ||
+                      testType === "ANY_CORRECT") &&
+                    answers.map((answer: Answer, index) => (
+                      <div
+                        key={answer.id}
+                        className="flex items-center mb-4 gap-2"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={
+                            testType === "SUM" || answer.checked
+                          }
                           onChange={(e) => handleCheckboxChange(e)}
                           disabled={testType === "SUM"}
                           className="mr-3 accent-blue-500"
@@ -528,14 +757,13 @@ function Test() {
                         className="flex items-center mb-4 gap-1"
                       >
                         <input
-                          onClick={(e) => handleCheckboxChange(e)}
-                          onChange={(e) => handleAnswerChange(e)}
+                          onChange={(e) => handleRadioChange(index)}
                           type="radio"
                           name="single-choice"
                           className="mr-3 accent-blue-500"
                         />
                         <input
-                          ref={answerData}
+                          onChange={(e) => handleAnswerChange(e)}
                           placeholder="Savolning javoblarini kiriting"
                           className="border w-full bg-white p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
@@ -589,7 +817,7 @@ function Test() {
                     onChange={(e) => setKategoriya(e.target.value)}
                     className="w-[200px] text-gray-400 bg-white rounded-md h-[50px]"
                   >
-                    <option disabled selected>
+                    <option value="All" selected>
                       Kategoriyani tanlang
                     </option>
                     <option className="text text-black" value="All">All</option>
@@ -611,6 +839,7 @@ function Test() {
                     <option disabled selected>
                       Turlarni tanlang
                     </option>
+                    <option className="text text-black" value="All">All</option>
                     <option value="SUM" className="text text-black">
                       Hisoblangan natija
                     </option>
@@ -638,22 +867,22 @@ function Test() {
               </TableHead>
               {currentItems.map((item, index) => (
                 <TableBody className="divide-y bg-white" key={item.id}>
-                  <TableCell className="bg-white">
+                  <TableCell className="bg-white">{index + 1}</TableCell>
+                  <TableCell className="w-[90px]">
                     <img
                       src="src/assets/images/default.png" // Replace with actual image source
-                      className="w-10 h-10 rounded-full cursor-pointer"
+                      className="border-[1px] border-gray-300 w-10 h-10 rounded-full object-cover hover:cursor-pointer sm:w-[43px] sm:h-[43px]"
                       alt=""
                       onClick={() => showImageModal("src/assets/images/default.png")} // Replace with actual image URL
                     />
                   </TableCell>
-                  <TableCell className="bg-white">{index + 1}</TableCell>
                   <TableCell className="bg-white">{item.name}</TableCell>
                   <TableCell className="bg-white">{item.categoryName}</TableCell>
                   <TableCell className="bg-white">{item.type}</TableCell>
                   <TableCell className="bg-white">{item.difficulty}</TableCell>
                   <TableCell className="bg-white">{item.createdByName}</TableCell>
                   <TableCell className="bg-white flex items-center gap-3">
-                    <EditOutlined />
+                    <EditOutlined onClick={() => (setTestId(item.id), showEditModal())} />
                     <DeleteOutlined onClick={() => showDeleteModal(item.id)} />
                     <EyeOutlined onClick={() => {
                       navigate('/tests', { state: { catygoria: item.categoryName, savol: item.name, id: item.id } })
@@ -865,7 +1094,7 @@ function Test() {
       <Modal
         title="Delete Confirmation"
         visible={isModalOpen}
-        onOk={() => isDelete.mutate()} // Calls the delete function when confirmed
+        onOk={() => (isDelete.mutate())} // Calls the delete function when confirmed
         onCancel={() => setIsModalOpen(false)} // Close modal on cancel
       >
         <p>Testni o'chirmoqchimisiz?</p>

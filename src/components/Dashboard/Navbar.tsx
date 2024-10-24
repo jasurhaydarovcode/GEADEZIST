@@ -120,7 +120,7 @@ const Navbar: React.FC = () => {
             </div>
             <div>
               <img
-                src={(role === 'ROLE_TESTER' && testerLogo )||(role === 'ROLE_ADMIN' && testerLogo )||( role === 'ROLE_SUPER_ADMIN' && geodeziyaLogo) || (role === 'ROLE_CLIENT' && noImageClientDefaultImage)}
+                src={(role === 'ROLE_TESTER' && testerLogo) || (role === 'ROLE_ADMIN' && testerLogo) || (role === 'ROLE_SUPER_ADMIN' && geodeziyaLogo) || (role === 'ROLE_CLIENT' && noImageClientDefaultImage)}
                 alt="Admin logo"
                 className="rounded-full w-10"
               />
@@ -145,7 +145,7 @@ const Navbar: React.FC = () => {
               </div>
               <hr />
               <div>
-                <Link to={'/profile'}>
+                <Link to={role === 'ROLE_CLIENT' ? '/client/profile' : '/profile'}>
                   <button
                     className={`flex items-center gap-2 w-full text-left hover:bg-gray-100 px-3 py-5 rounded ${getMe.isLoading ? 'pointer-events-none opacity-50' : ''
                       }`}

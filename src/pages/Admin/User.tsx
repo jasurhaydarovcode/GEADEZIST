@@ -1,31 +1,79 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Layout from '@/components/Dashboard/Layout';
-import { getResult } from '@/helpers/api/baseUrl';
+import { baseUrl, getResult } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import { UserNatijasi } from '@/helpers/types/UserNatijasi';
 import axios from 'axios';
 import { Helmet } from 'react-helmet';
-import { FcSearch } from 'react-icons/fc';
-import { SlArrowDown } from 'react-icons/sl';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
-import { Button, Dropdown, Menu, message, Modal, Input, Spin, Space } from 'antd';
+import {  Dropdown, Menu, message, Modal, Input, Spin, Space } from 'antd';
 import CheckLogin from '@/helpers/functions/checkLogin';
 import { EllipsisVerticalIcon } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 'flowbite-react';
+import { showErrorMessage } from '@/helpers/functions/message';
 
 const User: React.FC = () => {
   CheckLogin;
 
   const [searchQuery, setSearchQuery] = useState <string>('');
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [selectedUser, setSelectedUser] = useState<UserNatijasi | null>(null); // Tanlangan foydalanuvchi
-  const [loadingDetails, setLoadingDetails] = useState<boolean>(false); // Yuklanayotganini ko'rsatish
-  const [selectedStatus, setSelectedStatus] = useState<string>(''); // Status uchun state
-  const [isRatingModalVisible, setIsRatingModalVisible] = useState<boolean>(false); // Tasdiqlash modalining holati
-  const [rating, setRating] = useState<string>(''); // Baholash input qiymati
-  const [isRatingValid, setIsRatingValid] = useState<boolean>(false); // Baholash uchun validatsiya
+  const [loadingDetails, setLoadingDetails] = useState<boolean>(false); 
+  const [selectedStatus, setSelectedStatus] = useState<string>('');
   const [isModalVisibled, setIsModalVisibled] = useState(false);
+  const [tasdiqlash, setTasdiqlash] = useState(false);
+  const refName = useRef<HTMLInputElement>(null);
+
+  const modalTasdiqlash = () => {
+    setTasdiqlash(true);
+  };
+
+  const tashdiqlashClose = () => {
+    setTasdiqlash(false);
+    deleteInput();
+  };
+
+  const deleteInput = () => {
+    refName.current!.value = '';
+  };
+
+  const tasdiqlashMutation = useMutation({
+      mutationFn: async (selectedUser: UserNatijasi) => {
+        const res = await axios.put(`${baseUrl}result/update-status/${selectedUser}?status=APPROVED&practicalScore=0`, {}, config);
+        return res.data;
+      },
+        onSuccess: () => {
+          message.success("Natija muvaffaqiyatli tasdiqlandi");
+          refetch();
+          setTasdiqlash(false);
+          deleteInput();
+        },
+        onError: (error) => {
+          console.error('Xatolik:', error);
+          showErrorMessage("Natija qo'shishda xatolik yuz berdi");
+        },
+  });
+  const [selectedUser, setSelectedUser] = useState<UserNatijasi | null>(null); // Tanlangan foydalanuvchi
+
+  const bekorQilish = useMutation({
+    mutationFn: async (selectedUser: UserNatijasi) => {
+      const res = await axios.put(`${baseUrl}result/update-status/${selectedUser}?status=CANCELLED&practicalScore=0`, {}, config);
+      return res.data;
+    },
+    onSuccess: () => {
+      message.success("Natija muvaffaqiyatli bekor qilindi");
+      setIsModalVisibled(false);
+      refetch();
+    },
+    onError: (error) => {
+      console.error('Xatolik:', error);
+      showErrorMessage("Natija qo'shishda xatolik yuz berdi");
+    },
+  });
+
+  const tasdiqlashOk = () => {
+    tasdiqlashMutation.mutate(selectedUser?.id); 
+  };
 
   const showModal = () => {
     setIsModalVisibled(true);
@@ -33,6 +81,10 @@ const User: React.FC = () => {
 
   const handleClose = () => {
     setIsModalVisibled(false);
+  };
+
+  const handleOk = () => {
+    bekorQilish.mutate(selectedUser?.id);
   };
 
   const { data: usersData, refetch } = useQuery({
@@ -43,11 +95,10 @@ const User: React.FC = () => {
       return data.body?.body || [];
     },
     onError: (error) => {
+      console.log(error);
       message.error('Xatolik yuz berdi');
     },
   });
-
-  
 
   useEffect(() => {
     refetch();
@@ -77,60 +128,18 @@ const User: React.FC = () => {
     }
   };
 
-  // Tasdiqlash modalini ochish
-  const showRatingModal = (user: UserNatijasi) => {
-    setSelectedUser(user);
-    setIsRatingModalVisible(true);
-  };
-
-  // Baho kiritilishi
-  const handleRatingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    const numericValue = parseInt(value);
-    setRating(value);
-
-    // 1 dan 10 gacha son kiritishni validatsiya qilish
-    if (numericValue >= 1 && numericValue <= 10) {
-      setIsRatingValid(true);
-    } else {
-      setIsRatingValid(false);
-      message.error('Iltimos, 1dan 10gacha baho kiriting.');
-    }
-  };
-
-  // Tasdiqlash funksiyasi (API orqali baholashni jo'natish)
-  const handleRatingConfirm = async () => {
-    if (!isRatingValid || !selectedUser) return;
-
-    try {
-      const response = await axios.put(
-        `/result/update-status/${selectedUser.resultId}`,
-        {
-          status: 'CONFIRMED', // Statusni tasdiqlash
-          practicalScore: rating,
-        },
-        config
-      );
-
-      if (response.status === 200) {
-        message.success('Natija muvaffaqiyatli tasdiqlandi!');
-        setIsRatingModalVisible(false); // Modalni yopish
-        setRating(''); // Baho inputini tozalash
-        refetch(); // Ma'lumotlarni yangilash
-      }
-    } catch (error) {
-      message.error('Natijani tasdiqlashda xatolik yuz berdi.');
-    }
-  };
-
   const handleCancel = () => {
     setIsModalVisible(false);
     setSelectedUser(null);
   };
 
-  // const []
-
-
+  const categoryGet = useQuery(
+    ['category', config],
+    async () => {
+      const res = await axios.get(`${baseUrl}category/list`, config);
+      return (res.data as { body: { body: string; }}).body;    
+    }
+  )
 
   return (
     <div className="overflow-x-hidden">
@@ -147,9 +156,8 @@ const User: React.FC = () => {
                   <h3 className="font-bold text-[27px]">Foydalanuvchilar natijasi</h3>
                   <div className="flex gap-2 text-[18px]">
                     <Link to={'/dashboard'}>
-                      <h4>Boshqaruv paneli</h4>
+                      <h4>Boshqaruv paneli / </h4>
                     </Link>
-                    <h4> / </h4>
                     <h4 className="text-blue-600"> Foydalanuvchilar</h4>
                   </div>
                 </header>
@@ -157,25 +165,30 @@ const User: React.FC = () => {
                 <div className="flex justify-end pt-5 gap-5">
                   <div className="flex">
                     <label htmlFor="inp1">
-                      <FcSearch className="absolute mt-4 ml-3 text-[20px]" />
+                     
                     </label>
                     <input
                       type="text"
                       id="inp1"
-                      className="pl-10 w-[375px] border-gray-300 rounded-md h-[50px]"
-                      placeholder="Ism yoki familya bo'yicha qidirish"
+                      className=" w-[375px] border-gray-300 rounded-md h-[50px]"
+                      placeholder="🔍Ism yoki familya bo'yicha qidirish"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                     />
                   </div>
-                  <div className="flex">
-                    <input
-                      type="text"
-                      className="min-w-[260px] w-[360px] rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]"
-                      placeholder="Tumanni tanlang"
-                    />
-                    <SlArrowDown className="absolute ml-[320px] mt-4" />
-                  </div>
+                  <select
+                    className="max-w-[350px] w-[375px] text-gray-40 rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]"
+                    // value={selectedStatus}
+                    // onChange={(e) => setSelectedStatus(e.target.value)}
+                  >
+                    <option value="">Kategoriyani tanlang</option>
+                    {Array.isArray(categoryGet) &&
+                      categoryGet.map((category) => (
+                        <option key={category.id} >
+                          {category.name}
+                        </option>
+                      ))}
+                  </select>
 
                   {/* Status Select */}
                   <select
@@ -236,19 +249,19 @@ const User: React.FC = () => {
                                   <Dropdown  overlay={
                                       <Menu>
                                         <Menu.Item key="1">
-                                          <Link to={`/archive/${item.id}`}>Arxivni ko'rish</Link>
+                                          <Link to={`/archive/${item.id}`}>Arxivni ko'rish</Link>s
                                         </Menu.Item>
                                         <Menu.Item key="2">
-                                          <button onClick={() => showUserDetails(item)}>Natijani ko'rish</button>
+                                          <button className='w-full flex ' onClick={() => showUserDetails(item)}>Natijani ko'rish</button>
                                         </Menu.Item>
                                         <Menu.Item key="3">
-                                          <button>Tasdiqlash</button>
+                                          <button className='w-full flex ' onClick={() => (modalTasdiqlash(), setSelectedUser(item))} >Tasdiqlash</button>
                                         </Menu.Item>
                                         <Menu.Item key="4">
-                                          <button onClick={showModal}>Bekor qilish</button>
+                                          <button className='w-full flex ' onClick={() => (showModal(), setSelectedUser(item))}>Bekor qilish</button>
                                         </Menu.Item>
                                         <Menu.Item key="5">
-                                          <button>Qayta topshirishga ruxsat berish</button>
+                                          <button className='w-full flex '>Qayta topshirishga ruxsat berish</button>
                                         </Menu.Item>
                                       </Menu>
                                     }
@@ -268,8 +281,7 @@ const User: React.FC = () => {
               </div>
             </div>
           </div>
-
-          {/* Modal for displaying user details */}
+          {/* Modal info */}
           <Modal visible={isModalVisible} onCancel={handleCancel} footer={null}>
             {loadingDetails ? (
               <Spin />
@@ -286,35 +298,27 @@ const User: React.FC = () => {
               <h2 className="text-2xl font-extrabold my-4 text-center text-[#727788]">Natijalar topilmadi</h2>
             )}
           </Modal>
-
-          {/* Modal for confirming the rating */}
+          {/* Tasdiqlash uchun modal */}
           <Modal
             title="Natijani tasdiqlash"
-            visible={isRatingModalVisible}
-            onCancel={() => setIsRatingModalVisible(false)}
-            footer={null}
+            open={tasdiqlash}
+            onOk={tasdiqlashOk}
+            onCancel={tashdiqlashClose}
+            cancelText="Bekor qilish"
+            okText="Tasdiqlash"
           >
             <div>
               <label htmlFor="rating">Baholash:</label>
               <Input
                 type="number"
                 id="rating"
-                value={rating}
-                onChange={handleRatingChange}
+                ref={refName}
                 className="border rounded-md w-full p-2"
               />
-              <div className="flex justify-end mt-4">
-                <Button onClick={() => setIsRatingModalVisible(false)} style={{ marginRight: '8px' }}>
-                  Yopish
-                </Button>
-                <Button type="primary" onClick={handleRatingConfirm} disabled={!isRatingValid}>
-                  Tasdiqlash
-                </Button>
-              </div>
             </div>
           </Modal>
           {/* Bekor qilish uchun modal */}
-          <Modal visible={isModalVisibled} onCancel={handleClose} >
+          <Modal open={isModalVisibled} onOk={handleOk} onCancel={handleClose} okText="Tasdiqlash" cancelText="Bekor qilish">
             <p className='text-lg text-center mt-4 font-semibold'>Natijani bekor qilmoqchimisiz</p>
           </Modal>
         </div>
