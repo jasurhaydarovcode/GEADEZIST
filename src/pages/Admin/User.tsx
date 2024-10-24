@@ -35,6 +35,11 @@ const User: React.FC = () => {
 
   const tashdiqlashClose = () => {
     setTasdiqlash(false);
+    deleteInput();
+  };
+
+  const deleteInput = () => {
+    refName.current!.value = '';
   };
 
   const tasdiqlashMutation = useMutation({
@@ -44,7 +49,9 @@ const User: React.FC = () => {
       },
         onSuccess: () => {
           message.success("Natija muvaffaqiyatli tasdiqlandi");
+          refetch();
           setTasdiqlash(false);
+          deleteInput();
         },
         onError: (error) => {
           console.error('Xatolik:', error);
