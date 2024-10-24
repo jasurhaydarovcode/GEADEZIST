@@ -17,11 +17,11 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        {/* <CursorProtect message='❌ Websayt Ximoyalangan'>
-          <DevToolsBlocker> */}
+        {/* <CursorProtect message='❌ Websayt Ximoyalangan'> */}
+          {/* <DevToolsBlocker> */}
             <App />
-          {/* </DevToolsBlocker>
-        </CursorProtect> */}
+          {/* </DevToolsBlocker> */}
+        {/* </CursorProtect> */}
         <ToastContainer
           position="top-center"
           autoClose={2000}

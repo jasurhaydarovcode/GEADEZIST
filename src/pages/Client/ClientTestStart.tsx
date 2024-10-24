@@ -13,19 +13,16 @@ import { config } from '@/helpers/functions/token';
 import TableLoading from '@/components/spinner/TableLoading';
 import defaultImage from '@/assets/images/default.png';
 export const getImage = `${baseUrl}api/videos/files`;
-import CheckLogin from '@/helpers/functions/checkLogin';
 
 interface AxiosError {
   message: string;
 }
 
 const ClientTestStart: React.FC = () => {
-  CheckLogin
-
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const navigate = useNavigate();
-  const [cateId, setSelectedCateId] = useState<number | null>(null);
+
   const { isLoading, error, data } = useQuery({
     queryKey: ['getClientCategory'],
     queryFn: async () => {
@@ -36,6 +33,7 @@ const ClientTestStart: React.FC = () => {
       message.error(error.message);
     },
   });
+
   const showModal = (categoryId: number) => {
     setSelectedCategoryId(categoryId);
     setIsModalVisible(true);
@@ -49,8 +47,7 @@ const ClientTestStart: React.FC = () => {
     } else if (role == 'ROLE_TESTER') {
       navigate('/category');
     }
-
-    if (token == null) {
+    if (!token) {
       navigate('/auth/Signin');
     }
   }, [navigate]);
@@ -63,24 +60,22 @@ const ClientTestStart: React.FC = () => {
     setIsModalVisible(false);
   };
 
-  const getTests = useQuery({
-    queryKey: ['getTests', config],
+  const { refetch: refetchTests } = useQuery({
+    queryKey: ['getTests', selectedCategoryId],
     queryFn: async () => {
-      const res = await axios.get(`${baseUrl}quiz/start/${cateId}`, config)
-      return res.data
+      if (!selectedCategoryId) return;
+      const res = await axios.get(`${baseUrl}quiz/start/${selectedCategoryId}`, config);
+      return res.data;
     },
-    onSuccess: () => {
-
-    }
-  })
+    enabled: false, // Qo'lda refetch qilish uchun
+  });
 
   const handleOk = () => {
-    getTests.refetch()
+    refetchTests(); // Refetch qilish
     if (selectedCategoryId !== null) {
       navigate(`/client/quiz/${selectedCategoryId}`);
     }
   };
-
 
   if (error) return toast.error((error as AxiosError).message);
 
@@ -105,9 +100,7 @@ const ClientTestStart: React.FC = () => {
                   <div>
                     <img
                       alt={item.name}
-                      src={
-                        item.fileId ? `${getImage}${item.fileId}` : defaultImage
-                      }
+                      src={item.fileId ? `${getImage}${item.fileId}` : defaultImage}
                       className="border-[1px] border-gray-300 w-[100px] h-[100px] rounded-full object-cover hover:cursor-pointer"
                     />
                   </div>
@@ -151,7 +144,6 @@ const ClientTestStart: React.FC = () => {
                     <button
                       onClick={() => {
                         showModal(item.id);
-                        setSelectedCateId(item.id); // Type assertion to number
                       }}
                       className="bg-gray-600 cursor-pointer absolute top-[78%] right-5 text-white p-1 px-4 rounded"
                     >
@@ -167,11 +159,7 @@ const ClientTestStart: React.FC = () => {
         title={
           <div>
             <span>
-              <MdOutlineNotStarted
-                size={90}
-                color="red"
-                className="mx-auto"
-              />
+              <MdOutlineNotStarted size={90} color="red" className="mx-auto" />
             </span>
             <span>Haqiqatdan ham </span>
             <span className="text-red-600">
@@ -183,20 +171,14 @@ const ClientTestStart: React.FC = () => {
             </span>
           </div>
         }
-        visible={isModalVisible}
+        open={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
         okText="Boshlash"
         cancelText="Orqaga"
         maskClosable={false}
-        style={{
-          top: '34%',
-          left: '1%',
-          width: '300px',
-        }}
-        maskStyle={{
-          backgroundColor: 'rgba(0, 0, 0, 0.1)',
-        }}
+        style={{ top: '34%', left: '1%', width: '300px' }}
+        maskStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.1)' }}
       />
     </Layout>
   );

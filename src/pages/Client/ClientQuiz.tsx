@@ -3,7 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import CheckLogin from '@/helpers/functions/checkLogin';
 import { config } from '@/helpers/functions/token';
 import { baseUrl } from '@/helpers/api/baseUrl';
 import { ClientQuizType, optionDtos } from '@/helpers/types/clientQuizType';
@@ -35,7 +34,6 @@ interface SubmitQuizResponse {
 }
 
 const QuestionPage: React.FC = () => {
-  CheckLogin();
   const navigate = useNavigate();
   const param = useParams<{ id: string }>();
 
@@ -133,8 +131,8 @@ const QuestionPage: React.FC = () => {
   };
 
   const getQuestion = async (): Promise<ClientQuizType[]> => {
-    const res = await axios.get<ClientQuizType[]>(`${baseUrl}quiz/start/${param.id}`, config);
-    return res.data?.body?.questionDtoList;
+    const res = await axios.get<{ body: { questionDtoList: ClientQuizType[] } }>(`${baseUrl}quiz/start/${param.id}`, config);
+    return res.data.body.questionDtoList;
   };
 
   const { data: quizData, isLoading: quizLoading, error: quizError } = useQuery({
@@ -158,8 +156,8 @@ const QuestionPage: React.FC = () => {
   };
 
   const getCategories = async (): Promise<ClientCategory[]> => {
-    const res = await axios.get<ClientCategory[]>(`${baseUrl}category`, config);
-    return res.data.body?.body || [];
+    const res = await axios.get<{ body: ClientCategory[] }>(`${baseUrl}category`, config);
+    return res.data.body;
   };
 
   const { data: categories, isLoading: categoryLoading, error: categoryError } = useQuery({
@@ -227,7 +225,7 @@ const QuestionPage: React.FC = () => {
         <Spin className="absolute top-[44%] left-[46%]" size="large" />
       ) : quizError || categoryError ? (
         <div>
-          <div className='text-center text-2xl'>Bu kategoriyadagi testlarni <span className='text-red-500'>{categories?.[currentIndex]?.retakeDate} </span>
+          <div className='text-center text-2xl'>Bu kategoriyadagi testlarni <span className='text-red-500'>{categories?.[currentIndex]?.retakeDate ? categories?.[currentIndex]?.retakeDate : '3'} </span>
             kundan so'ng keyin ishlashingiz mumkin.</div>
         </div>
 
