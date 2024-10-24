@@ -165,7 +165,6 @@ function AllUser() {
                     {selectedRegion && districts.map((district, index) => ( // Check if a region is selected
                       <option key={index} value={district.id}>
                         {district.name}
-                        {district.regionName}
                       </option>
                     ))}
                   </select>
