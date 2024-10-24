@@ -53,13 +53,10 @@ function SignIn() {
       localStorage.setItem('role', res.data.role);
       if (res.data.role === 'ROLE_SUPER_ADMIN') {
         navigate('/dashboard');
-        refresh()
       } else if (res.data.role === 'ROLE_ADMIN') {
         navigate('/inspector-admin');
-        refresh()
       } else if (res.data.role === 'ROLE_TESTER') {
         navigate('/category');
-        refresh()
       } else if (res.data.rol === 'ROLE_CLIENT') {
         navigate('/client/dashboard');
       }
