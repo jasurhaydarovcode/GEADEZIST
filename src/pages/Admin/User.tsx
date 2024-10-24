@@ -39,7 +39,7 @@ const User: React.FC = () => {
 
   const tasdiqlashMutation = useMutation({
       mutationFn: async (selectedUser: UserNatijasi) => {
-        const res = await axios.put(`${baseUrl}result/update-status/${selectedUser}?status=APPROVED&practicalScore=${Number(refName.current?.value)}`,config);
+        const res = await axios.put(`${baseUrl}result/update-status/${selectedUser}?status=APPROVED&practicalScore=0`, {}, config);
         return res.data;
       },
         onSuccess: () => {
@@ -57,7 +57,7 @@ const User: React.FC = () => {
     console.log(selectedUser);
     
     // if (selectedUser && selectedUser) {
-      tasdiqlashMutation.mutate(selectedUser.id); // Id yuboriladi
+      tasdiqlashMutation.mutate(selectedUser?.id); // Id yuboriladi
     // } else {
     //   message.error("Hech qanday foydalanuvchi tanlanmadi");
     // }
