@@ -7,7 +7,7 @@ import axios from 'axios';
 import { Helmet } from 'react-helmet';
 import { useMutation, useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
-import {  Dropdown, Menu, message, Modal, Input, Spin, Space } from 'antd';
+import {  Dropdown, Menu, message, Modal, Input, Spin, Space, InputRef } from 'antd';
 import CheckLogin from '@/helpers/functions/checkLogin';
 import { EllipsisVerticalIcon } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 'flowbite-react';
@@ -22,20 +22,21 @@ const User: React.FC = () => {
   const [selectedStatus, setSelectedStatus] = useState<string>('');
   const [isModalVisibled, setIsModalVisibled] = useState(false);
   const [tasdiqlash, setTasdiqlash] = useState(false);
-  const refName = useRef<HTMLInputElement>(null);
-  const [qaytaTest, setQaytaTest] = useState(false);
+  const refName = useRef<InputRef>(null);
+  // const [qaytaTest, setQaytaTest] = useState(false);
 
-  const qaytaModal = () => {
-    setQaytaTest(true);
-  };
+  // const qaytaModal = () => {
+  //   setQaytaTest(true);
+  // };
 
-  const qaytaTestClose = () => {
-    setQaytaTest(false);
-  };
+  // const qaytaTestClose = () => {
+  //   setQaytaTest(false);
+  // };
 
-  const qaytaTestOk = () => {
-    setQaytaTest(false);
-  };
+  // const qaytaTestOk = () => {
+  //   qaytaTopshirish.mutate(selectedUser.id);
+  //   setQaytaTest(false);
+  // };
 
   const modalTasdiqlash = () => {
     setTasdiqlash(true);
@@ -83,6 +84,22 @@ const User: React.FC = () => {
       showErrorMessage("Natija qo'shishda xatolik yuz berdi");
     },
   });
+
+  // const qaytaTopshirish = useMutation({
+  //   mutationFn: async (selectedUser: UserNatijasi) => {
+  //     const res = await axios.put(`${baseUrl}result/update-status/expiredDate?userId=${selectedUser}&categoryId=${selectedUser.categoryId}`, {}, config);
+  //     return res.data;
+  //   },
+  //   onSuccess: () => {
+  //     message.success("Natija muvaffaqiyatli qayta topshirildi");
+  //     setIsModalVisibled(false);
+  //     refetch();
+  //   },
+  //   onError: (error) => {
+  //     console.error('Xatolik:', error);
+  //     showErrorMessage("Natija qo'shishda xatolik yuz berdi");
+  //   },
+  // });
 
   const tasdiqlashOk = () => {
     tasdiqlashMutation.mutate(selectedUser!.id); 
@@ -260,7 +277,7 @@ const User: React.FC = () => {
                                   <Dropdown  overlay={
                                       <Menu>
                                         <Menu.Item key="1">
-                                          <Link to={`/archive/${item.id}`}>Arxivni ko'rish</Link>s
+                                          <Link to={`/archive/${item.id}`}>Arxivni ko'rish</Link>
                                         </Menu.Item>
                                         <Menu.Item key="2">
                                           <button className='w-full flex ' onClick={() => showUserDetails(item)}>Natijani ko'rish</button>
@@ -271,9 +288,9 @@ const User: React.FC = () => {
                                         <Menu.Item key="4">
                                           <button className='w-full flex ' onClick={() => (showModal(), setSelectedUser(item))}>Bekor qilish</button>
                                         </Menu.Item>
-                                        <Menu.Item key="5">
+                                        {/* <Menu.Item key="5">
                                           <button className='w-full flex ' onClick={() => (qaytaModal(), setSelectedUser(item))}>Qayta topshirishga ruxsat berish</button>
-                                        </Menu.Item>
+                                        </Menu.Item> */}
                                       </Menu>
                                     }
                                     placement="bottomRight"
@@ -333,9 +350,9 @@ const User: React.FC = () => {
             <p className='text-lg text-center mt-4 font-semibold'>Natijani bekor qilmoqchimisiz</p>
           </Modal>
           {/* Qayta test topshirish */}
-          <Modal okText="Ha" cancelText="Yopish" open={qaytaTest} onOk={qaytaTestOk} onCancel={qaytaTestClose}>
+          {/* <Modal okText="Ha" cancelText="Yopish" open={qaytaTest} onOk={qaytaTestOk} onCancel={qaytaTestClose}>
             <p className='text-lg text-center mt-8 mb-4 p-[5px] font-semibold'>Rostdan ham bu foydalanuvchiga qayta test topshirishga ruxsat bermoqchimisiz</p>
-          </Modal>
+          </Modal> */}
         </div>
       </Layout>
     </div>
