@@ -47,7 +47,6 @@ function SignIn() {
       return res;
     },
     onSuccess: (res: AxiosResponse) => {
-
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('role', res.data.role);
       if (res.data.role === 'ROLE_SUPER_ADMIN') {
