@@ -115,7 +115,7 @@ const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
           message.success("Ro'yxatdan o'tdingiz");
           navigate('/auth/confirm-signup');
         }
-        message.success("Ro'yxatdan o'tdingiz");
+        message.success("Emailga code yuborildi");
       })
       .catch((err) => {
         if (err.response?.status === 404) {
