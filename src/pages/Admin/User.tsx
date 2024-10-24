@@ -60,14 +60,24 @@ const User: React.FC = () => {
   });
   const [selectedUser, setSelectedUser] = useState<UserNatijasi | null>(null); // Tanlangan foydalanuvchi
 
+  const bekorQilish = useMutation({
+    mutationFn: async (selectedUser: UserNatijasi) => {
+      const res = await axios.put(`${baseUrl}result/update-status/${selectedUser}?status=CANCELLED&practicalScore=0`, {}, config);
+      return res.data;
+    },
+    onSuccess: () => {
+      message.success("Natija muvaffaqiyatli bekor qilindi");
+      setIsModalVisibled(false);
+      refetch();
+    },
+    onError: (error) => {
+      console.error('Xatolik:', error);
+      showErrorMessage("Natija qo'shishda xatolik yuz berdi");
+    },
+  });
+
   const tasdiqlashOk = () => {
-    console.log(selectedUser);
-    
-    // if (selectedUser && selectedUser) {
-      tasdiqlashMutation.mutate(selectedUser?.id); // Id yuboriladi
-    // } else {
-    //   message.error("Hech qanday foydalanuvchi tanlanmadi");
-    // }
+    tasdiqlashMutation.mutate(selectedUser?.id); 
   };
 
   const showModal = () => {
@@ -76,6 +86,10 @@ const User: React.FC = () => {
 
   const handleClose = () => {
     setIsModalVisibled(false);
+  };
+
+  const handleOk = () => {
+    bekorQilish.mutate(selectedUser?.id);
   };
 
   const { data: usersData, refetch } = useQuery({
@@ -279,7 +293,7 @@ const User: React.FC = () => {
                                   <Dropdown  overlay={
                                       <Menu>
                                         <Menu.Item key="1">
-                                          <Link to={`/archive/${item.id}`}>Arxivni ko'rish</Link>
+                                          <Link to={`/archive/${item.id}`}>Arxivni ko'rish</Link>s
                                         </Menu.Item>
                                         <Menu.Item key="2">
                                           <button className='w-full flex ' onClick={() => showUserDetails(item)}>Natijani ko'rish</button>
@@ -288,7 +302,7 @@ const User: React.FC = () => {
                                           <button className='w-full flex ' onClick={() => (modalTasdiqlash(), setSelectedUser(item))} >Tasdiqlash</button>
                                         </Menu.Item>
                                         <Menu.Item key="4">
-                                          <button className='w-full flex ' onClick={showModal}>Bekor qilish</button>
+                                          <button className='w-full flex ' onClick={() => (showModal(), setSelectedUser(item))}>Bekor qilish</button>
                                         </Menu.Item>
                                         <Menu.Item key="5">
                                           <button className='w-full flex '>Qayta topshirishga ruxsat berish</button>
@@ -352,7 +366,7 @@ const User: React.FC = () => {
             </div>
           </Modal>
           {/* Bekor qilish uchun modal */}
-          <Modal visible={isModalVisibled} onCancel={handleClose} >
+          <Modal open={isModalVisibled} onOk={handleOk} onCancel={handleClose} okText="Tasdiqlash" cancelText="Bekor qilish">
             <p className='text-lg text-center mt-4 font-semibold'>Natijani bekor qilmoqchimisiz</p>
           </Modal>
         </div>
