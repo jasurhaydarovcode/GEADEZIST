@@ -1,6 +1,5 @@
 // types/category.ts
 export interface Category {
-  body: {
     id: string;
     name: string;
     description: string;
@@ -12,5 +11,6 @@ export interface Category {
     createdBy: string;
     deleted: boolean;
     deletedBy?: string;
-  }
 }
+
+

@@ -23,6 +23,7 @@ export const updateCategory = `${baseUrl}category/update`;
 
 // ======================= Question =======================
 export const PostQuestion = `${baseUrl}question`;
+export const EditQuestion = `${baseUrl}question/`;
 
 // ==================== Video File ====================
 export const getVideoFile = `${baseUrl}video/file/get/all`;

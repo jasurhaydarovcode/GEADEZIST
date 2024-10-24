@@ -1,5 +1,5 @@
 import Layout from "@/components/Dashboard/Layout";
-import { baseUrl, PostQuestion } from "@/helpers/api/baseUrl";
+import { baseUrl, EditQuestion, PostQuestion } from "@/helpers/api/baseUrl";
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, } from 'flowbite-react';
 import { config } from "@/helpers/functions/token";
 import { PlusCircleOutlined, EditOutlined, DeleteOutlined, EyeOutlined, } from "@ant-design/icons";
@@ -16,6 +16,7 @@ import { Link, useNavigate } from "react-router-dom";
 import CheckLogin from "@/helpers/functions/checkLogin";
 import { Category } from "@/helpers/types/Category";
 import { toast } from "react-toastify";
+import { AxiosError } from "axios";
 
 function Test() {
   const queryGet = useQueryClient()
@@ -43,13 +44,11 @@ function Test() {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [testType, setTestType] = useState<string | null>(null);
   const quiz = useRef<HTMLInputElement | null>(null);
-  const category = useRef<HTMLSelectElement | null>(null);
-  const difficulty = useRef<string>('');
+  const difficulty = useRef<HTMLInputElement | null>(null);
   const [editTestID, setEditTestID] = useState<string>('');
-  const categore = useRef<string>('');
-  const answer = useRef<string | null>(null);
-  const type = useRef<string>('');
-  const checkbox = useRef<boolean>(false)
+  const categore = useRef<HTMLSelectElement | null>(null);
+  const answer = useRef<HTMLInputElement | null>(null);
+  const type = useRef<HTMLInputElement | null>(null);
   const [datas, useDatas] = useState<FetchedTest[]>([]);
   const [turi, setTuri] = useState<string | null>(null);
   const [kategoriya, setKategoriya] = useState<string | null>(null);
@@ -94,7 +93,7 @@ function Test() {
       filteredTests = filteredTests.filter((item) =>
         item.type?.toLowerCase() === turi.toLowerCase()
       );
-    }else{
+    } else {
       setTestlar(datas)
     }
 
@@ -135,11 +134,11 @@ function Test() {
     }
   })
 
-  // useEffect(() => {
-  //   if (isDelete) {
-  //     queryGet.refetchQueries('testData')
-  //   }
-  // }, [isDelete])
+  useEffect(() => {
+    if (isDelete) {
+      queryGet.refetchQueries('testData')
+    }
+  }, [isDelete])
   // Delete qilish tugatildi
 
   function showDeleteModal(id: number | string) {
@@ -279,11 +278,6 @@ function Test() {
 
   const [answerDate, setAnswerDate] = useState(''); // State for answer input
 
-  useEffect(() => {
-    console.log(answerDate, 'input answer');
-    console.log(optionDtos, 'input option');
-  }, [answerDate, optionDtos]);
-
   // Handler for the answer input change
   const handleAnswerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAnswerDate(e.target.value);
@@ -321,18 +315,18 @@ function Test() {
     mutationFn: async () => {
       const data = {
         name: quiz.current?.value || "", // Ref orqali olish
-        categoryId: Number(categore.current?.value) || "", // Ref orqali olish
+        categoryId: Number(categore?.current?.value) || "", // Ref orqali olish
         finiteError: 0,
-        type: type.current?.value || "", // Ref orqali olish
-        difficulty: difficulty.current?.value || "", // Ref orqali olish
+        type: type?.current?.value || "", // Ref orqali olish
+        difficulty: difficulty?.current?.value || "", // Ref orqali olish
         attachmentIds: [0],
-        optionDtos: optionDtos.slice(1), // Skip the first (placeholder) option
+        optionDtos: optionDtos, // Skip the first (placeholder) option
       };
 
       try {
         const res = await axios.post(PostQuestion, data, config);
         return res.data;
-      } catch (err) {
+      } catch (err: AxiosError) {
         throw new Error('Error posting question: ' + err.message);
       }
     },
@@ -348,6 +342,7 @@ function Test() {
   });
 
   const handleRadioChange = (index: number) => {
+    
     // Update the isCorrect value for the selected option only
     setOptionDtos((prevOptions) =>
       prevOptions.map((option, i) => ({
@@ -372,7 +367,6 @@ function Test() {
   // Edit states
   const [testId, setTestId] = useState(null)
 
-
   // Edit Quiz function 
   const editQuiz = useMutation({
     mutationFn: async () => {
@@ -383,24 +377,25 @@ function Test() {
         type: type.current?.value || "", // Ref orqali olish
         difficulty: difficulty.current?.value || "", // Ref orqali olish
         attachmentIds: [0],
-        optionDtos: optionDtos.slice(1), // Skip the first (placeholder) option
+        optionDtos: optionDtos, // Skip the first (placeholder) option
       };
 
       try {
-        const res = await axios.put(`${PostQuestion}/${testId}`, data, config);
+        const res = await axios.put(`${EditQuestion}${testId}`, data, config);
         return res.data;
-      } catch (err) {
+      } catch (err: AxiosError) {
         throw new Error('Error posting question: ' + err.message);
       }
     },
     onSuccess: () => {
       message.success('Edited successfully');
       queryGet.invalidateQueries('testData');
+      setEditOpen(false);
     },
     onError: (err: any) => {
-      message.error(err.message);
+      testType === "ONE_CHOICE" ? message.error("Bir to'g'ri javobli turda kamida 3 ta javob bo'lishi kerak")
+      : message.error(err.message);
       console.error(err);
-      console.log(testId);
     },
   });
 
@@ -503,8 +498,8 @@ function Test() {
                       Kategoriyani tanlang
                     </option>
                     {saveCates && saveCates.length > 0 && saveCates.map((item: Category) => (
-                      <option value={item?.id} className="text text-black">
-                        {item?.name}
+                      <option value={item.id} className="text text-black">
+                        {item.name}
                       </option>
                     ))}
                   </select>
@@ -593,13 +588,13 @@ function Test() {
                 <div>
                   {testType !== null &&
                     testType === "ONE_CHOICE" &&
-                    answers.map((answer, index) => (
+                    answers.map((answer, index: number) => (
                       <div
                         key={answer.id}
                         className="flex items-center mb-4 gap-1"
                       >
                         <input
-                          onChange={(e) => handleRadioChange(index)}
+                          onChange={() => handleRadioChange(index)}
                           type="radio"
                           name="single-choice"
                           className="mr-3 accent-blue-500"
@@ -725,7 +720,7 @@ function Test() {
                           checked={
                             testType === "SUM" || answer.checked
                           }
-                          onChange={(e) => handleCheckboxChange(e)}
+                          onChange={(e) => handleCheckboxChange(index, e)}
                           disabled={testType === "SUM"}
                           className="mr-3 accent-blue-500"
                         />
@@ -757,7 +752,7 @@ function Test() {
                         className="flex items-center mb-4 gap-1"
                       >
                         <input
-                          onChange={(e) => handleRadioChange(index)}
+                          onChange={() => handleRadioChange(index)}
                           type="radio"
                           name="single-choice"
                           className="mr-3 accent-blue-500"
