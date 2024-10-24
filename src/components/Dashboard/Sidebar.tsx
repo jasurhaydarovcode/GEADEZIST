@@ -61,8 +61,7 @@ const Sidebar = () => {
 
 
   return (
-    <div className=''>
-      {/* Burger Menu Button for mobile view */}
+    <div>
       <button
         className="md:hidden bg-gray-100 rounded-xl m-3 p-3 fixed top-0 left-0 z-40"
         onClick={toggleSidebar}

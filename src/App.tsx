@@ -1,12 +1,11 @@
-import { Route, Routes, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { Route, Routes } from 'react-router-dom';
+
 
 // lato font family
 import '@fontsource/lato';
 import '@fontsource/lato/400.css';
 import '@fontsource/lato/400-italic.css';
 
-import SiteLoading from './components/SiteLoading';
 import PrivateRoute from './components/security/route/PrivateRoute';
 import PublicRoute from './components/security/route/PublicRoute';
 
@@ -15,18 +14,11 @@ import {
   Home, NotFound, SignIn, SignUp, Offer, Confirm, ResetPassword,
   ClientDashboard, ClientProfile, ClientTestStart, ClientQuiz,
   Dashboard, Test, AllUser, User, Archive, Employees, InspectorAdmin,
-  Category, Profile, ConfirmSignUp, TestVisual
+  Category, Profile, ConfirmSignUp, TestVisual,
+  Address, ClientQuizResult
 } from './pages';
 
 function App() {
-  const [loading, setLoading] = useState(false);
-  const location = useLocation();
-
-  useEffect(() => {
-    setLoading(true);
-    const timer = setTimeout(() => setLoading(false), 200);
-    return () => clearTimeout(timer);
-  }, [location]);
 
   const renderRoute = (path: string, Component: React.FC, isPrivate: boolean = true) => {
     const RouteWrapper = isPrivate ? PrivateRoute : PublicRoute;
@@ -44,7 +36,6 @@ function App() {
 
   return (
     <>
-      {loading && <SiteLoading />}
       <Routes>
         {renderRoute("/", Home)}
         <Route path="*" element={<NotFound />} />
@@ -59,6 +50,7 @@ function App() {
 
         {/* Protected Client Routes */}
         {renderRoute("/client/dashboard", ClientDashboard)}
+        {renderRoute("/client/quiz/result", ClientQuizResult)}
         {renderRoute("/client/profile", ClientProfile)}
         {renderRoute("/client/test/start", ClientTestStart)}
         {renderRoute("/client/quiz/:id", ClientQuiz)}
@@ -70,9 +62,10 @@ function App() {
         {renderRoute("/tests", TestVisual)}
         {renderRoute("/all-user", AllUser)}
         {renderRoute("/user", User)}
-        {renderRoute("/archive/:id", Archive)}
+        {renderRoute("/archive/:resultId", Archive)}
         {renderRoute("/employees", Employees)}
         {renderRoute("/profile", Profile)}
+        {renderRoute("/address", Address)}
         {renderRoute("/inspector-admin", InspectorAdmin)}
       </Routes>
     </>

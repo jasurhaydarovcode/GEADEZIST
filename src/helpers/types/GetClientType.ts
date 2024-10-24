@@ -1,6 +1,6 @@
 export interface GetClientAllResponse {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-}
+  "firstName": string
+  "lastName": string
+  "categoryName": string
+  "correctAnswers": string
+},
