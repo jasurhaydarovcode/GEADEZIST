@@ -178,12 +178,10 @@ const User: React.FC = () => {
                   </div>
                   <select
                     className="max-w-[350px] w-[375px] text-gray-40 rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]"
-                    // value={selectedStatus}
-                    // onChange={(e) => setSelectedStatus(e.target.value)}
                   >
                     <option value="">Kategoriyani tanlang</option>
-                    {Array.isArray(categoryGet) &&
-                      categoryGet.map((category) => (
+                    {Array.isArray(categoryGet.data) &&
+                      categoryGet.data.map((category) => (
                         <option key={category.id} >
                           {category.name}
                         </option>
