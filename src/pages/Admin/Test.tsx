@@ -264,10 +264,20 @@ function Test() {
   function showModal() {
     setOpen(true);
   };
+  const [editOpen, setEditOpen] = useState<boolean>(false)
+  function showEditModal() {
+    setEditOpen(!editOpen);
+  };
 
   function handleCancel() {
     setOpen(false);
   };
+
+  
+  function handleEditCancel() {
+    setEditOpen(false);
+  };
+
 
 
   const [optionDtos, setOptionDtos] = useState([
@@ -292,23 +302,19 @@ function Test() {
   };
 
   // Function to add the new option to the optionDtos array
-  
+
   // Clear the inputs after adding the option
-  
-  useEffect(() => {
-    const addOption = () => {
-      setOptionDtos((prevOptions: any) => [
-        ...prevOptions,
-        {
-          answer: answerDate, // Use the current value of the answer state
-          isCorrect: checkedBox, // Use the current value of the checkbox state
-          file: 0,
-        },
-      ]);
+  const addOption = () => {
+    setOptionDtos((prevOptions: any) => [
+      ...prevOptions,
+      {
+        answer: answerDate, // Use the current value of the answer state
+        isCorrect: checkedBox, // Use the current value of the checkbox state
+        file: 0,
+      },
+    ]);
     setAnswerDate(""); // Clear the answer input
   };
-
-  },[answerDate, checkedBox]);
   // Function to remove an option by index
   const removeOption = (index: number) => {
     setOptionDtos((prevOptions) =>
@@ -352,6 +358,51 @@ function Test() {
   // Handle OK button
   const handleOk = () => {
     postQuestion.mutate();
+    setConfirmLoading(true);
+    setTimeout(() => {
+      setOpen(false);
+      setConfirmLoading(false);
+    }, 2000);
+  };
+
+
+  // Edit states
+  const [testId,setTestId] = useState(null)
+
+  
+  // Edit Quiz function 
+  const editQuiz = useMutation({
+    mutationFn: async () => {
+      const data = {
+        name: quiz.current?.value || "", // Ref orqali olish
+        categoryId: Number(categore.current?.value) || "", // Ref orqali olish
+        finiteError: 0,
+        type: type.current?.value || "", // Ref orqali olish
+        difficulty: difficulty.current?.value || "", // Ref orqali olish
+        attachmentIds: [0],
+        optionDtos: optionDtos.slice(1), // Skip the first (placeholder) option
+      };
+
+      try {
+        const res = await axios.post(`${PostQuestion}/${testId}`, data, config);
+        return res.data;
+      } catch (err) {
+        throw new Error('Error posting question: ' + err.message);
+      }
+    },
+    onSuccess: () => {
+      message.success('Edited successfully');
+      queryGet.invalidateQueries('testData');
+    },
+    onError: (err: any) => {
+      message.error(err.message);
+      console.error(err);
+      console.log(testId);
+    },
+  });
+
+  const handleEditOk = () => {
+    editQuiz.mutate();
     setConfirmLoading(true);
     setTimeout(() => {
       setOpen(false);
@@ -420,6 +471,161 @@ function Test() {
                 onOk={handleOk}
                 confirmLoading={confirmLoading}
                 onCancel={handleCancel}
+                maskClosable={false}
+              >
+                <div className="mb-4">
+                  <input
+                    ref={quiz}
+                    placeholder="Savolni kiriting"
+                    className="border bg-white w-full p-2 rounded"
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <select ref={categore} className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
+                    <option disabled selected value="">
+                      Kategoriyani tanlang
+                    </option>
+                    {saveCates && saveCates.length > 0 && saveCates.map((item: Category) => (
+                      <option value={item?.id} className="text text-black">
+                        {item?.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="mb-4">
+                  <select ref={difficulty} className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
+                    <option disabled selected>
+                      Qiyinchilik darajasini tanlang
+                    </option>
+                    <option value="HARD" className="text text-black">
+                      Qiyin
+                    </option>
+                    <option value="EASY" className="text text-black">
+                      Oson
+                    </option>
+                    <option value="MEDIUM" className="text text-black">
+                      O'rta
+                    </option>
+                  </select>
+                </div>
+
+                <div className="mb-4">
+                  <select ref={type}
+                    onChange={(e) => setTestType(e.target.value)}
+                    className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]"
+                  >
+                    <option disabled selected>
+                      Turlarni tanlang
+                    </option>
+                    {categoryNames &&
+                      categoryNames.length > 0 &&
+                      categoryNames.map((category, key) => (
+                        <option
+                          key={key}
+                          value={category.value}
+                          className="text text-black"
+                        >
+                          {category.name}
+                        </option>
+                      ))}
+                  </select>
+                </div>
+
+                <div>
+                  {testType !== null &&
+                    (testType === "SUM" ||
+                      testType === "ANY_CORRECT") &&
+                    answers.map((answer: Answer, index) => (
+                      <div
+                        key={answer.id}
+                        className="flex items-center mb-4 gap-2"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={
+                            testType === "SUM" || answer.checked
+                          }
+                          onChange={(e) => handleCheckboxChange(e)}
+                          disabled={testType === "SUM"}
+                          className="mr-3 accent-blue-500"
+                        />
+                        <input
+                          onChange={(e) => handleAnswerChange(e)}
+                          placeholder="Savolning javoblarini kiriting"
+                          className="border bg-white w-full p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                        <label className="cursor-pointer custom-file-upload px-3 w-[160px] py-2 bg-blue-500 text-white text-[13px] rounded-md">
+                          <input type="file" className="hidden" />
+                          Choose file
+                        </label>
+                        {testType === "ANY_CORRECT" && (
+                          <>
+                            <button onClick={() => (handleRemoveAnswer(), removeOption(index))} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300 ml-2" > - </button>
+                            <button onClick={() => (handleAddAnswer(), addOption())} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300"  >  +</button>
+                          </>
+                        )}
+                      </div>
+                    ))}
+                </div>
+
+                <div>
+                  {testType !== null &&
+                    testType === "ONE_CHOICE" &&
+                    answers.map((answer, index) => (
+                      <div
+                        key={answer.id}
+                        className="flex items-center mb-4 gap-1"
+                      >
+                        <input
+                          onClick={(e) => handleCheckboxChange(e)}
+                          onChange={(e) => handleAnswerChange(e)}
+                          type="radio"
+                          name="single-choice"
+                          className="mr-3 accent-blue-500"
+                        />
+                        <input
+                          ref={answerData}
+                          placeholder="Savolning javoblarini kiriting"
+                          className="border w-full bg-white p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                        <label className="cursor-pointer custom-file-upload px-3 w-[150px] py-2 bg-blue-500 text-white text-[13px] rounded-md">
+                          <input type="file" className="hidden" />
+                          Choose file
+                        </label>
+                        <>
+                          <button onClick={() => (handleRemoveAnswer(), removeOption(index))} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300 ml-2" > - </button>
+                          <button onClick={() => (handleAddAnswer(), addOption())} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300"  >  +</button>
+                        </>
+                      </div>
+                    ))}
+                </div>
+
+                <div className="mb-4 ml-[180px] mt-5 ">
+                  {/* <label className="w-[90px] h-[90px] rounded border-dashed border-2 border-gray-400 bg-yellow-100 flex flex-col items-center justify-center">
+                    <input type="file" className="hidden" />
+                    <img
+                      src="https://example.com/your-icon.png"
+                      alt="Rasm yuklash"
+                      className="w-6 h-6"
+                    />
+                    Rasm yuklash
+                  </label>
+                  <h2 className="mt-2 relative right-[20px]">
+                    Rasm yuklash ixtiyoriy
+                  </h2>{" "} */}
+                </div>
+              </Modal>
+
+
+              {/* Edit modal  */}
+              <Modal
+                title="Savol qo'shish"
+                open={editOpen}
+                onOk={handleEditOk}
+                confirmLoading={confirmLoading}
+                onCancel={handleEditCancel}
                 maskClosable={false}
               >
                 <div className="mb-4">
@@ -653,7 +859,7 @@ function Test() {
                   <TableCell className="bg-white">{item.difficulty}</TableCell>
                   <TableCell className="bg-white">{item.createdByName}</TableCell>
                   <TableCell className="bg-white flex items-center gap-3">
-                    <EditOutlined />
+                    <EditOutlined onClick={() => (setTestId(item.id),showEditModal())}/>
                     <DeleteOutlined onClick={() => showDeleteModal(item.id)} />
                     <EyeOutlined onClick={() => {
                       navigate('/tests', { state: { catygoria: item.categoryName, savol: item.name, id: item.id } })

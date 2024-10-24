@@ -22,7 +22,7 @@ export const deleteCategory = `${baseUrl}category/delete`;
 export const updateCategory = `${baseUrl}category/update`;
 
 // ======================= Question =======================
-export const PostQuestion = `${baseUrl}question `;
+export const PostQuestion = `${baseUrl}question`;
 
 // ==================== Video File ====================
 export const getVideoFile = `${baseUrl}video/file/get/all`;

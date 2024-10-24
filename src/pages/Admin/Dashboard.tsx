@@ -16,7 +16,7 @@ import { FaArrowsAlt } from 'react-icons/fa';
 import { FaCircleQuestion } from 'react-icons/fa6';
 import { MdOutlineCategory } from 'react-icons/md';
 import { useQuery, useQueryClient } from 'react-query';
-import { getClientAll, getStaticAll, } from '@/helpers/api/baseUrl';
+import { baseUrl, getStaticAll, } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import { toast } from 'react-toastify';
 import axios from 'axios';
@@ -52,7 +52,22 @@ const Dashboard = () => {
   const [pageSize, setPageSize] = useState(10);
   const [clientData, setClientData] = useState<GetClientAllResponse[] | null>(null);
   const [allClientData, setAllClientData] = useState<GetClientAllResponse[] | null>(null)
+  const [weekData, setWeekData] = useState(null)
   // dashboard statiastic
+
+  const getWeekStatic = useQuery({
+    queryKey: ['getWeekStatic', config],
+    queryFn: async () => {
+      const res = await axios.get(`${baseUrl}statistic/dayOfWeek/`, config);
+      return res.data.body
+    },
+    onSuccess: (data) => {
+      setWeekData(data)
+    }
+  })
+  useEffect(() => {
+    getWeekStatic.refetch()
+  }, [weekData])
   const dashboardStatic = useQuery({
     queryKey: ['dashboardStatic', config],
     queryFn: async () => {
@@ -68,7 +83,7 @@ const Dashboard = () => {
       const data = res.data.body
       return data
     },
-    onError: (error: unknown) => { 
+    onError: (error: unknown) => {
       toast.error((error as Error).message);
     },
   });
@@ -150,7 +165,7 @@ const Dashboard = () => {
   const data = {
     datasets: [
       {
-        label: 'Savdolar soni',
+        label: 'Natijalar soni',
         data: [
           { x: 1, y: 0 },
           { x: 2, y: 0 },
@@ -169,12 +184,12 @@ const Dashboard = () => {
     ],
   };
 
-  const getClient = useQuery({
+  const getClientStatic = useQuery({
     queryKey: ['getClient', config],
     queryFn: async () => {
 
-      const res = await axios.get<GetClientAllResponse[]>(`${getClientAll}page=${currentPage - 1}&size=${pageSize}`, config);
-      const data: GetClientAllResponse[] | null = res?.data?.body?.body as GetClientAllResponse[] | null;
+      const res = await axios.get(`${baseUrl}statistic/filter/?page=${currentPage - 1}&size=${pageSize}`, config);
+      const data = res?.data?.body?.body as GetClientAllResponse[] | null;
       return data;
     },
     onSuccess: (data) => {
@@ -262,7 +277,7 @@ const Dashboard = () => {
       </Helmet>
 
       <Layout>
-        {getClient.isLoading ? (
+        {getClientStatic.isLoading ? (
           <div className="flex justify-center items-center h-screen">
             <TableLoading />
           </div>
@@ -336,7 +351,8 @@ const Dashboard = () => {
                   <TableHeadCell className="w-1/12 text-center">T/P</TableHeadCell>
                   <TableHeadCell className="w-3/12 text-left">Ism</TableHeadCell>
                   <TableHeadCell className="w-3/12 text-left">Familiya</TableHeadCell>
-                  <TableHeadCell className="w-5/12 text-left">Email</TableHeadCell>
+                  <TableHeadCell className="w-5/12 text-left">Kategoriya</TableHeadCell>
+                  <TableHeadCell className="w-5/12 text-left">Natija (to'g'ri javoblar/savollar soni)</TableHeadCell>
                 </TableHead>
                 <TableBody className="divide-y">
                   {clientData && clientData.length > 0 ? (
@@ -347,7 +363,8 @@ const Dashboard = () => {
                         </TableCell>
                         <TableCell className="text-left p-4">{item.firstName}</TableCell>
                         <TableCell className="text-left p-4">{item.lastName}</TableCell>
-                        <TableCell className="text-left p-4">{item.email}</TableCell>
+                        <TableCell className="text-left p-4">{item.categoryName}</TableCell>
+                        <TableCell className="text-left p-4">{item.correctAnswers}</TableCell>
                       </TableRow>
                     ))
                   ) : (
