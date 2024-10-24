@@ -6,6 +6,7 @@ import { useEffect, useRef, useCallback } from 'react';
 import { useMutation } from 'react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import { message } from 'antd';
+import { refresh } from 'aos';
 function SignIn() {
   const email = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
@@ -47,15 +48,19 @@ function SignIn() {
       return res;
     },
     onSuccess: (res: AxiosResponse) => {
+
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('role', res.data.role);
       if (res.data.role === 'ROLE_SUPER_ADMIN') {
         navigate('/dashboard');
+        refresh()
       } else if (res.data.role === 'ROLE_ADMIN') {
         navigate('/inspector-admin');
+        refresh()
       } else if (res.data.role === 'ROLE_TESTER') {
         navigate('/category');
-      } else if (res.data.role === 'ROLE_CLIENT') {
+        refresh()
+      } else if (res.data.rol === 'ROLE_CLIENT') {
         navigate('/client/dashboard');
       }
       message.success('Tizimga kirish muvaffaqiyatli', 2);
