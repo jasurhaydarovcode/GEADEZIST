@@ -23,6 +23,19 @@ const User: React.FC = () => {
   const [isModalVisibled, setIsModalVisibled] = useState(false);
   const [tasdiqlash, setTasdiqlash] = useState(false);
   const refName = useRef<HTMLInputElement>(null);
+  const [qaytaTest, setQaytaTest] = useState(false);
+
+  const qaytaModal = () => {
+    setQaytaTest(true);
+  };
+
+  const qaytaTestClose = () => {
+    setQaytaTest(false);
+  };
+
+  const qaytaTestOk = () => {
+    setQaytaTest(false);
+  };
 
   const modalTasdiqlash = () => {
     setTasdiqlash(true);
@@ -72,7 +85,7 @@ const User: React.FC = () => {
   });
 
   const tasdiqlashOk = () => {
-    tasdiqlashMutation.mutate(selectedUser?.id); 
+    tasdiqlashMutation.mutate(selectedUser!.id); 
   };
 
   const showModal = () => {
@@ -259,7 +272,7 @@ const User: React.FC = () => {
                                           <button className='w-full flex ' onClick={() => (showModal(), setSelectedUser(item))}>Bekor qilish</button>
                                         </Menu.Item>
                                         <Menu.Item key="5">
-                                          <button className='w-full flex '>Qayta topshirishga ruxsat berish</button>
+                                          <button className='w-full flex ' onClick={() => (qaytaModal(), setSelectedUser(item))}>Qayta topshirishga ruxsat berish</button>
                                         </Menu.Item>
                                       </Menu>
                                     }
@@ -318,6 +331,10 @@ const User: React.FC = () => {
           {/* Bekor qilish uchun modal */}
           <Modal open={isModalVisibled} onOk={handleOk} onCancel={handleClose} okText="Tasdiqlash" cancelText="Bekor qilish">
             <p className='text-lg text-center mt-4 font-semibold'>Natijani bekor qilmoqchimisiz</p>
+          </Modal>
+          {/* Qayta test topshirish */}
+          <Modal okText="Ha" cancelText="Yopish" open={qaytaTest} onOk={qaytaTestOk} onCancel={qaytaTestClose}>
+            <p className='text-lg text-center mt-8 mb-4 p-[5px] font-semibold'>Rostdan ham bu foydalanuvchiga qayta test topshirishga ruxsat bermoqchimisiz</p>
           </Modal>
         </div>
       </Layout>
