@@ -71,36 +71,36 @@ function Test() {
 
   // Search
   const searchTest2 = () => {
+    let filteredTests = [...datas]; // Start with all tests
+
+    // Filter by name search
     if (nameSearch && nameSearch.trim() !== "") {
-      // testlar mavjud bo'lsa va testlar massiv bo'lsa, filter qilamiz
-      const newData = testlar?.filter((item) =>
+      filteredTests = filteredTests.filter((item) =>
         item.name?.toLowerCase().includes(nameSearch.toLowerCase())
-      ) ?? []
-      setTestlar(newData);
+      );
+    }
 
+    // Filter by category
+    if (kategoriya && kategoriya !== "All") {
+      filteredTests = filteredTests.filter((item) =>
+        item.categoryName?.toLowerCase() === kategoriya.toLowerCase()
+      );
+    }else{
+      setTestlar(datas)
+    }
 
-    } else if (nameSearch == '') {
-      setTestlar(datas);
-    }
-    if (kategoriya) {
-      const kategoriyaData = testlar?.filter((item) =>
-        item.categoryName?.toLowerCase().includes(kategoriya.toLowerCase())
-      ) ?? [];
-      setTestlar(kategoriyaData);
-    }
-    if (kategoriya == "All") {
-      setTestlar(datas);
-    }
+    // Filter by type
     if (turi && turi !== '') {
-      const turiData = testlar?.filter((item) =>
-        item.type?.toLowerCase().includes(turi.toLowerCase())
-      ) ?? [];
-      setTestlar(turiData);
+      filteredTests = filteredTests.filter((item) =>
+        item.type?.toLowerCase() === turi.toLowerCase()
+      );
     }
+
+    setTestlar(filteredTests);
   };
   useEffect(() => {
     searchTest2();
-  }, [nameSearch, kategoriya, turi])
+  }, [nameSearch, kategoriya, turi, datas]);
   // search
 
 
@@ -137,9 +137,8 @@ function Test() {
     if (isDelete) {
       queryGet.refetchQueries('testData')
     }
-  }, [isDelete])
+  }, [])
   // Delete qilish tugatildi
-
 
   function showDeleteModal(id: number | string) {
     setTestID(id);
