@@ -133,11 +133,11 @@ function Test() {
     }
   })
 
-  useEffect(() => {
-    if (isDelete) {
-      queryGet.refetchQueries('testData')
-    }
-  }, [isDelete])
+  // useEffect(() => {
+  //   if (isDelete) {
+  //     queryGet.refetchQueries('testData')
+  //   }
+  // }, [isDelete])
   // Delete qilish tugatildi
 
 
@@ -817,7 +817,7 @@ function Test() {
                     onChange={(e) => setKategoriya(e.target.value)}
                     className="w-[200px] text-gray-400 bg-white rounded-md h-[50px]"
                   >
-                    <option disabled selected>
+                    <option value="All" selected>
                       Kategoriyani tanlang
                     </option>
                     <option className="text text-black" value="All">All</option>
