@@ -866,6 +866,7 @@ function Test() {
               </TableHead>
               {currentItems.map((item, index) => (
                 <TableBody className="divide-y bg-white" key={item.id}>
+                  <TableCell className="bg-white">{index + 1}</TableCell>
                   <TableCell className="bg-white">
                     <img
                       src="src/assets/images/default.png" // Replace with actual image source
@@ -874,7 +875,6 @@ function Test() {
                       onClick={() => showImageModal("src/assets/images/default.png")} // Replace with actual image URL
                     />
                   </TableCell>
-                  <TableCell className="bg-white">{index + 1}</TableCell>
                   <TableCell className="bg-white">{item.name}</TableCell>
                   <TableCell className="bg-white">{item.categoryName}</TableCell>
                   <TableCell className="bg-white">{item.type}</TableCell>
