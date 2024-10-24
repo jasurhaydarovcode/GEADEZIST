@@ -278,52 +278,53 @@ function Test() {
   };
 
 
-
   const [optionDtos, setOptionDtos] = useState([
     {
-      answer: "", // Initial empty answer
-      isCorrect: false, // Default value
+      answer: '', // Initial empty answer
+      isCorrect: false, // Default value for isCorrect
       file: 0,
     },
   ]);
 
-  const [answerDate, setAnswerDate] = useState(""); // State for answer input
-  const [checkedBox, setCheckedBox] = useState(false); // State for isCorrect (checkbox)
+  const [answerDate, setAnswerDate] = useState(''); // State for answer input
+
   useEffect(() => {
     console.log(answerDate, 'input answer');
-    console.log(optionDtos, "input optio");
-  }, [answerDate,optionDtos])
+    console.log(optionDtos, 'input option');
+  }, [answerDate, optionDtos]);
+
   // Handler for the answer input change
   const handleAnswerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAnswerDate(e.target.value);
   };
 
-  // Handler for the checkbox change
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCheckedBox(e.target.checked);
-  };
-
-  // Function to add the new option to the optionDtos array
-
-  // Clear the inputs after adding the option
-  const addOption = () => {
-    setOptionDtos((prevOptions: any) => [
-      ...prevOptions,
-      {
-        answer: answerDate, // Use the current value of the answer state
-        isCorrect: checkedBox, // Use the current value of the checkbox state
-        file: 0,
-      },
-    ]);
-    setAnswerDate(""); // Clear the answer input
-  };
-  // Function to remove an option by index
-  const removeOption = (index: number) => {
+  // Handler for checkbox change by index
+  const handleCheckboxChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = e.target.checked;
     setOptionDtos((prevOptions) =>
-      prevOptions.filter((_, i) => i !== index)
+      prevOptions.map((option, i) =>
+        i === index ? { ...option, isCorrect: isChecked } : option
+      )
     );
   };
 
+  // Function to add the new option to the optionDtos array
+  const addOption = () => {
+    setOptionDtos((prevOptions) => [
+      ...prevOptions,
+      {
+        answer: answerDate, // Use the current value of the answer state
+        isCorrect: false, // New option starts with isCorrect as false
+        file: 0,
+      },
+    ]);
+    setAnswerDate(''); // Clear the answer input
+  };
+
+  // Function to remove an option by index
+  const removeOption = (index: number) => {
+    setOptionDtos((prevOptions) => prevOptions.filter((_, i) => i !== index));
+  };
   // Post question mutation (remains the same)
   const postQuestion = useMutation({
     mutationFn: async () => {
