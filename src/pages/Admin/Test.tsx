@@ -85,15 +85,17 @@ function Test() {
       filteredTests = filteredTests.filter((item) =>
         item.categoryName?.toLowerCase() === kategoriya.toLowerCase()
       );
-    }else{
+    } else {
       setTestlar(datas)
     }
 
     // Filter by type
-    if (turi && turi !== '') {
+    if (turi && turi !== 'All') {
       filteredTests = filteredTests.filter((item) =>
         item.type?.toLowerCase() === turi.toLowerCase()
       );
+    }else{
+      setTestlar(datas)
     }
 
     setTestlar(filteredTests);
@@ -133,11 +135,11 @@ function Test() {
     }
   })
 
-  useEffect(() => {
-    if (isDelete) {
-      queryGet.refetchQueries('testData')
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (isDelete) {
+  //     queryGet.refetchQueries('testData')
+  //   }
+  // }, [isDelete])
   // Delete qilish tugatildi
 
   function showDeleteModal(id: number | string) {
@@ -755,8 +757,7 @@ function Test() {
                         className="flex items-center mb-4 gap-1"
                       >
                         <input
-                          onClick={(e) => handleCheckboxChange(e)}
-                          onChange={(e) => handleAnswerChange(e)}
+                          onChange={(e) => handleRadioChange(index)}
                           type="radio"
                           name="single-choice"
                           className="mr-3 accent-blue-500"
@@ -816,7 +817,7 @@ function Test() {
                     onChange={(e) => setKategoriya(e.target.value)}
                     className="w-[200px] text-gray-400 bg-white rounded-md h-[50px]"
                   >
-                    <option disabled selected>
+                    <option value="All" selected>
                       Kategoriyani tanlang
                     </option>
                     <option className="text text-black" value="All">All</option>
@@ -838,6 +839,7 @@ function Test() {
                     <option disabled selected>
                       Turlarni tanlang
                     </option>
+                    <option className="text text-black" value="All">All</option>
                     <option value="SUM" className="text text-black">
                       Hisoblangan natija
                     </option>

@@ -172,7 +172,6 @@ function AllUser() {
                     {selectedRegion && districts.map((district, index) => (
                       <option key={index} value={district.id}>
                         {district.name}
-                        {district.regionName}
                       </option>
                     ))}
                   </select>
