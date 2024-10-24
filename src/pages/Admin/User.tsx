@@ -5,11 +5,9 @@ import { config } from '@/helpers/functions/token';
 import { UserNatijasi } from '@/helpers/types/UserNatijasi';
 import axios from 'axios';
 import { Helmet } from 'react-helmet';
-import { FcSearch } from 'react-icons/fc';
-import { SlArrowDown } from 'react-icons/sl';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
-import {  Dropdown, Menu, message, Modal, Input, Spin, Space, Result } from 'antd';
+import {  Dropdown, Menu, message, Modal, Input, Spin, Space } from 'antd';
 import CheckLogin from '@/helpers/functions/checkLogin';
 import { EllipsisVerticalIcon } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 'flowbite-react';
@@ -20,11 +18,8 @@ const User: React.FC = () => {
 
   const [searchQuery, setSearchQuery] = useState <string>('');
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [loadingDetails, setLoadingDetails] = useState<boolean>(false); // Yuklanayotganini ko'rsatish
-  const [selectedStatus, setSelectedStatus] = useState<string>(''); // Status uchun state
-  const [isRatingModalVisible, setIsRatingModalVisible] = useState<boolean>(false); // Tasdiqlash modalining holati
-  const [rating, setRating] = useState<string>(''); // Baholash input qiymati
-  const [isRatingValid, setIsRatingValid] = useState<boolean>(false); // Baholash uchun validatsiya
+  const [loadingDetails, setLoadingDetails] = useState<boolean>(false); 
+  const [selectedStatus, setSelectedStatus] = useState<string>('');
   const [isModalVisibled, setIsModalVisibled] = useState(false);
   const [tasdiqlash, setTasdiqlash] = useState(false);
   const refName = useRef<HTMLInputElement>(null);
@@ -100,11 +95,10 @@ const User: React.FC = () => {
       return data.body?.body || [];
     },
     onError: (error) => {
+      console.log(error);
       message.error('Xatolik yuz berdi');
     },
   });
-
-  
 
   useEffect(() => {
     refetch();
@@ -134,60 +128,10 @@ const User: React.FC = () => {
     }
   };
 
-  // Tasdiqlash modalini ochish
-  const showRatingModal = (user: UserNatijasi) => {
-    setSelectedUser(user);
-    setIsRatingModalVisible(true);
-  };
-
-  // Baho kiritilishi
-  const handleRatingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    const numericValue = parseInt(value);
-    setRating(value);
-
-    // 1 dan 10 gacha son kiritishni validatsiya qilish
-    if (numericValue >= 1 && numericValue <= 10) {
-      setIsRatingValid(true);
-    } else {
-      setIsRatingValid(false);
-      message.error('Iltimos, 1dan 10gacha baho kiriting.');
-    }
-  };
-
-  // Tasdiqlash funksiyasi (API orqali baholashni jo'natish)
-  const handleRatingConfirm = async () => {
-    if (!isRatingValid || !selectedUser) return;
-
-    try {
-      const response = await axios.put(
-        `/result/update-status/${selectedUser.resultId}`,
-        {
-          status: 'CONFIRMED', // Statusni tasdiqlash
-          practicalScore: rating,
-        },
-        config
-      );
-
-      if (response.status === 200) {
-        message.success('Natija muvaffaqiyatli tasdiqlandi!');
-        setIsRatingModalVisible(false); // Modalni yopish
-        setRating(''); // Baho inputini tozalash
-        refetch(); // Ma'lumotlarni yangilash
-      }
-    } catch (error) {
-      message.error('Natijani tasdiqlashda xatolik yuz berdi.');
-    }
-  };
-
   const handleCancel = () => {
     setIsModalVisible(false);
     setSelectedUser(null);
   };
-
-  // const []
-
-
 
   return (
     <div className="overflow-x-hidden">
@@ -204,9 +148,8 @@ const User: React.FC = () => {
                   <h3 className="font-bold text-[27px]">Foydalanuvchilar natijasi</h3>
                   <div className="flex gap-2 text-[18px]">
                     <Link to={'/dashboard'}>
-                      <h4>Boshqaruv paneli</h4>
+                      <h4>Boshqaruv paneli / </h4>
                     </Link>
-                    <h4> / </h4>
                     <h4 className="text-blue-600"> Foydalanuvchilar</h4>
                   </div>
                 </header>
@@ -225,14 +168,16 @@ const User: React.FC = () => {
                       onChange={(e) => setSearchQuery(e.target.value)}
                     />
                   </div>
-                  <div className="flex">
-                    <input
-                      type="text"
-                      className="min-w-[260px] w-[360px] rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]"
-                      placeholder="Tumanni tanlang"
-                    />
-                    <SlArrowDown className="absolute ml-[320px] mt-4" />
-                  </div>
+                  <select
+                    className="max-w-[350px] w-[375px] text-gray-40 rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]"
+                    // value={selectedStatus}
+                    // onChange={(e) => setSelectedStatus(e.target.value)}
+                  >
+                    <option value="">Kategoriyani tanlang</option>
+                    <option value="WAITING">Kutilmoqda</option>
+                    <option value="APPROVED">Tekshirilganlar</option>
+                    <option value="CANCELLED">Bekor qilinganlar</option>
+                  </select>
 
                   {/* Status Select */}
                   <select
@@ -325,8 +270,7 @@ const User: React.FC = () => {
               </div>
             </div>
           </div>
-
-          {/* Modal for displaying user details */}
+          {/* Modal info */}
           <Modal visible={isModalVisible} onCancel={handleCancel} footer={null}>
             {loadingDetails ? (
               <Spin />
@@ -343,8 +287,7 @@ const User: React.FC = () => {
               <h2 className="text-2xl font-extrabold my-4 text-center text-[#727788]">Natijalar topilmadi</h2>
             )}
           </Modal>
-
-          {/* Modal for confirming the rating */}
+          {/* Tasdiqlash uchun modal */}
           <Modal
             title="Natijani tasdiqlash"
             open={tasdiqlash}
@@ -359,8 +302,6 @@ const User: React.FC = () => {
                 type="number"
                 id="rating"
                 ref={refName}
-                // value={rating}
-                // onChange={handleRatingChange}
                 className="border rounded-md w-full p-2"
               />
             </div>
