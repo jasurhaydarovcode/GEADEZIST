@@ -282,16 +282,16 @@ const User: React.FC = () => {
                                           <Link to={`/archive/${item.id}`}>Arxivni ko'rish</Link>
                                         </Menu.Item>
                                         <Menu.Item key="2">
-                                          <button onClick={() => showUserDetails(item)}>Natijani ko'rish</button>
+                                          <button className='w-full flex ' onClick={() => showUserDetails(item)}>Natijani ko'rish</button>
                                         </Menu.Item>
                                         <Menu.Item key="3">
-                                          <button onClick={() => (modalTasdiqlash(), setSelectedUser(item))} >Tasdiqlash</button>
+                                          <button className='w-full flex ' onClick={() => (modalTasdiqlash(), setSelectedUser(item))} >Tasdiqlash</button>
                                         </Menu.Item>
                                         <Menu.Item key="4">
-                                          <button onClick={showModal}>Bekor qilish</button>
+                                          <button className='w-full flex ' onClick={showModal}>Bekor qilish</button>
                                         </Menu.Item>
                                         <Menu.Item key="5">
-                                          <button>Qayta topshirishga ruxsat berish</button>
+                                          <button className='w-full flex '>Qayta topshirishga ruxsat berish</button>
                                         </Menu.Item>
                                       </Menu>
                                     }
