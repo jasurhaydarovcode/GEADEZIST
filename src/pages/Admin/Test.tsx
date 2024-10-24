@@ -3,13 +3,13 @@ import { baseUrl, PostQuestion } from "@/helpers/api/baseUrl";
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, } from 'flowbite-react';
 import { config } from "@/helpers/functions/token";
 import { PlusCircleOutlined, EditOutlined, DeleteOutlined, EyeOutlined, } from "@ant-design/icons";
-import { Button, message, Modal, } from "antd";
+import { Button, message, Modal, Pagination } from "antd";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 import { FcSearch } from "react-icons/fc";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { ApiResponse, FetchedTest, Question } from "@/helpers/types/test";
+import { ApiResponse, FetchedTest } from "@/helpers/types/test";
 import TableLoading from "@/components/spinner/TableLoading";
 import { Answer } from "@/helpers/types/AddQuizType";
 import { Link, useNavigate } from "react-router-dom";
@@ -18,13 +18,36 @@ import { Category } from "@/helpers/types/Category";
 import { toast } from "react-toastify";
 
 function Test() {
-  const navigate = useNavigate();
+  const queryGet = useQueryClient()
+  CheckLogin
+  const [saveCates, setSaveCates] = useState<Category[]>([]);
+
+  // categoryni get qilish
+  const getCategory = useQuery({
+    queryKey: ["getCategory", config],
+    queryFn: async () => {
+
+      const res = await axios.get(`${baseUrl}category/page`, config)
+      const response: Category = res.data?.body.body
+      return response
+    },
+    onSuccess: (data) => {
+      setSaveCates(data)
+    }
+  })
+  useEffect(() => {
+    getCategory.refetch()
+  }, [])
+
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [testType, setTestType] = useState<string | null>(null);
   const quiz = useRef<HTMLInputElement | null>(null);
+  const category = useRef<HTMLSelectElement | null>(null);
   const difficulty = useRef<string>('');
+  const [editTestID, setEditTestID] = useState<string>('');
   const categore = useRef<string>('');
+  const answer = useRef<string | null>(null);
   const type = useRef<string>('');
   const checkbox = useRef<boolean>(false)
   const answerData = useRef<string>('')
@@ -35,58 +58,14 @@ function Test() {
   const [testlar, setTestlar] = useState<any[] | null>(null); // testlar ma'lumotlari massiv ekanini aniqladik
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
   const [testID, setTestID] = useState<number | string>(''); // State to hold the test ID to be deleted
-  // edit modal ref
-  const questionInputRef = useRef<HTMLInputElement>(null);
-  const categorySelectRef = useRef<HTMLSelectElement>(null);
-  const difficultySelectRef = useRef<HTMLSelectElement>(null);
-  const typeSelectRef = useRef<HTMLSelectElement>(null);
-  const testRes = useRef<HTMLSelectElement>(null);
-  // edit modal ref
-
-  const queryGet = useQueryClient()
-  const [saveCates, setSaveCates] = useState<Category[]>([]);
-  CheckLogin
-
-  // categoryni get qilish
-  const getCategory = useQuery({
-    queryKey: ["getCategory", config],
-    queryFn: async () => {
-      interface Category {
-        body: {
-          body: {
-            id: string;
-            name: string;
-            description: string;
-            fileId?: string;
-            questionCount: number;
-            extraQuestionCount: number;
-            durationTime: number;
-            retakeDate: string;
-            createdBy: string;
-            deleted: boolean;
-            deletedBy?: string;
-          }
-        }
-      }
-      const res = await axios.get(`${baseUrl}category/page`, config)
-      const response: Category[] = res.data?.body.body
-      return response
-    },
-    onSuccess: (data: Category[]) => {
-      setSaveCates(data)
-    }
-  })
-  useEffect(() => {
-    getCategory.refetch()
-  }, [])
-
-
+  const navigate = useNavigate();
 
   // bu kod qoshish btn uchun + -funck
   const [answers, setAnswers] = useState<Answer[]>([
     { id: Date.now(), value: "" },
   ]);
   // test get
+
   // useEffect(() => {
   // }, [nameSearch])
 
@@ -99,7 +78,7 @@ function Test() {
         item.name?.toLowerCase().includes(nameSearch.toLowerCase())
       ) ?? []
       setTestlar(newData);
-      console.log(newData);
+
 
     } else if (nameSearch == '') {
       setTestlar(datas);
@@ -138,17 +117,13 @@ function Test() {
       setTestlar(data)
     }
   })
-  useEffect(() => {
-    testData.refetch()
-  }, [testData.data])
   // Test get qilish tugatildi
 
   // Bu yo'lda delete qiladi
   const isDelete = useMutation({
     mutationFn: async () => {
       const res = axios.delete(`${baseUrl}question/${testID}`, config)
-      const response = res.data
-      return response
+      return res.data
     },
     onSuccess() {
       toast.success("Test o'chirildi")
@@ -160,9 +135,11 @@ function Test() {
     }
   })
 
-  // useEffect(() => {
-  //   queryGet.refetchQueries('testData')
-  // }, [queryGet, isDelete, isModalOpen])
+  useEffect(() => {
+    if (isDelete) {
+      queryGet.refetchQueries('testData')
+    }
+  }, [isDelete])
   // Delete qilish tugatildi
 
 
@@ -196,89 +173,33 @@ function Test() {
 
   // edit 
 
-  // const updatedData = {
-  //   name: answer,
-  //   categoryName: categore,
-  //   type: type,
-  //   difficulty: difficulty,
-  //   optionDtos: [
-  //     {
-  //       id: 1,
-  //       answer: answer,
-  //       isCorrect: true,
-  //     },
-  //   ],
-  // };
-
-  const [editTestID, setEditTestID] = useState<string>('');
   const updatedData = {
-    "name": questionInputRef.current?.value,
-    "categoryId": categorySelectRef.current?.value,
-    "finiteError": 0,
-    "type": typeSelectRef.current?.value,
-    "difficulty": difficultySelectRef.current?.value,
-    "attachmentIds": [
-      0
-    ],
-    "optionDtos": [
+    name: answer,
+    categoryName: categore,
+    type: type,
+    difficulty: difficulty,
+    optionDtos: [
       {
-        "answer": testRes.current?.value,
-        "isCorrect": true,
-        "file": 0
-      }
-    ]
-  }
-
-  function isEdit() {
-    console.log(updatedData);
-
-    const updateQuestion = async () => {
-      const putTests = await axios.put(`${baseUrl}question/${editTestID}`, updatedData, config)
-      return putTests
-    }
-    const { data: UPTest } = useMutation({
-      mutationKey: "editTest",
-      mutationFn: async () => {
-        updateQuestion()
+        id: 1,
+        answer: answer,
+        isCorrect: true,
       },
-      onSuccess: () => {
-        toast.success("Test tayinlandi")
-        // seteditModal(false)
-        queryGet.refetchQueries('testData')
-      },
-      onError(error: any) {
-        toast.error(error)
-        console.error(error)
+    ],
+  };
+  function isEdit(ID: string) {
+    const updateQuestion = async (ID: string | number) => {
+      try {
+        const response = await axios.put(`${baseUrl}question/${ID}`, updatedData, config);
+
+        return response.data;
+      } catch (error) {
+        toast.error('edit bolmadi')
       }
-    })
-    console.log(UPTest);
+    };
+    updateQuestion(ID)
+    seteditModal(!editMod)
   }
-  // edit modal
-  const [editModal, seteditModal] = useState<boolean>(false);
-  const [confirmLoad, setConfirmLoad] = useState<boolean>(false);
-
-  const editMod = () => {
-    setConfirmLoad(true);
-    setTimeout(() => {
-      setConfirmLoad(false);
-      isEdit()
-      seteditModal(!editModal)
-    }, 2000);
-
-  };
-
-  const closeditmod = () => seteditModal(!editModal);
-  // edit modal
-
-  function showModal() {
-    setOpen(true);
-  };
-
-  function handleCancel() {
-    setOpen(false);
-  };
-
-
+  // edit 
 
   // Use the data in a React component
   const { data, isLoading } = useQuery<ApiResponse, Error>({
@@ -288,7 +209,7 @@ function Test() {
       return response.data;
     },
     onSuccess: (response) => {
-      const fetchedTests: Question[] = response.body.body.map((item, index) => ({
+      const fetchedTests = response.body.body.map((item, index) => ({
         id: item.id,
         name: item.name,
         categoryName: item.categoryName || "No category",
@@ -301,7 +222,7 @@ function Test() {
         createdByName: item.createdByName,
         key: item.id.toString(),
         numer: index + 1,
-        testRasm: "",
+        testRasm: ".",
         savol: item.optionDtos[0]?.answer || "",
         catygoria: item.categoryName || "No category",
         savolTuri: item.type,
@@ -319,14 +240,83 @@ function Test() {
 
 
 
+
   const categoryNames = [
     { value: "SUM", name: "Hisoblangan natija", },
     { value: "ONE_CHOICE", name: "Bir to'g'ri javobli test", },
     { value: "ANY_CORRECT", name: "Ko'p to'g'ri javobli test", },
   ];
 
+  // edit modal
+  const [editModal, seteditModal] = useState<boolean>(false);
+  const [confirmLoad, setConfirmLoad] = useState<boolean>(false);
 
-  // Post question mutation
+  const editMod = () => {
+    setConfirmLoad(true);
+    setTimeout(() => {
+      setConfirmLoad(false);
+      isEdit(editTestID)
+    }, 2000);
+  };
+  const closeditmod = () => seteditModal(!editModal);
+  // edit modal
+
+  function showModal() {
+    setOpen(true);
+  };
+
+  function handleCancel() {
+    setOpen(false);
+  };
+
+
+  const [optionDtos, setOptionDtos] = useState([
+    {
+      answer: "", // Initial empty answer
+      isCorrect: false, // Default value
+      file: 0,
+    },
+  ]);
+
+  const [answerDate, setAnswerDate] = useState(""); // State for answer input
+  const [checkedBox, setCheckedBox] = useState(false); // State for isCorrect (checkbox)
+
+  // Handler for the answer input change
+  const handleAnswerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAnswerDate(e.target.value);
+  };
+
+  // Handler for the checkbox change
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCheckedBox(e.target.checked);
+  };
+
+  // Function to add the new option to the optionDtos array
+  
+  // Clear the inputs after adding the option
+  
+  useEffect(() => {
+    const addOption = () => {
+      setOptionDtos((prevOptions: any) => [
+        ...prevOptions,
+        {
+          answer: answerDate, // Use the current value of the answer state
+          isCorrect: checkedBox, // Use the current value of the checkbox state
+          file: 0,
+        },
+      ]);
+    setAnswerDate(""); // Clear the answer input
+  };
+
+  },[answerDate, checkedBox]);
+  // Function to remove an option by index
+  const removeOption = (index: number) => {
+    setOptionDtos((prevOptions) =>
+      prevOptions.filter((_, i) => i !== index)
+    );
+  };
+
+  // Post question mutation (remains the same)
   const postQuestion = useMutation({
     mutationFn: async () => {
       const data = {
@@ -336,13 +326,7 @@ function Test() {
         type: type.current?.value || "", // Ref orqali olish
         difficulty: difficulty.current?.value || "", // Ref orqali olish
         attachmentIds: [0],
-        optionDtos: [
-          {
-            answer: answerData.current?.value || "", // Ref orqali olish
-            isCorrect: true,
-            file: 0,
-          },
-        ],
+        optionDtos: optionDtos.slice(1), // Skip the first (placeholder) option
       };
 
       try {
@@ -354,14 +338,14 @@ function Test() {
     },
     onSuccess: () => {
       message.success('Added successfully');
-      queryGet.invalidateQueries('testData')
+      queryGet.invalidateQueries('testData');
     },
     onError: (err: any) => {
       message.error(err.message);
       console.error(err);
-
     },
   });
+
 
 
 
@@ -375,6 +359,35 @@ function Test() {
     }, 2000);
   };
 
+  // Rasm modal
+  const [imageModalVisible, setImageModalVisible] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+
+  const showImageModal = (imageUrl: string) => {
+    setSelectedImage(imageUrl);
+    setImageModalVisible(true);
+  };
+
+  const handleImageModalClose = () => {
+    setImageModalVisible(false);
+    setSelectedImage(null);
+  };
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+  const currentItems = testlar?.slice(indexOfFirstItem, indexOfLastItem) || [];
+
+
+  const onPageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div>
@@ -479,26 +492,16 @@ function Test() {
                         className="flex items-center mb-4 gap-2"
                       >
                         <input
-                          ref={checkbox}
                           type="checkbox"
                           checked={
                             testType === "SUM" || answer.checked
                           }
-                          onChange={(e) => {
-                            if (testType === "ANY_CORRECT") {
-                              const updatedAnswers = answers.map((ans, i) =>
-                                i === index
-                                  ? { ...ans, checked: e.target.checked }
-                                  : ans
-                              );
-                              setAnswers(updatedAnswers);
-                            }
-                          }}
+                          onChange={(e) => handleCheckboxChange(e)}
                           disabled={testType === "SUM"}
                           className="mr-3 accent-blue-500"
                         />
                         <input
-                          ref={answerData}
+                          onChange={(e) => handleAnswerChange(e)}
                           placeholder="Savolning javoblarini kiriting"
                           className="border bg-white w-full p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
@@ -508,8 +511,8 @@ function Test() {
                         </label>
                         {testType === "ANY_CORRECT" && (
                           <>
-                            <button onClick={handleRemoveAnswer} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300 ml-2" > - </button>
-                            <button onClick={handleAddAnswer} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300"  >  +</button>
+                            <button onClick={() => (handleRemoveAnswer(), removeOption(index))} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300 ml-2" > - </button>
+                            <button onClick={() => (handleAddAnswer(), addOption())} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300"  >  +</button>
                           </>
                         )}
                       </div>
@@ -519,13 +522,14 @@ function Test() {
                 <div>
                   {testType !== null &&
                     testType === "ONE_CHOICE" &&
-                    answers.map((answer) => (
+                    answers.map((answer, index) => (
                       <div
                         key={answer.id}
                         className="flex items-center mb-4 gap-1"
                       >
                         <input
-                          ref={checkbox}
+                          onClick={(e) => handleCheckboxChange(e)}
+                          onChange={(e) => handleAnswerChange(e)}
                           type="radio"
                           name="single-choice"
                           className="mr-3 accent-blue-500"
@@ -540,15 +544,15 @@ function Test() {
                           Choose file
                         </label>
                         <>
-                          <button onClick={handleRemoveAnswer} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300 ml-2" > - </button>
-                          <button onClick={handleAddAnswer} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300"  >  +</button>
+                          <button onClick={() => (handleRemoveAnswer(), removeOption(index))} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300 ml-2" > - </button>
+                          <button onClick={() => (handleAddAnswer(), addOption())} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300"  >  +</button>
                         </>
                       </div>
                     ))}
                 </div>
 
-                {/* <div className="mb-4 ml-[180px] mt-5 ">
-                  <label className="w-[90px] h-[90px] rounded border-dashed border-2 border-gray-400 bg-yellow-100 flex flex-col items-center justify-center">
+                <div className="mb-4 ml-[180px] mt-5 ">
+                  {/* <label className="w-[90px] h-[90px] rounded border-dashed border-2 border-gray-400 bg-yellow-100 flex flex-col items-center justify-center">
                     <input type="file" className="hidden" />
                     <img
                       src="https://example.com/your-icon.png"
@@ -559,8 +563,8 @@ function Test() {
                   </label>
                   <h2 className="mt-2 relative right-[20px]">
                     Rasm yuklash ixtiyoriy
-                  </h2>{" "}
-                </div> */}
+                  </h2>{" "} */}
+                </div>
               </Modal>
 
               {/* search  input*/}
@@ -619,7 +623,6 @@ function Test() {
                   </select>
                 </div>
               </div>
-
             </div>
             {/* table  */}
             <Table hoverable className="bg-white">
@@ -633,35 +636,49 @@ function Test() {
                 <TableHeadCell>Yaratgan odam</TableHeadCell>
                 <TableHeadCell>action</TableHeadCell>
               </TableHead>
-              {testlar && testlar.map((item, index) => (
-                <TableBody className="divide-y bg-white">
+              {currentItems.map((item, index) => (
+                <TableBody className="divide-y bg-white" key={item.id}>
+                  <TableCell className="bg-white">
+                    <img
+                      src="src/assets/images/default.png" // Replace with actual image source
+                      className="w-10 h-10 rounded-full cursor-pointer"
+                      alt=""
+                      onClick={() => showImageModal("src/assets/images/default.png")} // Replace with actual image URL
+                    />
+                  </TableCell>
                   <TableCell className="bg-white">{index + 1}</TableCell>
-                  <TableCell className="bg-white"><img src="src/assets/images/default.png" className="w-10 h-10 rounded-full" alt="" /></TableCell>
                   <TableCell className="bg-white">{item.name}</TableCell>
                   <TableCell className="bg-white">{item.categoryName}</TableCell>
                   <TableCell className="bg-white">{item.type}</TableCell>
                   <TableCell className="bg-white">{item.difficulty}</TableCell>
                   <TableCell className="bg-white">{item.createdByName}</TableCell>
                   <TableCell className="bg-white flex items-center gap-3">
-                    <EditOutlined onClick={() => {
-                      seteditModal(true)
-                      setEditTestID(item.id)
-                    }} />
+                    <EditOutlined />
                     <DeleteOutlined onClick={() => showDeleteModal(item.id)} />
                     <EyeOutlined onClick={() => {
-                      navigate('/tests', { state: { catygoria: item.categoryName, savol: item.name } })
+                      navigate('/tests', { state: { catygoria: item.categoryName, savol: item.name, id: item.id } })
                     }} />
                   </TableCell>
                 </TableBody>
               ))}
             </Table>
+            {/* Pagination */}
+            <Pagination
+              current={currentPage}
+              pageSize={itemsPerPage}
+              total={testlar?.length || 0}
+              onChange={onPageChange}
+              showSizeChanger={false} // Hide page size changer if not needed
+              className="flex mt-4"
+            />
           </div>
         )
         }
       </Layout>
-      {/* edit qulish */}
+
+      {/* edit modal */}
       <Modal
-        title="uzgartirish"
+        title="edit modal"
         open={editModal}
         onOk={editMod}
         confirmLoading={confirmLoad}
@@ -670,27 +687,37 @@ function Test() {
       >
         <div className="mb-4">
           <input
-            ref={questionInputRef}
+            onChange={(e) => setanswer(e.target.value)}
             placeholder="Savolni kiriting"
-            className="border bg-white w-full p-2 rounded"
+            className="border w-full p-2 rounded"
           />
         </div>
 
         <div className="mb-4">
-          <select ref={categorySelectRef} className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
+          <select onChange={(e) => setCategory(e.target.value)} className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
             <option disabled selected value="">
               Kategoriyani tanlang
             </option>
-            {saveCates && saveCates.length > 0 && saveCates.map((item: Category) => (
-              <option value={item?.id} className="text text-black">
-                {item?.name}
-              </option>
-            ))}
+            <option value="SUM" className="text text-black">
+              Umumiy savollar
+            </option>
+            <option value="" className="text text-black">
+              Umumiy geodeziya
+            </option>
+            <option value="" className="text text-black">
+              Topografiya
+            </option>
+            <option value="" className="text text-black">
+              Oliy geodeziya
+            </option>
+            <option value="" className="text text-black">
+              Har qanday to'g'ri
+            </option>
           </select>
         </div>
 
         <div className="mb-4">
-          <select ref={difficultySelectRef} className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
+          <select onChange={(e) => setDifficulty(e.target.value)} className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
             <option disabled selected>
               Qiyinchilik darajasini tanlang
             </option>
@@ -700,7 +727,7 @@ function Test() {
             <option value="EASY" className="text text-black">
               Oson
             </option>
-            <option value="MEDIUM" className="text text-black">
+            <option value="NEDIUM" className="text text-black">
               O'rta
             </option>
           </select>
@@ -708,8 +735,10 @@ function Test() {
 
         <div className="mb-4">
           <select
-            ref={typeSelectRef}
-            onChange={(e) => setTestType(e.target.value)}
+            onChange={(e) => {
+              setTestType(e.target.value)
+              setType(e.target.value)
+            }}
             className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]"
           >
             <option disabled selected>
@@ -720,7 +749,7 @@ function Test() {
               categoryNames.map((category, key) => (
                 <option
                   key={key}
-                  value={category.value}
+                  value={category.name}
                   className="text text-black"
                 >
                   {category.name}
@@ -730,21 +759,16 @@ function Test() {
         </div>
 
         <div>
-          {testType !== null &&
-            (testType === "SUM" ||
-              testType === "ANY_CORRECT") &&
+          {testType !== null && // Show inputs only when testType is not null
+            (testType === "Hisoblangan natija" ||
+              testType === "Ko'p to'g'ri javobli test") &&
             answers.map((answer: Answer, index) => (
-              <div
-                key={answer.id}
-                className="flex items-center mb-4 gap-2"
-              >
+              <div key={answer.id} className="flex items-center mb-4 gap-2">
                 <input
                   type="checkbox"
-                  checked={
-                    testType === "SUM" || answer.checked
-                  }
+                  checked={testType === "Hisoblangan natija" || answer.checked} // Automatically checked for "Hisoblangan natija", manually for multiple answers
                   onChange={(e) => {
-                    if (testType === "ANY_CORRECT") {
+                    if (testType === "Ko'p to'g'ri javobli test") {
                       const updatedAnswers = answers.map((ans, i) =>
                         i === index
                           ? { ...ans, checked: e.target.checked }
@@ -753,22 +777,31 @@ function Test() {
                       setAnswers(updatedAnswers);
                     }
                   }}
-                  disabled={testType === "SUM"}
+                  disabled={testType === "Hisoblangan natija"} // Disable for "Hisoblangan natija"
                   className="mr-3 accent-blue-500"
                 />
                 <input
-                  ref={testRes}
                   placeholder="Savolning javoblarini kiriting"
-                  className="border bg-white w-full p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="border w-full p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <label className="cursor-pointer custom-file-upload px-3 w-[160px] py-2 bg-blue-500 text-white text-[13px] rounded-md">
                   <input type="file" className="hidden" />
                   Choose file
                 </label>
-                {testType === "ANY_CORRECT" && (
+                {testType === "Ko'p to'g'ri javobli test" && (
                   <>
-                    <button onClick={handleRemoveAnswer} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300 ml-2" > - </button>
-                    <button onClick={handleAddAnswer} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300"  >  +</button>
+                    <button
+                      onClick={handleRemoveAnswer}
+                      className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300 ml-2"
+                    >
+                      -
+                    </button>
+                    <button
+                      onClick={handleAddAnswer}
+                      className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300"
+                    >
+                      +
+                    </button>
                   </>
                 )}
               </div>
@@ -776,13 +809,10 @@ function Test() {
         </div>
 
         <div>
-          {testType !== null &&
-            testType === "ONE_CHOICE" &&
+          {testType !== null && // Show inputs only when testType is not null
+            testType === "Bir to'g'ri javobli test" &&
             answers.map((answer) => (
-              <div
-                key={answer.id}
-                className="flex items-center mb-4 gap-1"
-              >
+              <div key={answer.id} className="flex items-center mb-4 gap-1">
                 <input
                   type="radio"
                   name="single-choice"
@@ -790,44 +820,71 @@ function Test() {
                 />
                 <input
                   placeholder="Savolning javoblarini kiriting"
-                  className="border w-full bg-white p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="border w-full p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <label className="cursor-pointer custom-file-upload px-3 w-[150px] py-2 bg-blue-500 text-white text-[13px] rounded-md">
                   <input type="file" className="hidden" />
                   Choose file
                 </label>
                 <>
-                  <button onClick={handleRemoveAnswer} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300 ml-2" > - </button>
-                  <button onClick={handleAddAnswer} className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300"  >  +</button>
+                  <button
+                    onClick={handleRemoveAnswer}
+                    className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300 ml-2"
+                  >
+                    -
+                  </button>
+                  <button
+                    onClick={handleAddAnswer}
+                    className="bg-gray-300 hover:bg-gray-400 text-lg px-3 rounded-md border border-gray-300"
+                  >
+                    +
+                  </button>
                 </>
               </div>
             ))}
         </div>
 
-        {/* <div className="mb-4 ml-[180px] mt-5 ">
-                    <label className="w-[90px] h-[90px] rounded border-dashed border-2 border-gray-400 bg-yellow-100 flex flex-col items-center justify-center">
-                      <input type="file" className="hidden" />
-                      <img
-                        src="https://example.com/your-icon.png"
-                        alt="Rasm yuklash"
-                        className="w-6 h-6"
-                      />
-                      Rasm yuklash
-                    </label>
-                    <h2 className="mt-2 relative right-[20px]">
-                      Rasm yuklash ixtiyoriy
-                    </h2>{" "}
-                  </div> */}
+
+        <div className="mb-4 ml-[180px] mt-5 ">
+          <label className="w-[90px] h-[90px] rounded border-dashed border-2 border-gray-400 bg-yellow-100 flex flex-col items-center justify-center">
+            <input type="file" className="hidden" />
+            <img
+              src="https://example.com/your-icon.png"
+              alt="Rasm yuklash"
+              className="w-6 h-6"
+            />
+            Rasm yuklash
+          </label>
+          <h2 className="mt-2 relative right-[20px]">Rasm yuklash ixtiyoriy</h2>{" "}
+        </div>
+
+        {/* Qolgan kontentni modal ichiga joylang */}
       </Modal>
 
       {/* Delete modal */}
       <Modal
         title="Delete Confirmation"
         visible={isModalOpen}
-        onOk={() => isDelete.mutate()}
-        onCancel={() => setIsModalOpen(false)}
+        onOk={() => isDelete.mutate()} // Calls the delete function when confirmed
+        onCancel={() => setIsModalOpen(false)} // Close modal on cancel
       >
         <p>Testni o'chirmoqchimisiz?</p>
+      </Modal>
+
+      {/* Image Modal */}
+      <Modal
+        title="Image Preview"
+        visible={imageModalVisible}
+        onCancel={handleImageModalClose}
+        footer={null}
+      >
+        {selectedImage && (
+          <img
+            src={selectedImage}
+            alt="Preview"
+            className="w-full h-auto"
+          />
+        )}
       </Modal>
     </div>
   );

@@ -1,5 +1,4 @@
-import { Route, Routes, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { Route, Routes } from 'react-router-dom';
 
 
 // lato font family
@@ -7,7 +6,6 @@ import '@fontsource/lato';
 import '@fontsource/lato/400.css';
 import '@fontsource/lato/400-italic.css';
 
-import SiteLoading from './components/SiteLoading';
 import PrivateRoute from './components/security/route/PrivateRoute';
 import PublicRoute from './components/security/route/PublicRoute';
 
@@ -17,19 +15,10 @@ import {
   ClientDashboard, ClientProfile, ClientTestStart, ClientQuiz,
   Dashboard, Test, AllUser, User, Archive, Employees, InspectorAdmin,
   Category, Profile, ConfirmSignUp, TestVisual,
-  Address
+  Address, ClientQuizResult
 } from './pages';
-import ClientQuizResult from './pages/Client/ClientResultPage';
 
 function App() {
-  const [loading, setLoading] = useState(false);
-  const location = useLocation();
-
-  useEffect(() => {
-    setLoading(true);
-    const timer = setTimeout(() => setLoading(false), 200);
-    return () => clearTimeout(timer);
-  }, [location]);
 
   const renderRoute = (path: string, Component: React.FC, isPrivate: boolean = true) => {
     const RouteWrapper = isPrivate ? PrivateRoute : PublicRoute;
@@ -47,7 +36,6 @@ function App() {
 
   return (
     <>
-      {loading && <SiteLoading />}
       <Routes>
         {renderRoute("/", Home)}
         <Route path="*" element={<NotFound />} />
