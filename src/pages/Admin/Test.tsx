@@ -85,15 +85,17 @@ function Test() {
       filteredTests = filteredTests.filter((item) =>
         item.categoryName?.toLowerCase() === kategoriya.toLowerCase()
       );
-    }else{
+    } else {
       setTestlar(datas)
     }
 
     // Filter by type
-    if (turi && turi !== '') {
+    if (turi && turi !== 'All') {
       filteredTests = filteredTests.filter((item) =>
         item.type?.toLowerCase() === turi.toLowerCase()
       );
+    }else{
+      setTestlar(datas)
     }
 
     setTestlar(filteredTests);
@@ -838,6 +840,7 @@ function Test() {
                     <option disabled selected>
                       Turlarni tanlang
                     </option>
+                    <option className="text text-black" value="All">All</option>
                     <option value="SUM" className="text text-black">
                       Hisoblangan natija
                     </option>
