@@ -214,13 +214,13 @@ const User: React.FC = () => {
                 <div className="flex justify-end pt-5 gap-5">
                   <div className="flex">
                     <label htmlFor="inp1">
-                      <FcSearch className="absolute mt-4 ml-3 text-[20px]" />
+                     
                     </label>
                     <input
                       type="text"
                       id="inp1"
-                      className="pl-10 w-[375px] border-gray-300 rounded-md h-[50px]"
-                      placeholder="Ism yoki familya bo'yicha qidirish"
+                      className=" w-[375px] border-gray-300 rounded-md h-[50px]"
+                      placeholder="🔍Ism yoki familya bo'yicha qidirish"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                     />
