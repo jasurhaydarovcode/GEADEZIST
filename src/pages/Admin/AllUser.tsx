@@ -35,6 +35,7 @@ function AllUser() {
   const [selectedRegion, setSelectedRegion] = useState<string>(''); // For storing selected region ID
   const [districts, setDistricts] = useState<districtType[]>([]); // For storing districts
 
+
   // Fetching users data
   const { data: usersData, refetch: refetchUsers } = useQuery({
     queryKey: ['User', config],
@@ -142,27 +143,33 @@ function AllUser() {
                   <select
                     className="max-w-[350px] w-[375px]  rounded-md h-[50px] border-gray-400"
                     onChange={(e) => {
-                      setSelectedRegion(e.target.value);  // Set selected region
-                      fetchDistricts(e.target.value);     // Fetch districts based on selected region
+                      const selectedRegionId = e.target.value;
+                      setSelectedRegion(selectedRegionId);  // Set selected region
+                      fetchDistricts(selectedRegionId);     // Fetch districts based on selected region
                       setSelectedDistrict(''); // Reset selected district when region changes
                     }}
                     value={selectedRegion}
                   >
                     <option value="" disabled>Viloyatni tanlash</option>
                     {regions.map((region, index) => (
-                      <option key={index} value={region.id}>
+                      <option key={index} id='regname' value={region.id}>
                         {region.name}
                       </option>
                     ))}
                   </select>
                   <select
                     className="max-w-[350px] w-[375px]  rounded-md h-[50px] border-gray-400"
-                    onChange={(e) => setSelectedDistrict(e.target.value)} // Set selected district
-                    value={selectedDistrict} // Add state for selected district
-                    disabled={!selectedRegion || !districts.length} // Disable if no region or districts available
+                    onChange={(e) => {
+                      const selectedDistrictId = e.target.value;
+                      setSelectedDistrict(selectedDistrictId);
+                      const selectedDistrict = districts.find(district => district.id === selectedDistrictId);
+                      console.log(selectedDistrict);
+                    }}
+                    value={selectedDistrict}
+                    disabled={!selectedRegion || !districts.length}
                   >
-                    <option value="">Tumanni tanlang</option>
-                    {selectedRegion && districts.map((district, index) => ( // Check if a region is selected
+                    <option value="" disabled>Tumanni tanlang</option>
+                    {selectedRegion && districts.map((district, index) => (
                       <option key={index} value={district.id}>
                         {district.name}
                         {district.regionName}
@@ -173,7 +180,7 @@ function AllUser() {
 
                 <div className="py-5 max-md:ml-7 max-lg:ml-5">
                   <table className="mx-3 xl:w-[1110px] max-lg:ml-2.5 ml-0 bg-white border border-gray-300">
-                    <div className='lg:w-[700px] mx-auto pb-5 max-lg:ml-[30px] lg:ml-[50px]'>
+                    <div className='lg:w-[700px] mx-auto pb-5 max-lg:ml-[60px] lg:ml-[50px]'>
                       <thead>
                         <tr>
                           <th className="text-left max-lg:hidden xl:px-12 py-7">T/P</th>
