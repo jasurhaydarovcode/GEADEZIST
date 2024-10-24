@@ -1,31 +1,67 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Layout from '@/components/Dashboard/Layout';
-import { getResult } from '@/helpers/api/baseUrl';
+import { baseUrl, getResult } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import { UserNatijasi } from '@/helpers/types/UserNatijasi';
 import axios from 'axios';
 import { Helmet } from 'react-helmet';
 import { FcSearch } from 'react-icons/fc';
 import { SlArrowDown } from 'react-icons/sl';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Link } from 'react-router-dom';
-import { Button, Dropdown, Menu, message, Modal, Input, Spin, Space } from 'antd';
+import {  Dropdown, Menu, message, Modal, Input, Spin, Space, Result } from 'antd';
 import CheckLogin from '@/helpers/functions/checkLogin';
 import { EllipsisVerticalIcon } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 'flowbite-react';
+import { showErrorMessage } from '@/helpers/functions/message';
 
 const User: React.FC = () => {
   CheckLogin;
 
   const [searchQuery, setSearchQuery] = useState <string>('');
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [selectedUser, setSelectedUser] = useState<UserNatijasi | null>(null); // Tanlangan foydalanuvchi
   const [loadingDetails, setLoadingDetails] = useState<boolean>(false); // Yuklanayotganini ko'rsatish
   const [selectedStatus, setSelectedStatus] = useState<string>(''); // Status uchun state
   const [isRatingModalVisible, setIsRatingModalVisible] = useState<boolean>(false); // Tasdiqlash modalining holati
   const [rating, setRating] = useState<string>(''); // Baholash input qiymati
   const [isRatingValid, setIsRatingValid] = useState<boolean>(false); // Baholash uchun validatsiya
   const [isModalVisibled, setIsModalVisibled] = useState(false);
+  const [tasdiqlash, setTasdiqlash] = useState(false);
+  const refName = useRef<HTMLInputElement>(null);
+
+  const modalTasdiqlash = () => {
+    setTasdiqlash(true);
+  };
+
+  const tashdiqlashClose = () => {
+    setTasdiqlash(false);
+  };
+
+  const tasdiqlashMutation = useMutation({
+      mutationFn: async (selectedUser: UserNatijasi) => {
+        const res = await axios.put(`${baseUrl}result/update-status/${selectedUser}?status=APPROVED&practicalScore=${Number(refName.current?.value)}`,config);
+        return res.data;
+      },
+        onSuccess: () => {
+          message.success("Natija muvaffaqiyatli tasdiqlandi");
+          setTasdiqlash(false);
+        },
+        onError: (error) => {
+          console.error('Xatolik:', error);
+          showErrorMessage("Natija qo'shishda xatolik yuz berdi");
+        },
+  });
+  const [selectedUser, setSelectedUser] = useState<UserNatijasi | null>(null); // Tanlangan foydalanuvchi
+
+  const tasdiqlashOk = () => {
+    console.log(selectedUser);
+    
+    // if (selectedUser && selectedUser) {
+      tasdiqlashMutation.mutate(selectedUser.id); // Id yuboriladi
+    // } else {
+    //   message.error("Hech qanday foydalanuvchi tanlanmadi");
+    // }
+  };
 
   const showModal = () => {
     setIsModalVisibled(true);
@@ -242,7 +278,7 @@ const User: React.FC = () => {
                                           <button onClick={() => showUserDetails(item)}>Natijani ko'rish</button>
                                         </Menu.Item>
                                         <Menu.Item key="3">
-                                          <button>Tasdiqlash</button>
+                                          <button onClick={() => (modalTasdiqlash(), setSelectedUser(item))} >Tasdiqlash</button>
                                         </Menu.Item>
                                         <Menu.Item key="4">
                                           <button onClick={showModal}>Bekor qilish</button>
@@ -290,27 +326,22 @@ const User: React.FC = () => {
           {/* Modal for confirming the rating */}
           <Modal
             title="Natijani tasdiqlash"
-            visible={isRatingModalVisible}
-            onCancel={() => setIsRatingModalVisible(false)}
-            footer={null}
+            open={tasdiqlash}
+            onOk={tasdiqlashOk}
+            onCancel={tashdiqlashClose}
+            cancelText="Bekor qilish"
+            okText="Tasdiqlash"
           >
             <div>
               <label htmlFor="rating">Baholash:</label>
               <Input
                 type="number"
                 id="rating"
-                value={rating}
-                onChange={handleRatingChange}
+                ref={refName}
+                // value={rating}
+                // onChange={handleRatingChange}
                 className="border rounded-md w-full p-2"
               />
-              <div className="flex justify-end mt-4">
-                <Button onClick={() => setIsRatingModalVisible(false)} style={{ marginRight: '8px' }}>
-                  Yopish
-                </Button>
-                <Button type="primary" onClick={handleRatingConfirm} disabled={!isRatingValid}>
-                  Tasdiqlash
-                </Button>
-              </div>
             </div>
           </Modal>
           {/* Bekor qilish uchun modal */}
