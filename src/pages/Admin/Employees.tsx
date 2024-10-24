@@ -110,10 +110,12 @@ function Employees() {
           postAdmin.mutate(); 
           setConfirmLoading(true);
           setTimeout(() => {
-            setOpen(false);
             setConfirmLoading(false);
-            resetForm(); 
-          }, 1000);
+            if (postAdmin.isSuccess) {
+              setOpen(false);
+              resetForm();
+            } 
+          }, 1500);
         } else {
           showErrorMessage('Parollar mos kelmadi');
         }
