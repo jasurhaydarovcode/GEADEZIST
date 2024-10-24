@@ -133,6 +133,14 @@ const User: React.FC = () => {
     setSelectedUser(null);
   };
 
+  const categoryGet = useQuery(
+    ['category', config],
+    async () => {
+      const res = await axios.get(`${baseUrl}category/list`, config);
+      return (res.data as { body: { body: string; }}).body;    
+    }
+  )
+
   return (
     <div className="overflow-x-hidden">
       <Helmet>
@@ -174,9 +182,12 @@ const User: React.FC = () => {
                     // onChange={(e) => setSelectedStatus(e.target.value)}
                   >
                     <option value="">Kategoriyani tanlang</option>
-                    <option value="WAITING">Kutilmoqda</option>
-                    <option value="APPROVED">Tekshirilganlar</option>
-                    <option value="CANCELLED">Bekor qilinganlar</option>
+                    {Array.isArray(categoryGet) &&
+                      categoryGet.map((category) => (
+                        <option key={category.id} >
+                          {category.name}
+                        </option>
+                      ))}
                   </select>
 
                   {/* Status Select */}
