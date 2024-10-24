@@ -81,7 +81,6 @@ function Test() {
 
     } else if (nameSearch == '') {
       setTestlar(datas);
-
     }
     if (kategoriya) {
       const kategoriyaData = testlar?.filter((item) =>
@@ -159,15 +158,6 @@ function Test() {
     }
   };
 
-  // Handle remove inputs
-  function removeInp() {
-    if (testType === "Hisoblangan natija") {
-      setAnswers(answers.slice(0, 1));
-    }
-  }
-  useEffect(() => {
-    removeInp();
-  }, [testType, turi, kategoriya, nameSearch, testlar]);
 
 
   // edit 
@@ -281,7 +271,7 @@ function Test() {
   const [optionDtos, setOptionDtos] = useState([
     {
       answer: '', // Initial empty answer
-      isCorrect: false, // Default value for isCorrect
+      isCorrect: true, // Default value for isCorrect
       file: 0,
     },
   ]);
@@ -348,6 +338,7 @@ function Test() {
     onSuccess: () => {
       message.success('Added successfully');
       queryGet.invalidateQueries('testData');
+
     },
     onError: (err: any) => {
       message.error(err.message);
@@ -355,7 +346,15 @@ function Test() {
     },
   });
 
-
+  const handleRadioChange = (index: number) => {
+    // Update the isCorrect value for the selected option only
+    setOptionDtos((prevOptions) =>
+      prevOptions.map((option, i) => ({
+        ...option,
+        isCorrect: i === index, // Set isCorrect to true for the selected index, false for others
+      }))
+    );
+  };
 
 
   // Handle OK button
@@ -403,6 +402,19 @@ function Test() {
       console.log(testId);
     },
   });
+
+  // Handle remove inputs
+  function removeInp() {
+    if (testType === "SUM") {
+      setAnswers(answers.slice(0, 1));
+      setAnswerDate('')
+      setOptionDtos((prevOptions) => prevOptions.slice(0, 1));
+    }
+  }
+  useEffect(() => {
+    removeInp();
+  }, [testType, turi, kategoriya, nameSearch, testlar]);
+
 
   const handleEditOk = () => {
     editQuiz.mutate();
@@ -550,13 +562,17 @@ function Test() {
                           checked={
                             testType === "SUM" || answer.checked
                           }
-                          onChange={(e) => handleCheckboxChange(e)}
+                          onChange={(e) => handleCheckboxChange(index, e)}
                           disabled={testType === "SUM"}
                           className="mr-3 accent-blue-500"
                         />
                         <input
-                          onChange={(e) => handleAnswerChange(e)}
-                          placeholder="Savolning javoblarini kiriting"
+                          onChange={(e) => setOptionDtos((prevOptions) =>
+                            prevOptions.map((opt, i) =>
+                              i === index ? { ...opt, answer: e.target.value } : opt
+                            )
+                          )}
+                          placeholder={`Option ${index + 1}`}
                           className="border bg-white w-full p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                         <label className="cursor-pointer custom-file-upload px-3 w-[160px] py-2 bg-blue-500 text-white text-[13px] rounded-md">
@@ -582,15 +598,18 @@ function Test() {
                         className="flex items-center mb-4 gap-1"
                       >
                         <input
-                          onClick={(e) => handleCheckboxChange(e)}
-                          onChange={(e) => handleAnswerChange(e)}
+                          onChange={(e) => handleRadioChange(index)}
                           type="radio"
                           name="single-choice"
                           className="mr-3 accent-blue-500"
                         />
                         <input
-                          onChange={(e) => handleAnswerChange(e)}
-                          placeholder="Savolning javoblarini kiriting"
+                          onChange={(e) => setOptionDtos((prevOptions) =>
+                            prevOptions.map((opt, i) =>
+                              i === index ? { ...opt, answer: e.target.value } : opt
+                            )
+                          )}
+                          placeholder={`Option ${index + 1}`}
                           className="border w-full bg-white p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                         <label className="cursor-pointer custom-file-upload px-3 w-[150px] py-2 bg-blue-500 text-white text-[13px] rounded-md">
@@ -1074,7 +1093,7 @@ function Test() {
       <Modal
         title="Delete Confirmation"
         visible={isModalOpen}
-        onOk={() => isDelete.mutate()} // Calls the delete function when confirmed
+        onOk={() => (isDelete.mutate())} // Calls the delete function when confirmed
         onCancel={() => setIsModalOpen(false)} // Close modal on cancel
       >
         <p>Testni o'chirmoqchimisiz?</p>
