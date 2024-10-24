@@ -755,8 +755,7 @@ function Test() {
                         className="flex items-center mb-4 gap-1"
                       >
                         <input
-                          onClick={(e) => handleCheckboxChange(e)}
-                          onChange={(e) => handleAnswerChange(e)}
+                          onChange={(e) => handleRadioChange(index)}
                           type="radio"
                           name="single-choice"
                           className="mr-3 accent-blue-500"
