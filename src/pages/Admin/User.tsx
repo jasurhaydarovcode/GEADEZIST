@@ -276,21 +276,23 @@ const User: React.FC = () => {
                                 <Space wrap>
                                   <Dropdown  overlay={
                                       <Menu>
+                                         <Link to={`/archive/${item.resultId}`}>
                                         <Menu.Item key="1">
-                                          <Link to={`/archive/${item.id}`}>Arxivni ko'rish</Link>
+                                              <Link to={`/archive/${item.resultId}`}>Arxivni ko'rish</Link>
+                                           </Menu.Item>
+                                           </Link>
+                                        <Menu.Item key="2"  onClick={() => showUserDetails(item)}>
+                                          <button className='w-full flex '>Natijani ko'rish</button>
                                         </Menu.Item>
-                                        <Menu.Item key="2">
-                                          <button className='w-full flex ' onClick={() => showUserDetails(item)}>Natijani ko'rish</button>
+                                        <Menu.Item key="3"  onClick={() => (modalTasdiqlash(), setSelectedUser(item))}>
+                                          <button className='w-full flex ' >Tasdiqlash</button>
                                         </Menu.Item>
-                                        <Menu.Item key="3">
-                                          <button className='w-full flex ' onClick={() => (modalTasdiqlash(), setSelectedUser(item))} >Tasdiqlash</button>
+                                        <Menu.Item key="4" onClick={() => (showModal(), setSelectedUser(item))}>
+                                          <button className='w-full flex ' >Bekor qilish</button>
                                         </Menu.Item>
-                                        <Menu.Item key="4">
-                                          <button className='w-full flex ' onClick={() => (showModal(), setSelectedUser(item))}>Bekor qilish</button>
-                                        </Menu.Item>
-                                        {/* <Menu.Item key="5">
-                                          <button className='w-full flex ' onClick={() => (qaytaModal(), setSelectedUser(item))}>Qayta topshirishga ruxsat berish</button>
-                                        </Menu.Item> */}
+                                         <Menu.Item key="5" onClick={() => (qaytaModal(), setSelectedUser(item))}>
+                                          <button className='w-full flex ' >Qayta topshirishga ruxsat berish</button>
+                                        </Menu.Item> 
                                       </Menu>
                                     }
                                     placement="bottomRight"

@@ -1,6 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
 
-
 // lato font family
 import '@fontsource/lato';
 import '@fontsource/lato/400.css';
@@ -62,7 +61,7 @@ function App() {
         {renderRoute("/tests", TestVisual)}
         {renderRoute("/all-user", AllUser)}
         {renderRoute("/user", User)}
-        {renderRoute("/archive/:resultId", Archive)}
+        {renderRoute("/archive/:resultId", Archive)} {/* To'g'ri yo'nalish */}
         {renderRoute("/employees", Employees)}
         {renderRoute("/profile", Profile)}
         {renderRoute("/address", Address)}
