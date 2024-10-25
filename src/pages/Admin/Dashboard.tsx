@@ -16,7 +16,7 @@ import { FaArrowsAlt } from 'react-icons/fa';
 import { FaCircleQuestion } from 'react-icons/fa6';
 import { MdOutlineCategory } from 'react-icons/md';
 import { useQuery, useQueryClient } from 'react-query';
-import { baseUrl, getStaticAll, } from '@/helpers/api/baseUrl';
+import { baseUrl, getRegion, getStaticAll, } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import { toast } from 'react-toastify';
 import axios from 'axios';
@@ -29,6 +29,8 @@ import TableLoading from '@/components/spinner/TableLoading';
 import { Pagination } from 'antd';
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 'flowbite-react';
 import CheckLogin from '@/helpers/functions/checkLogin';
+import { GetWeekStatic } from '@/helpers/types/GetWeekStatic';
+import { GetRegs } from '@/helpers/types/RegionType';
 
 
 ChartJS.register(
@@ -44,24 +46,49 @@ const Dashboard = () => {
   CheckLogin
   const queryClient = useQueryClient();
   // states
-  const regions = ['Toshkent', 'Samarqand', "Farg'ona"];
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [regions, setRegions] = useState<null>(null)
   const [selectedRegion, setSelectedRegion] = useState('');
-  const [totalItems, setTotalItems] = useState(0);
+  const totalItems: number | null = 0
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const pageSize: number | null = 10
   const [clientData, setClientData] = useState<GetClientAllResponse[] | null>(null);
   const [allClientData, setAllClientData] = useState<GetClientAllResponse[] | null>(null)
-  const [weekData, setWeekData] = useState(null)
+  const [weekData, setWeekData] = useState<GetWeekStatic[] | null>(null)
+
+  // regions get
+  const getRegions = useQuery({
+    queryKey: ['getRegions', config],
+    queryFn: async () => {
+      const res = axios.get<GetRegs>(getRegion, config)
+      const data = res.data
+      console.log(data);
+
+    }
+  })
+
+  useEffect(() => {
+    if (getRegions) {
+      queryClient.refetchQueries('getRegions')
+
+    }
+  }, [getRegions])
+
   // dashboard statiastic
 
   const getWeekStatic = useQuery({
     queryKey: ['getWeekStatic', config],
     queryFn: async () => {
-      const res = await axios.get(`${baseUrl}statistic/dayOfWeek/`, config);
-      return res.data.body
+      interface GetWeekData {
+        body: {
+          "dayOfWeek": number | null
+          "count": number | null
+        }[]
+      }
+      const res = await axios.get<GetWeekData>(`${baseUrl}statistic/dayOfWeek/`, config);
+      const data: GetWeekStatic[] = res.data?.body
+      return data;
     },
-    onSuccess: (data) => {
+    onSuccess: (data: GetWeekStatic[]) => {
       setWeekData(data)
     }
   })
@@ -187,8 +214,12 @@ const Dashboard = () => {
   const getClientStatic = useQuery({
     queryKey: ['getClient', config],
     queryFn: async () => {
-
-      const res = await axios.get(`${baseUrl}statistic/filter/?page=${currentPage - 1}&size=${pageSize}`, config);
+      interface GetClientAllData {
+        body: {
+          body: GetClientAllResponse[] | null
+        }
+      }
+      const res = await axios.get<GetClientAllData>(`${baseUrl}statistic/filter/?page=${currentPage - 1}&size=${pageSize}`, config);
       const data = res?.data?.body?.body as GetClientAllResponse[] | null;
       return data;
     },
@@ -259,7 +290,7 @@ const Dashboard = () => {
 
     if (searchValue !== '') {
       const filteredData = allClientData?.filter((event) =>
-        (event.email && event.email.toLowerCase().includes(searchValue)) ||
+        (event?.categoryName && event?.categoryName.toLowerCase().includes(searchValue)) ||
         (event.firstName && event.firstName.toLowerCase().includes(searchValue)) ||
         (event.lastName && event.lastName.toLowerCase().includes(searchValue))
       );
@@ -356,8 +387,8 @@ const Dashboard = () => {
                 </TableHead>
                 <TableBody className="divide-y">
                   {clientData && clientData.length > 0 ? (
-                    clientData.map((item, index) => (
-                      <TableRow key={item.id} className="bg-white">
+                    clientData.map((item: GetClientAllResponse, index) => (
+                      <TableRow key={item?.id} className="bg-white">
                         <TableCell className="text-center p-4">
                           {(currentPage - 1) * pageSize + index + 1}
                         </TableCell>

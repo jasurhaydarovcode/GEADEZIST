@@ -5,11 +5,11 @@ import { config } from "@/helpers/functions/token";
 import { PlusCircleOutlined, EditOutlined, DeleteOutlined, EyeOutlined, } from "@ant-design/icons";
 import { Button, message, Modal, Pagination } from "antd";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 import { FcSearch } from "react-icons/fc";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { ApiResponse, FetchedTest } from "@/helpers/types/test";
+import { ApiResponse, FetchedTest, FilteredTest } from "@/helpers/types/test";
 import TableLoading from "@/components/spinner/TableLoading";
 import { Answer } from "@/helpers/types/AddQuizType";
 import { Link, useNavigate } from "react-router-dom";
@@ -44,11 +44,11 @@ function Test() {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [testType, setTestType] = useState<string | null>(null);
   const quiz = useRef<HTMLInputElement | null>(null);
-  const difficulty = useRef<HTMLInputElement | null>(null);
+  const difficulty = useRef<HTMLSelectElement | null>(null);
   const [editTestID, setEditTestID] = useState<string>('');
   const categore = useRef<HTMLSelectElement | null>(null);
   const answer = useRef<HTMLInputElement | null>(null);
-  const type = useRef<HTMLInputElement | null>(null);
+  const type = useRef<HTMLSelectElement | null>(null);
   const [datas, useDatas] = useState<FetchedTest[]>([]);
   const [turi, setTuri] = useState<string | null>(null);
   const [kategoriya, setKategoriya] = useState<string | null>(null);
@@ -116,9 +116,7 @@ function Test() {
       setTestlar(data)
     }
   })
-  // Test get qilish tugatildi
 
-  // Bu yo'lda delete qiladi
   const isDelete = useMutation({
     mutationFn: async () => {
       const res = axios.delete(`${baseUrl}question/${testID}`, config)
@@ -134,11 +132,20 @@ function Test() {
     }
   })
 
+  // Test get qilish tugatildi
   useEffect(() => {
-    if (isDelete) {
+    if (testData) {
       queryGet.refetchQueries('testData')
     }
-  }, [isDelete])
+  }, [testData])
+
+  // Bu yo'lda delete qiladi
+
+  // useEffect(() => {
+  //   if (isDelete) {
+  //     queryGet.refetchQueries('testData')
+  //   }
+  // }, [isDelete])
   // Delete qilish tugatildi
 
   function showDeleteModal(id: number | string) {
@@ -198,7 +205,8 @@ function Test() {
       return response.data;
     },
     onSuccess: (response) => {
-      const fetchedTests = response.body.body.map((item, index) => ({
+
+      const fetchedTests: FilteredTest[] = response.body.body.map((item, index) => ({
         id: item.id,
         name: item.name,
         categoryName: item.categoryName || "No category",
@@ -342,7 +350,7 @@ function Test() {
   });
 
   const handleRadioChange = (index: number) => {
-    
+
     // Update the isCorrect value for the selected option only
     setOptionDtos((prevOptions) =>
       prevOptions.map((option, i) => ({
@@ -394,7 +402,7 @@ function Test() {
     },
     onError: (err: any) => {
       testType === "ONE_CHOICE" ? message.error("Bir to'g'ri javobli turda kamida 3 ta javob bo'lishi kerak")
-      : message.error(err.message);
+        : message.error(err.message);
       console.error(err);
     },
   });
@@ -911,14 +919,14 @@ function Test() {
       >
         <div className="mb-4">
           <input
-            onChange={(e) => setanswer(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setAnswerDate(e.target.value)}
             placeholder="Savolni kiriting"
             className="border w-full p-2 rounded"
           />
         </div>
 
         <div className="mb-4">
-          <select onChange={(e) => setCategory(e.target.value)} className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
+          <select ref={categore} className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
             <option disabled selected value="">
               Kategoriyani tanlang
             </option>
@@ -941,7 +949,7 @@ function Test() {
         </div>
 
         <div className="mb-4">
-          <select onChange={(e) => setDifficulty(e.target.value)} className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
+          <select ref={difficulty} className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]">
             <option disabled selected>
               Qiyinchilik darajasini tanlang
             </option>
@@ -961,8 +969,8 @@ function Test() {
           <select
             onChange={(e) => {
               setTestType(e.target.value)
-              setType(e.target.value)
             }}
+            ref={type}
             className="w-full text-gray-400 bg-white rounded-md h-[50px] placeholder:font-extralight placeholder-gray-400 border-gray-400 placeholder:text-[14px]"
           >
             <option disabled selected>

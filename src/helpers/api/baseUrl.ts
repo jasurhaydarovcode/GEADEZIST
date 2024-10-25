@@ -53,7 +53,7 @@ export const getStaticAll = `${baseUrl}statistic/counts/`;
 
 // ==================== Super Admin address urls ====================
 // viloyatlarni get urls
-export const getRegion = `${baseUrl}region/`;
+export const getRegion = `${baseUrl}region`;
 // viloyatlar post urls
 export const addRegion = `${baseUrl}region`;
 // viloyatlar delete urls
