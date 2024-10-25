@@ -137,7 +137,7 @@ const ClientTestStart: React.FC = () => {
                         Qayta topshirish vaqti
                       </span>
                       <span className="text-gray-700 font-medium">
-                        {item.retakeDate} ta
+                        {item.retakeDate} kun
                       </span>
                     </div>
 
