@@ -10,10 +10,12 @@ import { baseUrl } from "@/helpers/api/baseUrl";
 import { config } from "@/helpers/functions/token";
 import { AnswerRes, QuizType } from "@/helpers/types/AnswerType";
 import { useState } from "react";
+import { BodyRespon } from "@/helpers/types/testvisual";
+import { optionDtos } from "@/helpers/types/clientQuizType";
 
 function Category() {
-    CheckLogin()
-    const [options, setOptions] = useState([]);
+    CheckLogin
+    const [options, setOptions] = useState<optionDtos[]>([]);
     const [quizData, setQuizData] = useState<QuizType[]>([]);
     const location = useLocation();
     const { catygoria, savol, id } = location.state || {};
@@ -21,7 +23,9 @@ function Category() {
     const getQuizId = useQuery({
         queryKey: ['getQuiz', id],
         queryFn: async () => {
-            const res = await axios.get(`${baseUrl}question/${id}`, config);
+            const res= await axios.get<BodyRespon>(`${baseUrl}question/${id}`, config);
+            console.log(res);
+            
             return res.data.body;
         },
         onSuccess: (data) => {
