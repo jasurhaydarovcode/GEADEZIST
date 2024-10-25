@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useCallback } from 'react';
 import { Helmet } from 'react-helmet';
 import CheckLogin from '@/helpers/functions/checkLogin';
+import { toast } from 'react-toastify';
 
 
 function Profile() {
@@ -16,7 +17,7 @@ function Profile() {
   const getUserProfile = useQuery({
     queryKey: ['getUserProfile', config],
     queryFn: async () => {
-      const res = await axios.get(`${getProfile}`, config);
+      const res = await axios.get(`${getProfile}`, config); 
       return res.data;
     },
   });
@@ -41,7 +42,13 @@ function Profile() {
     getUserProfile.data as UserProfileData
   )?.body;
 
-  const role = localStorage.getItem('role'); // role ni local storage dan oldim okay?
+  const role = localStorage.getItem('role');
+
+  const handleClick = () => {
+    if (role === 'ROLE_SUPER_ADMIN') {
+      toast.error('Super Admin o\'zini o\'zi tahrirlashi mumkin emas');
+    }
+  };
 
   return (
     <div>
@@ -199,13 +206,13 @@ function Profile() {
                 </div>
               </div>
               <button
-                disabled={role !== 'ROLE_TESTER'}
+                disabled={role !== 'ROLE_SUPER_ADMIN'}
+                onClick={handleClick}
                 className={`p-2 rounded-lg text-md mt-4 bg-gray-600 hover:bg-gray-800 transition duration-200 ease-in-out w-max font-semibold text-white 
                ${role === 'ROLE_TESTER' ? 'cursor-pointer' : 'cursor-not-allowed'}`}
               >
                 O'zgartirishlarni saqlang
               </button>
-
             </div>
           </div>
         )}
