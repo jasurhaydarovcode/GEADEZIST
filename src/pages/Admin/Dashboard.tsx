@@ -46,7 +46,7 @@ const Dashboard = () => {
   CheckLogin
   const queryClient = useQueryClient();
   // states
-  const [regions, setRegions] = useState<null>(null)
+  const [regions, setRegions] = useState<GetRegs[] | null>(null)
   const [selectedRegion, setSelectedRegion] = useState('');
   const totalItems: number | null = 0
   const [currentPage, setCurrentPage] = useState(1);
@@ -59,17 +59,23 @@ const Dashboard = () => {
   const getRegions = useQuery({
     queryKey: ['getRegions', config],
     queryFn: async () => {
-      const res = axios.get<GetRegs>(getRegion, config)
-      const data = res.data
-      console.log(data);
+      interface GetRegionData {
+        body: GetRegs[] | null;
+      }
+      const res = await axios.get<GetRegionData>(getRegion, config)
+      const data = res.data.body
+      return data
+    },
 
+
+    onSuccess: (data: GetRegs[]) => {
+      setRegions(data)
     }
   })
 
   useEffect(() => {
     if (getRegions) {
       queryClient.refetchQueries('getRegions')
-
     }
   }, [getRegions])
 
@@ -193,15 +199,9 @@ const Dashboard = () => {
     datasets: [
       {
         label: 'Natijalar soni',
-        data: [
-          { x: 1, y: 0 },
-          { x: 2, y: 0 },
-          { x: 3, y: 0 },
-          { x: 4, y: 0 },
-          { x: 5, y: 0 },
-          { x: 6, y: 0 },
-          { x: 7, y: 0 },
-        ],
+        data: weekData ? weekData.map((item: GetWeekStatic) => (
+          { x: item.dayOfWeek, y: item.count }
+        )) : [],
         borderColor: 'rgba(54, 162, 235, 1)',
         backgroundColor: 'rgba(54, 162, 235, 0.2)',
         borderWidth: 2,
@@ -210,6 +210,7 @@ const Dashboard = () => {
       },
     ],
   };
+
 
   const getClientStatic = useQuery({
     queryKey: ['getClient', config],
@@ -367,9 +368,9 @@ const Dashboard = () => {
                 className="border p-2 rounded"
               >
                 <option value="">Viloyatni tanlang</option>
-                {regions.map((region, index) => (
-                  <option key={index} value={region}>
-                    {region}
+                {regions && regions.length > 0 && regions.map((region, index) => (
+                  <option key={index} value={region.id}>
+                    {region.name}
                   </option>
                 ))}
               </select>
@@ -387,8 +388,8 @@ const Dashboard = () => {
                 </TableHead>
                 <TableBody className="divide-y">
                   {clientData && clientData.length > 0 ? (
-                    clientData.map((item: GetClientAllResponse, index) => (
-                      <TableRow key={item?.id} className="bg-white">
+                    clientData.map((item: GetClientAllResponse, index: number) => (
+                      <TableRow key={index} className="bg-white">
                         <TableCell className="text-center p-4">
                           {(currentPage - 1) * pageSize + index + 1}
                         </TableCell>
