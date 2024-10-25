@@ -125,7 +125,7 @@ const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
           err.response?.status === 401 ||
           err.response?.status === 403
         ) {
-          message .error(err.response?.data.message);
+          message .error("Bu email allaqachon ro'yxatdan o'tgan");
         }
         setIsSubmitting(false);
       });

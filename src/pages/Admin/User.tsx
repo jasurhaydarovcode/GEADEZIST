@@ -7,7 +7,7 @@ import axios from 'axios';
 import { Helmet } from 'react-helmet';
 import { useMutation, useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
-import {  Dropdown, Menu, message, Modal, Input, Spin, Space, InputRef } from 'antd';
+import {  Dropdown, Menu, message, Modal, Input, Spin, Space, InputRef, Pagination } from 'antd';
 import CheckLogin from '@/helpers/functions/checkLogin';
 import { EllipsisVerticalIcon } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 'flowbite-react';
@@ -171,6 +171,9 @@ const User: React.FC = () => {
     }
   )
 
+  const [page, setPage] = useState<number>(1); // Hozirgi sahifa
+  const [totalUsers, setTotalUsers] = useState<number>(0); // Umumiy foydalanuvchilar soni
+
   return (
     <div className="overflow-x-hidden">
       <Helmet>
@@ -232,7 +235,7 @@ const User: React.FC = () => {
                 </div>
 
                 <div className="py-5">
-                  <Table >
+                  <Table>
                     <TableHead>
                       <TableHeadCell>T/P</TableHeadCell>
                       <TableHeadCell>Tuliq ismi</TableHeadCell>
@@ -254,7 +257,19 @@ const User: React.FC = () => {
                             <TableCell>{item.categoryName}</TableCell>
                             <TableCell>{item.phoneNumber}</TableCell>
                             <TableCell>
-                                {item.expiredDate}
+                              {item.expiredDate && (
+                                <>
+                                  {new Date(item.expiredDate) <= new Date() ? (
+                                    <span className="text-gray-800">
+                                      Testni ishlashingiz mumkin
+                                    </span>
+                                  ) : (
+                                    <span className="text-sm text-gray-800">
+                                      {Math.max(0, Math.floor((new Date(item.expiredDate) - new Date()) / (1000 * 60 * 60 * 24)))} kun qoldi
+                                    </span>
+                                  )}
+                                </>
+                              )}
                             </TableCell>
                             <TableCell>
                               <button
@@ -274,25 +289,20 @@ const User: React.FC = () => {
                             <TableCell>
                               <Space direction="vertical">
                                 <Space wrap>
-                                  <Dropdown  overlay={
+                                  <Dropdown overlay={
                                       <Menu>
-                                         <Link to={`/archive/${item.resultId}`}>
-                                        <Menu.Item key="1">
-                                              <Link to={`/archive/${item.resultId}`}>Arxivni ko'rish</Link>
-                                           </Menu.Item>
-                                           </Link>
-                                        <Menu.Item key="2"  onClick={() => showUserDetails(item)}>
-                                          <button className='w-full flex '>Natijani ko'rish</button>
-                                        </Menu.Item>
-                                        <Menu.Item key="3"  onClick={() => (modalTasdiqlash(), setSelectedUser(item))}>
-                                          <button className='w-full flex ' >Tasdiqlash</button>
-                                        </Menu.Item>
-                                        <Menu.Item key="4" onClick={() => (showModal(), setSelectedUser(item))}>
-                                          <button className='w-full flex ' >Bekor qilish</button>
-                                        </Menu.Item>
-                                         <Menu.Item key="5" onClick={() => (qaytaModal(), setSelectedUser(item))}>
-                                          <button className='w-full flex ' >Qayta topshirishga ruxsat berish</button>
-                                        </Menu.Item> 
+                                         <Menu.Item key="1">
+                                            <Link to={`/archive/${item.resultId}`}>Arxivni ko'rish</Link>
+                                         </Menu.Item>
+                                         <Menu.Item key="2" onClick={() => showUserDetails(item)}>
+                                           <button className='w-full flex'>Natijani ko'rish</button>
+                                         </Menu.Item>
+                                         <Menu.Item key="3" onClick={() => (modalTasdiqlash(), setSelectedUser(item))}>
+                                           <button className='w-full flex'>Tasdiqlash</button>
+                                         </Menu.Item>
+                                         <Menu.Item key="4" onClick={() => (showModal(), setSelectedUser(item))}>
+                                           <button className='w-full flex'>Bekor qilish</button>
+                                         </Menu.Item>
                                       </Menu>
                                     }
                                     placement="bottomRight"
@@ -307,6 +317,15 @@ const User: React.FC = () => {
                         ))}
                     </TableBody>
                   </Table>
+                  {/* Pagination qo'shish */}
+                  <Pagination
+                    current={page} // Hozirgi sahifa
+                    pageSize={10} // Har bir sahifada ko'rsatiladigan foydalanuvchilar soni
+                    total={totalUsers} // Umumiy foydalanuvchilar soni
+                    onChange={(page) => setPage(page)} // Sahifani o'zgartirish
+                    showSizeChanger={false} // O'lcham o'zgartirishni ko'rsatmaslik
+                    className="mt-4" // Margin qo'shish
+                  />
                 </div>
               </div>
             </div>

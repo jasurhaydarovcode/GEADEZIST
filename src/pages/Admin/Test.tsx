@@ -9,13 +9,13 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 import { FcSearch } from "react-icons/fc";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { ApiResponse, FetchedTest, FilteredTest } from "@/helpers/types/test";
+import { ApiResponse, FilteredTest } from "@/helpers/types/test";
 import TableLoading from "@/components/spinner/TableLoading";
 import { Answer } from "@/helpers/types/AddQuizType";
 import { Link, useNavigate } from "react-router-dom";
 import CheckLogin from "@/helpers/functions/checkLogin";
 import { Category } from "@/helpers/types/Category";
-import {AxiosError} from '@/helpers/types/axiosType'
+import { AxiosError } from '@/helpers/types/axiosType'
 import { toast } from "react-toastify";
 
 function Test() {
@@ -23,26 +23,39 @@ function Test() {
   CheckLogin
   const [saveCates, setSaveCates] = useState<Category[]>([]);
 
-  // categoryni get qilish
   const getCategory = useQuery({
     queryKey: ["getCategory", config],
     queryFn: async () => {
       interface CategoryData {
         body: {
-          body: Category
-        }[]
+          body: {
+            id: string;
+            name: string;
+            description: string;
+            fileId?: string | undefined;
+            questionCount: number;
+            extraQuestionCount: number;
+            durationTime: number;
+            retakeDate: string;
+            createdBy: string;
+            deleted: boolean;
+            deletedBy?: string | undefined;
+          }
+        }
       }
-      const res = await axios.get<CategoryData>(`${baseUrl}category/page`, config)
-      const response: CategoryData = res.data?.body?.body
-      return response
+      const res = await axios.get<CategoryData>(`${baseUrl}category/page`, config);
+      const response: CategoryData | null = res.data.body.body
+      return response;
     },
     onSuccess: (data: Category[]) => {
-      setSaveCates(data)
+      setSaveCates(data);
     },
     onError: (err: AxiosError) => {
-      message.error(err.message)
+      message.error(err.message);
     }
-  })
+  });
+
+
   useEffect(() => {
     getCategory.refetch()
   }, [])
@@ -52,7 +65,7 @@ function Test() {
   const [testType, setTestType] = useState<string | null>(null);
   const quiz = useRef<HTMLInputElement | null>(null);
   const difficulty = useRef<HTMLSelectElement | null>(null);
-  const [editTestID, setEditTestID] = useState<string>('');
+  // const [editTestID, setEditTestID] = useState<string>('');
   const categore = useRef<HTMLSelectElement | null>(null);
   const answer = useRef<HTMLInputElement | null>(null);
   const type = useRef<HTMLSelectElement | null>(null);
@@ -127,6 +140,7 @@ function Test() {
   const isDelete = useMutation({
     mutationFn: async () => {
       const res = axios.delete(`${baseUrl}question/${testID}`, config)
+      console.log(res);
     },
     onSuccess() {
       toast.success("Test o'chirildi")
@@ -139,11 +153,11 @@ function Test() {
   })
 
   // Test get qilish tugatildi
-  useEffect(() => {
-    if (testData) {
-      queryGet.refetchQueries('testData')
-    }
-  }, [testData])
+  // useEffect(() => {
+  //   if (testData) {
+  //     queryGet.refetchQueries('testData')
+  //   }
+  // }, [testData])
 
   // Bu yo'lda delete qiladi
 
@@ -171,40 +185,36 @@ function Test() {
     }
   };
 
-
-
   // edit 
-
-  const updatedData = {
-    name: answer,
-    categoryName: categore,
-    type: type,
-    difficulty: difficulty,
-    optionDtos: [
-      {
-        id: 1,
-        answer: answer,
-        isCorrect: true,
-      },
-    ],
-  };
-  function isEdit(ID: string) {
-    const updateQuestion = async (ID: string | number) => {
-      try {
-        const response = await axios.put(`${baseUrl}question/${ID}`, updatedData, config);
-
-        return response.data;
-      } catch (error) {
-        toast.error('edit bolmadi')
-      }
-    };
-    updateQuestion(ID)
-    seteditModal(!editMod)
-  }
+  // const updatedData = {
+  //   name: answer,
+  //   categoryName: categore,
+  //   type: type,
+  //   difficulty: difficulty,
+  //   optionDtos: [
+  //     {
+  //       id: 1,
+  //       answer: answer,
+  //       isCorrect: true,
+  //     },
+  //   ],
+  // };
+  // function isEdit(ID: string) {
+  //   const updateQuestion = async (ID: string | number) => {
+  //     try {
+  //       const response = await axios.put(`${baseUrl}question/${ID}`, updatedData, config);
+  //       return response.data;
+  //     } catch (error) {
+  //       toast.error('edit bolmadi')
+  //     }
+  //   };
+  //   updateQuestion(ID)
+  //   seteditModal(!editMod)
+  // }
   // edit 
 
   // Use the data in a React component
-  const { data, isLoading } = useQuery<ApiResponse, Error>({
+  const { isLoading } = useQuery<ApiResponse, Error>({
     queryKey: ["tests"],
     queryFn: async () => {
       const response = await axios.get<ApiResponse>(`${baseUrl}question/filter?page=0&size=100`, config);
@@ -258,7 +268,7 @@ function Test() {
     setConfirmLoad(true);
     setTimeout(() => {
       setConfirmLoad(false);
-      isEdit(editTestID)
+      // isEdit(editTestID)
     }, 2000);
   };
   const closeditmod = () => seteditModal(!editModal);
@@ -289,7 +299,9 @@ function Test() {
       file: 0,
     },
   ]);
-
+  useEffect(() => {
+    console.log(optionDtos)
+  }, [optionDtos])
   const [answerDate, setAnswerDate] = useState(''); // State for answer input
 
   // Handler for the answer input change
@@ -773,8 +785,12 @@ function Test() {
                           className="mr-3 accent-blue-500"
                         />
                         <input
-                          onChange={(e) => handleAnswerChange(e)}
-                          placeholder="Savolning javoblarini kiriting"
+                          onChange={(e) => setOptionDtos((prevOptions) =>
+                            prevOptions.map((opt, i) =>
+                              i === index ? { ...opt, answer: e.target.value } : opt
+                            )
+                          )}
+                          placeholder={`Option ${index + 1}`}
                           className="border w-full bg-white p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                         <label className="cursor-pointer custom-file-upload px-3 w-[150px] py-2 bg-blue-500 text-white text-[13px] rounded-md">

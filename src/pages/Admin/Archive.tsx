@@ -3,9 +3,8 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { message, Spin, List } from 'antd';
 import Layout from '@/components/Dashboard/Layout';
-import resultId from './User'
-
-const yourToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJpYXQiOjE3Mjk4MzQ2MTYsImV4cCI6MTcyOTkyMTAxNn0.a8017upf5Wh3m2tknJHsuRO973taogy0HFyY52gGLpgh9DSmuaY1VARwMo5EfVB538mgDiMlbMHPRq9MaF5U2w';
+import { config } from '@/helpers/functions/token';
+import { baseUrl } from '@/helpers/api/baseUrl';
 
 const Archive = () => {
   const { resultId } = useParams<{ resultId: string }>();
@@ -23,51 +22,55 @@ const Archive = () => {
 
     const fetchResult = async () => {
       try {
-        const response = await axios.get(`/result/resultByArchive/${resultId}`, {
-          headers: {
-            Authorization: `Bearer ${yourToken}`
-          }
-        });
+        const response = await axios.get(baseUrl+`result/resultByArchive/${resultId}`, config);
         setResult(response.data.body);
+        console.log(response);
       } catch (error) {
         message.error('Natijalarni olishda xatolik yuz berdi');
       } finally {
         setLoading(false);
       }
     };
-    
+
     fetchResult();
   }, [resultId]);
 
   return (
-    <Layout>
-      <div className="px-[100px] py-[60px] w-full">
-        <h2 className="font-bold text-[24px] py-[20px]">Foydalanuvchi Natijalari</h2>
+    <div>
+      <div className="px-[80px] py-[50px] w-full bg-gray-50 min-h-screen">
+        <h2 className="font-extrabold text-[30px] text-gray-800 border-b-2 border-gray-300 pb-4 mb-8">Foydalanuvchi Natijalari</h2>
 
         {loading ? (
-          <Spin />
+          <div className="flex justify-center items-center h-full">
+            <Spin size="large" />
+          </div>
         ) : result && result.length ? (
           <List
             dataSource={result}
             renderItem={(item) => (
-              <List.Item key={item.id}>
-                <div className={`p-4 rounded ${item.correct ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}>
-                  <strong>Savol:</strong> {item.question}
-                  <br />
-                  <strong>Kategoriya:</strong> {item.categoryName}
-                  <br />
-                  <strong>Foydalanuvchi javobi:</strong> {item.answer.join(', ')}
-                  <br />
-                  <strong>To'g'ri javob:</strong> {item.correctAnswer ? item.correctAnswer : 'Noma'}
+              <List.Item key={item.id} className="mb-4">
+                <div className={`p-6 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105 w-[100%] 
+                  ${item.correct ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}>
+                  <h3 className="font-semibold text-lg mb-2">{item.question}</h3>
+                  <p className="text-md mb-1">
+                    <strong>Kategoriya:</strong> {item.categoryName}
+                  </p>
+                  <p className="text-md mb-1">
+                    <strong>Foydalanuvchi javobi:</strong> {item.answer.join(', ')}
+                  </p>
+                  <p className="text-md">
+                    <strong>To'g'ri javob:</strong> {item.correctAnswer ? item.correctAnswer : 'Noma'}
+                  </p>
                 </div>
               </List.Item>
             )}
           />
         ) : (
-          <p>Natijalar topilmadi.</p>
+          <p className="text-center text-gray-500 text-xl">Natijalar topilmadi.</p>
         )}
+
       </div>
-    </Layout>
+    </div>
   );
 };
 
