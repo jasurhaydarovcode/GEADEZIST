@@ -29,7 +29,7 @@ const ClientDashboard: React.FC = () => {
     queryFn: async () => {
       const config = await getConfig();
       const res = await axios.get<GetMeResponse>(getMeUser, config);
-      return res.data?.body;
+      return res.data; // {{ edit_1 }} - 'body' ni olib tashladik
     },
     onSuccess: (data) => {
       setGetUser(data);
@@ -38,6 +38,12 @@ const ClientDashboard: React.FC = () => {
       console.error('Failed to fetch user data:', error);
     },
   });
+
+  useEffect(() => {
+    if (getMe.data) {
+      setGetUser(getMe.data);
+    }
+  }, [getMe.data]);
 
   const checkRoleClient = useCallback(() => {
     const role = localStorage.getItem('role');
