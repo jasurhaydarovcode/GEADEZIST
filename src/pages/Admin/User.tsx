@@ -7,7 +7,7 @@ import axios from 'axios';
 import { Helmet } from 'react-helmet';
 import { useMutation, useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
-import {  Dropdown, Menu, message, Modal, Input, Spin, Space } from 'antd';
+import {  Dropdown, Menu, message, Modal, Input, Spin, Space, InputRef } from 'antd';
 import CheckLogin from '@/helpers/functions/checkLogin';
 import { EllipsisVerticalIcon } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 'flowbite-react';
@@ -22,7 +22,21 @@ const User: React.FC = () => {
   const [selectedStatus, setSelectedStatus] = useState<string>('');
   const [isModalVisibled, setIsModalVisibled] = useState(false);
   const [tasdiqlash, setTasdiqlash] = useState(false);
-  const refName = useRef<HTMLInputElement>(null);
+  const refName = useRef<InputRef>(null);
+  // const [qaytaTest, setQaytaTest] = useState(false);
+
+  // const qaytaModal = () => {
+  //   setQaytaTest(true);
+  // };
+
+  // const qaytaTestClose = () => {
+  //   setQaytaTest(false);
+  // };
+
+  // const qaytaTestOk = () => {
+  //   qaytaTopshirish.mutate(selectedUser.id);
+  //   setQaytaTest(false);
+  // };
 
   const modalTasdiqlash = () => {
     setTasdiqlash(true);
@@ -71,8 +85,24 @@ const User: React.FC = () => {
     },
   });
 
+  // const qaytaTopshirish = useMutation({
+  //   mutationFn: async (selectedUser: UserNatijasi) => {
+  //     const res = await axios.put(`${baseUrl}result/update-status/expiredDate?userId=${selectedUser}&categoryId=${selectedUser.categoryId}`, {}, config);
+  //     return res.data;
+  //   },
+  //   onSuccess: () => {
+  //     message.success("Natija muvaffaqiyatli qayta topshirildi");
+  //     setIsModalVisibled(false);
+  //     refetch();
+  //   },
+  //   onError: (error) => {
+  //     console.error('Xatolik:', error);
+  //     showErrorMessage("Natija qo'shishda xatolik yuz berdi");
+  //   },
+  // });
+
   const tasdiqlashOk = () => {
-    tasdiqlashMutation.mutate(selectedUser?.id); 
+    tasdiqlashMutation.mutate(selectedUser!.id); 
   };
 
   const showModal = () => {
@@ -246,21 +276,23 @@ const User: React.FC = () => {
                                 <Space wrap>
                                   <Dropdown  overlay={
                                       <Menu>
+                                         <Link to={`/archive/${item.resultId}`}>
                                         <Menu.Item key="1">
-                                          <Link to={`/archive/${item.id}`}>Arxivni ko'rish</Link>s
+                                              <Link to={`/archive/${item.resultId}`}>Arxivni ko'rish</Link>
+                                           </Menu.Item>
+                                           </Link>
+                                        <Menu.Item key="2"  onClick={() => showUserDetails(item)}>
+                                          <button className='w-full flex '>Natijani ko'rish</button>
                                         </Menu.Item>
-                                        <Menu.Item key="2">
-                                          <button className='w-full flex ' onClick={() => showUserDetails(item)}>Natijani ko'rish</button>
+                                        <Menu.Item key="3"  onClick={() => (modalTasdiqlash(), setSelectedUser(item))}>
+                                          <button className='w-full flex ' >Tasdiqlash</button>
                                         </Menu.Item>
-                                        <Menu.Item key="3">
-                                          <button className='w-full flex ' onClick={() => (modalTasdiqlash(), setSelectedUser(item))} >Tasdiqlash</button>
+                                        <Menu.Item key="4" onClick={() => (showModal(), setSelectedUser(item))}>
+                                          <button className='w-full flex ' >Bekor qilish</button>
                                         </Menu.Item>
-                                        <Menu.Item key="4">
-                                          <button className='w-full flex ' onClick={() => (showModal(), setSelectedUser(item))}>Bekor qilish</button>
-                                        </Menu.Item>
-                                        <Menu.Item key="5">
-                                          <button className='w-full flex '>Qayta topshirishga ruxsat berish</button>
-                                        </Menu.Item>
+                                         <Menu.Item key="5" onClick={() => (qaytaModal(), setSelectedUser(item))}>
+                                          <button className='w-full flex ' >Qayta topshirishga ruxsat berish</button>
+                                        </Menu.Item> 
                                       </Menu>
                                     }
                                     placement="bottomRight"
@@ -319,6 +351,10 @@ const User: React.FC = () => {
           <Modal open={isModalVisibled} onOk={handleOk} onCancel={handleClose} okText="Tasdiqlash" cancelText="Bekor qilish">
             <p className='text-lg text-center mt-4 font-semibold'>Natijani bekor qilmoqchimisiz</p>
           </Modal>
+          {/* Qayta test topshirish */}
+          {/* <Modal okText="Ha" cancelText="Yopish" open={qaytaTest} onOk={qaytaTestOk} onCancel={qaytaTestClose}>
+            <p className='text-lg text-center mt-8 mb-4 p-[5px] font-semibold'>Rostdan ham bu foydalanuvchiga qayta test topshirishga ruxsat bermoqchimisiz</p>
+          </Modal> */}
         </div>
       </Layout>
     </div>

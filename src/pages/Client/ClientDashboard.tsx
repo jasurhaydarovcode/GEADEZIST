@@ -35,7 +35,7 @@ const ClientDashboard: React.FC = () => {
       setGetUser(data);
     },
     onError: (error) => {
-      console.error('Failed to fetch user data:', error.message);
+      console.error('Failed to fetch user data:', error);
     },
   });
 
@@ -54,14 +54,14 @@ const ClientDashboard: React.FC = () => {
     queryKey: ['getResults', config],
     queryFn: async () => {
       const res = await axios.get(getResultsClient, config) as { data: { body: { body: ClientRezType[] } } };
-      console.log(res.data.body.body, "UserResultlar");
+      // console.log(res.data.body.body, "UserResultlar");
       return res.data.body.body;
     },
     onSuccess: (data) => {
       setCards(data);
     },
     onError: (error) => {
-      console.error(error.message);
+      console.error("Error:", error);
     },
   });
 
@@ -93,7 +93,7 @@ const ClientDashboard: React.FC = () => {
                     <div key={index} className="card bg-white glass mx-auto w-full sm:w-80 md:w-96">
                       <figure>
                         <img
-                          src={card.categoryImage || defaultImageDash}
+                          src={card.categoryName ? `${card.categoryName}.png` : defaultImageDash}
                           alt="Category Image!"
                           className="w-full h-64 object-cover"
                         />

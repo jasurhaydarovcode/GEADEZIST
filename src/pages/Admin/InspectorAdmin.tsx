@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Layout from '@/components/Dashboard/Layout';
 import { getResult } from '@/helpers/api/baseUrl';
 import { config } from '@/helpers/functions/token';
 import { UserNatijasi } from '@/helpers/types/UserNatijasi';
@@ -20,12 +19,12 @@ const InspectorAdmin: React.FC = () => {
 
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [selectedUser, setSelectedUser] = useState<UserNatijasi | null>(null); // Tanlangan foydalanuvchi
-  const [loadingDetails, setLoadingDetails] = useState<boolean>(false); // Yuklanayotganini ko'rsatish
-  const [selectedStatus, setSelectedStatus] = useState<string>(''); // Status uchun state
-  const [isRatingModalVisible, setIsRatingModalVisible] = useState<boolean>(false); // Tasdiqlash modalining holati
-  const [rating, setRating] = useState<string>(''); // Baholash input qiymati
-  const [isRatingValid, setIsRatingValid] = useState<boolean>(false); // Baholash uchun validatsiya
+  const [selectedUser, setSelectedUser] = useState<UserNatijasi | null>(null);
+  const [loadingDetails, setLoadingDetails] = useState<boolean>(false);
+  const [selectedStatus, setSelectedStatus] = useState<string>('');
+  const [isRatingModalVisible, setIsRatingModalVisible] = useState<boolean>(false);
+  const [rating, setRating] = useState<string>('');
+  const [isRatingValid, setIsRatingValid] = useState<boolean>(false);
 
   const { data: usersData, refetch } = useQuery({
     queryKey: ['User', config],
@@ -45,14 +44,12 @@ const InspectorAdmin: React.FC = () => {
 
   const GetResult: UserNatijasi[] = usersData ?? [];
 
-  // Foydalanuvchilarni searchQuery va selectedStatus bo'yicha filtrlaymiz
   const filteredUsers = GetResult.filter(
     (user) =>
       `${user.fullName} ${user.phoneNumber}`.toLowerCase().includes(searchQuery.toLowerCase()) &&
       (selectedStatus === '' || user.status === selectedStatus) // Status bo'yicha filtr
   );
 
-  // Natijalarni ko'rish uchun modal ochish
   const showUserDetails = async (user: UserNatijasi) => {
     setLoadingDetails(true);
     setSelectedUser(user);
@@ -67,11 +64,11 @@ const InspectorAdmin: React.FC = () => {
     }
   };
 
-  // Tasdiqlash modalini ochish
-  const showRatingModal = (user: UserNatijasi) => {
-    setSelectedUser(user);
-    setIsRatingModalVisible(true);
-  };
+  // // Tasdiqlash modalini ochish
+  // const showRatingModal = (user: UserNatijasi) => {
+  //   setSelectedUser(user);
+  //   setIsRatingModalVisible(true);
+  // };
 
   // Baho kiritilishi
   const handleRatingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,9 +101,9 @@ const InspectorAdmin: React.FC = () => {
 
       if (response.status === 200) {
         message.success('Natija muvaffaqiyatli tasdiqlandi!');
-        setIsRatingModalVisible(false); // Modalni yopish
-        setRating(''); // Baho inputini tozalash
-        refetch(); // Ma'lumotlarni yangilash
+        setIsRatingModalVisible(false);
+        setRating('');
+        refetch();
       }
     } catch (error) {
       message.error('Natijani tasdiqlashda xatolik yuz berdi.');

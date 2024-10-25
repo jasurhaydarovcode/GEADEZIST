@@ -9,10 +9,10 @@ import { useQuery } from 'react-query';
 import { config } from '@/helpers/functions/token';
 import { GetMetype } from '../../helpers/types/GetMetype.ts';
 import { Helmet } from 'react-helmet';
-import CheckLogin from '@/helpers/functions/checkLogin.tsx';
+// import CheckLogin from '@/helpers/functions/checkLogin.tsx';
 
 function ClientProfile() {
-  CheckLogin
+  // CheckLogin
   const navigate = useNavigate();
 
   const checkRoleClient = useCallback(() => {

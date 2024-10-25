@@ -94,7 +94,7 @@ const Dashboard = () => {
   })
   useEffect(() => {
     getWeekStatic.refetch()
-  }, [weekData])
+  }, [getWeekStatic])
   const dashboardStatic = useQuery({
     queryKey: ['dashboardStatic', config],
     queryFn: async () => {
@@ -121,7 +121,7 @@ const Dashboard = () => {
   // dashboard static data
   const staticData: GetStaticsAllResponse =
     dashboardStatic.data as GetStaticsAllResponse;
-  console.log(staticData);
+  // console.log(staticData);
 
   // dashboard region filter
   const handleRegionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

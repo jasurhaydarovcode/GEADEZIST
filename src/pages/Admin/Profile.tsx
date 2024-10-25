@@ -41,7 +41,7 @@ function Profile() {
     getUserProfile.data as UserProfileData
   )?.body;
 
-  const role = localStorage.getItem('role'); // role ni local storage dan oldim okay?
+  const role = localStorage.getItem('role');
 
   return (
     <div>
@@ -205,7 +205,6 @@ function Profile() {
               >
                 O'zgartirishlarni saqlang
               </button>
-
             </div>
           </div>
         )}

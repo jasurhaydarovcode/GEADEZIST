@@ -11,6 +11,7 @@ export interface GetMeResponse {
   address?: string;
   phoneNumber?: string;
   dateOfBirth?: string;
+  // categoryImage?: HTMLImageElement;
 }
 
 export interface GetMetype {
