@@ -150,7 +150,7 @@ function AllUser() {
                     }}
                     value={selectedRegion}
                   >
-                    <option value="" disabled>Viloyatni tanlash</option>
+                    <option value="" >Viloyatni tanlash</option>
                     {regions.map((region, index) => (
                       <option key={index} id='regname' value={region.id}>
                         {region.name}

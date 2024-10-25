@@ -22,7 +22,7 @@ const ConfirmSignUp = () => {
     axios
       .put(`${baseUrl}auth/activate?code=${code.current?.value}`)
       .then((res) => {
-        message.success('Yaxshi');
+        message.success('Ro`yhatdan muvaffaqiyatli o`tkazildi');
         console.log(res.data);  
         navigate('/auth/SignIn');
       })
@@ -61,7 +61,7 @@ const ConfirmSignUp = () => {
                     htmlFor="email"
                     className="block text-sm font-semibold text-gray-600"
                   >
-                    Codeni kiriting
+                    Codni kiriting
                   </label>
                   <input
                     ref={code}
