@@ -65,7 +65,7 @@ function Test() {
   const [testType, setTestType] = useState<string | null>(null);
   const quiz = useRef<HTMLInputElement | null>(null);
   const difficulty = useRef<HTMLSelectElement | null>(null);
-  const [editTestID, setEditTestID] = useState<string>('');
+  // const [editTestID, setEditTestID] = useState<string>('');
   const categore = useRef<HTMLSelectElement | null>(null);
   const answer = useRef<HTMLInputElement | null>(null);
   const type = useRef<HTMLSelectElement | null>(null);
@@ -140,6 +140,7 @@ function Test() {
   const isDelete = useMutation({
     mutationFn: async () => {
       const res = axios.delete(`${baseUrl}question/${testID}`, config)
+      console.log(res);
     },
     onSuccess() {
       toast.success("Test o'chirildi")
@@ -184,40 +185,36 @@ function Test() {
     }
   };
 
-
-
   // edit 
-
-  const updatedData = {
-    name: answer,
-    categoryName: categore,
-    type: type,
-    difficulty: difficulty,
-    optionDtos: [
-      {
-        id: 1,
-        answer: answer,
-        isCorrect: true,
-      },
-    ],
-  };
-  function isEdit(ID: string) {
-    const updateQuestion = async (ID: string | number) => {
-      try {
-        const response = await axios.put(`${baseUrl}question/${ID}`, updatedData, config);
-
-        return response.data;
-      } catch (error) {
-        toast.error('edit bolmadi')
-      }
-    };
-    updateQuestion(ID)
-    seteditModal(!editMod)
-  }
+  // const updatedData = {
+  //   name: answer,
+  //   categoryName: categore,
+  //   type: type,
+  //   difficulty: difficulty,
+  //   optionDtos: [
+  //     {
+  //       id: 1,
+  //       answer: answer,
+  //       isCorrect: true,
+  //     },
+  //   ],
+  // };
+  // function isEdit(ID: string) {
+  //   const updateQuestion = async (ID: string | number) => {
+  //     try {
+  //       const response = await axios.put(`${baseUrl}question/${ID}`, updatedData, config);
+  //       return response.data;
+  //     } catch (error) {
+  //       toast.error('edit bolmadi')
+  //     }
+  //   };
+  //   updateQuestion(ID)
+  //   seteditModal(!editMod)
+  // }
   // edit 
 
   // Use the data in a React component
-  const { data, isLoading } = useQuery<ApiResponse, Error>({
+  const { isLoading } = useQuery<ApiResponse, Error>({
     queryKey: ["tests"],
     queryFn: async () => {
       const response = await axios.get<ApiResponse>(`${baseUrl}question/filter?page=0&size=100`, config);
@@ -271,7 +268,7 @@ function Test() {
     setConfirmLoad(true);
     setTimeout(() => {
       setConfirmLoad(false);
-      isEdit(editTestID)
+      // isEdit(editTestID)
     }, 2000);
   };
   const closeditmod = () => seteditModal(!editModal);
