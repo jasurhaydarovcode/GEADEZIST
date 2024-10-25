@@ -9,7 +9,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { ToastContainer } from 'react-toastify';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import 'aos/dist/aos.css';
-import { CursorProtect, DevToolsBlocker } from 'react-mower';
+import { CursorProtect, DevToolsBlocker, DisableScreenshot } from 'react-mower';
 
 const queryClient = new QueryClient();
 
@@ -19,7 +19,9 @@ createRoot(document.getElementById('root')!).render(
       <BrowserRouter>
         <CursorProtect message='❌ Websayt Ximoyalangan'>
           <DevToolsBlocker>
-            <App />
+            <DisableScreenshot screenMessage='No Screenshot bro'>
+              <App />
+            </DisableScreenshot>
           </DevToolsBlocker>
         </CursorProtect>
         <ToastContainer
