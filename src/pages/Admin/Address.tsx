@@ -91,7 +91,7 @@ function Address() {
     ['getAddress', currentPage],
     async () => {
       const res = await axios.get(
-        `${getRegion}getAllRegionPage?page=${currentPage - 1}&size=${pageSize}`,
+        `${getRegion}/getAllRegionPage?page=${currentPage - 1}&size=${pageSize}`,
         config,
       );
       const responseData = (
