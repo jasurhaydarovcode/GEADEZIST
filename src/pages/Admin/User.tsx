@@ -292,7 +292,7 @@ const User: React.FC = () => {
                                   <Dropdown overlay={
                                       <Menu>
                                          <Menu.Item key="1">
-                                            <Link to={`/archive/${item.resultId}`}>Arxivni ko'rish</Link>
+                                            <Link to={`/archive/${item.id}`}>Arxivni ko'rish</Link>
                                          </Menu.Item>
                                          <Menu.Item key="2" onClick={() => showUserDetails(item)}>
                                            <button className='w-full flex'>Natijani ko'rish</button>

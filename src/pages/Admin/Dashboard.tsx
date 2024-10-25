@@ -31,6 +31,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from 
 import CheckLogin from '@/helpers/functions/checkLogin';
 import { GetWeekStatic } from '@/helpers/types/GetWeekStatic';
 import { GetRegs } from '@/helpers/types/RegionType';
+import { AxiosError } from '@/helpers/types/axiosType';
 
 
 ChartJS.register(
@@ -116,7 +117,7 @@ const Dashboard = () => {
       const data = res.data.body
       return data
     },
-    onError: (error: unknown) => {
+    onError: (error: AxiosError) => {
       toast.error((error as Error).message);
     },
   });
