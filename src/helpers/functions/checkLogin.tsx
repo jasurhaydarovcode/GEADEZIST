@@ -10,9 +10,9 @@ const CheckLogin: React.FC = () => {
     if (!token) {
       navigate('/auth/SignIn');
     }
-  }, [navigate,token]); // Faqat navigate dependencyda
+  }, [navigate,token]);
 
-  return null; // Agar bu komponentdan hech narsa render qilmasangiz
+  return null;
 }
 
 export default CheckLogin;

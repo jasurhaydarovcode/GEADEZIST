@@ -45,7 +45,6 @@ const Dashboard = () => {
   const queryClient = useQueryClient();
   // states
   const regions = ['Toshkent', 'Samarqand', "Farg'ona"];
-  const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedRegion, setSelectedRegion] = useState('');
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -67,7 +66,7 @@ const Dashboard = () => {
   })
   useEffect(() => {
     getWeekStatic.refetch()
-  }, [weekData])
+  }, [getWeekStatic])
   const dashboardStatic = useQuery({
     queryKey: ['dashboardStatic', config],
     queryFn: async () => {
@@ -94,7 +93,7 @@ const Dashboard = () => {
   // dashboard static data
   const staticData: GetStaticsAllResponse =
     dashboardStatic.data as GetStaticsAllResponse;
-  console.log(staticData);
+  // console.log(staticData);
 
   // dashboard region filter
   const handleRegionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
