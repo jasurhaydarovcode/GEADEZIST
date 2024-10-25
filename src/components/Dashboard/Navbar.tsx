@@ -114,16 +114,23 @@ const Navbar: React.FC = () => {
                   ? 'Loading...'
                   : (role === 'ROLE_SUPER_ADMIN' && 'super admin') ||
                   (role === 'ROLE_TESTER' && 'tester') ||
-                  (role === 'ROLE_CLIENT' && 'client') ||
+                  (role === 'ROLE_CLIENT' && 'Foydalanuvchi') ||
                   (role === 'ROLE_ADMIN' && 'admin (tekshiruvchi)')}
               </span>
             </div>
             <div>
               <img
-                src={(role === 'ROLE_TESTER' && testerLogo) || (role === 'ROLE_ADMIN' && testerLogo) || (role === 'ROLE_SUPER_ADMIN' && geodeziyaLogo) || (role === 'ROLE_CLIENT' && noImageClientDefaultImage)}
+                src={
+                  (role === 'ROLE_TESTER' && testerLogo) ||
+                  (role === 'ROLE_ADMIN' && testerLogo) ||
+                  (role === 'ROLE_SUPER_ADMIN' && geodeziyaLogo) ||
+                  (role === 'ROLE_CLIENT' && noImageClientDefaultImage) ||
+                  undefined
+                }
                 alt="Admin logo"
                 className="rounded-full w-10"
               />
+
             </div>
           </div>
 

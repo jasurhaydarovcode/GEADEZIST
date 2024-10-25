@@ -94,9 +94,12 @@ const ClientDashboard: React.FC = () => {
             </div>
             <div className="p-4">
               {cards && cards.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 mx-auto justify-center">
+                <div className="flex flex-wrap justify-center gap-4 p-4 mx-auto">
                   {cards.map((card: ClientRezType, index) => (
-                    <div key={index} className="card bg-white glass mx-auto w-full sm:w-80 md:w-96">
+                    <div
+                      key={index}
+                      className="card mb-10 bg-white glass mx-auto w-full sm:w-80 md:w-96 flex-shrink-0"
+                    >
                       <figure>
                         <img
                           src={card.categoryName ? `${card.categoryName}.png` : defaultImageDash}
@@ -107,7 +110,7 @@ const ClientDashboard: React.FC = () => {
                       <div className="card-body flex flex-col leading-6 justify-between">
                         <div>
                           <h2 className="card-title text-red-500 pb-5 font-bold text-center flex justify-center">
-                            {card.categoryName || <del className='text-black'>No Title Data</del>}
+                            {card.categoryName || <del className="text-black">No Title Data</del>}
                           </h2>
                           <p className="text-gray-600">
                             <strong>Tog'ri Javoblar:</strong>
@@ -128,9 +131,18 @@ const ClientDashboard: React.FC = () => {
                         </div>
                         <div className="card-actions mt-4">
                           <button
-                            className={`btn text-lg w-full ${card.status === 'APPROVED' ? 'btn-success' : card.status === 'WAITING' ? 'btn-warning' : 'btn-primary'}`}
+                            className={`btn text-lg w-full ${card.status === "APPROVED"
+                              ? "btn-success"
+                              : card.status === "WAITING"
+                                ? "btn-warning"
+                                : "btn-primary"
+                              }`}
                           >
-                            {card.status === 'APPROVED' ? 'Tasdiqlandi' : card.status === 'WAITING' ? 'Kutilmoqda' : card.status}
+                            {card.status === "APPROVED"
+                              ? "Tasdiqlandi"
+                              : card.status === "WAITING"
+                                ? "Kutilmoqda"
+                                : card.status}
                           </button>
                         </div>
                       </div>
@@ -141,10 +153,8 @@ const ClientDashboard: React.FC = () => {
                 <div className="flex justify-center items-center w-full h-full p-10 bg-gray-100 rounded-md shadow-md">
                   <p className="text-center text-red-600 font-semibold text-2xl">
                     Siz xozircha test ishlamagansiz 😊,
-                    <span className='bg-red-500 text-white rounded-lg mx-2 py-1 px-3'>
-                      <Link to={"/client/test/start"}>
-                        test
-                      </Link>
+                    <span className="bg-red-500 text-white rounded-lg mx-2 py-1 px-3">
+                      <Link to={"/client/test/start"}>test</Link>
                     </span>
                     ishlash uchun test bo'limiga o'ting
                   </p>
