@@ -15,8 +15,8 @@ import { Answer } from "@/helpers/types/AddQuizType";
 import { Link, useNavigate } from "react-router-dom";
 import CheckLogin from "@/helpers/functions/checkLogin";
 import { Category } from "@/helpers/types/Category";
+import {AxiosError} from '@/helpers/types/axiosType'
 import { toast } from "react-toastify";
-import { AxiosError } from "axios";
 
 function Test() {
   const queryGet = useQueryClient()
@@ -27,13 +27,20 @@ function Test() {
   const getCategory = useQuery({
     queryKey: ["getCategory", config],
     queryFn: async () => {
-
-      const res = await axios.get(`${baseUrl}category/page`, config)
-      const response: Category = res.data?.body.body
+      interface CategoryData {
+        body: {
+          body: Category
+        }[]
+      }
+      const res = await axios.get<CategoryData>(`${baseUrl}category/page`, config)
+      const response: CategoryData = res.data?.body?.body
       return response
     },
-    onSuccess: (data) => {
+    onSuccess: (data: Category[]) => {
       setSaveCates(data)
+    },
+    onError: (err: AxiosError) => {
+      message.error(err.message)
     }
   })
   useEffect(() => {
@@ -49,7 +56,7 @@ function Test() {
   const categore = useRef<HTMLSelectElement | null>(null);
   const answer = useRef<HTMLInputElement | null>(null);
   const type = useRef<HTMLSelectElement | null>(null);
-  const [datas, useDatas] = useState<FetchedTest[]>([]);
+  const [datas, useDatas] = useState<FilteredTest[]>([]);
   const [turi, setTuri] = useState<string | null>(null);
   const [kategoriya, setKategoriya] = useState<string | null>(null);
   const [nameSearch, setnameSearch] = useState<string | null>(null);
@@ -120,7 +127,6 @@ function Test() {
   const isDelete = useMutation({
     mutationFn: async () => {
       const res = axios.delete(`${baseUrl}question/${testID}`, config)
-      return res.data
     },
     onSuccess() {
       toast.success("Test o'chirildi")
@@ -334,7 +340,7 @@ function Test() {
       try {
         const res = await axios.post(PostQuestion, data, config);
         return res.data;
-      } catch (err: AxiosError) {
+      } catch (err: AxiosError | any) {
         throw new Error('Error posting question: ' + err.message);
       }
     },
@@ -343,7 +349,7 @@ function Test() {
       queryGet.invalidateQueries('testData');
 
     },
-    onError: (err: any) => {
+    onError: (err: AxiosError) => {
       message.error(err.message);
       console.error(err);
     },
@@ -391,10 +397,11 @@ function Test() {
       try {
         const res = await axios.put(`${EditQuestion}${testId}`, data, config);
         return res.data;
-      } catch (err: AxiosError) {
+      } catch (err: AxiosError | any) {
         throw new Error('Error posting question: ' + err.message);
       }
     },
+
     onSuccess: () => {
       message.success('Edited successfully');
       queryGet.invalidateQueries('testData');
