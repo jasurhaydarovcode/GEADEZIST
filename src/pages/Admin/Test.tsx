@@ -880,7 +880,7 @@ function Test() {
                     <EditOutlined onClick={() => (setTestId(item.id), showEditModal())} />
                     <DeleteOutlined onClick={() => showDeleteModal(item.id)} />
                     <EyeOutlined onClick={() => {
-                      navigate('/tests', { state: { catygoria: item.categoryName, savol: item.name, id: item.id } })
+                      navigate('/javobniKurish', { state: { catygoria: item.categoryName, savol: item.name, id: item.id } })
                     }} />
                   </TableCell>
                 </TableBody>

@@ -58,7 +58,7 @@ function App() {
         {renderRoute("/dashboard", Dashboard)}
         {renderRoute("/category", Category)}
         {renderRoute("/test", Test)}
-        {renderRoute("/tests", TestVisual)}
+        {renderRoute("/javobniKurish", TestVisual)}
         {renderRoute("/all-user", AllUser)}
         {renderRoute("/user", User)}
         {renderRoute("/archive/:resultId", Archive)} {/* To'g'ri yo'nalish */}
