@@ -9,13 +9,13 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 import { FcSearch } from "react-icons/fc";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { ApiResponse, FetchedTest, FilteredTest } from "@/helpers/types/test";
+import { ApiResponse, FilteredTest } from "@/helpers/types/test";
 import TableLoading from "@/components/spinner/TableLoading";
 import { Answer } from "@/helpers/types/AddQuizType";
 import { Link, useNavigate } from "react-router-dom";
 import CheckLogin from "@/helpers/functions/checkLogin";
 import { Category } from "@/helpers/types/Category";
-import {AxiosError} from '@/helpers/types/axiosType'
+import { AxiosError } from '@/helpers/types/axiosType'
 import { toast } from "react-toastify";
 
 function Test() {
@@ -23,26 +23,39 @@ function Test() {
   CheckLogin
   const [saveCates, setSaveCates] = useState<Category[]>([]);
 
-  // categoryni get qilish
   const getCategory = useQuery({
     queryKey: ["getCategory", config],
     queryFn: async () => {
       interface CategoryData {
         body: {
-          body: Category
-        }[]
+          body: {
+            id: string;
+            name: string;
+            description: string;
+            fileId?: string | undefined;
+            questionCount: number;
+            extraQuestionCount: number;
+            durationTime: number;
+            retakeDate: string;
+            createdBy: string;
+            deleted: boolean;
+            deletedBy?: string | undefined;
+          }
+        }
       }
-      const res = await axios.get<CategoryData>(`${baseUrl}category/page`, config)
-      const response: CategoryData = res.data?.body?.body
-      return response
+      const res = await axios.get<CategoryData>(`${baseUrl}category/page`, config);
+      const response: CategoryData | null = res.data.body.body
+      return response;
     },
     onSuccess: (data: Category[]) => {
-      setSaveCates(data)
+      setSaveCates(data);
     },
     onError: (err: AxiosError) => {
-      message.error(err.message)
+      message.error(err.message);
     }
-  })
+  });
+
+
   useEffect(() => {
     getCategory.refetch()
   }, [])
@@ -289,7 +302,9 @@ function Test() {
       file: 0,
     },
   ]);
-
+  useEffect(() => {
+    console.log(optionDtos)
+  }, [optionDtos])
   const [answerDate, setAnswerDate] = useState(''); // State for answer input
 
   // Handler for the answer input change
@@ -773,8 +788,12 @@ function Test() {
                           className="mr-3 accent-blue-500"
                         />
                         <input
-                          onChange={(e) => handleAnswerChange(e)}
-                          placeholder="Savolning javoblarini kiriting"
+                          onChange={(e) => setOptionDtos((prevOptions) =>
+                            prevOptions.map((opt, i) =>
+                              i === index ? { ...opt, answer: e.target.value } : opt
+                            )
+                          )}
+                          placeholder={`Option ${index + 1}`}
                           className="border w-full bg-white p-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                         <label className="cursor-pointer custom-file-upload px-3 w-[150px] py-2 bg-blue-500 text-white text-[13px] rounded-md">

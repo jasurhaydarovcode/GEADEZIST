@@ -63,25 +63,23 @@ export type FetchedTest = {
   "createdByName": string
 }
 // EditModal propslari uchun interfeys
- export interface FilteredTest {
-  "id": number
-  "name": string
-  "categoryName":string | null
-  "categoryId": number | null 
-  "finiteError": number
-  "type": string
-  "difficulty": string
-  "attachmentIds": number[] | null 
-  "optionDtos": [
-    OptDtos
-  ],
-  "createdByName": string
-  key: number
-  numer: number
-  testRasm: string
-  savol: string
-  catygoria: string
-  savolTuri: string
-  qiyinligi: string
-  yaratganOdam: string
+export interface FilteredTest {
+  id: number;
+  name: string;
+  categoryName: string;
+  categoryId: number | null; // null bo'lishi mumkin
+  finiteError: number;
+  type: string;
+  difficulty: string;
+  attachmentIds: number[] | null;
+  optionDtos: OptionDto[];
+  createdByName: string;
+  key: string;
+  numer: number;
+  testRasm: string;
+  savol: string;
+  catygoria: string;
+  savolTuri: string;
+  qiyinligi: string;
+  yaratganOdam: string;
 }
