@@ -147,7 +147,7 @@ function Employees() {
     {
       onSuccess: (data, variables) => {
         const { enabled } = variables;
-        // console.log(data);
+        console.log(data);
         // queryClient.invalidateQueries('getADmin'); 
         if (enabled === true) {
           message.success('Hodim muvaffaqiyatli ishga tushirildi');
