@@ -254,7 +254,19 @@ const User: React.FC = () => {
                             <TableCell>{item.categoryName}</TableCell>
                             <TableCell>{item.phoneNumber}</TableCell>
                             <TableCell>
-                                {item.expiredDate}
+                              {item.expiredDate && (
+                                <>
+                                  {new Date(item.expiredDate) <= new Date() ? (
+                                    <span className="text-gray-800">
+                                      Testni ishlashingiz mumkin
+                                    </span>
+                                  ) : (
+                                    <span className="text-sm text-gray-800">
+                                      {Math.max(0, Math.floor((new Date(item.expiredDate) - new Date()) / (1000 * 60 * 60 * 24)))} kun qoldi
+                                    </span>
+                                  )}
+                                </>
+                              )}
                             </TableCell>
                             <TableCell>
                               <button
@@ -276,9 +288,9 @@ const User: React.FC = () => {
                                 <Space wrap>
                                   <Dropdown  overlay={
                                       <Menu>
-                                         <Link to={`/archive/${item.id}`}>
+                                         <Link to={`/archive/${item.resultId}`}>
                                         <Menu.Item key="1">
-                                              <Link to={`/archive/${item.id}`}>Arxivni ko'rish</Link>
+                                              <Link to={`/archive/${item.resultId}`}>Arxivni ko'rish</Link>
                                            </Menu.Item>
                                            </Link>
                                         <Menu.Item key="2"  onClick={() => showUserDetails(item)}>
@@ -290,9 +302,9 @@ const User: React.FC = () => {
                                         <Menu.Item key="4" onClick={() => (showModal(), setSelectedUser(item))}>
                                           <button className='w-full flex ' >Bekor qilish</button>
                                         </Menu.Item>
-                                         <Menu.Item key="5" onClick={() => (qaytaModal(), setSelectedUser(item))}>
+                                         {/* <Menu.Item key="5" onClick={() => (qaytaModal(), setSelectedUser(item))}>
                                           <button className='w-full flex ' >Qayta topshirishga ruxsat berish</button>
-                                        </Menu.Item> 
+                                        </Menu.Item>  */}
                                       </Menu>
                                     }
                                     placement="bottomRight"
