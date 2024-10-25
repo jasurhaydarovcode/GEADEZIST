@@ -120,10 +120,17 @@ const Navbar: React.FC = () => {
             </div>
             <div>
               <img
-                src={(role === 'ROLE_TESTER' && testerLogo) || (role === 'ROLE_ADMIN' && testerLogo) || (role === 'ROLE_SUPER_ADMIN' && geodeziyaLogo) || (role === 'ROLE_CLIENT' && noImageClientDefaultImage)}
+                src={
+                  (role === 'ROLE_TESTER' && testerLogo) ||
+                  (role === 'ROLE_ADMIN' && testerLogo) ||
+                  (role === 'ROLE_SUPER_ADMIN' && geodeziyaLogo) ||
+                  (role === 'ROLE_CLIENT' && noImageClientDefaultImage) ||
+                  undefined
+                }
                 alt="Admin logo"
                 className="rounded-full w-10"
               />
+
             </div>
           </div>
 
