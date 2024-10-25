@@ -16,24 +16,22 @@ import { optionDtos } from "@/helpers/types/clientQuizType";
 function Category() {
     CheckLogin
     const [options, setOptions] = useState<optionDtos[]>([]);
-    const [quizData, setQuizData] = useState<QuizType[]>([]);
+    const [quizData, setQuizData] = useState<QuizType | null>(null);
     const location = useLocation();
     const { catygoria, savol, id } = location.state || {};
 
-    const getQuizId = useQuery({
+    const { data: quizDetails } = useQuery({
         queryKey: ['getQuiz', id],
         queryFn: async () => {
-            const res= await axios.get<BodyRespon>(`${baseUrl}question/${id}`, config);
-            console.log(res);
-            
+            const res = await axios.get<BodyRespon>(`${baseUrl}question/${id}`, config);
             return res.data.body;
         },
         onSuccess: (data) => {
-            console.log(data);
             setOptions(data.optionDtos);
             setQuizData(data);
         },
     });
+    console.log(quizDetails);
 
     const navigate = useNavigate();
     function getOut() {
@@ -63,12 +61,12 @@ function Category() {
                         <div className="mt-6">
                             <div className="mt-6">
                                 <p className="text-red-600 font-bold mt-4 text-left">
-                                    {quizData.type === "SUM" ? "Bu savolda faqat bitta javob bo'ladi" : "Faqat bitta tug'ri javobni belgilang"}
+                                    {quizData?.type === "SUM" ? "Bu savolda faqat bitta javob bo'ladi" : "Faqat bitta tug'ri javobni belgilang"}
                                 </p>
                                 {options.map((option: AnswerRes, index: number) => (
                                     <div key={index}>
                                         <label className="flex items-center mb-4 border border-gray-300 rounded-lg p-2 bg-gray-100">
-                                            {quizData.type === "ONE_CHOICE" ? (
+                                            {quizData?.type === "ONE_CHOICE" ? (
                                                 // Radio input for ONE_CHOICE type
                                                 <input
                                                     type="radio"
@@ -76,7 +74,7 @@ function Category() {
                                                     value={option.answer}
                                                     className="mr-2"
                                                 />
-                                            ) : quizData.type === "SUM" ? (
+                                            ) : quizData?.type === "SUM" ? (
                                                 // Automatically checked and disabled checkbox for SUM type
                                                 <input
                                                     type="checkbox"
@@ -94,10 +92,10 @@ function Category() {
                                                     className="mr-2"
                                                 />
                                             )}
-                                            {quizData.type === "ONE_CHOICE" ? (
+                                            {quizData?.type === "ONE_CHOICE" ? (
                                                 <span className="text-lg">{option.answer || "javob yo'qligi uchun namuma"}</span>
-                                            ):
-                                            (<input type="text" placeholder={option.answer || 'javob kiriting'} className="text-lg bg-transparent border-none w-full"  />)
+                                            ) :
+                                                (<input type="text" placeholder={option.answer || 'javob kiriting'} className="text-lg bg-transparent border-none w-full" />)
                                             }
                                         </label>
                                     </div>
