@@ -39,7 +39,7 @@ const Navbar: React.FC = () => {
     queryFn: async () => {
       const config = await getConfig();
       const res = await axios.get<GetMeResponse>(getMeUser, config);
-      return res.data?.body;
+      return res.data;
     },
     staleTime: 0,
     cacheTime: 0,
@@ -114,7 +114,7 @@ const Navbar: React.FC = () => {
                   ? 'Loading...'
                   : (role === 'ROLE_SUPER_ADMIN' && 'super admin') ||
                   (role === 'ROLE_TESTER' && 'tester') ||
-                  (role === 'ROLE_CLIENT' && 'client') ||
+                  (role === 'ROLE_CLIENT' && 'Foydalanuvchi') ||
                   (role === 'ROLE_ADMIN' && 'admin (tekshiruvchi)')}
               </span>
             </div>
