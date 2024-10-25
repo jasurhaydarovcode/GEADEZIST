@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "format": "npx prettier src/ --write",
+    "format": "npx prettier src/helpers/lib --write",
     "lint": "eslint .",
     "preview": "vite preview",
     "postinstall": "npm run geo",
