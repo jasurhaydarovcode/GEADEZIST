@@ -24,7 +24,7 @@ function Category() {
         queryKey: ['getQuiz', id],
         queryFn: async () => {
             const res = await axios.get<BodyRespon>(`${baseUrl}question/${id}`, config);
-            return res.data.body;
+            return res.data;
         },
         onSuccess: (data) => {
             setOptions(data.optionDtos);

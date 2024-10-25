@@ -84,9 +84,6 @@ function Test() {
   ]);
   // test get
 
-  // useEffect(() => {
-  // }, [nameSearch])
-
 
   // Search
   const searchTest2 = () => {
@@ -152,21 +149,6 @@ function Test() {
     }
   })
 
-  // Test get qilish tugatildi
-  // useEffect(() => {
-  //   if (testData) {
-  //     queryGet.refetchQueries('testData')
-  //   }
-  // }, [testData])
-
-  // Bu yo'lda delete qiladi
-
-  // useEffect(() => {
-  //   if (isDelete) {
-  //     queryGet.refetchQueries('testData')
-  //   }
-  // }, [isDelete])
-  // Delete qilish tugatildi
 
   function showDeleteModal(id: number | string) {
     setTestID(id);
@@ -184,34 +166,6 @@ function Test() {
       setAnswers(answers.slice(0, -1));
     }
   };
-
-  // edit 
-  // const updatedData = {
-  //   name: answer,
-  //   categoryName: categore,
-  //   type: type,
-  //   difficulty: difficulty,
-  //   optionDtos: [
-  //     {
-  //       id: 1,
-  //       answer: answer,
-  //       isCorrect: true,
-  //     },
-  //   ],
-  // };
-  // function isEdit(ID: string) {
-  //   const updateQuestion = async (ID: string | number) => {
-  //     try {
-  //       const response = await axios.put(`${baseUrl}question/${ID}`, updatedData, config);
-  //       return response.data;
-  //     } catch (error) {
-  //       toast.error('edit bolmadi')
-  //     }
-  //   };
-  //   updateQuestion(ID)
-  //   seteditModal(!editMod)
-  // }
-  // edit 
 
   // Use the data in a React component
   const { isLoading } = useQuery<ApiResponse, Error>({
@@ -250,8 +204,6 @@ function Test() {
       toast.error("malumot kelmadi");
     }
   });
-
-
 
 
   const categoryNames = [
