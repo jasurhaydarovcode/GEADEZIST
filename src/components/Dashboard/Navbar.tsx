@@ -39,7 +39,7 @@ const Navbar: React.FC = () => {
     queryFn: async () => {
       const config = await getConfig();
       const res = await axios.get<GetMeResponse>(getMeUser, config);
-      return res.data;
+      return res.data?.body;
     },
     staleTime: 0,
     cacheTime: 0,
