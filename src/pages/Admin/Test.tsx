@@ -153,11 +153,11 @@ function Test() {
   })
 
   // Test get qilish tugatildi
-  useEffect(() => {
-    if (testData) {
-      queryGet.refetchQueries('testData')
-    }
-  }, [testData])
+  // useEffect(() => {
+  //   if (testData) {
+  //     queryGet.refetchQueries('testData')
+  //   }
+  // }, [testData])
 
   // Bu yo'lda delete qiladi
 
