@@ -15,29 +15,29 @@ const LogoutModal: React.FC<LogoutModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed z-[60] inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-[450px]">
-        <div className="flex justify-end items-center">
-          <button onClick={onClose}>
-            <IoCloseOutline className="text-3xl hover:bg-gray-300 rounded-md hover:text-gray-50 animatsiyaHover" />
+    <div className="fixed z-[60] inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+      <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
+        <div className="flex justify-end">
+          <button onClick={onClose} aria-label="Close">
+            <IoCloseOutline className="text-3xl text-gray-500 hover:bg-gray-200 p-1 rounded-full transition duration-200" />
           </button>
         </div>
-        <div className="flex justify-center my-6">
-          <IoExitOutline className="text-red-500 text-7xl" />
+        <div className="flex justify-center my-4">
+          <IoExitOutline className="text-red-500 text-6xl" />
         </div>
-        <h2 className="text-xl py-4 font-bold text-center">
+        <h2 className="text-lg font-semibold text-center text-gray-800 mb-6">
           Siz aniq tizimdan chiqmoqchimisiz?
         </h2>
-        <div className="flex justify-around">
+        <div className="flex justify-around gap-4">
           <button
-            className="bg-gray-400 text-white px-4 py-2 rounded-md hover:bg-gray-500 animatsiyaHover"
+            className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md font-medium hover:bg-gray-400 transition duration-200"
             onClick={onClose}
           >
             Yopish
           </button>
           <button
             onClick={onLogout}
-            className="bg-gray-400 text-white px-4 py-2 rounded-md hover:bg-gray-500 animatsiyaHover"
+            className="bg-red-500 text-white px-4 py-2 rounded-md font-medium hover:bg-red-600 transition duration-200"
           >
             Chiqish
           </button>
