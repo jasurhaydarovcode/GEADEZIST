@@ -1,6 +1,6 @@
 
 // ======= Swagger UI =======
-export const baseUrl = 'http://164.92.165.18:8090/';
+export const baseUrl = 'http://142.93.106.195:9090/';
 
 //  ==== AUTH ====
 export const loginUrl = `${baseUrl}auth/login`;
